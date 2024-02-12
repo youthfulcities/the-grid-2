@@ -10,6 +10,26 @@
       "StackName": "amplify-thegrid2-staging-214411",
       "StackId": "arn:aws:cloudformation:ca-central-1:730335589682:stack/amplify-thegrid2-staging-214411/decfab50-c081-11ee-b3f0-06af8a8a7554",
       "AmplifyAppId": "dlnca7rtkq5g9"
+    },
+    "categories": {
+      "auth": {
+        "thegrid2fafc44b3": {}
+      },
+      "storage": {
+        "thegrid23ee127f9": {
+          "bucketName": "ycthegrid",
+          "region": "ca-central-1"
+        }
+      },
+      "function": {
+        "dataapi": {
+          "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
+          "s3Key": "amplify-builds/dataapi-685267475a4845693256-build.zip"
+        }
+      },
+      "api": {
+        "s3": {}
+      }
     }
   }
 }

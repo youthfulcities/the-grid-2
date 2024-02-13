@@ -1,10 +1,9 @@
 import '@aws-amplify/ui-react/styles.css';
 import { Amplify } from 'aws-amplify';
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 import React from 'react';
 import config from '../amplifyconfiguration.json';
-import "./globals.css";
-
+import './globals.css';
 
 Amplify.configure(config, {
   Storage: {
@@ -12,20 +11,19 @@ Amplify.configure(config, {
       prefixResolver: async ({ accessLevel, targetIdentityId }) => {
         if (accessLevel === 'guest') {
           return 'public/';
-        } else if (accessLevel === 'protected') {
-          return `protected/${targetIdentityId}/`;
-        } else {
-          return `private/${targetIdentityId}/`;
         }
-      }
-    }
-  }
+        if (accessLevel === 'protected') {
+          return `protected/${targetIdentityId}/`;
+        }
+        return `private/${targetIdentityId}/`;
+      },
+    },
+  },
 });
 
-
 export const metadata: Metadata = {
-  title: "THE GRID",
-  description: "",
+  title: 'THE GRID',
+  description: '',
 };
 
 export default function RootLayout({
@@ -34,8 +32,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang='en'>
       <body>{children}</body>
-      </html>
+    </html>
   );
 }

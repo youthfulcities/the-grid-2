@@ -1,6 +1,6 @@
+import '@aws-amplify/ui-react/styles.css';
 import { Amplify } from 'aws-amplify';
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import React from 'react';
 import config from '../amplifyconfiguration.json';
 import "./globals.css";
@@ -22,7 +22,6 @@ Amplify.configure(config, {
   }
 });
 
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "THE GRID",
@@ -36,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+      <body>{children}</body>
+      </html>
   );
 }

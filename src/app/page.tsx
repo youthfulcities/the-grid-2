@@ -2,15 +2,19 @@
 
 import {
   Authenticator,
+  Button,
   Flex,
   View,
   withAuthenticator,
 } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import { getUrl } from 'aws-amplify/storage';
-import React, { useState } from 'react';
+import Papa from 'papaparse';
+import React, { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import awsExports from '../aws-exports';
 import page from './page.module.css';
+
 Amplify.configure(awsExports);
 
 const App: React.FC = () => {
@@ -19,6 +23,40 @@ const App: React.FC = () => {
     url: URL;
     expiresAt: Date;
   } | null>(null);
+
+  // Define an interface for the structure of the CSV data
+  interface CSVRow {
+    [key: string]: string | boolean | number;
+  }
+  const [csvData, setCsvData] = useState<CSVRow[]>([] as CSVRow[]);
+
+  useEffect(() => {
+    // Define a function to parse CSV
+    const parseCSV = async () => {
+      try {
+        if (!signedUrl) {
+          console.error('No signed URL available');
+          return;
+        }
+
+        const response = await fetch(signedUrl.url.href);
+        const csvText = await response.text();
+        const parsedCSV = Papa.parse(csvText, {
+          header: true, // Assuming CSV file has headers
+          preview: 10, //only show the first 10 rows
+        });
+
+        setCsvData(parsedCSV.data as CSVRow[]); // Access parsed CSV data
+      } catch (error) {
+        console.error('Error parsing CSV:', error);
+      }
+    };
+
+    // Call parseCSV function whenever signedUrl changes
+    if (signedUrl) {
+      parseCSV();
+    }
+  }, [signedUrl]); // useEffect will run whenever signedUrl changes
 
   const fetchUrl = async () => {
     try {
@@ -38,12 +76,39 @@ const App: React.FC = () => {
     }
   };
 
+  // Function to render HTML table
+  const renderTable = () => (
+    <View style={{ maxHeight: '500px', overflow: 'auto', marginTop: '4rem' }}>
+      <table>
+        <thead>
+          <tr>
+            {csvData.length > 0 &&
+              Object.keys(csvData[0]).map((key) => (
+                <th style={{ padding: '0.5rem' }} key={key}>
+                  {key}
+                </th>
+              ))}
+          </tr>
+        </thead>
+        <tbody>
+          {csvData.map((row) => (
+            <tr key={uuidv4()}>
+              {Object.values(row).map((value, columnIndex) => (
+                <td style={{ padding: '0.5rem' }} key={uuidv4()}>
+                  {String(value)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </View>
+  );
+
   return (
     <Authenticator>
       {({ signOut, user }) => (
         <main>
-          <button onClick={signOut}>Sign out</button>
-
           <View as='section' className='home-header'>
             <Flex as='div' direction='column' className='container'>
               <h1 className='header-text'>
@@ -96,22 +161,35 @@ const App: React.FC = () => {
             </h2>
             <div className='inner-container'>
               <div className='cards-container'>
-                <a
-                  href='/pages/topics'
+                <Button
                   className='card soft-shadow hvr-float hvr-push'
+                  style={{
+                    paddingInlineStart: 0,
+                    paddingInlineEnd: 0,
+                    paddingBlockEnd: 0,
+                    paddingBlockStart: 0,
+                    position: 'relative',
+                  }}
+                  onClick={() => fetchUrl()}
                 >
-                  <div className='card-img clip image-card-topics'></div>
-                  <h4 className='card-text-bottom-corner'>Topics</h4>
-                </a>
+                  <div
+                    className='card-img clip image-card-topics'
+                    style={{ position: 'absolute', top: 0 }}
+                  />
+                  <h4 className='card-text-bottom-corner'>
+                    Urban Work Index 2023
+                  </h4>
+                </Button>
                 <a href='#' className='card soft-shadow hvr-float hvr-push'>
-                  <div className='card-img clip image-card-datasets'></div>
+                  <div className='card-img clip image-card-datasets' />
                   <h4 className='card-text-bottom-corner'>TBD</h4>
                 </a>
                 <a href='#' className='card soft-shadow hvr-float hvr-push'>
-                  <div className='card-img clip image-card-cities'></div>
+                  <div className='card-img clip image-card-cities' />
                   <h4 className='card-text-bottom-corner'>TBD</h4>
                 </a>
               </div>
+              {signedUrl && renderTable()}
             </div>
           </View>
 
@@ -133,6 +211,7 @@ const App: React.FC = () => {
                 qualitative and quantitative data across 47 Canadian cities and
                 23 topics.
               </p>
+              <Button onClick={signOut}>Sign out</Button>
             </div>
           </section>
         </main>

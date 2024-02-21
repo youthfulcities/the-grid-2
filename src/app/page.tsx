@@ -4,6 +4,7 @@ import {
   Authenticator,
   Button,
   Flex,
+  Loader,
   View,
   withAuthenticator,
 } from '@aws-amplify/ui-react';
@@ -18,7 +19,6 @@ import page from './page.module.css';
 Amplify.configure(awsExports);
 
 const App: React.FC = () => {
-  const filename = 'UWI 2023 FINAL DATA FOR THE GRID — SCORES - ALL.csv'; // Replace with your actual filename
   const [signedUrl, setSignedUrl] = useState<{
     url: URL;
     expiresAt: Date;
@@ -29,26 +29,29 @@ const App: React.FC = () => {
     [key: string]: string | boolean | number;
   }
   const [csvData, setCsvData] = useState<CSVRow[]>([] as CSVRow[]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     // Define a function to parse CSV
     const parseCSV = async () => {
       try {
+        setLoading(true);
         if (!signedUrl) {
           console.error('No signed URL available');
+          setLoading(false);
           return;
         }
-
         const response = await fetch(signedUrl.url.href);
         const csvText = await response.text();
         const parsedCSV = Papa.parse(csvText, {
           header: true, // Assuming CSV file has headers
           preview: 10, //only show the first 10 rows
         });
-
         setCsvData(parsedCSV.data as CSVRow[]); // Access parsed CSV data
+        setLoading(false);
       } catch (error) {
         console.error('Error parsing CSV:', error);
+        setLoading(false);
       }
     };
 
@@ -58,8 +61,9 @@ const App: React.FC = () => {
     }
   }, [signedUrl]); // useEffect will run whenever signedUrl changes
 
-  const fetchUrl = async () => {
+  const fetchUrl = async (filename: string) => {
     try {
+      setLoading(true);
       const getUrlResult = await getUrl({
         key: filename,
         options: {
@@ -69,10 +73,11 @@ const App: React.FC = () => {
           useAccelerateEndpoint: false,
         },
       });
-
       setSignedUrl(getUrlResult);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching URL:', error);
+      setLoading(false);
     }
   };
 
@@ -170,7 +175,11 @@ const App: React.FC = () => {
                     paddingBlockStart: 0,
                     position: 'relative',
                   }}
-                  onClick={() => fetchUrl()}
+                  onClick={() =>
+                    fetchUrl(
+                      'UWI 2023 FINAL DATA FOR THE GRID — SCORES - ALL.csv'
+                    )
+                  }
                 >
                   <div
                     className='card-img clip image-card-topics'
@@ -180,16 +189,44 @@ const App: React.FC = () => {
                     Urban Work Index 2023
                   </h4>
                 </Button>
-                <a href='#' className='card soft-shadow hvr-float hvr-push'>
-                  <div className='card-img clip image-card-datasets' />
-                  <h4 className='card-text-bottom-corner'>TBD</h4>
-                </a>
-                <a href='#' className='card soft-shadow hvr-float hvr-push'>
-                  <div className='card-img clip image-card-cities' />
-                  <h4 className='card-text-bottom-corner'>TBD</h4>
-                </a>
+                <Button
+                  className='card soft-shadow hvr-float hvr-push'
+                  style={{
+                    paddingInlineStart: 0,
+                    paddingInlineEnd: 0,
+                    paddingBlockEnd: 0,
+                    paddingBlockStart: 0,
+                    position: 'relative',
+                  }}
+                  onClick={() => fetchUrl('pivot-2020-interview.csv')}
+                >
+                  <div
+                    className='card-img clip image-card-datasets'
+                    style={{ position: 'absolute', top: 0 }}
+                  />
+                  <h4 className='card-text-bottom-corner'>
+                    Pivot 2020 Interviews
+                  </h4>
+                </Button>
+                <Button
+                  className='card soft-shadow hvr-float hvr-push'
+                  style={{
+                    paddingInlineStart: 0,
+                    paddingInlineEnd: 0,
+                    paddingBlockEnd: 0,
+                    paddingBlockStart: 0,
+                    position: 'relative',
+                  }}
+                  onClick={() => fetchUrl('pivot-2020-survey-aggregated.csv')}
+                >
+                  <div
+                    className='card-img clip image-card-cities'
+                    style={{ position: 'absolute', top: 0 }}
+                  />
+                  <h4 className='card-text-bottom-corner'>Pivot 2020 Survey</h4>
+                </Button>
               </div>
-              {signedUrl && renderTable()}
+              {loading ? <Loader /> : signedUrl && renderTable()}
             </div>
           </View>
 

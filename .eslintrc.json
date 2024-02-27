@@ -20,6 +20,7 @@
   },
   "plugins": ["react", "prettier", "json"],
   "rules": {
+    "import/extensions": "off",
     "spaced-comment": "off",
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-unused-vars": "warn",

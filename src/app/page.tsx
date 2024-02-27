@@ -1,5 +1,6 @@
 'use client';
 
+import BarGraph from '@/components/BarGraph';
 import {
   Authenticator,
   Button,
@@ -80,6 +81,10 @@ const App: React.FC = () => {
       setLoading(false);
     }
   };
+
+  console.log(csvData);
+  const labels = csvData.map((row) => String(row.City));
+  const values = csvData.map((row) => Number(row.Value)); // Convert 'Value' to numbers
 
   // Function to render HTML table
   const renderTable = () => (
@@ -227,6 +232,7 @@ const App: React.FC = () => {
                 </Button>
               </div>
               {loading ? <Loader /> : signedUrl && renderTable()}
+              {signedUrl && <BarGraph labels={labels} values={values} />}
             </div>
           </View>
 

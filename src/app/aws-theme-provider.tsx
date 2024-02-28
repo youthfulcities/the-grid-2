@@ -1,18 +1,20 @@
 'use client';
 
-import { ThemeProvider, Theme } from '@aws-amplify/ui-react';
+import { Theme, ThemeProvider } from '@aws-amplify/ui-react';
 
 const theme: Theme = {
   name: 'my-theme',
   tokens: {
-    colors: {
-      font: {
-        primary: { value: '#008080' },
-        // ...
+    fonts: {
+      default: {
+        variable: { value: 'Gotham, Raleway, sans-serif' },
+        static: { value: 'Gotham, Raleway, sans-serif' },
       },
     },
   },
 };
+
+console.log(theme);
 
 export default function AWSThemeProvider({
   children,

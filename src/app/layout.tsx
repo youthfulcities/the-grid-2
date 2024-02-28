@@ -3,6 +3,7 @@ import { Amplify } from 'aws-amplify';
 import type { Metadata } from 'next';
 import React from 'react';
 import config from '../amplifyconfiguration.json';
+import AWSThemeProvider from './aws-theme-provider';
 import './globals.css';
 
 Amplify.configure(config, {
@@ -33,7 +34,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body>{children}</body>
+      <body>
+        <AWSThemeProvider>{children}</AWSThemeProvider>
+      </body>
     </html>
   );
 }

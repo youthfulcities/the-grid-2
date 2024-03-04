@@ -149,13 +149,10 @@ export default function ContactUs(props) {
           {...getOverrideProps(overrides, "Frame 2829766942")}
         >
           <MyIcon
-            width="24px"
-            height="24px"
             display="block"
             gap="unset"
             alignItems="unset"
             justifyContent="unset"
-            overflow="hidden"
             shrink="0"
             position="relative"
             padding="0px 0px 0px 0px"
@@ -197,13 +194,10 @@ export default function ContactUs(props) {
           {...getOverrideProps(overrides, "Frame 30")}
         >
           <MyIcon
-            width="24px"
-            height="24px"
             display="block"
             gap="unset"
             alignItems="unset"
             justifyContent="unset"
-            overflow="hidden"
             shrink="0"
             position="relative"
             padding="0px 0px 0px 0px"

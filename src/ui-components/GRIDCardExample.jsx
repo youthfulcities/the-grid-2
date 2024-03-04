@@ -85,7 +85,7 @@ export default function GRIDCardExample(props) {
             position="relative"
             padding="0px 0px 0px 0px"
             whiteSpace="pre-wrap"
-            children="Urban Work Index"
+            children="title"
             {...getOverrideProps(overrides, "Urban Work Index")}
           ></Text>
           <Text
@@ -108,7 +108,7 @@ export default function GRIDCardExample(props) {
             position="relative"
             padding="0px 0px 0px 0px"
             whiteSpace="pre-wrap"
-            children="2023"
+            children="year"
             {...getOverrideProps(overrides, "2023")}
           ></Text>
           <Text

@@ -430,7 +430,7 @@ export default function ProductDetail(props) {
               {...getOverrideProps(overrides, "Button29766974")}
             ></Button>
             <Button
-              width="94px"
+              width="98px"
               height="unset"
               shrink="0"
               size="default"
@@ -440,7 +440,7 @@ export default function ProductDetail(props) {
               {...getOverrideProps(overrides, "Button29766975")}
             ></Button>
             <Button
-              width="94px"
+              width="98px"
               height="unset"
               shrink="0"
               size="default"
@@ -450,7 +450,7 @@ export default function ProductDetail(props) {
               {...getOverrideProps(overrides, "Button29766976")}
             ></Button>
             <Button
-              width="94px"
+              width="98px"
               height="unset"
               shrink="0"
               size="default"
@@ -473,7 +473,7 @@ export default function ProductDetail(props) {
             {...getOverrideProps(overrides, "Frame 2829766978")}
           >
             <Button
-              width="94px"
+              width="98px"
               height="unset"
               gap="24px"
               shrink="0"
@@ -484,7 +484,7 @@ export default function ProductDetail(props) {
               {...getOverrideProps(overrides, "Button29766979")}
             ></Button>
             <Button
-              width="94px"
+              width="98px"
               height="unset"
               gap="24px"
               shrink="0"
@@ -495,7 +495,7 @@ export default function ProductDetail(props) {
               {...getOverrideProps(overrides, "Button29766980")}
             ></Button>
             <Button
-              width="94px"
+              width="98px"
               height="unset"
               gap="24px"
               shrink="0"
@@ -506,7 +506,7 @@ export default function ProductDetail(props) {
               {...getOverrideProps(overrides, "Button29766981")}
             ></Button>
             <Button
-              width="94px"
+              width="98px"
               height="unset"
               gap="24px"
               shrink="0"

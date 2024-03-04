@@ -10,7 +10,7 @@ import { getOverrideProps } from "./utils";
 import MyIcon from "./MyIcon";
 import { Flex } from "@aws-amplify/ui-react";
 export default function CircleButton(props) {
-  const { overrides, ...rest } = props;
+  const { circleButton, icon, overrides, ...rest } = props;
   return (
     <Flex
       gap="0"
@@ -21,15 +21,13 @@ export default function CircleButton(props) {
       alignItems="center"
       position="relative"
       boxShadow="0px 2px 2px rgba(0, 0, 0, 0.10000000149011612)"
-      borderRadius="1500px"
-      padding="0px 0px 0px 0px"
+      borderRadius="35px"
+      padding="8px 16px 8px 16px"
       backgroundColor="rgba(251,208,101,1)"
       {...getOverrideProps(overrides, "CircleButton")}
       {...rest}
     >
       <MyIcon
-        width="19.2px"
-        height="19.2px"
         display="block"
         gap="unset"
         alignItems="unset"
@@ -37,7 +35,7 @@ export default function CircleButton(props) {
         shrink="0"
         position="relative"
         padding="0px 0px 0px 0px"
-        type="globe"
+        type="map"
         {...getOverrideProps(overrides, "MyIcon")}
       ></MyIcon>
     </Flex>

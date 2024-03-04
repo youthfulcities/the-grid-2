@@ -23,6 +23,9 @@ export declare type CircleButtonOverridesProps = {
     MyIcon?: MyIconProps;
 } & EscapeHatchProps;
 export declare type CircleButtonProps = React.PropsWithChildren<Partial<FlexProps> & {
+    circleButton?: React.ReactNode;
+    icon?: React.ReactNode;
+} & {
     overrides?: CircleButtonOverridesProps | undefined | null;
 }>;
 export default function CircleButton(props: CircleButtonProps): React.ReactElement;

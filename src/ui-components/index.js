@@ -6,15 +6,19 @@
 
 export { default as ActionCard } from "./ActionCard";
 export { default as Ampligram } from "./Ampligram";
+export { default as Button2 } from "./Button2";
 export { default as CTASection } from "./CTASection";
 export { default as CheckoutPayment } from "./CheckoutPayment";
+export { default as CircleButton } from "./CircleButton";
 export { default as CommentCard } from "./CommentCard";
 export { default as ContactUs } from "./ContactUs";
+export { default as DataFilters } from "./DataFilters";
 export { default as DataRow } from "./DataRow";
 export { default as EditProfile } from "./EditProfile";
 export { default as Features2x2 } from "./Features2x2";
 export { default as Filters } from "./Filters";
 export { default as FormCheckout } from "./FormCheckout";
+export { default as GRIDCardMain } from "./GRIDCardMain";
 export { default as HeroLayout1 } from "./HeroLayout1";
 export { default as HeroLayout2 } from "./HeroLayout2";
 export { default as ItemCard } from "./ItemCard";

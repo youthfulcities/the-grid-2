@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { ButtonProps, FlexProps, IconProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
+import { FlexProps, ImageProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -20,15 +20,19 @@ export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes
 export declare type NavBarHeader2OverridesProps = {
     NavBarHeader2?: PrimitiveOverrideProps<FlexProps>;
     "Frame 5"?: PrimitiveOverrideProps<FlexProps>;
-    "Amplify Mark"?: PrimitiveOverrideProps<ViewProps>;
-    Union?: PrimitiveOverrideProps<IconProps>;
+    "Logo Area"?: PrimitiveOverrideProps<ViewProps>;
+    "THE_GRID_logo_RGB_black 1"?: PrimitiveOverrideProps<ImageProps>;
+    "EN | FR"?: PrimitiveOverrideProps<TextProps>;
+    "Right Side"?: PrimitiveOverrideProps<FlexProps>;
     Home?: PrimitiveOverrideProps<TextProps>;
-    Products?: PrimitiveOverrideProps<TextProps>;
-    Pricing?: PrimitiveOverrideProps<TextProps>;
-    Contact?: PrimitiveOverrideProps<TextProps>;
-    actions?: PrimitiveOverrideProps<FlexProps>;
-    Button39493466?: PrimitiveOverrideProps<ButtonProps>;
-    Button39493467?: PrimitiveOverrideProps<ButtonProps>;
+    topics?: PrimitiveOverrideProps<TextProps>;
+    datasets?: PrimitiveOverrideProps<TextProps>;
+    cities?: PrimitiveOverrideProps<TextProps>;
+    "data playground"?: PrimitiveOverrideProps<TextProps>;
+    about?: PrimitiveOverrideProps<TextProps>;
+    FAQ?: PrimitiveOverrideProps<TextProps>;
+    tutorials?: PrimitiveOverrideProps<TextProps>;
+    "contact us"?: PrimitiveOverrideProps<TextProps>;
 } & EscapeHatchProps;
 export declare type NavBarHeader2Props = React.PropsWithChildren<Partial<FlexProps> & {
     overrides?: NavBarHeader2OverridesProps | undefined | null;

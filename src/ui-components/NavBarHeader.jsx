@@ -154,13 +154,10 @@ export default function NavBarHeader(props) {
         {...getOverrideProps(overrides, "Frame 32129767081")}
       >
         <MyIcon
-          width="24px"
-          height="24px"
           display="block"
           gap="unset"
           alignItems="unset"
           justifyContent="unset"
-          overflow="hidden"
           shrink="0"
           position="relative"
           padding="0px 0px 0px 0px"

@@ -1,20 +1,28 @@
 'use client';
 
-import { Theme, ThemeProvider } from '@aws-amplify/ui-react';
+import { createTheme, ThemeProvider } from '@aws-amplify/ui-react';
+import studioTheme from '../ui-components/studioTheme';
 
-const theme: Theme = {
-  name: 'my-theme',
-  tokens: {
-    fonts: {
-      default: {
-        variable: { value: 'Gotham, Raleway, sans-serif' },
-        static: { value: 'Gotham, Raleway, sans-serif' },
+const theme = createTheme(
+  {
+    name: 'my-theme',
+    tokens: {
+      fonts: {
+        default: {
+          variable: { value: 'Gotham Narrow, Raleway, sans-serif' },
+          static: { value: 'Gotham Narrow, Raleway, sans-serif' },
+        },
+      },
+      components: {
+        card: {
+          backgroundColor: { value: '{colors.brand.primary.60.value}' },
+          padding: { value: '{space.large.value}' },
+        },
       },
     },
   },
-};
-
-console.log(theme);
+  studioTheme
+);
 
 export default function AWSThemeProvider({
   children,

@@ -8,7 +8,6 @@ import {
   Button,
   Flex,
   Loader,
-  ThemeProvider,
   View,
   withAuthenticator,
 } from '@aws-amplify/ui-react';
@@ -18,7 +17,6 @@ import Papa from 'papaparse';
 import React, { useEffect, useState } from 'react';
 import awsExports from '../aws-exports';
 import page from './page.module.css';
-import theme from './theme';
 
 Amplify.configure(awsExports);
 
@@ -89,110 +87,110 @@ const App: React.FC = () => {
   const values = csvData.map((row) => Number(row.Value)); // Convert 'Value' to numbers
 
   return (
-      <Authenticator>
-        {({ signOut, user }) => (
-          <main>
-            <View as='section' className='home-header'>
-              <Flex as='div' direction='column' className='container'>
-                <h1 className='header-text'>
-                  Democratizing Youth <span className='highlight'>Data</span>
-                </h1>
-                <h3 className='header-subtext'>
-                  An open data portal powered by{' '}
-                  <a href='https://youthfulcities.com/'>Youthful Cities</a>
-                </h3>
-                <View as='div' className='relative-container' shrink={3}>
-                  <img
-                    className='clip hero-img'
-                    src='https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
-                    alt='New York City at sunset'
-                  />
-                  <img
-                    className='hero-logo'
-                    src='/assets/theme_image/THE_GRID_logo_RGB_yellow.png'
-                    alt='THE GRID logo'
-                  />
-                </View>
-              </Flex>
-            </View>
+    <Authenticator>
+      {({ signOut, user }) => (
+        <main>
+          <View as='section' className='home-header'>
+            <Flex as='div' direction='column' className='container'>
+              <h1 className='header-text'>
+                Democratizing Youth <span className='highlight'>Data</span>
+              </h1>
+              <h3 className='header-subtext'>
+                An open data portal powered by{' '}
+                <a href='https://youthfulcities.com/'>Youthful Cities</a>
+              </h3>
+              <View as='div' className='relative-container' shrink={3}>
+                <img
+                  className='clip hero-img'
+                  src='https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
+                  alt='New York City at sunset'
+                />
+                <img
+                  className='hero-logo'
+                  src='/assets/theme_image/THE_GRID_logo_RGB_yellow.png'
+                  alt='THE GRID logo'
+                />
+              </View>
+            </Flex>
+          </View>
 
-            <section className='highlight-bar soft-shadow'>
-              <Flex className={page.container} justifyContent='space-between'>
-                <div className='fact'>
-                  <div>
-                    <h4 className='light-heading'>Datasets</h4>
-                    <h3 className='outline-text'>0</h3>
-                  </div>
+          <section className='highlight-bar soft-shadow'>
+            <Flex className={page.container} justifyContent='space-between'>
+              <div className='fact'>
+                <div>
+                  <h4 className='light-heading'>Datasets</h4>
+                  <h3 className='outline-text'>0</h3>
                 </div>
-                <div className='fact'>
-                  <div>
-                    <h4 className='light-heading'>Downloads</h4>
-                    <h3 className='outline-text'>0</h3>
-                  </div>
-                </div>
-                <div className='fact'>
-                  <div>
-                    <h4 className='light-heading'>Downloads</h4>
-                    <h3 className='outline-text'>0</h3>
-                  </div>
-                </div>
-              </Flex>
-            </section>
-            <View as='section' className='container section-padding'>
-              <h2>
-                Explore <span className='alt-highlight'>Data</span>
-              </h2>
-              <div className='inner-container'>
-                <div className='cards-container'>
-                  <DataCard
-                    fetchUrl={fetchUrl}
-                    title='Urban Work Index 2023'
-                    url='UWI 2023 FINAL DATA FOR THE GRID — SCORES - ALL.csv'
-                  />
-                  <DataCard
-                    title='Pivot 2020 Interviews'
-                    fetchUrl={fetchUrl}
-                    url='pivot-2020-interview.csv'
-                  />
-                  <DataCard
-                    fetchUrl={fetchUrl}
-                    title='Pivot 2020 Survey'
-                    url='pivot-2020-survey-aggregated.csv'
-                  />
-                </div>
-                {loading ? (
-                  <Loader />
-                ) : (
-                  signedUrl && <DataTable csvData={csvData} />
-                )}
-                {signedUrl && <BarGraph labels={labels} values={values} />}
               </div>
-            </View>
+              <div className='fact'>
+                <div>
+                  <h4 className='light-heading'>Downloads</h4>
+                  <h3 className='outline-text'>0</h3>
+                </div>
+              </div>
+              <div className='fact'>
+                <div>
+                  <h4 className='light-heading'>Downloads</h4>
+                  <h3 className='outline-text'>0</h3>
+                </div>
+              </div>
+            </Flex>
+          </section>
+          <View as='section' className='container section-padding'>
+            <h2>
+              Explore <span className='alt-highlight'>Data</span>
+            </h2>
+            <div className='inner-container'>
+              <div className='cards-container'>
+                <DataCard
+                  fetchUrl={fetchUrl}
+                  title='Urban Work Index 2023'
+                  url='UWI 2023 FINAL DATA FOR THE GRID — SCORES - ALL.csv'
+                />
+                <DataCard
+                  title='Pivot 2020 Interviews'
+                  fetchUrl={fetchUrl}
+                  url='pivot-2020-interview.csv'
+                />
+                <DataCard
+                  fetchUrl={fetchUrl}
+                  title='Pivot 2020 Survey'
+                  url='pivot-2020-survey-aggregated.csv'
+                />
+              </div>
+              {loading ? (
+                <Loader />
+              ) : (
+                signedUrl && <DataTable csvData={csvData} />
+              )}
+              {signedUrl && <BarGraph labels={labels} values={values} />}
+            </div>
+          </View>
 
-            <section className='container section-padding'>
-              <h2>
-                What is the <span className='alt-highlight'>Grid?</span>
-              </h2>
-              <div className='inner-container'>
-                <p>
-                  A free, open-source, intuitive data portal for young people,
-                  communities, planners, organizations, governments, and more to
-                  improve our future, inspire further research and shape
-                  youth-informed policies.
-                </p>
-                <p>
-                  THE GRID highlights youth voices across 3,000+ survey
-                  responses, 20,000 minutes of interviews, and an index
-                  containing over 23,000+ data points, allowing users to compare
-                  and contrast qualitative and quantitative data across 47
-                  Canadian cities and 23 topics.
-                </p>
-                <Button onClick={signOut}>Sign out</Button>
-              </div>
-            </section>
-          </main>
-        )}
-      </Authenticator>
+          <section className='container section-padding'>
+            <h2>
+              What is the <span className='alt-highlight'>Grid?</span>
+            </h2>
+            <div className='inner-container'>
+              <p>
+                A free, open-source, intuitive data portal for young people,
+                communities, planners, organizations, governments, and more to
+                improve our future, inspire further research and shape
+                youth-informed policies.
+              </p>
+              <p>
+                THE GRID highlights youth voices across 3,000+ survey responses,
+                20,000 minutes of interviews, and an index containing over
+                23,000+ data points, allowing users to compare and contrast
+                qualitative and quantitative data across 47 Canadian cities and
+                23 topics.
+              </p>
+              <Button onClick={signOut}>Sign out</Button>
+            </div>
+          </section>
+        </main>
+      )}
+    </Authenticator>
   );
 };
 

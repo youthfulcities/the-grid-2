@@ -31,7 +31,7 @@ export default function HeroLayout2(props) {
     },
     {
       overrides: {
-        "Full stack": { color: "rgba(183,165,243,1)" },
+        "Full stack": { color: "rgba(255,242,209,1)" },
         "Build full-stack web and mobile apps in hours. Easy to start, easy to scale":
           { color: "rgba(205,137,174,1)" },
         "AWS Amplify is a complete solution that lets frontend web and mobile developers easily build, ship, and host full-stack applications on AWS, with the flexibility to leverage the breadth of AWS services as use cases evolve. No cloud expertise needed.":

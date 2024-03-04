@@ -54,7 +54,7 @@ export default function CTASection(props) {
             fontFamily="Inter"
             fontSize="16px"
             fontWeight="700"
-            color="rgba(83,38,232,1)"
+            color="rgba(251,208,101,1)"
             lineHeight="24px"
             textAlign="left"
             display="block"

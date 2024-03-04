@@ -5,13 +5,3 @@
   margin-right: auto;
   margin-left: auto;
 }
-
-.card {
-  position: relative;
-  background-color: var(--plum);
-  color: var(--yellow);
-  width: 100%;
-  padding: 0;
-  transition: all 0.8s ease;
-  box-sizing: content-box;
-}

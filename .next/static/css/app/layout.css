@@ -6322,13 +6322,16 @@ html[dir=rtl] .amplify-field-group__inner-start {
 * Browsers: last 4 version
 */
 
+/* Note: this code has been copied from THE GRID 1.0 and some classes may be obsolete */
+
 /* Fonts
 ========================================================================== */
 
 @font-face {
   font-family: 'Gotham Narrow Black';
   src: url('/assets/theme_font/GothamNarrow-Black.eot');
-  src: url('/assets/theme_font/GothamNarrow-Black.eot?#iefix')
+  src:
+    url('/assets/theme_font/GothamNarrow-Black.eot?#iefix')
       format('embedded-opentype'),
     url('/assets/theme_font/GothamNarrow-Black.woff2') format('woff2'),
     url('/assets/theme_font/GothamNarrow-Black.woff') format('woff'),
@@ -6340,7 +6343,8 @@ html[dir=rtl] .amplify-field-group__inner-start {
 @font-face {
   font-family: 'Gotham Narrow Medium';
   src: url('/assets/theme_font/GothamNarrow-Medium.eot');
-  src: url('/assets/theme_font/GothamNarrow-Medium.eot?#iefix')
+  src:
+    url('/assets/theme_font/GothamNarrow-Medium.eot?#iefix')
       format('embedded-opentype'),
     url('/assets/theme_font/GothamNarrow-Medium.woff2') format('woff2'),
     url('/assets/theme_font/GothamNarrow-Medium.woff') format('woff'),
@@ -6352,7 +6356,8 @@ html[dir=rtl] .amplify-field-group__inner-start {
 @font-face {
   font-family: 'Gotham Narrow Light';
   src: url('/assets/theme_font/GothamNarrow-Light.eot');
-  src: url('/assets/theme_font/GothamNarrow-Light.eot?#iefix')
+  src:
+    url('/assets/theme_font/GothamNarrow-Light.eot?#iefix')
       format('embedded-opentype'),
     url('/assets/theme_font/GothamNarrow-Light.woff2') format('woff2'),
     url('/assets/theme_font/GothamNarrow-Light.woff') format('woff'),
@@ -6364,7 +6369,8 @@ html[dir=rtl] .amplify-field-group__inner-start {
 @font-face {
   font-family: 'Gotham Narrow Book';
   src: url('/assets/theme_font/GothamNarrow-Book.eot');
-  src: url('/assets/theme_font/GothamNarrow-Book.eot?#iefix')
+  src:
+    url('/assets/theme_font/GothamNarrow-Book.eot?#iefix')
       format('embedded-opentype'),
     url('/assets/theme_font/GothamNarrow-Book.woff2') format('woff2'),
     url('/assets/theme_font/GothamNarrow-Book.woff') format('woff'),
@@ -6375,7 +6381,8 @@ html[dir=rtl] .amplify-field-group__inner-start {
 @font-face {
   font-family: 'Adelle';
   src: url('/assets/theme_font/Adelle-SemiBold.eot');
-  src: url('/assets/theme_font/Adelle-SemiBold.eot?#iefix')
+  src:
+    url('/assets/theme_font/Adelle-SemiBold.eot?#iefix')
       format('embedded-opentype'),
     url('/assets/theme_font/Adelle-SemiBold.woff2') format('woff2'),
     url('/assets/theme_font/Adelle-SemiBold.woff') format('woff'),
@@ -6454,7 +6461,9 @@ h5 {
   margin: 0px 0 10px 0;
   color: #000;
 }
-p {
+p,
+.amplify-text {
+  font-family: 'Gotham Narrow Book', sans-serif;
   font-size: 1.15rem;
   margin: 0 0 10px 0;
 }
@@ -6565,7 +6574,8 @@ li {
 /* Box styles
 ========================================================================== */
 .soft-shadow {
-  box-shadow: 0px 100px 80px rgba(0, 0, 0, 0.07),
+  box-shadow:
+    0px 100px 80px rgba(0, 0, 0, 0.07),
     0px 41.7776px 33.4221px rgba(0, 0, 0, 0.0503198),
     0px 22.3363px 17.869px rgba(0, 0, 0, 0.0417275),
     0px 12.5216px 10.0172px rgba(0, 0, 0, 0.035),
@@ -6879,10 +6889,6 @@ a.outline-button:hover {
   width: 100%;
   margin-right: -100%;
   min-height: 350px;
-
-  /* display: -ms-grid;
-    display: grid;
-    place-items: start; */
   position: absolute;
   top: 0;
   left: 0;
@@ -7559,7 +7565,9 @@ a:active {
   /* Gives that scrolling effect as the typing happens */
   letter-spacing: 0.15em;
   /* Adjust as needed */
-  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+  animation:
+    typing 3.5s steps(40, end),
+    blink-caret 0.75s step-end infinite;
 }
 /* The typing effect */
 @keyframes typing {

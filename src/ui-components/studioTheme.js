@@ -126,11 +126,11 @@ export default createTheme({
         paddingInlineEnd: {
           value: "{components.fieldcontrol.paddingInlineEnd.value}",
         },
-        borderColor: { value: "{components.fieldcontrol.borderColor.value}" },
+        borderColor: { value: "hsl(36, 100%, 45%)" },
         borderWidth: { value: "{components.fieldcontrol.borderWidth.value}" },
         borderStyle: { value: "{components.fieldcontrol.borderStyle.value}" },
         borderRadius: { value: "{components.fieldcontrol.borderRadius.value}" },
-        color: { value: "{colors.font.primary.value}" },
+        color: { value: "hsl(0, 0%, 0%)" },
         _hover: {
           color: { value: "{colors.font.focus.value}" },
           backgroundColor: { value: "{colors.brand.primary.10.value}" },
@@ -163,7 +163,7 @@ export default createTheme({
           borderColor: { value: "transparent" },
           borderWidth: { value: "{borderWidths.small.value}" },
           borderStyle: { value: "solid" },
-          backgroundColor: { value: "{colors.brand.primary.80.value}" },
+          backgroundColor: { value: "{colors.brand.primary.90.value}" },
           color: { value: "{colors.font.inverse.value}" },
           _disabled: {
             borderColor: { value: "transparent" },
@@ -497,7 +497,7 @@ export default createTheme({
       },
       fieldcontrol: {
         borderStyle: { value: "solid" },
-        borderColor: { value: "{colors.border.primary.value}" },
+        borderColor: { value: "hsl(43, 95%, 69%)" },
         borderWidth: { value: "{borderWidths.small.value}" },
         borderRadius: { value: "{radii.small.value}" },
         color: { value: "{colors.font.primary.value}" },
@@ -1054,7 +1054,7 @@ export default createTheme({
         },
       },
       text: {
-        color: { value: "{colors.font.primary.value}" },
+        color: { value: "hsl(0, 0%, 100%)" },
         primary: { color: { value: "{colors.font.primary.value}" } },
         secondary: { color: { value: "{colors.font.secondary.value}" } },
         tertiary: { color: { value: "{colors.font.tertiary.value}" } },
@@ -1142,9 +1142,9 @@ export default createTheme({
       },
     },
     borderWidths: {
-      small: { value: "1px" },
-      medium: { value: "2px" },
-      large: { value: "3px" },
+      small: { value: "3px" },
+      medium: { value: "5px" },
+      large: { value: "7px" },
     },
     colors: {
       red: {
@@ -1239,13 +1239,13 @@ export default createTheme({
           100: { value: "{colors.purple.100.value}" },
         },
         secondary: {
-          10: { value: "{colors.blue.10.value}" },
-          20: { value: "{colors.blue.20.value}" },
-          40: { value: "{colors.blue.40.value}" },
-          60: { value: "{colors.blue.60.value}" },
-          80: { value: "{colors.blue.80.value}" },
-          90: { value: "{colors.blue.90.value}" },
-          100: { value: "{colors.blue.100.value}" },
+          10: { value: "{colors.yellow.10.value}" },
+          20: { value: "{colors.yellow.20.value}" },
+          40: { value: "{colors.yellow.40.value}" },
+          60: { value: "{colors.yellow.60.value}" },
+          80: { value: "{colors.yellow.80.value}" },
+          90: { value: "{colors.yellow.90.value}" },
+          100: { value: "{colors.yellow.100.value}" },
         },
       },
       font: {
@@ -1274,7 +1274,7 @@ export default createTheme({
         success: { value: "{colors.green.20.value}" },
       },
       border: {
-        primary: { value: "{colors.neutral.60.value}" },
+        primary: { value: "{colors.red.60.value}" },
         secondary: { value: "{colors.neutral.40.value}" },
         tertiary: { value: "{colors.neutral.20.value}" },
         disabled: { value: "{colors.border.tertiary.value}" },
@@ -1365,9 +1365,9 @@ export default createTheme({
       large: { value: "3px" },
     },
     radii: {
-      xs: { value: "0.125rem" },
-      small: { value: "0.25rem" },
-      medium: { value: "0.5rem" },
+      xs: { value: "0" },
+      small: { value: "0" },
+      medium: { value: "0" },
       large: { value: "1rem" },
       xl: { value: "2rem" },
       xxl: { value: "4rem" },

@@ -216,6 +216,8 @@ li {
   width: 70%;
   transform: translate(5%);
   padding-bottom: 0;
+  margin-right: auto;
+  margin-left: auto;
 }
 .inner-container {
   width: 90%;

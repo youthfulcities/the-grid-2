@@ -27,16 +27,12 @@ export const metadata: Metadata = {
   description: '',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang='en'>
-      <body>
-        <AWSThemeProvider>{children}</AWSThemeProvider>
-      </body>
-    </html>
-  );
-}
+const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <html lang='en'>
+    <body>
+      <AWSThemeProvider>{children}</AWSThemeProvider>
+    </body>
+  </html>
+);
+
+export default RootLayout;

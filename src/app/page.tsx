@@ -54,7 +54,9 @@ const App: React.FC = () => {
     }
   }, [signedUrl]); // useEffect will run whenever signedUrl changes
 
-  const fetchUrl = async (filename: string) => {
+  const fetchUrl = async (
+    filename: string
+  ): Promise<{ url: URL; expiresAt: Date } | null> => {
     try {
       setLoading(true);
       const getUrlResult = await getUrl({
@@ -68,9 +70,11 @@ const App: React.FC = () => {
       });
       setSignedUrl(getUrlResult);
       setLoading(false);
+      return getUrlResult;
     } catch (error) {
       console.error('Error fetching URL:', error);
       setLoading(false);
+      return null; // Return null in case of error
     }
   };
 
@@ -110,9 +114,7 @@ const App: React.FC = () => {
         </h2>
         <div className='inner-container'>
           <div className='cards-container'>
-            <DataCard
-              fetchUrl={fetchUrl}
-            />
+            <DataCard fetchUrl={fetchUrl} />
           </div>
         </div>
       </View>

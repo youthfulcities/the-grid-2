@@ -13,11 +13,21 @@ import { v4 as uuidv4 } from 'uuid';
 import datasetCards from '../data/dataset-cards.json';
 
 interface AppProps {
-  fetchUrl: (url: string) => void;
+  fetchUrl: (url: string) => Promise<{ url: URL; expiresAt: Date } | null>;
 }
 
 const DataCard = ({ fetchUrl }: AppProps) => {
   const { tokens } = useTheme();
+
+  const download = async (file: string) => {
+    try {
+      const getUrlResult: { url: URL; expiresAt: Date } | null =
+        await fetchUrl(file);
+      window.open(getUrlResult?.url.href);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    }
+  };
 
   return datasetCards.datasetCards.map((card) => (
     <Card
@@ -69,7 +79,7 @@ const DataCard = ({ fetchUrl }: AppProps) => {
             borderRadius='35px'
             padding='8px 16px 8px 16px'
             backgroundColor='brand.secondary.60'
-            onClick={() => fetchUrl(card.file)}
+            onClick={() => download(card.file)}
             color='brand.primary.60'
           >
             <FaFileArrowDown size='1.5em' />

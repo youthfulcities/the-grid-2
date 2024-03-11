@@ -24,10 +24,8 @@ const theme = createTheme(
   studioTheme
 );
 
-export default function AWSThemeProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
-}
+const AWSThemeProvider = ({ children }: { children: React.ReactNode }) => (
+  <ThemeProvider theme={theme}>{children}</ThemeProvider>
+);
+
+export default AWSThemeProvider;

@@ -1,0 +1,215 @@
+{
+  "priorityCardsTamarack": [
+    {
+      "title": "Employment and Mentorship",
+      "description": "This topic is also referred to as Youth Employment.",
+      "className": "image-card-youth-employment",
+      "datasets": [
+        {
+          "title": "Index",
+          "link": "/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&refine.topic_en=Youth%20Employment",
+          "icon": "fa fa-database"
+        }
+      ],
+      "keywords": [
+        "young people",
+        "adolescents",
+        "young adults",
+        "youth employment centres",
+        "paid",
+        "internships",
+        "money",
+        "income",
+        "undergrad",
+        "post-secondary",
+        "high schools",
+        "placements",
+        "certification",
+        "training",
+        "workshops",
+        "mentorship",
+        "profession",
+        "peer",
+        "unemployment"
+      ]
+    },
+    {
+      "title": "Accessible Education",
+      "description": "This topic is also referred to as Education and Training.",
+      "className": "image-card-education-and-training",
+      "datasets": [
+        {
+          "title": "Index",
+          "link": "/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&refine.topic_en=Education+%2B+Training",
+          "icon": "fa fa-database"
+        }
+      ],
+      "keywords": [
+        "school",
+        "trades",
+        "mentorship",
+        "apprenticeship",
+        "alternative learning",
+        "graduation rate",
+        "high school",
+        "food program",
+        "indigenous",
+        "support",
+        "heritage",
+        "traditional",
+        "safe",
+        "French",
+        "scholarships",
+        "post-secondary",
+        "universities",
+        "POC",
+        "college",
+        "cost",
+        "residence",
+        "meal plan",
+        "degrees",
+        "diplomas",
+        "tuition",
+        "non-school learning",
+        "First Nations",
+        "curriculum",
+        "hands on",
+        "workshops",
+        "international students",
+        "hours",
+        "application fee",
+        "class size",
+        "workforce"
+      ]
+    },
+    {
+      "title": "Holistic Health and Wellbeing",
+      "description": "This topic is also referred to as Public Health Services and includes indicators from Cost of Living and Public Safety.",
+      "className": "image-card-public-health-services",
+      "datasets": [
+        {
+          "title": "Index",
+          "link": "/explore/dataset/tamarack-index/table/?disjunctive.indicator_en&disjunctive.measurement_en&refine.indicator_en=Cost+of+menstrual+products&refine.indicator_en=Sexual+health+scale&refine.indicator_en=Health+clinics&refine.indicator_en=Reproductive+health+scale&refine.indicator_en=Post+secondary+mental+health+scale&refine.indicator_en=Harm+reduction+scale&refine.indicator_en=Food+bank+scale&refine.indicator_en=Funding+of+community+and+social+programming&refine.indicator_en=high+school+mental+health+scale",
+          "icon": "fa fa-database"
+        }
+      ],
+      "keywords": [
+        "menstrual products",
+        "food bank",
+        "harm reduction scale",
+        "addiction",
+        "substance abuse",
+        "rehabilitation",
+        "hospital",
+        "medical",
+        "sickness",
+        "mental health scale",
+        "reproductive health scale",
+        "sexual health scale",
+        "crisis hotlines",
+        "home kits",
+        "doulas",
+        "condoms",
+        "birth control",
+        "free",
+        "dental",
+        "gynocologist",
+        "safe abortion",
+        "MHFA",
+        "awareness",
+        "suicide prevention",
+        "counselling",
+        "cirriculum",
+        "victim",
+        "abuse",
+        "hotline",
+        "STI",
+        "testing",
+        "queer",
+        "anonymous",
+        "mifegymiso",
+        "wait times"
+      ]
+    },
+    {
+      "title": "Identity and Social Connections",
+      "description": "This includes indicators from the topics of Public Built Space, Green Space, and Sports + Recreation",
+      "className": "image-card-public-built-space",
+      "datasets": [
+        {
+          "title": "Index",
+          "link": "/explore/dataset/tamarack-index/table/?disjunctive.indicator_en&disjunctive.measurement_en&refine.indicator_en=Library+scale&refine.indicator_en=Traditional+Knowledge&refine.indicator_en=Safe+spaces,+connections,+and+learning&refine.indicator_en=Community+centre+accessibility+scale&refine.indicator_en=Sports+facilities%2Ffields&refine.indicator_en=Community+recreation+centres&refine.indicator_en=Recreational+space",
+          "icon": "fa fa-database"
+        }
+      ],
+      "keywords": [
+        "library scale",
+        "traditional knowledge",
+        "safe spaces",
+        "community centres",
+        "gardens",
+        "tourism",
+        "recreation",
+        "open",
+        "dog parks",
+        "languages",
+        "remote programming",
+        "outdoor gyms",
+        "playgrounds",
+        "skate parks"
+      ]
+    },
+    {
+      "title": "Youth Engagement and Leadership",
+      "description": "This topic is also referred to as Civic Engagement.",
+      "className": "image-card-civic-engagement",
+      "datasets": [
+        {
+          "title": "Index",
+          "link": "/explore/dataset/tamarack-index/table/?disjunctive.indicator_en&disjunctive.measurement_en&refine.topic_en=Civic+Engagement",
+          "icon": "fa fa-database"
+        }
+      ],
+      "keywords": [
+        "city",
+        "council",
+        "indigenous",
+        "advisory boards",
+        "youth fund",
+        "public",
+        "deputations",
+        "ombudsman",
+        "public advocate",
+        "leadership"
+      ]
+    },
+    {
+      "title": "Service Navigation and Access to Supports",
+      "description": "This includes indicators from the topics of Cost of Living, Public Transit, Financial Services, and Digital Access",
+      "className": "image-card-digital-access",
+      "datasets": [
+        {
+          "title": "Index",
+          "link": "/explore/dataset/tamarack-index/table/?disjunctive.indicator_en&disjunctive.measurement_en&refine.indicator_en=Housing+insecurity+scale&refine.indicator_en=Rental+housing&refine.indicator_en=Transit+accessibility&refine.indicator_en=Financial+literacy+resources&refine.indicator_en=Broadband+internet+scale&refine.indicator_en=Free+wifi&refine.indicator_en=Public+Transit",
+          "icon": "fa fa-database"
+        }
+      ],
+      "keywords": [
+        "public transportation",
+        "financial literacy programs",
+        "rental housing",
+        "housing insecurity scale",
+        "phone",
+        "device",
+        "internet",
+        "accessibility",
+        "broadband",
+        "free wifi",
+        "speed",
+        "high speed",
+        "download",
+        "upload"
+      ]
+    }
+  ]
+}

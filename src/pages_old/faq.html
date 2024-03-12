@@ -1,0 +1,303 @@
+<div
+  ng-init="questions = [
+              {
+              'q':'What is THE GRID?',
+              'a':'<p>THE GRID is an open data portal with a focus on Canadian cities and youth.</p>'
+              },
+              {
+              'q':'What is open data?', 
+              'a':'<p><a href=&#34;https://open.canada.ca/en/open-data-principles&#34;>Open Data 101</a> shares that &#34;open data is 
+              defined as structured data that is machine-readable, freely shared, used and built on without restrictions.&#34;</p>'
+              },
+              {
+              'q':'What is an open data portal?', 
+              'a':'<p>A freely available web-based platform where data is machine-readable, simple to access, and easy to reuse.
+              Visit <a href=&#34;https://open.canada.ca/en/open-data-principles&#34;>Open Data 101 Government of Canada</a> to learn more.</p>'
+              },
+              {
+              'q':'What is raw data?', 
+              'a':'<p>Raw data, also known as primary data, is data collected from a source. 
+              Each transaction is recorded and stored in a database without any alteration.</p>'
+              },
+              {
+              'q':'What is processed data?', 
+              'a':'<p>Processed data means the data has been processed, segmented or categorized from its raw state. 
+              Generally speaking, processed data is ready to be analyzed.</p>'
+              },
+              {
+              'q':'What platform are you hosting THE GRID on?', 
+              'a':'<p>We have aligned ourselves with <a href=&#34;https://www.opendatasoft.com/&#34;>Opendatasoft</a>, a France-based company providing data management platform services. Opendatasoft\'s mission is to support organizations by helping people access data and make sense of it.</p>'
+              },
+              {
+              'q':'Who owns the data on THE GRID?', 
+              'a':'<p>The data collected and analyzed for Pivot 2020 is owned by Simon Fraser University (SFU). Ultimately SFU is accountable for the data that has been published, the quality of the data sets and any action on data quality issues.</p>
+              <p>For all other datasets, the data is owned by Youthful Cities (a project of Decode Inc.)</p>
+              <p>See the <a href=&#34;/terms/terms-and-conditions/&#34;>Terms and Conditions</a> for more information.</p>'
+              },
+              {
+              'q':'Who manages the data on THE GRID?', 
+              'a':'<p>Youthful Cities has taken on the role of data stewards for the data collected and analyzed for Pivot 2020 and subsequent projects.</p>'
+              }];
+
+              usingQuestions = [
+              {'q':'Can you filter by multiple cities at once?',
+              'a':'<p>Yes, to filter by multiple cities select more than one city. Click on a city to select or deselect it.</p>'
+              },
+              {'q':'Can you filter by multiple topics at once?',
+              'a':'<p>No, you can only select 1 topic option to filter at a time. However, multiple measurements can be selected.</p>'
+              },
+              {'q':'How do you download only a section of the dataset?',
+              'a':'<p>Choose the dataset you would like a subsection of, then apply whichever filters you desire on the left. Next, go to the ‘Export’ tab. Here you will have the option to download either the entire dataset or just the subsection that meets your chosen filters.</p>'
+              },
+              {'q':'Why are some of the topics different from dataset to dataset?',
+              'a':'<p>The datasets have different topics depending on the research method, time of collection, and purpose. A unifying ‘Topic’ column has been added to the datasets, standardizing the dataset-specific topics into groups.</p>'
+              },
+              {'q':'What does the Census Metropolitan Area (CMA) refer to?',
+              'a':' <p>
+              One or more neighboring municipalities located around an urban core area. 
+              To learn more about the CMAs, visit <a href=&#34;https://www150.statcan.gc.ca/n1/pub/92-195-x/2011001/geo/cma-rmr/def-eng.htm&#34;>Statistics Canada</a> to learn more. 
+              </p>'
+              },
+              {'q':'What if I notice discrepancies in the information or data hygiene issues?',
+              'a':'                    <p>
+              Data from THE GRID has been manually collected from different sources. 
+              If a measurement is empty or 0 in value this means that during the data collection phase, relevant data was not collected. 
+              If you would like to contribute to THE GRID by providing data along with its source or notice any discrepancies in the information, 
+              please let us know via <a href=&#34;/pages/contact&#34;>Contact Us</a>.
+              </p>'
+              }
+              ];
+
+              researchQuestions = [
+              {
+              'q':'What is an index?',
+              'a':'<p>An index is a collection of indicators that we can use to score and rank cities. Indicators are broken down into measurements, with each measurement having a quantifiable value. These values are comparable and allow us to see how a city or region is doing in a particular area. For example, &#34;Transit accessibility&#34; is an indicator, and &#34;Number of different modes of transit&#34; is a measurement used to measure that indicator.</p>'
+              },
+              {
+              'q':'How accurate is the index data?', 
+              'a':'<p>The index data was deemed accurate as of the time it was last updated but is subject to human error. Any resources that could not be found within a reasonable amount of time searching (approx. 1 hour) were deemed inaccessible and therefore not included in the index despite the fact that they may exist.</p>
+              <p>If your organization is interested in funding an updated index based on new or existing topics, please <a href=&#34;/pages/contact&#34;>get in touch with us.</a></p>'
+              },
+              {
+              'q':'What is an indicator?',
+              'a':'<p>An indicator is something that points to, measures or otherwise provides a summary overview of a specific concept, and a set of indicators that are combined is referred to as an index. A good indicator needs to be measurable, relevant, and easy to access and collect the information from.</p>'
+              },
+              {
+              'q':'Why do we need indicators?',
+              'a':'<p>Indicators give us a common language, through numbers and data, to describe or explain a situation. Indicators highlight opportunities, gaps, and challenges and help identify problems and propose solutions.</p>
+              <p>There are two types of indicators:
+              Central indicators can be collected from databases like StatsCan or a government agency
+              Local indicators are intended to be collected through integrated contexts, ie. calling the local library to
+              ask about remote planning.
+              </p>'
+              },
+              {
+              'q':'Are there limitations to indicators?',
+              'a':'<p>There is limited secondary data on racialized populations in Canada and we recognize that there are implications on the absence of race based data. Absence of race based data can partially be attributed to cities not asking questions. One step towards reconciling this is the active decision during the equity audit of the index, indicators were specifically created with urban Indigenous populations, directly from Indigenous youth. What we don’t want the users to do is compare the survey with the index, with the intention to invalidate the experiences of young people whose lives are not captured in the indicators. But rather to use the indicators to support what young people are experiencing through the survey and interviews.</p>'
+              },
+              {
+              'q':'What is a measurement?',
+              'a':'<p>A measurement makes up the indicator in a singular value per city in a question format. Multiple
+              measurements may exist for a single measurement.</p>
+              <p>Eg. Measure 1: What is the cost of an annual public transit pass? (Value = $)</p>
+              <p>Eg. Measure 2: Is there public transit connectivity to high school? (Value = Yes/No)</p>
+              <p>Eg. Measure 3: How often is public transit available in peak times? (value = # in minutes)</p>'
+              },
+              {
+              'q':'What is a scale?',
+              'a':'<p>A scale is a combination of different measurements into one indicator that allows us to quantify otherwise more abstract or qualitative elements of a city.</p>'
+              },
+              {
+              'q':'What is an ethics review and what methods was one used for?',
+              'a':'                                <p>
+              The Pivot 2020 survey and interview went through an ethics review process. 
+              Simon Fraser University is one of the founding partners of Pivot 2020. 
+              As a university that receives funding from Canada’s three federal research agencies, they are required to follow the agencies <sup>1</sup> 
+              <a href=&#34;https://ethics.gc.ca/eng/policy-politique_tcps2-eptc2_2018.html&#34;> Tri-Council Policy Statement: Ethical Conduct for Research Involving Humans (TCPS 2)</a>.  
+              As part of this, all post-secondary institutions are required to set up an internal review process 
+              to make sure that the human research they conduct aligns with the TCPS 2. 
+              Typically, the REB is an independent body made up of faculty from across departments and disciplines, 
+              and a representative from the research ethics office or department. 
+              <br /><br />
+              </p>
+              <p style=&#34;font-size:12px;&#34;>
+              <sup>1</sup> The Canadian Institutes of Health Research (CIHR), the Natural Sciences and Engineering Research Council of Canada (NSERC), 
+              and the Social Sciences and Humanities Research Council of Canada (SSHRC).
+              </p>'
+              }
+              ]"
+>
+  <!-- <section class="header">
+        <div class="container">
+            <h1>
+                Frequently Asked <span class="highlight">Questions</span>
+            </h1>
+            <div class="clip hero-img image-card-methodology"></div>
+        </div>
+    </section> -->
+  <section class="container" id="faqs">
+    <div class="padding">
+      <h1 class="alt-heading">
+        Frequently Asked <span class="alt-highlight">Questions</span>
+      </h1>
+    </div>
+    <nav class="top-margin">
+      <p class="breadcrumbs"><a href="/">Home</a> / FAQ</p>
+    </nav>
+    <!-- QUESTIONS SECTION (FAQs) -->
+    <div class="inner-container padding">
+      <h3>THE GRID & Open Data</h3>
+      <h4>How do I find datasets?</h4>
+      <div class="video-container col-md-12">
+        <iframe
+          width="100%"
+          height="315"
+          src="https://www.youtube.com/embed/Otx1erHSV7w"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <div ng-repeat="question in questions" class="accordion">
+        <div ng-init="open = false">
+          <button
+            class="label thar-three {{open && 'isopen'}}"
+            ng-click="open = !open"
+            aria-controls="q{{$index}}-a"
+            id="q{{$index}}"
+            aria-expanded="{{open}}"
+          >
+            <h4>{{question.q}}</h4>
+          </button>
+          <div
+            id="q{{$index}}-a"
+            aria-labelledby="q{{$index}}"
+            class="content"
+            ng-show="open"
+          >
+            <div ng-bind-html="question.a"></div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="padding">Using THE GRID</h3>
+      <h4>How do I navigate the data in table view?</h4>
+      <div class="video-container col-md-12">
+        <iframe
+          width="100%"
+          height="315"
+          src="https://www.youtube.com/embed/FT1iBQJpfTU"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <h4>How do I use the analyze view to create data visualizations?</h4>
+      <div class="video-container col-md-12">
+        <iframe
+          width="100%"
+          height="315"
+          src="https://www.youtube.com/embed/_nEgm8cN1rk"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <h4>How do I use the data playground?</h4>
+      <div class="video-container col-md-12">
+        <iframe
+          width="100%"
+          height="315"
+          src="https://www.youtube.com/embed/7GUcr3jQtYo"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <h4>How can I create maps?</h4>
+      <div class="video-container col-md-12">
+        <iframe
+          width="100%"
+          height="315"
+          src="https://www.youtube.com/embed/BMsOeYqFVpY"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <h4>Where do I find quotes?</h4>
+      <div class="video-container col-md-12">
+        <iframe
+          width="100%"
+          height="315"
+          src="https://www.youtube.com/embed/Ym9QJazqTaA"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+
+      <div ng-repeat="question in usingQuestions" class="accordion">
+        <div ng-init="open = false">
+          <button
+            class="label thar-three {{open && 'isopen'}}"
+            ng-click="open = !open"
+            aria-controls="q{{$index}}-a"
+            id="q{{$index}}"
+            aria-expanded="{{open}}"
+          >
+            <h4>{{question.q}}</h4>
+          </button>
+          <div
+            id="q{{$index}}-a"
+            aria-labelledby="q{{$index}}"
+            class="content"
+            ng-show="open"
+          >
+            <div ng-bind-html="question.a"></div>
+          </div>
+        </div>
+      </div>
+      <h3 class="padding">Research Methods</h3>
+      <h4>How do we ensure equity, diversity, and inclusion in open data?</h4>
+      <div class="video-container col-md-12">
+        <iframe
+          width="100%"
+          height="315"
+          src="https://www.youtube.com/embed/MtD7NgvhIh0"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <div ng-repeat="question in researchQuestions" class="accordion">
+        <div ng-init="open = false">
+          <button
+            class="label thar-three {{open && 'isopen'}}"
+            ng-click="open = !open"
+            aria-controls="q{{$index}}-a"
+            id="q{{$index}}"
+            aria-expanded="{{open}}"
+          >
+            <h4>{{question.q}}</h4>
+          </button>
+          <div
+            id="q{{$index}}-a"
+            aria-labelledby="q{{$index}}"
+            class="content"
+            ng-show="open"
+          >
+            <div ng-bind-html="question.a"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

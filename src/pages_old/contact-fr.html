@@ -1,0 +1,32 @@
+<div>
+  <!-- Contact Us -->
+  <div class="container padding">
+    <p class="breadcrumbs"><a href="/">Accueil</a> / Contactez-nous</p>
+  </div>
+  <section class="container">
+    <h1>Contactez-nous</h1>
+    <div class="inner-container">
+      <ods-page-contact-form
+        name-label="Nom"
+        additional-fields="[
+                                                      {
+                                                      id: 'category',
+                                                      name: 'category',
+                                                      label: 'Catégorie',
+                                                      type: 'choice',
+                                                      choices: [
+                                                      'Demandes médiatiques',
+                                                      'Difficultés techniques',
+                                                      'Signaler un bogue',
+                                                      'Autre'
+                                                      ],
+                                                      required: true,
+                                                      }
+                                                      ]"
+        email-label="Adresse courriel"
+        message-label="Écrivez votre message ici…"
+      >
+      </ods-page-contact-form>
+    </div>
+  </section>
+</div>

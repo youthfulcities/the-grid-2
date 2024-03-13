@@ -33,9 +33,9 @@ export declare type GRIDCardMainOverridesProps = {
     "Circle Button58551427"?: CircleButtonProps;
 } & EscapeHatchProps;
 export declare type GRIDCardMainProps = React.PropsWithChildren<Partial<FlexProps> & {
-    title?: String;
-    year?: Number;
-    description?: String;
+    title?: string;
+    year?: number;
+    description?: string;
     cardActionButtons?: React.ReactNode;
 } & {
     overrides?: GRIDCardMainOverridesProps | undefined | null;

@@ -3,6 +3,8 @@
 import BarGraph from '@/components/BarGraph';
 import DataCard from '@/components/DataCard';
 import DataTable from '@/components/DataTable';
+import NavBar from '@/components/NavBar';
+import ComingSoon from '@/components/ComingSoon'
 import {
   Authenticator,
   Button,
@@ -90,6 +92,8 @@ const App: React.FC = () => {
     <Authenticator>
       {({ signOut, user }) => (
         <main>
+          <ComingSoon />
+          {/* <NavBar />
           <View as='section' className='home-header'>
             <Flex as='div' direction='column' className='container'>
               <h1 className='header-text'>
@@ -187,7 +191,7 @@ const App: React.FC = () => {
               </p>
               <Button onClick={signOut}>Sign out</Button>
             </div>
-          </section>
+          </section> */}
         </main>
       )}
     </Authenticator>

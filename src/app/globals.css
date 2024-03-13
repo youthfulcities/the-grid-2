@@ -1413,3 +1413,22 @@ a:active {
     transform: translateY(-8px);
   }
 }
+
+.NavList{
+  color: rgba(0,0,0,1);
+  font-size: 16px;
+  font-Family:'Gotham Narrow';
+  font-weight: 350;
+  text-transform: uppercase;
+  display: block;
+  text-align: left;
+  line-height: 24px;
+  direction: column;
+  flex-shrink: 0;
+  position: relative;
+  white-space: pre-wrap;
+}
+
+
+
+

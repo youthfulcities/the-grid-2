@@ -89,11 +89,11 @@ const App: React.FC = () => {
   const values = csvData.map((row) => Number(row.Value)); // Convert 'Value' to numbers
 
   return (
-    <Authenticator>
-      {({ signOut, user }) => (
-        <main>
-          <ComingSoon />
-          {/* <NavBar />
+    // <Authenticator>
+    //   {({ signOut, user }) => (
+    <main>
+      <ComingSoon />
+      {/* <NavBar />
           <View as='section' className='home-header'>
             <Flex as='div' direction='column' className='container'>
               <h1 className='header-text'>
@@ -192,10 +192,11 @@ const App: React.FC = () => {
               <Button onClick={signOut}>Sign out</Button>
             </div>
           </section> */}
-        </main>
-      )}
-    </Authenticator>
+    </main>
+    //)
+    //}
+    //   </Authenticator>
   );
 };
 
-export default withAuthenticator(App);
+export default App;

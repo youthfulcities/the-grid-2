@@ -68,6 +68,7 @@ const App: React.FC = () => {
           useAccelerateEndpoint: false,
         },
       });
+      console.log(getUrlResult);
       setSignedUrl(getUrlResult);
       setLoading(false);
       return getUrlResult;

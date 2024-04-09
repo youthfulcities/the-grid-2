@@ -1,4 +1,4 @@
-// File: C:\Users\bo_su\the-grid-2\src\app\layout.tsx
+// File: /home/genna/yc/the-grid-2/src/app/layout.tsx
 import * as entry from '../../../src/app/layout.js'
 import type { ResolvingMetadata } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

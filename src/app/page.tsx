@@ -1,11 +1,10 @@
 'use client';
 
 import Banner from '@/components/Banner';
-import HomeHeader from '@/components/HomeHeader';
 import DataCard from '@/components/DataCard';
 import GridInfo from '@/components/GridInfo';
-import NavBar from '@/components/NavBar';
-import { Flex, View } from '@aws-amplify/ui-react';
+import HomeHeader from '@/components/HomeHeader';
+import { View } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import { getUrl } from 'aws-amplify/storage';
 import Papa from 'papaparse';
@@ -87,8 +86,6 @@ const App: React.FC = () => {
 
   return (
     <main>
-
-      <NavBar />
       <HomeHeader />
       <Banner />
       <View as='section' className='container section-padding'>

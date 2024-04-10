@@ -1,3 +1,6 @@
+//
+
+import NavBar from '@/components/NavBar/NavBar';
 import '@aws-amplify/ui-react/styles.css';
 import { Amplify } from 'aws-amplify';
 import type { Metadata } from 'next';
@@ -30,7 +33,10 @@ export const metadata: Metadata = {
 const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <html lang='en'>
     <body>
-      <AWSThemeProvider>{children}</AWSThemeProvider>
+      <AWSThemeProvider>
+        <NavBar />
+        {children}
+      </AWSThemeProvider>
     </body>
   </html>
 );

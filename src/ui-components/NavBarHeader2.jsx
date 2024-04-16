@@ -14,14 +14,14 @@ export default function NavBarHeader2(props) {
     <Flex
       gap="10px"
       direction="row"
-      width="1440px"
+      width="1480px"
       height="unset"
       justifyContent="space-between"
       alignItems="center"
       overflow="hidden"
       position="relative"
       boxShadow="0px 2px 6px rgba(0.05098039284348488, 0.10196078568696976, 0.14901961386203766, 0.15000000596046448)"
-      padding="16px 32px 16px 32px"
+      padding="16px 85px 16px 32px"
       backgroundColor="rgba(251,208,101,1)"
       {...getOverrideProps(overrides, "NavBarHeader2")}
       {...rest}
@@ -143,8 +143,8 @@ export default function NavBarHeader2(props) {
           position="relative"
           padding="0px 0px 0px 0px"
           whiteSpace="pre-wrap"
-          children="topics"
-          {...getOverrideProps(overrides, "topics")}
+          children="about"
+          {...getOverrideProps(overrides, "about")}
         ></Text>
         <Text
           fontFamily="Gotham Narrow"
@@ -187,28 +187,6 @@ export default function NavBarHeader2(props) {
           position="relative"
           padding="0px 0px 0px 0px"
           whiteSpace="pre-wrap"
-          children="cities"
-          {...getOverrideProps(overrides, "cities")}
-        ></Text>
-        <Text
-          fontFamily="Gotham Narrow"
-          fontSize="16px"
-          fontWeight="350"
-          color="rgba(0,0,0,1)"
-          textTransform="uppercase"
-          lineHeight="24px"
-          textAlign="left"
-          display="block"
-          direction="column"
-          justifyContent="unset"
-          width="unset"
-          height="unset"
-          gap="unset"
-          alignItems="unset"
-          shrink="0"
-          position="relative"
-          padding="0px 0px 0px 0px"
-          whiteSpace="pre-wrap"
           children="data playground"
           {...getOverrideProps(overrides, "data playground")}
         ></Text>
@@ -231,52 +209,8 @@ export default function NavBarHeader2(props) {
           position="relative"
           padding="0px 0px 0px 0px"
           whiteSpace="pre-wrap"
-          children="about"
-          {...getOverrideProps(overrides, "about")}
-        ></Text>
-        <Text
-          fontFamily="Gotham Narrow"
-          fontSize="16px"
-          fontWeight="350"
-          color="rgba(0,0,0,1)"
-          textTransform="uppercase"
-          lineHeight="24px"
-          textAlign="left"
-          display="block"
-          direction="column"
-          justifyContent="unset"
-          width="unset"
-          height="unset"
-          gap="unset"
-          alignItems="unset"
-          shrink="0"
-          position="relative"
-          padding="0px 0px 0px 0px"
-          whiteSpace="pre-wrap"
           children="FAQ"
           {...getOverrideProps(overrides, "FAQ")}
-        ></Text>
-        <Text
-          fontFamily="Gotham Narrow"
-          fontSize="16px"
-          fontWeight="350"
-          color="rgba(0,0,0,1)"
-          textTransform="uppercase"
-          lineHeight="24px"
-          textAlign="left"
-          display="block"
-          direction="column"
-          justifyContent="unset"
-          width="unset"
-          height="unset"
-          gap="unset"
-          alignItems="unset"
-          shrink="0"
-          position="relative"
-          padding="0px 0px 0px 0px"
-          whiteSpace="pre-wrap"
-          children="tutorials"
-          {...getOverrideProps(overrides, "tutorials")}
         ></Text>
         <Text
           fontFamily="Gotham Narrow"

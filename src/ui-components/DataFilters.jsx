@@ -327,7 +327,7 @@ export default function DataFilters(props) {
                   position="relative"
                   padding="0px 0px 0px 0px"
                   whiteSpace="pre-wrap"
-                  children="Search..."
+                  children="Search Filters..."
                   {...getOverrideProps(overrides, "placeholder")}
                 ></Text>
                 <Button
@@ -495,8 +495,6 @@ export default function DataFilters(props) {
                   {...getOverrideProps(overrides, "Frame 439")}
                 >
                   <MyIcon
-                    width="14px"
-                    height="14px"
                     display="block"
                     gap="unset"
                     alignItems="unset"

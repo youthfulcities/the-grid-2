@@ -5,9 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { LogoWithTextProps } from "./LogoWithText";
-import { FlexProps, ImageProps, TextProps } from "@aws-amplify/ui-react";
-import { MyIconProps } from "./MyIcon";
+import { ButtonProps, FlexProps, ImageProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -21,17 +19,23 @@ export declare type Variant = {
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type NavBarHeaderOverridesProps = {
     NavBarHeader?: PrimitiveOverrideProps<FlexProps>;
-    LogoWithText?: LogoWithTextProps;
-    "Frame 32129767076"?: PrimitiveOverrideProps<FlexProps>;
-    Dashboard?: PrimitiveOverrideProps<TextProps>;
-    Jobs?: PrimitiveOverrideProps<TextProps>;
-    Applicants?: PrimitiveOverrideProps<TextProps>;
-    Company?: PrimitiveOverrideProps<TextProps>;
-    "Frame 32129767081"?: PrimitiveOverrideProps<FlexProps>;
-    MyIcon?: MyIconProps;
-    image?: PrimitiveOverrideProps<ImageProps>;
+    "Frame 5"?: PrimitiveOverrideProps<FlexProps>;
+    "Logo Area"?: PrimitiveOverrideProps<ViewProps>;
+    "THE_GRID_logo_RGB_black 1"?: PrimitiveOverrideProps<ImageProps>;
+    "EN | FR"?: PrimitiveOverrideProps<TextProps>;
+    "Right Side"?: PrimitiveOverrideProps<FlexProps>;
+    Home?: PrimitiveOverrideProps<TextProps>;
+    about?: PrimitiveOverrideProps<TextProps>;
+    datasets?: PrimitiveOverrideProps<TextProps>;
+    "data playground"?: PrimitiveOverrideProps<TextProps>;
+    FAQ?: PrimitiveOverrideProps<TextProps>;
+    "contact us"?: PrimitiveOverrideProps<TextProps>;
+    Button5933520?: PrimitiveOverrideProps<ButtonProps>;
+    Button5933521?: PrimitiveOverrideProps<ButtonProps>;
 } & EscapeHatchProps;
 export declare type NavBarHeaderProps = React.PropsWithChildren<Partial<FlexProps> & {
+    property1?: "Default";
+} & {
     overrides?: NavBarHeaderOverridesProps | undefined | null;
 }>;
 export default function NavBarHeader(props: NavBarHeaderProps): React.ReactElement;

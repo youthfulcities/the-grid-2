@@ -239,10 +239,13 @@ export default function MarketingPricing(props) {
               {...getOverrideProps(overrides, "Frame 43039393324")}
             >
               <MyIcon
+                width="24px"
+                height="24px"
                 display="block"
                 gap="unset"
                 alignItems="unset"
                 justifyContent="unset"
+                overflow="hidden"
                 shrink="0"
                 position="relative"
                 padding="0px 0px 0px 0px"
@@ -306,10 +309,13 @@ export default function MarketingPricing(props) {
               {...getOverrideProps(overrides, "Frame 43139393330")}
             >
               <MyIcon
+                width="24px"
+                height="24px"
                 display="block"
                 gap="unset"
                 alignItems="unset"
                 justifyContent="unset"
+                overflow="hidden"
                 shrink="0"
                 position="relative"
                 padding="0px 0px 0px 0px"
@@ -373,10 +379,13 @@ export default function MarketingPricing(props) {
               {...getOverrideProps(overrides, "Frame 43039393348")}
             >
               <MyIcon
+                width="24px"
+                height="24px"
                 display="block"
                 gap="unset"
                 alignItems="unset"
                 justifyContent="unset"
+                overflow="hidden"
                 shrink="0"
                 position="relative"
                 padding="0px 0px 0px 0px"
@@ -545,10 +554,13 @@ export default function MarketingPricing(props) {
               {...getOverrideProps(overrides, "Frame 43039393397")}
             >
               <MyIcon
+                width="24px"
+                height="24px"
                 display="block"
                 gap="unset"
                 alignItems="unset"
                 justifyContent="unset"
+                overflow="hidden"
                 shrink="0"
                 position="relative"
                 padding="0px 0px 0px 0px"
@@ -612,10 +624,13 @@ export default function MarketingPricing(props) {
               {...getOverrideProps(overrides, "Frame 43139393401")}
             >
               <MyIcon
+                width="24px"
+                height="24px"
                 display="block"
                 gap="unset"
                 alignItems="unset"
                 justifyContent="unset"
+                overflow="hidden"
                 shrink="0"
                 position="relative"
                 padding="0px 0px 0px 0px"
@@ -679,10 +694,13 @@ export default function MarketingPricing(props) {
               {...getOverrideProps(overrides, "Frame 43039393405")}
             >
               <MyIcon
+                width="24px"
+                height="24px"
                 display="block"
                 gap="unset"
                 alignItems="unset"
                 justifyContent="unset"
+                overflow="hidden"
                 shrink="0"
                 position="relative"
                 padding="0px 0px 0px 0px"
@@ -851,10 +869,13 @@ export default function MarketingPricing(props) {
               {...getOverrideProps(overrides, "Frame 43039393613")}
             >
               <MyIcon
+                width="24px"
+                height="24px"
                 display="block"
                 gap="unset"
                 alignItems="unset"
                 justifyContent="unset"
+                overflow="hidden"
                 shrink="0"
                 position="relative"
                 padding="0px 0px 0px 0px"
@@ -918,10 +939,13 @@ export default function MarketingPricing(props) {
               {...getOverrideProps(overrides, "Frame 43139393617")}
             >
               <MyIcon
+                width="24px"
+                height="24px"
                 display="block"
                 gap="unset"
                 alignItems="unset"
                 justifyContent="unset"
+                overflow="hidden"
                 shrink="0"
                 position="relative"
                 padding="0px 0px 0px 0px"
@@ -985,10 +1009,13 @@ export default function MarketingPricing(props) {
               {...getOverrideProps(overrides, "Frame 43039393621")}
             >
               <MyIcon
+                width="24px"
+                height="24px"
                 display="block"
                 gap="unset"
                 alignItems="unset"
                 justifyContent="unset"
+                overflow="hidden"
                 shrink="0"
                 position="relative"
                 padding="0px 0px 0px 0px"

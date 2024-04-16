@@ -25,13 +25,10 @@ export declare type NavBarHeader2OverridesProps = {
     "EN | FR"?: PrimitiveOverrideProps<TextProps>;
     "Right Side"?: PrimitiveOverrideProps<FlexProps>;
     Home?: PrimitiveOverrideProps<TextProps>;
-    topics?: PrimitiveOverrideProps<TextProps>;
-    datasets?: PrimitiveOverrideProps<TextProps>;
-    cities?: PrimitiveOverrideProps<TextProps>;
-    "data playground"?: PrimitiveOverrideProps<TextProps>;
     about?: PrimitiveOverrideProps<TextProps>;
+    datasets?: PrimitiveOverrideProps<TextProps>;
+    "data playground"?: PrimitiveOverrideProps<TextProps>;
     FAQ?: PrimitiveOverrideProps<TextProps>;
-    tutorials?: PrimitiveOverrideProps<TextProps>;
     "contact us"?: PrimitiveOverrideProps<TextProps>;
 } & EscapeHatchProps;
 export declare type NavBarHeader2Props = React.PropsWithChildren<Partial<FlexProps> & {

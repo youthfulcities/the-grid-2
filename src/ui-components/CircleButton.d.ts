@@ -6,7 +6,7 @@
 
 import * as React from "react";
 import { MyIconProps } from "./MyIcon";
-import { FlexProps } from "@aws-amplify/ui-react";
+import { FlexProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -21,10 +21,15 @@ export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes
 export declare type CircleButtonOverridesProps = {
     CircleButton?: PrimitiveOverrideProps<FlexProps>;
     MyIcon?: MyIconProps;
+    "Button Icon58551430"?: PrimitiveOverrideProps<ViewProps>;
+    label?: PrimitiveOverrideProps<TextProps>;
+    "Button Icon58551432"?: PrimitiveOverrideProps<ViewProps>;
 } & EscapeHatchProps;
 export declare type CircleButtonProps = React.PropsWithChildren<Partial<FlexProps> & {
     circleButton?: React.ReactNode;
     icon?: React.ReactNode;
+} & {
+    property1?: "Default" | "Disabled" | "Hover";
 } & {
     overrides?: CircleButtonOverridesProps | undefined | null;
 }>;

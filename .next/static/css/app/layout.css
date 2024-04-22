@@ -7703,8 +7703,88 @@ a:active {
 
 
 /*!***********************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[12].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[12].oneOf[7].use[3]!./src/components/Footer/footer.module.css ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************/
+.footer_footerContainer__wPJvR {
+    background-color: #36031F;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+}
+
+.footer_topSection__DmDHM {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-shrink: 0;
+}
+
+.footer_newsletterText__ZoJ0w {
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+}
+
+.footer_smallText__SMuJ6 {
+    font-size: 16px;
+    font-weight: 400;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.footer_linkSection__isJf3 {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 20px 0;
+    gap: 200px;
+    
+}
+
+.footer_linkColumn__5X6x1 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.footer_logoAndRightsContainer__8irlz {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer_logoImage__wyO_H {
+    width: 100px;
+}
+
+
+@media (max-width: 844px) {
+    .footer_topSection__DmDHM {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer_linkSection__isJf3 {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .footer_newsletterInputSection__jT2u1 {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+/*!***********************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[12].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[12].oneOf[7].use[3]!./src/components/NavBar/navbar.module.css ***!
   \***********************************************************************************************************************************************************************************************************************************************************************************/
+
 .navbar_navigation__gQFoS a {
   font-family: 'Gotham Narrow';
   font-size: 16px;
@@ -7744,4 +7824,6 @@ a:active {
   transform-origin: left;
   width: 100%;
 }
+
+
 

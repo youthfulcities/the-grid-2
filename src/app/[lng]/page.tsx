@@ -5,7 +5,9 @@ import { Amplify } from 'aws-amplify';
 import { getUrl } from 'aws-amplify/storage';
 import Papa from 'papaparse';
 import React, { useEffect, useState } from 'react';
+import { Trans } from 'react-i18next/TransWithoutContext';
 import awsExports from '../../aws-exports';
+import useTranslation from '../i18n/client';
 import Banner from './components/Banner';
 import DataCard from './components/DataCard';
 import GridInfo from './components/GridInfo';
@@ -88,13 +90,19 @@ const App: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
   const labels = csvData.map((row) => String(row.City));
   const values = csvData.map((row) => Number(row.Value)); // Convert 'Value' to numbers
 
+  const { t } = useTranslation(lng, 'home');
+
   return (
     <main>
-      <HomeHeader />
-      <Banner />
+      <HomeHeader lng={lng} />
+      <Banner lng={lng} />
       <View as='section' className='container section-padding'>
         <h2>
-          Explore <span className='alt-highlight'>Data</span>
+          <Trans
+            t={t}
+            i18nKey='explore-data'
+            components={{ span: <span className='alt-highlight' /> }}
+          />
         </h2>
         <div className='inner-container'>
           <div className='cards-container'>
@@ -102,7 +110,7 @@ const App: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
           </div>
         </div>
       </View>
-      <GridInfo />
+      <GridInfo lng={lng} />
     </main>
   );
 };

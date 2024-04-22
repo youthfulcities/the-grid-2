@@ -1,14 +1,10 @@
 {
   "home": "Accueil",
   "datasets": "Ensembles de données",
-  "insights": "Insights",
-  "about": "About",
+  "insights": "Analyses",
+  "about": "À propos",
   "contact": "Contact",
-  "home-tagline": "Democratizing Youth Data",
-  "home-sub-tagline": "An open data portal powered by Youthful Cities",
-  "cities": "Cities",
-  "Records": "Records",
-  "explore-data": "Explore Data",
-  "what-is": "What is THE GRID?",
-  "what-is-paragraph": "A free, open-source, intuitive data portal for young people, communities, planners, organizations, governments, and more to improve our future, inspire further research and shape youth-informed policies. /nbsp THE GRID highlights youth voices across 3,000+ survey responses, 20,000 minutes of interviews, and an index containing over 23,000+ data points, allowing users to compare and contrast qualitative and quantitative data across 47 Canadian cities and 23 topics."
+  "cities": "Villes",
+  "records": "Enregistrements",
+  "topics": "Thèmes"
 }

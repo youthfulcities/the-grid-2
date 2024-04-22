@@ -10,11 +10,6 @@
       "static/chunks/main-app.js",
       "static/css/app/[lng]/layout.css",
       "static/chunks/app/[lng]/layout.js"
-    ],
-    "/[lng]/datasets/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/[lng]/datasets/page.js"
     ]
   }
 }

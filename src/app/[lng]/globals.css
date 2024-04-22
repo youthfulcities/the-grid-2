@@ -1,0 +1,1422 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.4.14,
+* Autoprefixer: v10.4.7
+* Browsers: last 4 version
+*/
+
+/* Note: this code has been copied from THE GRID 1.0 and some classes may be obsolete */
+
+/* Fonts
+========================================================================== */
+
+@font-face {
+  font-family: 'Gotham Narrow Black';
+  src: url('/assets/theme_font/GothamNarrow-Black.eot');
+  src:
+    url('/assets/theme_font/GothamNarrow-Black.eot?#iefix')
+      format('embedded-opentype'),
+    url('/assets/theme_font/GothamNarrow-Black.woff2') format('woff2'),
+    url('/assets/theme_font/GothamNarrow-Black.woff') format('woff'),
+    url('/assets/theme_font/GothamNarrow-Black.ttf') format('truetype'),
+    url('/assets/theme_font/GothamNarrow-Black.svg#GothamNarrow-Black')
+      format('svg');
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Gotham Narrow Medium';
+  src: url('/assets/theme_font/GothamNarrow-Medium.eot');
+  src:
+    url('/assets/theme_font/GothamNarrow-Medium.eot?#iefix')
+      format('embedded-opentype'),
+    url('/assets/theme_font/GothamNarrow-Medium.woff2') format('woff2'),
+    url('/assets/theme_font/GothamNarrow-Medium.woff') format('woff'),
+    url('/assets/theme_font/GothamNarrow-Medium.ttf') format('truetype'),
+    url('/assets/theme_font/GothamNarrow-Medium.svg#GothamNarrow-Medium')
+      format('svg');
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Gotham Narrow Light';
+  src: url('/assets/theme_font/GothamNarrow-Light.eot');
+  src:
+    url('/assets/theme_font/GothamNarrow-Light.eot?#iefix')
+      format('embedded-opentype'),
+    url('/assets/theme_font/GothamNarrow-Light.woff2') format('woff2'),
+    url('/assets/theme_font/GothamNarrow-Light.woff') format('woff'),
+    url('/assets/theme_font/GothamNarrow-Light.ttf') format('truetype'),
+    url('/assets/theme_font/GothamNarrow-Light.svg#GothamNarrow-Light')
+      format('svg');
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Gotham Narrow Book';
+  src: url('/assets/theme_font/GothamNarrow-Book.eot');
+  src:
+    url('/assets/theme_font/GothamNarrow-Book.eot?#iefix')
+      format('embedded-opentype'),
+    url('/assets/theme_font/GothamNarrow-Book.woff2') format('woff2'),
+    url('/assets/theme_font/GothamNarrow-Book.woff') format('woff'),
+    url('/assets/theme_font/GothamNarrow-Book.ttf') format('truetype'),
+    url('/assets/theme_font/GothamNarrow-Book.svg#GothamNarrow-Book')
+      format('svg');
+}
+@font-face {
+  font-family: 'Adelle';
+  src: url('/assets/theme_font/Adelle-SemiBold.eot');
+  src:
+    url('/assets/theme_font/Adelle-SemiBold.eot?#iefix')
+      format('embedded-opentype'),
+    url('/assets/theme_font/Adelle-SemiBold.woff2') format('woff2'),
+    url('/assets/theme_font/Adelle-SemiBold.woff') format('woff'),
+    url('/assets/theme_font/Adelle-SemiBold.ttf') format('truetype'),
+    url('/assets/theme_font/Adelle-SemiBold.svg#Adelle-SemiBold') format('svg');
+  font-style: normal;
+}
+
+/*
+  Variables
+  &
+  Shared
+  classes
+  ==========================================================================
+  */
+:root {
+  /*YOUTHFUL CITIES COLOURS*/
+  --daisy: #fbd166;
+  --pink: #f6d9d7;
+  --green: #b8d98d;
+  --indigo: #253d88;
+  --red: #f2695d;
+  --brown: #673934;
+  /*THE GRID COLOURS*/
+  --yellow: #fbd166;
+  --orange: #f2695d;
+  --plum: #550d35;
+  --blue: #5125e8;
+  --light-blue: #c9d5e9;
+  --grey: #dad6cf;
+}
+body,
+html {
+  background-color: #dad6cf;
+  font-family: 'Gotham Narrow Book', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+main {
+  /* Overrides an existing CSS rule so the banner image can be "edge-to-edge" */
+  margin: 0;
+}
+
+h1 {
+  font-family: 'Gotham Narrow Black', sans-serif;
+  color: var(--orange);
+  text-transform: uppercase;
+  font-size: 3rem;
+  line-height: 40px;
+  margin-bottom: 0;
+}
+h2 {
+  font-family: 'Gotham Narrow Black', sans-serif;
+  color: var(--plum);
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  margin: 0 0 0 0;
+}
+.container h2 {
+  margin-bottom: 30px;
+}
+h3 {
+  font-family: 'Gotham Narrow Medium', sans-serif;
+  font-size: 1.5rem;
+  margin: 10px 0;
+}
+h4 {
+  font-family: 'Gotham Narrow Book', sans-serif;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  margin: 0;
+}
+h5 {
+  font-family: 'Gotham Narrow Book', sans-serif;
+  font-size: 1.25rem;
+  margin: 0px 0 10px 0;
+  color: #000;
+}
+p,
+.amplify-text {
+  font-family: 'Gotham Narrow Book', sans-serif;
+  font-size: 1.15rem;
+  margin: 0 0 10px 0;
+}
+a {
+  color: var(--blue);
+}
+a:hover {
+  -webkit-text-decoration-color: inherit;
+  text-decoration-color: inherit;
+}
+a.card-full-width:hover {
+  text-decoration: none;
+}
+a.card-full-width:hover .card-text {
+  text-decoration: none;
+}
+a.card:hover .card-text-bottom-corner {
+  text-decoration: none;
+}
+.highlight {
+  color: var(--yellow);
+}
+.alt-heading {
+  color: var(--plum);
+}
+.alt-highlight {
+  color: var(--blue);
+}
+.orange-highlight {
+  color: var(--orange);
+}
+.light-heading {
+  color: #fff;
+}
+.text-center {
+  text-align: center;
+}
+.center {
+  width: 100%;
+  margin: auto;
+}
+
+.breadcrumbs {
+  color: #000;
+}
+ul {
+  list-style: square;
+}
+ol {
+  list-style-type: decimal;
+}
+li {
+  color: #000;
+}
+/* Containers
+========================================================================== */
+.container {
+  height: 100%;
+  width: 70%;
+  transform: translate(5%);
+  padding-bottom: 100px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.short-container {
+  height: 100%;
+  width: 70%;
+  transform: translate(5%);
+  padding-bottom: 0;
+  margin-right: auto;
+  margin-left: auto;
+}
+.inner-container {
+  width: 90%;
+  height: 100%;
+  transform: translate(10%);
+}
+.section-padding {
+  padding-top: 150px;
+}
+.section-padding:last-child {
+  padding-top: 200px;
+  padding-bottom: 200px;
+}
+.padding {
+  padding-top: 100px;
+}
+.padding:last-child {
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
+@media screen and (max-width: 992px) {
+  .container {
+    width: 80%;
+    transform: translate(0);
+  }
+}
+@media screen and (max-width: 766px) {
+  .container {
+    width: 90%;
+    transform: translate(0);
+  }
+}
+.top-margin {
+  margin-top: 20px;
+}
+.top-margin-large {
+  margin-top: 40px;
+}
+/* Box styles
+========================================================================== */
+.soft-shadow {
+  box-shadow:
+    0px 100px 80px rgba(0, 0, 0, 0.07),
+    0px 41.7776px 33.4221px rgba(0, 0, 0, 0.0503198),
+    0px 22.3363px 17.869px rgba(0, 0, 0, 0.0417275),
+    0px 12.5216px 10.0172px rgba(0, 0, 0, 0.035),
+    0px 6.6501px 5.32008px rgba(0, 0, 0, 0.0282725),
+    0px 2.76726px 2.21381px rgba(0, 0, 0, 0.0196802);
+}
+.clip {
+  -webkit-clip-path: polygon(
+    100% 0,
+    100% 100%,
+    32% 100%,
+    32% 62%,
+    10% 62%,
+    10% 40%,
+    0 40%,
+    0 0
+  );
+  clip-path: polygon(
+    100% 0,
+    100% 100%,
+    32% 100%,
+    32% 62%,
+    10% 62%,
+    10% 40%,
+    0 40%,
+    0 0
+  );
+}
+@media screen and (max-width: 766px) {
+  .clip {
+    -webkit-clip-path: polygon(
+      100% 0,
+      100% 100%,
+      52% 100%,
+      52% 62%,
+      20% 62%,
+      20% 40%,
+      0 40%,
+      0 0
+    );
+    clip-path: polygon(
+      100% 0,
+      100% 100%,
+      52% 100%,
+      52% 62%,
+      20% 62%,
+      20% 40%,
+      0 40%,
+      0 0
+    );
+  }
+}
+.outline-box {
+  border: 4px solid var(--orange);
+  height: 100%;
+  margin-bottom: 20px;
+  position: relative;
+  padding: 40px;
+  box-sizing: border-box;
+}
+.outline-button {
+  border: 4px solid var(--orange);
+  padding: 10px;
+  margin-right: 10px;
+  text-transform: uppercase;
+  font-size: 1.15rem;
+  font-family: 'Gotham Narrow Medium';
+  box-sizing: border-box;
+  color: #000;
+  position: relative;
+  background-color: transparent;
+  z-index: 30;
+}
+a.outline-button:hover {
+  text-decoration: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  a.outline-button:hover {
+    background: var(--orange);
+  }
+}
+/* Hero section
+========================================================================== */
+.home-header {
+  padding: 10% 0;
+  position: relative;
+  background-color: var(--plum);
+  height: 100%;
+  z-index: 3;
+}
+.header {
+  padding: 10% 0 5% 0;
+  position: relative;
+  background-color: var(--plum);
+  height: 100%;
+  margin-bottom: 20px;
+  z-index: 3;
+}
+.hero-img {
+  display: block;
+  position: relative;
+  height: 350px;
+  width: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+  margin-top: 20px;
+  z-index: 3;
+}
+.header-text {
+  max-width: 40%;
+}
+.header-subtext {
+  color: #fff;
+}
+.relative-container {
+  position: relative;
+}
+.hero-logo {
+  position: absolute;
+  width: 300px;
+  bottom: -93px;
+  left: -127px;
+  border: 1px;
+  z-index: 5;
+}
+@media screen and (max-width: 992px) {
+  .hero-logo {
+    bottom: -73px;
+    left: -47px;
+    width: 250px;
+  }
+}
+@media screen and (max-width: 576px) {
+  .hero-logo {
+    bottom: -53px;
+    left: -27px;
+    width: 200px;
+  }
+}
+.large-icon {
+  font-size: 8rem;
+  color: var(--orange);
+  position: absolute;
+  top: -50px;
+  left: -60px;
+}
+@media screen and (max-width: 992px) {
+  .large-icon {
+    top: -70px;
+    left: -20px;
+  }
+}
+
+/* Highlight bar
+========================================================================== */
+.highlight-bar {
+  width: 100%;
+  padding: 20px 0;
+  background-color: var(--blue);
+}
+.ods-widget-timer-controller {
+  display: none;
+}
+.fact {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.outline-text {
+  color: var(--light-blue);
+  font-family: 'Gotham Narrow Black';
+  font-style: normal;
+  font-size: 6.5rem;
+  line-height: 6.5rem;
+  -webkit-text-fill-color: var(--blue);
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: var(--light-blue);
+}
+
+.large-text {
+  color: var(--blue);
+  font-family: 'Gotham Narrow Black';
+  font-style: normal;
+  font-size: 6.5rem;
+  line-height: 6.5rem;
+}
+
+@media screen and (max-width: 992px) {
+  .outline-text {
+    font-size: 5rem;
+    line-height: 5rem;
+  }
+
+  .large-text {
+    font-size: 5rem;
+    line-height: 5rem;
+  }
+}
+/* Cards
+========================================================================== */
+.logo-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 250px;
+  max-width: calc(13.33333333%);
+  padding: 10px;
+}
+.logo-card img {
+  width: 100%;
+  height: auto;
+}
+
+.cards-container {
+  margin-top: 40px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 20px 1fr 20px 1fr;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media screen and (max-width: 992px) {
+  .cards-container {
+    -ms-grid-columns: (1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .cards-container {
+    -ms-grid-columns: (1fr);
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.card {
+  -webkit-font-smoothing: subpixel-antialiased;
+  transition: transform 0.6s;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  min-height: 350px;
+  background-color: var(--plum);
+}
+.card a:hover {
+  text-decoration: none;
+}
+.card li {
+  list-style: none;
+}
+.card-full-width {
+  -webkit-font-smoothing: subpixel-antialiased;
+  position: relative;
+  background-color: var(--plum);
+  color: var(--yellow);
+  width: 100%;
+  grid-column: 1 / -1;
+  min-height: 350px;
+  margin: 0;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: all 0.8s ease;
+  transition: all 0.8s ease;
+  box-sizing: border-box;
+}
+.card-placeholder {
+  display: none;
+}
+.card-content {
+  padding: 20px 10% 40px 10%;
+}
+.card-content-back {
+  padding: 20px 40px 40px 40px;
+}
+.card-text-bottom-corner {
+  width: 100%;
+  color: var(--yellow);
+  position: absolute;
+  font-size: 2rem;
+  left: 10%;
+  bottom: 40px;
+}
+.card-text {
+  margin-top: 30px;
+  width: 100%;
+  color: var(--yellow);
+  font-size: 1.75rem;
+}
+.subtitle {
+  margin-top: 10px;
+  color: var(--yellow);
+}
+.card-small-text {
+  color: #fff;
+  font-size: 1rem;
+  margin: 20px 0;
+}
+.card-img {
+  width: 100%;
+  height: 150px;
+}
+.card-front {
+  min-height: 100%;
+  height: 100%;
+  width: 100%;
+  margin-right: -100%;
+  min-height: 350px;
+  background: var(--plum);
+}
+
+.card-back {
+  min-height: 100%;
+  height: 100%;
+  width: 100%;
+  margin-right: -100%;
+  min-height: 350px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--light-blue);
+  opacity: 0;
+  overflow-x: hidden;
+}
+.card-back .card-text {
+  color: var(--blue);
+  margin-bottom: 30px;
+}
+.card-back .card-small-text {
+  color: #000;
+  margin: 0;
+}
+ul.card-dataset {
+  padding: 0;
+}
+.card-dataset {
+  margin: 15px 0;
+}
+.card-dataset a {
+  -webkit-font-smoothing: subpixel-antialiased;
+  display: flex;
+  align-items: center;
+}
+.card-dataset a:hover,
+a:active {
+  text-decoration: none;
+  color: var(--plum);
+}
+.card-dataset i {
+  color: var(--blue);
+  margin-right: 10px;
+}
+.card-dataset a:hover i,
+.card-dataset a:active i,
+.card-dataset i:hover {
+  color: var(--orange);
+}
+.card-dataset a:visited i {
+  color: var(--plum);
+}
+.card.is-flipped {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+}
+.card:focus .card-back,
+.card:focus-within .card-back,
+.card:hover .card-back,
+.is-flipped .card-back {
+  opacity: 1;
+  pointer-events: all;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .card-front {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  .card-back {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+    opacity: 1;
+  }
+  .card.is-flipped {
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+  }
+  .card:focus,
+  .card:focus-within {
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+  }
+}
+/* Image card backgrounds
+========================================================================== */
+/* Image card backgrounds - HEADERS
+========================================================================== */
+.image-card-topics {
+  background-image: url('/assets/theme_image/girls-together.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-datasets {
+  background-image: url('/assets/theme_image/books.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-rai {
+  background-image: url('/assets/theme_image/train.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-playground {
+  background-image: url('/assets/theme_image/swing.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-cities {
+  background-image: url('/assets/theme_image/toronto.jpg');
+  background-size: cover;
+  background-position: center;
+}
+.image-card-methodology {
+  background-image: url('/assets/theme_image/numbers.jpg');
+  background-size: cover;
+  background-position: center;
+}
+.image-card-tamarack {
+  background-image: url('/assets/theme_image/tamarack_smaller.jpg');
+  background-size: cover;
+  background-position: center;
+}
+/* Image card backgrounds - TOPIC CARS
+========================================================================== */
+.image-card-arts-fashion-design {
+  background-image: url('/assets/theme_image/art.jpg');
+  background-size: cover;
+}
+.image-card-civic-engagement {
+  background-image: url('/assets/theme_image/civic.jpg');
+  background-size: cover;
+}
+.image-card-climate-change {
+  background-image: url('/assets/theme_image/climate-protest.jpg');
+  background-size: cover;
+}
+.image-card-cost-of-living {
+  background-image: url('/assets/theme_image/appartment.jpg');
+  background-size: cover;
+}
+.image-card-digital-access {
+  background-image: url('/assets/theme_image/laptop.jpg');
+  background-size: cover;
+}
+.image-card-accessibility-diversity-inclusion {
+  background-image: url('/assets/theme_image/diversity.jpg');
+  background-size: cover;
+}
+.image-card-education-and-training {
+  background-image: url('/assets/theme_image/graduate.jpg');
+  background-size: cover;
+}
+.image-card-entertainment {
+  background-image: url('/assets/theme_image/concert.jpg');
+  background-size: cover;
+}
+.image-card-entrepreneurial-spirit {
+  background-image: url('/assets/theme_image/shop.jpg');
+  background-size: cover;
+}
+.image-card-financial-services {
+  background-image: url('/assets/theme_image/cash.jpg');
+  background-size: cover;
+}
+.image-card-public-health-services {
+  background-image: url('/assets/theme_image/Health%20Services.png');
+  background-size: cover;
+}
+.image-card-local-economic-growth {
+  background-image: url('/assets/theme_image/market.jpg');
+  background-size: cover;
+}
+.image-card-public-built-space {
+  background-image: url('/assets/theme_image/museum.jpg');
+  background-size: cover;
+}
+.image-card-public-green-space {
+  background-image: url('/assets/theme_image/park.jpg');
+  background-size: cover;
+}
+.image-card-public-safety {
+  background-image: url('/assets/theme_image/Public%20Safety%20.png');
+  background-size: cover;
+}
+.image-card-public-transit {
+  background-image: url('/assets/theme_image/streetcar.jpg');
+  background-size: cover;
+}
+.image-card-restaurants-and-bars {
+  background-image: url('/assets/theme_image/restaurant.jpg');
+  background-size: cover;
+}
+.image-card-sports-and-recreation {
+  background-image: url('/assets/theme_image/tennis.jpg');
+  background-size: cover;
+}
+.image-card-travel-and-tourism {
+  background-image: url('/assets/theme_image/brochures.jpg');
+  background-size: cover;
+}
+.image-card-youth-employment {
+  background-image: url('/assets/theme_image/work.jpg');
+  background-size: cover;
+}
+/* Image card backgrounds - CITIES
+========================================================================== */
+.image-card-brampton {
+  background-image: url('/assets/theme_image/brampton.jpg');
+  background-size: cover;
+}
+.image-card-burnaby {
+  background-image: url('/assets/theme_image/burnaby.jpg');
+  background-size: cover;
+}
+.image-card-calgary {
+  background-image: url('/assets/theme_image/Calgary.jpeg');
+  background-size: cover;
+}
+.image-card-charlottetown {
+  background-image: url('/assets/theme_image/Charlottetown.jpeg');
+  background-size: cover;
+}
+.image-card-city-of-vancouver {
+  background-image: url('/assets/theme_image/city-of-vancouver.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-colwood {
+  background-image: url('/assets/theme_image/colwood.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-coquitlam {
+  background-image: url('/assets/theme_image/coquitlam.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-delta {
+  background-image: url('/assets/theme_image/delta.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-edmonton {
+  background-image: url('/assets/theme_image/Edmonton.jpeg');
+  background-size: cover;
+}
+.image-card-delta {
+  background-image: url('/assets/theme_image/delta.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-esquimalt {
+  background-image: url('/assets/theme_image/esquimalt.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-fredericton {
+  background-image: url('/assets/theme_image/Fredericton.jpeg');
+  background-size: cover;
+}
+.image-card-gatineau {
+  background-image: url('/assets/theme_image/gatineau.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-victoria {
+  background-image: url('/assets/theme_image/Victoria.jpeg');
+  background-size: cover;
+}
+.image-card-halifax {
+  background-image: url('/assets/theme_image/Halifax.png');
+  background-size: cover;
+}
+.image-card-hamilton {
+  background-image: url('/assets/theme_image/Hamilton.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-kelowna {
+  background-image: url('/assets/theme_image/Kelowna.jpeg');
+  background-size: cover;
+}
+.image-card-cambridge {
+  background-image: url('/assets/theme_image/Cambridge.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-langford {
+  background-image: url('/assets/theme_image/langford.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-langley {
+  background-image: url('/assets/theme_image/langley.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-laval {
+  background-image: url('/assets/theme_image/laval_smaller.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-lethbridge {
+  background-image: url('/assets/theme_image/Lethbridge.jpeg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-london {
+  background-image: url('/assets/theme_image/London.jpeg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-maple-ridge {
+  background-image: url('/assets/theme_image/maple-ridge.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-metro-vancouver {
+  background-image: url('/assets/theme_image/Vancouver.jpeg');
+  background-size: cover;
+}
+.image-card-mississauga {
+  background-image: url('/assets/theme_image/mississauga.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-moncton {
+  background-image: url('/assets/theme_image/Moncton.jpeg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-new-westminster {
+  background-image: url('/assets/theme_image/new-westminster.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-north-vancouver {
+  background-image: url('/assets/theme_image/north-vancouver.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-oak-bay {
+  background-image: url('/assets/theme_image/oak-bay.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-oshawa {
+  background-image: url('/assets/theme_image/Oshawa.jpeg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-ottawa {
+  background-image: url('/assets/theme_image/Ottawa.jpeg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-pitt-meadows {
+  background-image: url('/assets/theme_image/pitt-meadows.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-port-coquitlam {
+  background-image: url('/assets/theme_image/port-coquitlam.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-port-moody {
+  background-image: url('/assets/theme_image/port-moody.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-quebec {
+  background-image: url('/assets/theme_image/Quebec.jpeg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-regina {
+  background-image: url('/assets/theme_image/Regina.jpeg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-richmond {
+  background-image: url('/assets/theme_image/richmond.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-saanich {
+  background-image: url('/assets/theme_image/saanich.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-saskatoon {
+  background-image: url('/assets/theme_image/Saskatoon.jpeg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-stjohns {
+  background-image: url('/assets/theme_image/St.%20Johns%20.jpeg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-sudbury {
+  background-image: url('/assets/theme_image/Sudbury.jpeg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-surrey {
+  background-image: url('/assets/theme_image/surrey.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-west-vancouver {
+  background-image: url('/assets/theme_image/west-vancouver.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-white-rock {
+  background-image: url('/assets/theme_image/white-rock.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-winnipeg {
+  background-image: url('/assets/theme_image/Winnipeg.jpeg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-yellowknife {
+  background-image: url('/assets/theme_image/Yellowknife.jpeg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-toronto {
+  background-image: url('/assets/theme_image/Toronto.jpeg');
+  background-size: cover;
+}
+.image-card-montreal {
+  background-image: url('/assets/theme_image/Montreal.jpeg');
+  background-size: cover;
+}
+.image-card-chatham-kent {
+  background-image: url('/assets/theme_image/chatham_kent.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-chilliwack {
+  background-image: url('/assets/theme_image/chilliwack_smaller.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-corner-brook {
+  background-image: url('/assets/theme_image/corner_brook_smaller.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-digby {
+  background-image: url('/assets/theme_image/digby_smaller.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-grande-prairie {
+  background-image: url('/assets/theme_image/grande_prairie.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-kahnawake {
+  background-image: url('/assets/theme_image/kahnawake_smaller.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-laval {
+  background-image: url('/assets/theme_image/laval_smaller.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-prince-albert {
+  background-image: url('/assets/theme_image/prince_albert_smaller.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-portage-la-prairie {
+  background-image: url('/assets/theme_image/portage_la_prairie_smaller.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
+.image-card-whitehorse {
+  background-image: url('/assets/theme_image/whitehorse_smaller.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
+.image-card-iqaluit {
+  background-image: url('/assets/theme_image/iqaluit.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
+.image-card-st-catharines {
+  background-image: url('/assets/theme_image/st-catharines.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
+.image-card-windsor {
+  background-image: url('/assets/theme_image/windsor.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
+.image-card-oxford-county {
+  background-image: url('/assets/theme_image/oxford-county.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
+.image-card-saint-leonard {
+  background-image: url('/assets/theme_image/saint-leonard.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
+.image-card-prince-edward-county {
+  background-image: url('/assets/theme_image/prince-edward-county.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
+.image-card-alberni-clayoquot {
+  background-image: url('/assets/theme_image/alberni-clayoquot.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
+.image-card-chippewas {
+  background-image: url('/assets/theme_image/chippewa.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
+/* Image card backgrounds - DATASETS
+========================================================================== */
+.image-card-real-affordability-index {
+  background-image: url('/assets/theme_image/money.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-refugee-resettlement-index {
+  background-image: url('/assets/theme_image/saskatoon.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-refugee-resources {
+  background-image: url('/assets/theme_image/phon.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-pivot-2020-index {
+  background-image: url('/assets/theme_image/night.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-pivot-2020-survey {
+  background-image: url('/assets/theme_image/subway.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-pivot-2020-survey-aggregated {
+  background-image: url('/assets/theme_image/colours.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-pivot-2020-interview {
+  background-image: url('/assets/theme_image/mask.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.image-card-cbyf-index {
+  background-image: url('/assets/theme_image/tamarack_smaller.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
+.image-card-uwi {
+  background-image: url('/assets/theme_image/uwi.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
+.image-card-microgrant {
+  background-image: url('/assets/theme_image/microgrant.jpg');
+  background-position: bottom;
+  background-size: cover;
+}
+
+/* Tables
+========================================================================== */
+.cma_table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border: none;
+}
+/* Accordion CSS
+========================================================================== */
+.accordion-group {
+  width: 100%;
+}
+.accordion {
+  width: 100%;
+  border-bottom: 4px solid var(--orange);
+  box-sizing: border-box;
+  transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+}
+.label {
+  color: #000;
+  padding: 10px 10px;
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 100%;
+  width: 100%;
+  border: none;
+  text-align: left;
+  background: transparent;
+}
+.isopen {
+  background: var(--orange);
+}
+.label::after {
+  content: '+';
+  font-size: 22px;
+  font-weight: 500;
+}
+.isopen::after {
+  content: '-';
+  font-size: 25px;
+  font-weight: 500;
+}
+.content {
+  padding: 20px 10px;
+}
+.facts {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 20px;
+}
+.typography {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+.odswidget-text-search {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.link-icon {
+  color: #000;
+  font-size: 0.75rem;
+}
+
+/* Animations
+========================================================================== */
+
+.typewriter h5 {
+  overflow: hidden;
+  /* Ensures the content is not revealed until the animation */
+  border-right: 0.15em solid orange;
+  /* The typwriter cursor */
+  white-space: nowrap;
+  /* Keeps the content on a single line */
+  margin: 0 auto;
+  /* Gives that scrolling effect as the typing happens */
+  letter-spacing: 0.15em;
+  /* Adjust as needed */
+  -webkit-animation:
+    typing 3.5s steps(40, end),
+    blink-caret 0.75s step-end infinite;
+  animation:
+    typing 3.5s steps(40, end),
+    blink-caret 0.75s step-end infinite;
+}
+/* The typing effect */
+@-webkit-keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+/* The typewriter cursor effect */
+@-webkit-keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: orange;
+  }
+}
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: orange;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  /* Button animations */
+  /* Hover sweep */
+  a.thar-three {
+    -webkit-font-smoothing: subpixel-antialiased;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  a.thar-three:hover {
+    background-color: transparent;
+  }
+  a.thar-three:hover:before {
+    left: 0%;
+    right: auto;
+    width: 100%;
+  }
+  a.thar-three:before {
+    display: block;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 100%;
+    width: 0px;
+    z-index: -1;
+    content: '';
+    background: var(--orange);
+    transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  .thar-three {
+    cursor: pointer;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  .thar-three:hover {
+    background-color: transparent;
+  }
+  .thar-three:hover:before {
+    left: 0%;
+    right: auto;
+    width: 100%;
+  }
+  .thar-three:before {
+    display: block;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 100%;
+    width: 0px;
+    z-index: -1;
+    content: '';
+    background: var(--orange);
+    transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+  }
+}
+/* Push */
+@-webkit-keyframes hvr-push {
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes hvr-push {
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hvr-push {
+    -webkit-font-smoothing: subpixel-antialiased;
+    display: inline-block;
+    vertical-align: middle;
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  }
+  .hvr-push:active {
+    -webkit-animation-name: hvr-push;
+    animation-name: hvr-push;
+    -webkit-animation-duration: 0.3s;
+    animation-duration: 0.3s;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    -webkit-animation-iteration-count: 1;
+    animation-iteration-count: 1;
+  }
+}
+/* Forward */
+@media (prefers-reduced-motion: no-preference) {
+  .hvr-forward {
+    -webkit-font-smoothing: subpixel-antialiased;
+    vertical-align: middle;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    transition-duration: 0.3s;
+    transition-property: transform;
+  }
+  .hvr-forward:hover,
+  .hvr-forward:focus,
+  .hvr-forward:active {
+    transform: translateX(8px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hvr-float {
+    transition-duration: 0.3s;
+    transition-property: transform;
+    transition-timing-function: ease-out;
+  }
+  .hvr-float:hover,
+  .hvr-float:focus,
+  .hvr-float:active {
+    transform: translateY(-8px);
+  }
+}
+
+
+
+
+

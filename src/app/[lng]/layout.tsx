@@ -7,9 +7,9 @@ import type { Metadata } from 'next';
 import React from 'react';
 import config from '../../amplifyconfiguration.json';
 import AWSThemeProvider from '../aws-theme-provider';
-import '../globals.css';
 import { languages } from '../i18n/settings';
 import NavBar from './components/NavBar/NavBar';
+import './globals.css';
 
 interface RootLayoutProps {
   children: React.ReactNode;

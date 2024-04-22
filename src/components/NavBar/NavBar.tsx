@@ -1,15 +1,27 @@
 'use client';
 
-import { Button, Flex, Image, View } from '@aws-amplify/ui-react';
-import Link from 'next/link'; // Import Link from next/link
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Button, Flex, Image, View, Menu, MenuButton, MenuItem } from '@aws-amplify/ui-react';
+import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import styles from './navbar.module.css';
 
 const NavBar = () => {
-  const [currentLangCode, setCurrentLangCode] = useState(
-    window.localStorage.i18nextLng || 'en'
-  );
+
+  const [currentLangCode, setCurrentLangCode] = useState('en');
+  const [isMobile, setIsMobile] = useState(false);
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const { t } = useTranslation();
 
@@ -21,7 +33,6 @@ const NavBar = () => {
       alignItems='center'
       gap='10px'
       width='100%'
-      height='unset'
       overflow='hidden'
       position='relative'
       boxShadow='0px 2px 6px rgba(0.05098039284348488, 0.10196078568696976, 0.14901961386203766, 0.15000000596046448)'
@@ -33,12 +44,7 @@ const NavBar = () => {
           <Image
             src='/assets/theme_image/THE_GRID_logo_RGB_black.png'
             alt='Logo'
-            style={{
-              width: '100%',
-              height: '80px',
-              top: '-15.5px',
-              left: '-24px',
-            }}
+            style={{ width: '100%', height: '80px', top: '-15.5px', left: '-24px' }}
           />
         </Link>
         <View>
@@ -67,20 +73,32 @@ const NavBar = () => {
           </Button>
         </View>
       </Flex>
-      <Flex
-        className={styles.navigation}
-        gap='48px'
-        direction='row'
-        justifyContent='flex-start'
-        alignItems='flex-start'
-        position='relative'
-      >
-        <Link href='/'>{t('home')}</Link>
-        <Link href='/datasets'>{t('datasets')}</Link>
-        <Link href='/insights'>{t('insights')}</Link>
-        <Link href='/about'>{t('about')}</Link>
-        <Link href='/contact'>{t('contact')}</Link>
-      </Flex>
+      {isMobile ? (
+        <Menu menuAlign='end'>
+
+          <MenuItem as="a" href='/'>{t('home')}</MenuItem>
+          <MenuItem as="a" href='/datasets'>{t('datasets')}</MenuItem>
+          <MenuItem as="a" href='/insights'>{t('insights')}</MenuItem>
+          <MenuItem as="a" href='/about'>{t('about')}</MenuItem>
+          <MenuItem as="a" href='/contact'>{t('contact')}</MenuItem>
+
+        </Menu>
+      ) : (
+        <Flex
+          className={styles.navigation}
+          gap='48px'
+          direction='row'
+          justifyContent='flex-start'
+          alignItems='flex-start'
+          position='relative'
+        >
+          <Link href='/'>{t('home')}</Link>
+          <Link href='/datasets'>{t('datasets')}</Link>
+          <Link href='/insights'>{t('insights')}</Link>
+          <Link href='/about'>{t('about')}</Link>
+          <Link href='/contact'>{t('contact')}</Link>
+        </Flex>
+      )}
     </Flex>
   );
 };

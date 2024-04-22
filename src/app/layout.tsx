@@ -1,6 +1,7 @@
 //
 
 import NavBar from '@/components/NavBar/NavBar';
+import Footer from '@/components/Footer/Footer'
 import '@aws-amplify/ui-react/styles.css';
 import { Amplify } from 'aws-amplify';
 import type { Metadata } from 'next';
@@ -8,6 +9,7 @@ import React from 'react';
 import config from '../amplifyconfiguration.json';
 import AWSThemeProvider from './aws-theme-provider';
 import './globals.css';
+
 
 // i18n
 //   .use(HttpApi)
@@ -74,6 +76,7 @@ const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
       <AWSThemeProvider>
         <NavBar />
         {children}
+        <Footer />
       </AWSThemeProvider>
     </body>
   </html>

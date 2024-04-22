@@ -1,29 +1,31 @@
-import { Flex } from '@aws-amplify/ui-react';
+import { Flex, View, Text } from '@aws-amplify/ui-react';
 import cityCards from '../data/city-cards.json';
 
 const Banner = () => (
-  <section className='highlight-bar soft-shadow'>
-    <Flex className='short-container' justifyContent='space-between'>
-      <div className='fact'>
-        <div>
-          <h4 className='light-heading'>Datasets</h4>
-          <h3 className='outline-text'>11</h3>
-        </div>
-      </div>
-      <div className='fact'>
-        <div>
-          <h4 className='light-heading'>Cities</h4>
-          <h3 className='outline-text'>{cityCards.cityCards.length}</h3>
-        </div>
-      </div>
-      <div className='fact'>
-        <div>
-          <h4 className='light-heading'>Records</h4>
-          <h3 className='outline-text'>454k</h3>
-        </div>
-      </div>
+  <View className="highlight-bar soft-shadow" as="section">
+    <Flex
+      className="short-container"
+      justifyContent="space-between"
+      alignItems="center"
+      direction="row"
+      wrap="nowrap"
+      gap="1rem"
+    >
+      <View className="fact">
+        <Text as="h4" className="light-heading">Datasets</Text>
+        <Text as="h3" className="outline-text">11</Text>
+      </View>
+      <View className="fact">
+        <Text as="h4" className="light-heading">Cities</Text>
+        <Text as="h3" className="outline-text">{cityCards.cityCards.length}</Text>
+      </View>
+      <View className="fact">
+        <Text as="h4" className="light-heading">Records</Text>
+        <Text as="h3" className="outline-text">454k</Text>
+      </View>
     </Flex>
-  </section>
+  </View>
 );
 
 export default Banner;
+

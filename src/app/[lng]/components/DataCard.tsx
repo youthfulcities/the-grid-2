@@ -9,8 +9,8 @@ import {
 } from '@aws-amplify/ui-react';
 import { FaFileArrowDown } from 'react-icons/fa6';
 
+import datasetCards from '@/data/dataset-cards.json';
 import { v4 as uuidv4 } from 'uuid';
-import datasetCards from '../data/dataset-cards.json';
 
 interface AppProps {
   fetchUrl: (url: string) => Promise<{ url: URL; expiresAt: Date } | null>;

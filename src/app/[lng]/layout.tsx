@@ -6,11 +6,11 @@ import { dir } from 'console';
 import type { Metadata } from 'next';
 import React from 'react';
 import config from '../../amplifyconfiguration.json';
-import AWSThemeProvider from '../aws-theme-provider';
 import { languages } from '../i18n/settings';
+import AWSThemeProvider from './aws-theme-provider';
 import Footer from './components/Footer/Footer';
 import NavBar from './components/NavBar/NavBar';
-import './globals.css';
+import './global.css';
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -53,8 +53,8 @@ const RootLayout: React.FC<RootLayoutProps> = ({
         <AWSThemeProvider>
           <NavBar lng={lng} />
           {children}
+          <Footer lng={lng} />
         </AWSThemeProvider>
-        <Footer />
       </body>
     </html>
   );

@@ -1,5 +1,5 @@
 import cityCards from '@/data/city-cards.json';
-import { Flex, Text, View } from '@aws-amplify/ui-react';
+import { Flex, Heading, Text, View } from '@aws-amplify/ui-react';
 import useTranslation from '../../i18n/client';
 
 const Banner: React.FC<{ lng: string }> = ({ lng }) => {
@@ -12,29 +12,29 @@ const Banner: React.FC<{ lng: string }> = ({ lng }) => {
         justifyContent='space-between'
         alignItems='center'
         direction='row'
-        wrap='nowrap'
+        wrap='wrap'
         gap='1rem'
       >
         <View className='fact'>
-          <Text as='h4' className='light-heading'>
+          <Heading level={4} className='light-heading'>
             {t('datasets')}
-          </Text>
+          </Heading>
           <Text as='h3' className='outline-text'>
             11
           </Text>
         </View>
         <View className='fact'>
-          <Text as='h4' className='light-heading'>
+          <Heading level={4} className='light-heading'>
             {t('cities')}
-          </Text>
+          </Heading>
           <Text as='h3' className='outline-text'>
             {cityCards.cityCards.length}
           </Text>
         </View>
         <View className='fact'>
-          <Text as='h4' className='light-heading'>
+          <Heading level={4} className='light-heading'>
             {t('records')}
-          </Text>
+          </Heading>
           <Text as='h3' className='outline-text'>
             454k
           </Text>

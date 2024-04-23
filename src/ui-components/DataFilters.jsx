@@ -68,7 +68,7 @@ export default function DataFilters(props) {
             {...getOverrideProps(overrides, "Active Filters")}
           >
             <Flex
-              gap="16px"
+              gap="79px"
               direction="row"
               width="unset"
               height="unset"

@@ -87,8 +87,9 @@ const App: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
     }
   };
 
-  const labels = csvData.map((row) => String(row.City));
-  const values = csvData.map((row) => Number(row.Value)); // Convert 'Value' to numbers
+  console.log(loading, csvData);
+  // const labels = csvData.map((row) => String(row.City));
+  // const values = csvData.map((row) => Number(row.Value));
 
   const { t } = useTranslation(lng, 'home');
 

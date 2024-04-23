@@ -1,0 +1,76 @@
+.footerContainer {
+    background-color: #36031F;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+}
+
+.topSection {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-shrink: 0;
+}
+
+.newsletterText {
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+}
+
+.smallText {
+    font-size: 16px;
+    font-weight: 400;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.linkSection {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 20px 0;
+    gap: 200px;
+    
+}
+
+.linkColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.logoAndRightsContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logoImage {
+    width: 100px;
+}
+
+
+@media (max-width: 844px) {
+    .topSection {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .linkSection {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .newsletterInputSection {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

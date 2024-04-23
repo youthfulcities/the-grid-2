@@ -187,8 +187,8 @@ export default function NavBarHeader2(props) {
           position="relative"
           padding="0px 0px 0px 0px"
           whiteSpace="pre-wrap"
-          children="data playground"
-          {...getOverrideProps(overrides, "data playground")}
+          children="insights"
+          {...getOverrideProps(overrides, "insights")}
         ></Text>
         <Text
           fontFamily="Gotham Narrow"

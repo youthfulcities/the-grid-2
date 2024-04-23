@@ -36,7 +36,7 @@ const DataTable = ({ csvData }: AppProps) => (
       <TableBody>
         {csvData.map((row) => (
           <TableRow key={uuidv4()}>
-            {Object.values(row).map((value, columnIndex) => (
+            {Object.values(row).map((value) => (
               <TableCell style={{ padding: '0.5rem' }} key={uuidv4()}>
                 {String(value)}
               </TableCell>

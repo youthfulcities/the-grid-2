@@ -1,8 +1,16 @@
 'use client';
 
-import { Button, Flex, Image, View } from '@aws-amplify/ui-react';
+import {
+  Button,
+  Flex,
+  Image,
+  Menu,
+  MenuItem,
+  View,
+} from '@aws-amplify/ui-react';
 import Link from 'next/link'; // Import Link from next/link
 import { usePathname, useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import useTranslation from '../../../i18n/client';
 import styles from './navbar.module.css';
 
@@ -15,6 +23,19 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
 
   const pathname = usePathname();
   const router = useRouter();
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   function handleLanguageChange(locale: string) {
     // e.g. '/en/about' or '/fr/contact'
@@ -32,7 +53,6 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
       alignItems='center'
       gap='10px'
       width='100%'
-      height='unset'
       overflow='hidden'
       position='relative'
       boxShadow='0px 2px 6px rgba(0.05098039284348488, 0.10196078568696976, 0.14901961386203766, 0.15000000596046448)'
@@ -78,20 +98,40 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
           </Button>
         </View>
       </Flex>
-      <Flex
-        className={styles.navigation}
-        gap='48px'
-        direction='row'
-        justifyContent='flex-start'
-        alignItems='flex-start'
-        position='relative'
-      >
-        <Link href={`/${lng}`}>{t('home')}</Link>
-        <Link href={`/${lng}/datasets`}>{t('datasets')}</Link>
-        <Link href={`/${lng}/insights`}>{t('insights')}</Link>
-        <Link href={`/${lng}/about`}>{t('about')}</Link>
-        <Link href={`/${lng}/contact`}>{t('contact')}</Link>
-      </Flex>
+      {isMobile ? (
+        <Menu menuAlign='end'>
+          <MenuItem as='a' href={`${lng}/`}>
+            {t('home')}
+          </MenuItem>
+          <MenuItem as='a' href={`${lng}/datasets`}>
+            {t('datasets')}
+          </MenuItem>
+          <MenuItem as='a' href={`${lng}/insights`}>
+            {t('insights')}
+          </MenuItem>
+          <MenuItem as='a' href={`${lng}/about`}>
+            {t('about')}
+          </MenuItem>
+          <MenuItem as='a' href={`${lng}/contact`}>
+            {t('contact')}
+          </MenuItem>
+        </Menu>
+      ) : (
+        <Flex
+          className={styles.navigation}
+          gap='48px'
+          direction='row'
+          justifyContent='flex-start'
+          alignItems='flex-start'
+          position='relative'
+        >
+          <Link href={`${lng}/`}>{t('home')}</Link>
+          <Link href={`${lng}/datasets`}>{t('datasets')}</Link>
+          <Link href={`${lng}/insights`}>{t('insights')}</Link>
+          <Link href={`${lng}/about`}>{t('about')}</Link>
+          <Link href={`${lng}/contact`}>{t('contact')}</Link>
+        </Flex>
+      )}
     </Flex>
   );
 };

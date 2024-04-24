@@ -27,7 +27,7 @@ export declare type NavBarHeader2OverridesProps = {
     Home?: PrimitiveOverrideProps<TextProps>;
     about?: PrimitiveOverrideProps<TextProps>;
     datasets?: PrimitiveOverrideProps<TextProps>;
-    "data playground"?: PrimitiveOverrideProps<TextProps>;
+    insights?: PrimitiveOverrideProps<TextProps>;
     FAQ?: PrimitiveOverrideProps<TextProps>;
     "contact us"?: PrimitiveOverrideProps<TextProps>;
 } & EscapeHatchProps;

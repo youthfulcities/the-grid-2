@@ -24,7 +24,7 @@ export default function NavBarHeader(props) {
         Home: {},
         about: {},
         datasets: {},
-        "data playground": {},
+        insights: {},
         FAQ: {},
         "contact us": {},
         Button5933520: {},
@@ -218,8 +218,8 @@ export default function NavBarHeader(props) {
           position="relative"
           padding="0px 0px 0px 0px"
           whiteSpace="pre-wrap"
-          children="data playground"
-          {...getOverrideProps(overrides, "data playground")}
+          children="insights"
+          {...getOverrideProps(overrides, "insights")}
         ></Text>
         <Text
           fontFamily="Gotham Narrow"

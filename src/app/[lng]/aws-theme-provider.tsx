@@ -1,7 +1,7 @@
 'use client';
 
+import studioTheme from '@/ui-components/studioTheme';
 import { createTheme, ThemeProvider } from '@aws-amplify/ui-react';
-import studioTheme from '../../ui-components/studioTheme';
 
 const theme = createTheme(
   {
@@ -18,6 +18,7 @@ const theme = createTheme(
           backgroundColor: { value: '{colors.brand.primary.60.value}' },
           padding: { value: '{space.large.value}' },
         },
+        button: {},
       },
     },
   },

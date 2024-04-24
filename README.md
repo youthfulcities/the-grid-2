@@ -1,3 +1,9 @@
+Styling convention:
+Use component props when possible.
+If the style only occurs once or cannot be easily overwritten, use inline styling.
+If the style occurs multiple times in the component, use css modules.
+If the style occurs on multiple pages, use global.css
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

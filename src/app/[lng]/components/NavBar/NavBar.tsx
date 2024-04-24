@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  Button,
-  Flex,
-  Image,
-  Menu,
-  MenuItem,
-  View,
-} from '@aws-amplify/ui-react';
+import { Button, Flex, Menu, MenuItem, View } from '@aws-amplify/ui-react';
 import Link from 'next/link'; // Import Link from next/link
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -61,11 +54,10 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
     >
       <Flex alignItems='center'>
         <Link href='/'>
-          <Image
+          <img
             src='/assets/theme_image/THE_GRID_logo_RGB_black.png'
             alt='Logo'
             style={{
-              width: '100%',
               height: '80px',
               top: '-15.5px',
               left: '-24px',

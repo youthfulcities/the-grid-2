@@ -92,19 +92,19 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
       </Flex>
       {isMobile ? (
         <Menu menuAlign='end'>
-          <MenuItem as='a' href={`${lng}/`}>
+          <MenuItem as='a' href={`/${lng}/`}>
             {t('home')}
           </MenuItem>
-          <MenuItem as='a' href={`${lng}/datasets`}>
+          <MenuItem as='a' href={`/${lng}/datasets`}>
             {t('datasets')}
           </MenuItem>
-          <MenuItem as='a' href={`${lng}/insights`}>
+          <MenuItem as='a' href={`/${lng}/insights`}>
             {t('insights')}
           </MenuItem>
-          <MenuItem as='a' href={`${lng}/about`}>
+          <MenuItem as='a' href={`/${lng}/about`}>
             {t('about')}
           </MenuItem>
-          <MenuItem as='a' href={`${lng}/contact`}>
+          <MenuItem as='a' href={`/${lng}/contact`}>
             {t('contact')}
           </MenuItem>
         </Menu>
@@ -117,11 +117,11 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
           alignItems='flex-start'
           position='relative'
         >
-          <Link href={`${lng}/`}>{t('home')}</Link>
-          <Link href={`${lng}/datasets`}>{t('datasets')}</Link>
-          <Link href={`${lng}/insights`}>{t('insights')}</Link>
-          <Link href={`${lng}/about`}>{t('about')}</Link>
-          <Link href={`${lng}/contact`}>{t('contact')}</Link>
+          <Link href={`/${lng}/`}>{t('home')}</Link>
+          <Link href={`/${lng}/datasets`}>{t('datasets')}</Link>
+          <Link href={`/${lng}/insights`}>{t('insights')}</Link>
+          <Link href={`/${lng}/about`}>{t('about')}</Link>
+          <Link href={`/${lng}/contact`}>{t('contact')}</Link>
         </Flex>
       )}
     </Flex>

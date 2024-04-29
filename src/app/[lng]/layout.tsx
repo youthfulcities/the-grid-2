@@ -6,6 +6,7 @@ import { dir } from 'console';
 import type { Metadata } from 'next';
 import React from 'react';
 import config from '../../amplifyconfiguration.json';
+import StyledComponentsRegistry from '../../lib/registry';
 import { languages } from '../i18n/settings';
 import AWSThemeProvider from './aws-theme-provider';
 import Footer from './components/Footer/Footer';
@@ -50,11 +51,13 @@ const RootLayout: React.FC<RootLayoutProps> = ({
   return (
     <html lang={lng} dir={direction !== undefined ? direction : 'ltr'}>
       <body>
-        <AWSThemeProvider>
-          <NavBar lng={lng} />
-          {children}
-          <Footer lng={lng} />
-        </AWSThemeProvider>
+        <StyledComponentsRegistry>
+          <AWSThemeProvider>
+            <NavBar lng={lng} />
+            {children}
+            <Footer lng={lng} />
+          </AWSThemeProvider>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );

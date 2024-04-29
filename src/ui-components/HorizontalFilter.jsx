@@ -46,7 +46,7 @@ export default function HorizontalFilter(props) {
           display="block"
           direction="column"
           justifyContent="unset"
-          width="unset"
+          width="143px"
           height="unset"
           gap="unset"
           alignItems="unset"

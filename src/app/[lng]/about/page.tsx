@@ -64,7 +64,7 @@ const About = () => (
         THE GRID Design Principles
       </Heading>
       <Flex direction='column' gap='1rem' className='cards-container'>
-        {cardData.map((card, index) => (
+        {cardData.map((card) => (
           <Card
             key={uuidv4()}
             variation='elevated'

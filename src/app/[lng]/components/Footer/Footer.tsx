@@ -11,6 +11,7 @@ import {
 } from '@aws-amplify/ui-react';
 import Link from 'next/link';
 import React from 'react';
+import styled from 'styled-components';
 import useTranslation from '../../../i18n/client';
 import styles from './footer.module.css';
 
@@ -18,12 +19,18 @@ interface FooterProps {
   lng: string;
 }
 
+const FooterView = styled(View)<{ background: string }>`
+  background-color: ${(props) => props.background};
+  position: relative;
+  padding: 40px 0;
+`;
+
 const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
-  const { tokens } = useTheme();
   const { t } = useTranslation(lng, 'translation');
+  const { tokens } = useTheme();
 
   return (
-    <View as='footer' className={styles.footerContainer}>
+    <FooterView as='footer' background={tokens.colors.primary[60].value}>
       <Flex className='short-container' direction='column' alignItems='stretch'>
         <Flex className={styles.topSection}>
           <Flex direction='column' gap='5px'>
@@ -31,8 +38,8 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
               Sign up for our newsletter
             </Heading>
             <Text as='h1' color={tokens.colors.font.inverse.value}>
-              Stay connected and up to date on new data, insights, or job
-              postings!
+              postings.” Stay connected and up to date on new data, insights, or
+              job
             </Text>
           </Flex>
           <Flex direction='row' alignContent='stretch' gap='10px' width='100%'>
@@ -85,7 +92,7 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
           </Text>
         </Flex>
       </Flex>
-    </View>
+    </FooterView>
   );
 };
 

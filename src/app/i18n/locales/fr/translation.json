@@ -6,5 +6,11 @@
   "contact": "Contact",
   "cities": "Villes",
   "records": "Enregistrements",
-  "topics": "Thèmes"
+  "topics": "Thèmes",
+  "subscribe": "S'abonner",
+  "email": "Votre email",
+  "sign-up": "S'inscrire à notre lettre d'information",
+  "sign-up-text": "Restez connecté et au courant des nouvelles données, perspectives ou offres d'emploi.",
+  "rights": "Tous droits réservés",
+  "newsletter-email": "Courriel de la lettre d'information"
 }

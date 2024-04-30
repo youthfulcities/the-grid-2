@@ -19,8 +19,8 @@ interface FooterProps {
   lng: string;
 }
 
-const FooterView = styled(View)<{ background: string }>`
-  background-color: ${(props) => props.background};
+const FooterView = styled(View)<{ $background: string }>`
+  background-color: ${(props) => props.$background};
   position: relative;
   padding: 40px 0;
 `;
@@ -30,29 +30,28 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
   const { tokens } = useTheme();
 
   return (
-    <FooterView as='footer' background={tokens.colors.primary[60].value}>
+    <FooterView as='footer' $background={tokens.colors.primary[60].value}>
       <Flex className='short-container' direction='column' alignItems='stretch'>
         <Flex className={styles.topSection}>
           <Flex direction='column' gap='5px'>
             <Heading level={6} color={tokens.colors.font.inverse.value}>
-              Sign up for our newsletter
+              {t('sign-up')}
             </Heading>
             <Text as='h1' color={tokens.colors.font.inverse.value}>
-              postings.” Stay connected and up to date on new data, insights, or
-              job
+              {t('sign-up-text')}
             </Text>
           </Flex>
           <Flex direction='row' alignContent='stretch' gap='10px' width='100%'>
             <TextField
               className={styles.textField}
               width='100%'
-              label='Newsletter Email'
+              label={t('newsletter-email')}
               labelHidden
-              placeholder='Your Email'
+              placeholder={t('email')}
               backgroundColor='white'
             />
             <Button colorTheme='error' variation='primary'>
-              Subscribe
+              {t('subscribe')}
             </Button>
           </Flex>
         </Flex>
@@ -88,7 +87,7 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
             />
           </View>
           <Text fontSize='12px' color='white'>
-            © 2023 The Grid. All rights reserved.
+            © 2023 The Grid. {t('rights')}
           </Text>
         </Flex>
       </Flex>

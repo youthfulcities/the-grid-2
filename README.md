@@ -1,8 +1,16 @@
-Styling convention:
-Use component props when possible.
-If the style only occurs once or cannot be easily overwritten, use inline styling.
-If the style occurs multiple times in the component, use css modules.
-If the style occurs on multiple pages, use global.css
+### Styling shortcuts
+
+These snippets can be used to access common theme variables.
+
+```
+import { useTheme } from '@aws-amplify/ui-react';
+const { tokens } = useTheme();
+```
+
+Primary colour (#550D35): `tokens.colors.primary[60].value`
+Secondary colour (#FBD166): `tokens.colors.secondary[60].value`
+Main text colour for light background (#000): `tokens.colors.font.primary.value`
+Main text colour for dark background (#fff): `tokens.colors.font.inverse.value`
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 

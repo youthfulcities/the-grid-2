@@ -13,16 +13,66 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import useTranslation from '../../../i18n/client';
-import styles from './footer.module.css';
 
 interface FooterProps {
   lng: string;
 }
 
-const FooterView = styled(View)<{ $background: string }>`
+const FooterBase = styled(View)<{ $background: string }>`
   background-color: ${(props) => props.$background};
-  position: relative;
   padding: 40px 0;
+`;
+
+const FooterTopSection = styled(Flex)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+`;
+
+const StyledTextField = styled(TextField)<{ $border: string }>`
+  max-width: 100%;
+  flex-grow: 2;
+  background-color: white;
+  input {
+    border-color: transparent;
+  }
+
+  input:focus {
+    border-color: ${(props) => props.$border};
+  }
+`;
+
+const LinkSection = styled(Flex)`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin: 10px 0;
+  gap: 200px;
+`;
+
+const LinkColumn = styled(Flex)`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+`;
+
+const SmallText = styled(Text)`
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  text-decoration: none;
+`;
+
+const FooterBottomSection = styled(Flex)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
@@ -30,10 +80,14 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
   const { tokens } = useTheme();
 
   return (
-    <FooterView as='footer' $background={tokens.colors.primary[60].value}>
+    <FooterBase as='footer' $background={tokens.colors.primary[60].value}>
       <Flex className='short-container' direction='column' alignItems='stretch'>
-        <Flex className={styles.topSection}>
-          <Flex direction='column' gap='5px'>
+        <FooterTopSection>
+          <Flex
+            direction='column'
+            gap='5px'
+            maxWidth={{ base: '100%', medium: '50%' }}
+          >
             <Heading level={6} color={tokens.colors.font.inverse.value}>
               {t('sign-up')}
             </Heading>
@@ -41,57 +95,65 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
               {t('sign-up-text')}
             </Text>
           </Flex>
-          <Flex direction='row' alignContent='stretch' gap='10px' width='100%'>
-            <TextField
-              className={styles.textField}
-              width='100%'
+          <Flex direction='row' alignContent='stretch' gap='10px'>
+            <StyledTextField
+              $border={tokens.colors.secondary[60].value}
               label={t('newsletter-email')}
               labelHidden
               placeholder={t('email')}
-              backgroundColor='white'
             />
             <Button colorTheme='error' variation='primary'>
               {t('subscribe')}
             </Button>
           </Flex>
-        </Flex>
+        </FooterTopSection>
 
-        <Flex className={styles.linkSection}>
-          <Flex className={styles.linkColumn}>
+        <LinkSection>
+          <LinkColumn>
             <Link href={`${lng}/`} passHref>
-              <Text className={styles.smallText}>{t('home')}</Text>
+              <SmallText color={tokens.colors.font.inverse.value}>
+                {t('home')}
+              </SmallText>
             </Link>
             <Link href={`${lng}/about`} passHref>
-              <Text className={styles.smallText}>{t('about')}</Text>
+              <SmallText color={tokens.colors.font.inverse.value}>
+                {t('about')}
+              </SmallText>
             </Link>
             <Link href={`${lng}/datasets`} passHref>
-              <Text className={styles.smallText}>{t('datasets')}</Text>
+              <SmallText color={tokens.colors.font.inverse.value}>
+                {t('datasets')}
+              </SmallText>
             </Link>
-          </Flex>
-          <Flex className={styles.linkColumn}>
+          </LinkColumn>
+          <LinkColumn>
             <Link href={`${lng}/insights`} passHref>
-              <Text className={styles.smallText}>{t('insights')}</Text>
+              <SmallText color={tokens.colors.font.inverse.value}>
+                {t('insights')}
+              </SmallText>
             </Link>
             <Link href={`${lng}/contact`} passHref>
-              <Text className={styles.smallText}>{t('contact')}</Text>
+              <SmallText color={tokens.colors.font.inverse.value}>
+                {t('contact')}
+              </SmallText>
             </Link>
-          </Flex>
-        </Flex>
+          </LinkColumn>
+        </LinkSection>
 
-        <Flex className={styles.logoAndRightsContainer}>
+        <FooterBottomSection>
           <View>
             <img
               src='/assets/theme_image/THE_GRID_logo_RGB_orange.png'
               alt='Your Logo'
-              className={styles.logoImage}
+              width='100px'
             />
           </View>
           <Text fontSize='12px' color='white'>
             © 2023 The Grid. {t('rights')}
           </Text>
-        </Flex>
+        </FooterBottomSection>
       </Flex>
-    </FooterView>
+    </FooterBase>
   );
 };
 

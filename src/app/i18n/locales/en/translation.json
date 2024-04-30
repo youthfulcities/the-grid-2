@@ -7,5 +7,9 @@
   "cities": "Cities",
   "records": "Records",
   "subscribe": "Subscribe",
-  "email": "Your email"
+  "email": "Your email",
+  "sign-up": "Sign up for our newsletter",
+  "sign-up-text": "Stay connected and up to date on new data, insights, or job postings.",
+  "newsletter-email": "Newsletter Email",
+  "rights": "All rights reserved"
 }

@@ -35,6 +35,8 @@ const DataCard = ({ fetchUrl }: AppProps) => {
       minHeight={300}
       variation='elevated'
       style={{ position: 'relative' }}
+      display='flex'
+      
     >
       <div
         className={`card-img clip ${card.className}`}
@@ -48,11 +50,11 @@ const DataCard = ({ fetchUrl }: AppProps) => {
         <Heading level={3} fontSize='xl' color='brand.secondary.60'>
           {card.title}
         </Heading>
-        <Text fontWeight='bold' color='brand.secondary.60' fontSize='medium'>
+        <Text fontWeight='bold' color='brand.secondary.60' fontSize='medium' marginTop='auto'>
           {card.date}
         </Text>
-        <Text fontSize='small'>{card.description}</Text>
-        <Flex>
+        <Text fontSize='small' marginTop='auto'>{card.description}</Text>
+        <Flex grow={1}>
           <Button
             variation='primary'
             width='57px'
@@ -64,6 +66,7 @@ const DataCard = ({ fetchUrl }: AppProps) => {
             borderRadius='35px'
             padding='8px 16px 8px 16px'
             backgroundColor='brand.secondary.60'
+            marginTop='auto'
             disabled
           >
             <MyIcon type='table' />
@@ -79,6 +82,7 @@ const DataCard = ({ fetchUrl }: AppProps) => {
             borderRadius='35px'
             padding='8px 16px 8px 16px'
             backgroundColor='brand.secondary.60'
+            marginTop='auto'
             onClick={() => download(card.file)}
             color='brand.primary.60'
           >

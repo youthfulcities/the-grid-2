@@ -97,20 +97,7 @@ const App: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
     <main>
       <HomeHeader lng={lng} />
       <Banner lng={lng} />
-      <View as='section' className='container section-padding'>
-        <h2>
-          <Trans
-            t={t}
-            i18nKey='explore-data'
-            components={{ span: <span className='alt-highlight' /> }}
-          />
-        </h2>
-        <div className='inner-container'>
-          <div className='cards-container'>
-            <DataCard fetchUrl={fetchUrl} />
-          </div>
-        </div>
-      </View>
+      
       <GridInfo lng={lng} />
     </main>
   );

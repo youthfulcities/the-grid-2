@@ -1,15 +1,12 @@
 'use client';
 
-import { View } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import { getUrl } from 'aws-amplify/storage';
 import Papa from 'papaparse';
 import React, { useEffect, useState } from 'react';
-import { Trans } from 'react-i18next/TransWithoutContext';
 import awsExports from '../../aws-exports';
 import useTranslation from '../i18n/client';
 import Banner from './components/Banner';
-import DataCard from './components/DataCard';
 import GridInfo from './components/GridInfo';
 import HomeHeader from './components/HomeHeader';
 
@@ -76,7 +73,7 @@ const App: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
           useAccelerateEndpoint: false,
         },
       });
-      console.log(getUrlResult);
+      // console.log(getUrlResult);
       setSignedUrl(getUrlResult);
       setLoading(false);
       return getUrlResult;
@@ -87,7 +84,7 @@ const App: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
     }
   };
 
-  console.log(loading, csvData);
+  // console.log(loading, csvData);
   // const labels = csvData.map((row) => String(row.City));
   // const values = csvData.map((row) => Number(row.Value));
 
@@ -97,7 +94,7 @@ const App: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
     <main>
       <HomeHeader lng={lng} />
       <Banner lng={lng} />
-      
+
       <GridInfo lng={lng} />
     </main>
   );

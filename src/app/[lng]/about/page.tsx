@@ -39,11 +39,11 @@ const cardData: CardData[] = [
 
 const About = () => (
   <View className='container' padding='small'>
-    <Flex direction='column' alignItems='center'>
+    <Flex direction='column'>
       <Heading level={2} className='padding'>
         What is THE GRID?
       </Heading>
-      <Text>
+      <Text variation='primary'>
         THE GRID is a free, open-source, intuitive portal with accessible and
         reliable data that can be used by young people, communities, planners,
         organizations, governments, and more. It is powered by{' '}
@@ -55,7 +55,7 @@ const About = () => (
       <Heading level={2} className='padding'>
         How Did THE GRID Begin?
       </Heading>
-      <Text>
+      <Text variation='primary'>
         THE GRID, formerly known as Pivot Hub, started with the Pivot 2020
         project. It addressed the crisis of youth unemployment during COVID-19,
         focusing on empowering young people in Canadian cities.
@@ -63,7 +63,12 @@ const About = () => (
       <Heading level={2} className='padding'>
         THE GRID Design Principles
       </Heading>
-      <Flex direction='column' gap='1rem' className='cards-container'>
+      <Flex
+        direction='column'
+        gap='1rem'
+        className='cards-container'
+        alignItems='stretch'
+      >
         {cardData.map((card) => (
           <Card
             key={uuidv4()}
@@ -80,7 +85,7 @@ const About = () => (
       <Heading level={2} className='padding'>
         Land Acknowledgements
       </Heading>
-      <Text>
+      <Text variation='primary'>
         THE GRID acknowledges the traditional territories across Canada where
         its operations and research are conducted, emphasizing respect and
         gratitude to the Indigenous Peoples.
@@ -97,43 +102,47 @@ const About = () => (
         allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
         allowFullScreen
       />
-      <Heading level={2} className='padding'>
-        Partners & Funding
-      </Heading>
-      <Flex direction='row' wrap='wrap' gap='1rem' className='cards-container'>
-        <img
-          src='/assets/theme_image/YC_colour_black_RGB.png'
-          alt='Youthful Cities logo'
-        />
-        <img
-          src='/assets/theme_image/refugee-centre-logo.png'
-          alt='The Refugee Centre logo'
-        />
-        <img
-          src='/assets/theme_image/CCYP.png'
-          alt='Canadian Council for Youth Prosperity logo'
-        />
-        <img
-          src='/assets/theme_image/tamarack-logo.png'
-          alt='Tamarack Institute logo'
-        />
-        <img
-          src='/assets/theme_image/SFU.png'
-          alt='Simon Fraser University logo'
-        />
-        <img
-          src='/assets/theme_image/Gov Canada Logo.png'
-          alt='Government of Canada logo'
-        />
-        <img
-          src='/assets/theme_image/rbc-logo.svg'
-          alt='RBC Future Launch logo'
-        />
-        <img
-          src='/assets/theme_image/northpine-logo.png'
-          alt='Northpine Foundation logo'
-        />
-      </Flex>
+      <View className='padding'>
+        <Heading level={2}>Partners & Funding</Heading>
+        <Flex
+          direction='row'
+          wrap='wrap'
+          gap='xxl'
+          justifyContent='space-around'
+          alignItems='center'
+        >
+          <img
+            width='300px'
+            src='/assets/theme_image/tig.avif'
+            alt='Taking It Global logo'
+          />
+          <img
+            width='300px'
+            src='/assets/theme_image/CCYP.png'
+            alt='Canadian Council for Youth Prosperity logo'
+          />
+          <img
+            width='300px'
+            src='/assets/theme_image/tamarack.png'
+            alt='Tamarack Institute logo'
+          />
+          <img
+            width='300px'
+            src='/assets/theme_image/sfu.png'
+            alt='Simon Fraser University logo'
+          />
+          <img
+            width='300px'
+            src='/assets/theme_image/gov.png'
+            alt='Government of Canada logo'
+          />
+          <img
+            width='300px'
+            src='/assets/theme_image/RBC_FL.png'
+            alt='RBC Future Launch logo'
+          />
+        </Flex>
+      </View>
     </Flex>
   </View>
 );

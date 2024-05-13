@@ -1,0 +1,21 @@
+{
+    "appName": "thegrid2",
+    "roleName": "pinpointLambdaRolee752a7b0",
+    "cloudformationPolicyName": "cloudformationPolicye752a7b0",
+    "cloudWatchPolicyName": "cloudWatchPolicye752a7b0",
+    "pinpointPolicyName": "pinpointPolicye752a7b0",
+    "authPolicyName": "pinpoint_amplify_e752a7b0",
+    "unauthPolicyName": "pinpoint_amplify_e752a7b0",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    }
+}

@@ -1,9 +1,21 @@
 export type AmplifyDependentResourcesAttributes = {
+  "analytics": {
+    "thegrid2": {
+      "Id": "string",
+      "Region": "string",
+      "appName": "string"
+    }
+  },
   "api": {
     "s3": {
       "ApiId": "string",
       "ApiName": "string",
       "RootUrl": "string"
+    },
+    "thegrid2": {
+      "GraphQLAPIEndpointOutput": "string",
+      "GraphQLAPIIdOutput": "string",
+      "GraphQLAPIKeyOutput": "string"
     }
   },
   "auth": {

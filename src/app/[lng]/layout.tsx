@@ -13,6 +13,7 @@ import AWSThemeProvider from './aws-theme-provider';
 import Footer from './components/Footer/Footer';
 import NavBar from './components/NavBar/NavBar';
 import './global.css';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -93,6 +94,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({
   return (
     <html lang={lng} dir={direction !== undefined ? direction : 'ltr'}>
       <body>
+        <GoogleAnalytics gaId='G-7S1Y1B2YXC' />
         <StyledComponentsRegistry>
           <AWSThemeProvider>
             <NavBar lng={lng} />

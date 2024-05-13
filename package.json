@@ -14,7 +14,7 @@
     "@typescript-eslint/eslint-plugin": "^6.20.0",
     "@typescript-eslint/parser": "^6.20.0",
     "accept-language": "^3.0.18",
-    "aws-amplify": "^6.0.13",
+    "aws-amplify": "^6.3.0",
     "bootstrap": "^5.3.2",
     "chart.js": "^4.4.1",
     "chartjs-plugin-deferred": "^2.0.0",

@@ -1,4 +1,3 @@
-import MyIcon from '@/ui-components/MyIcon';
 import {
   Button,
   Card,
@@ -36,7 +35,6 @@ const DataCard = ({ fetchUrl }: AppProps) => {
       variation='elevated'
       style={{ position: 'relative' }}
       display='flex'
-      
     >
       <div
         className={`card-img clip ${card.className}`}
@@ -50,27 +48,18 @@ const DataCard = ({ fetchUrl }: AppProps) => {
         <Heading level={3} fontSize='xl' color='brand.secondary.60'>
           {card.title}
         </Heading>
-        <Text fontWeight='bold' color='brand.secondary.60' fontSize='medium' marginTop='auto'>
+        <Text
+          fontWeight='bold'
+          color='brand.secondary.60'
+          fontSize='medium'
+          marginTop='auto'
+        >
           {card.date}
         </Text>
-        <Text fontSize='small' marginTop='auto'>{card.description}</Text>
+        <Text fontSize='small' marginTop='auto'>
+          {card.description}
+        </Text>
         <Flex grow={1}>
-          <Button
-            variation='primary'
-            width='57px'
-            height='57px'
-            justifyContent='center'
-            alignItems='center'
-            position='relative'
-            boxShadow='0px 2px 2px rgba(0, 0, 0, 0.10000000149011612)'
-            borderRadius='35px'
-            padding='8px 16px 8px 16px'
-            backgroundColor='brand.secondary.60'
-            marginTop='auto'
-            disabled
-          >
-            <MyIcon type='table' />
-          </Button>
           <Button
             variation='primary'
             width='57px'

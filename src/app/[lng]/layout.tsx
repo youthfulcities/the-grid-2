@@ -1,10 +1,12 @@
 //
 
 import '@aws-amplify/ui-react/styles.css';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { Amplify } from 'aws-amplify';
 import { configureAutoTrack } from 'aws-amplify/analytics';
 import { dir } from 'console';
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import React from 'react';
 import config from '../../amplifyconfiguration.json';
 import StyledComponentsRegistry from '../../lib/registry';
@@ -13,7 +15,6 @@ import AWSThemeProvider from './aws-theme-provider';
 import Footer from './components/Footer/Footer';
 import NavBar from './components/NavBar/NavBar';
 import './global.css';
-import { GoogleAnalytics } from '@next/third-parties/google';
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -93,6 +94,11 @@ const RootLayout: React.FC<RootLayoutProps> = ({
   const direction = dir(lng);
   return (
     <html lang={lng} dir={direction !== undefined ? direction : 'ltr'}>
+      <Script
+        id='cookieyes'
+        type='text/javascript'
+        src='https://cdn-cookieyes.com/client_data/36b079cad9fec46bd01a04bc/script.js'
+      />
       <body>
         <GoogleAnalytics gaId='G-7S1Y1B2YXC' />
         <StyledComponentsRegistry>

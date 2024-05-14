@@ -24,7 +24,7 @@
       "function": {
         "dataapi": {
           "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
-          "s3Key": "amplify-builds/dataapi-685267475a4845693256-build.zip"
+          "s3Key": "amplify-builds/dataapi-346b2b5477434a767563-build.zip"
         }
       },
       "api": {

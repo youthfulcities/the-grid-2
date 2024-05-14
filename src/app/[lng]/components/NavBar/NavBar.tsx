@@ -1,22 +1,75 @@
-'use client';
+'use client'
 
 import { Button, Flex, Menu, MenuItem, View } from '@aws-amplify/ui-react';
-import Link from 'next/link'; // Import Link from next/link
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import useTranslation from '../../../i18n/client';
-import styles from './navbar.module.css';
+import styled from 'styled-components';
 
 interface NavBarProps {
   lng: string;
 }
 
+const StyledFlex = styled(Flex)`
+  display: flex;
+  flex-direction: row; 
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0px 2px 6px rgba(0.05098039284348488, 0.10196078568696976, 0.14901961386203766, 0.15000000596046448);
+  padding: 16px 32px;
+  background-color: rgba(251,208,101,1);
+`;
+
+const NavigationLinks = styled(Flex)`
+  gap: 48px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+`;
+
+const NavLink = styled(Link)`
+  font-family: 'Gotham Narrow';
+  font-size: 16px;
+  font-weight: 450;
+  color: rgba(0, 0, 0, 1);
+  text-transform: uppercase;
+  line-height: 24px;
+  text-align: left;
+  display: inline-block;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: black;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease-in-out;
+    border-radius: 5px;
+  }
+  &:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+`;
+
 const NavBar: React.FC<NavBarProps> = ({ lng }) => {
   const { t } = useTranslation(lng, 'translation');
-
   const pathname = usePathname();
   const router = useRouter();
-
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -31,7 +84,6 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
   }, []);
 
   function handleLanguageChange(locale: string) {
-    // e.g. '/en/about' or '/fr/contact'
     const pathNoLocale = pathname.substring(3);
     const newPath = `/${locale}${pathNoLocale}`;
     router.prefetch(newPath);
@@ -39,53 +91,21 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
   }
 
   return (
-    <Flex
-      as='nav'
-      direction='row'
-      justifyContent='space-around'
-      alignItems='center'
-      gap='10px'
-      width='100%'
-      overflow='hidden'
-      position='relative'
-      boxShadow='0px 2px 6px rgba(0.05098039284348488, 0.10196078568696976, 0.14901961386203766, 0.15000000596046448)'
-      padding='16px 32px'
-      backgroundColor='rgba(251,208,101,1)'
-    >
+    <StyledFlex as='nav'>
       <Flex alignItems='center'>
         <Link href='/'>
           <img
             src='/assets/theme_image/THE_GRID_logo_RGB_black.png'
             alt='Logo'
-            style={{
-              height: '80px',
-              top: '-15.5px',
-              left: '-24px',
-            }}
+            style={{ height: '80px' }}
           />
         </Link>
-        <View>
-          <Button
-            colorTheme='overlay'
-            border='0'
-            width='30px'
-            height='30px'
-            size='small'
-            fontWeight={lng === 'en' ? 600 : 300}
-            onClick={() => handleLanguageChange('en')}
-          >
+        <View style={{ marginLeft: '20px' }}>
+          <Button colorTheme='overlay' border='0' width='30px' height='30px' size='small' fontWeight={lng === 'en' ? 600 : 300} onClick={() => handleLanguageChange('en')}>
             EN
           </Button>
           |
-          <Button
-            colorTheme='overlay'
-            border='0'
-            width='30px'
-            height='30px'
-            size='small'
-            fontWeight={lng === 'fr' ? 600 : 300}
-            onClick={() => handleLanguageChange('fr')}
-          >
+          <Button colorTheme='overlay' border='0' width='30px' height='30px' size='small' fontWeight={lng === 'fr' ? 600 : 300} onClick={() => handleLanguageChange('fr')}>
             FR
           </Button>
         </View>
@@ -109,22 +129,15 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
           </MenuItem>
         </Menu>
       ) : (
-        <Flex
-          className={styles.navigation}
-          gap='48px'
-          direction='row'
-          justifyContent='flex-start'
-          alignItems='flex-start'
-          position='relative'
-        >
-          <Link href={`/${lng}/`}>{t('home')}</Link>
-          <Link href={`/${lng}/datasets`}>{t('datasets')}</Link>
-          <Link href={`/${lng}/insights`}>{t('insights')}</Link>
-          <Link href={`/${lng}/about`}>{t('about')}</Link>
-          <Link href={`/${lng}/contact`}>{t('contact')}</Link>
-        </Flex>
+        <NavigationLinks>
+          <NavLink href={`/${lng}/`}>{t('home')}</NavLink>
+          <NavLink href={`/${lng}/datasets`}>{t('datasets')}</NavLink>
+          <NavLink href={`/${lng}/insights`}>{t('insights')}</NavLink>
+          <NavLink href={`/${lng}/about`}>{t('about')}</NavLink>
+          <NavLink href={`/${lng}/contact`}>{t('contact')}</NavLink>
+        </NavigationLinks>
       )}
-    </Flex>
+    </StyledFlex>
   );
 };
 

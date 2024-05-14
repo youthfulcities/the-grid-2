@@ -94,7 +94,6 @@ const App: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
     <main>
       <HomeHeader lng={lng} />
       <Banner lng={lng} />
-
       <GridInfo lng={lng} />
     </main>
   );

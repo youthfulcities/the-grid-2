@@ -1,3 +1,7 @@
+theme-reference.json
+.next/
+.vscode/
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
@@ -19,6 +23,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-theme-reference.json
-.next/
-.vscode/

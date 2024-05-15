@@ -8,8 +8,11 @@ const { tokens } = useTheme();
 ```
 
 Primary colour (#550D35): `tokens.colors.primary[60].value`
+
 Secondary colour (#FBD166): `tokens.colors.secondary[60].value`
+
 Main text colour for light background (#000): `tokens.colors.font.primary.value`
+
 Main text colour for dark background (#fff): `tokens.colors.font.inverse.value`
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).

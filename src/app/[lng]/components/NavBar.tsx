@@ -4,7 +4,7 @@ import { Button, Flex, Menu, MenuItem, View } from '@aws-amplify/ui-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import useTranslation from '../../../i18n/client';
+import useTranslation from '../../i18n/client';
 import styled from 'styled-components';
 
 interface NavBarProps {
@@ -35,7 +35,7 @@ const NavigationLinks = styled(Flex)`
 `;
 
 const NavLink = styled(Link)`
-  font-family: 'Gotham Narrow';
+  font-family: 'Gotham Narrow Medium';
   font-size: 16px;
   font-weight: 450;
   color: rgba(0, 0, 0, 1);

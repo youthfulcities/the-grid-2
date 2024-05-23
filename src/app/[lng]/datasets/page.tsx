@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-
 import { Flex, Heading, View } from '@aws-amplify/ui-react';
 import { getUrl } from 'aws-amplify/storage';
 import Papa from 'papaparse';

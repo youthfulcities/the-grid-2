@@ -38,7 +38,7 @@ const cardData: CardData[] = [
 ];
 
 const About = () => (
-  <View className='container' padding='small'>
+  <Flex className='container' padding='small'>
     <Flex direction='column'>
       <Heading level={2} className='padding'>
         What is THE GRID?
@@ -144,7 +144,7 @@ const About = () => (
         </Flex>
       </View>
     </Flex>
-  </View>
+  </Flex>
 );
 
 export default About;

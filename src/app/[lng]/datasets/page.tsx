@@ -82,7 +82,7 @@ const Datasets: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
         <Trans
           t={t}
           i18nKey='explore-data'
-          components={{ span: <span className='alt-highlight' /> }}
+          components={{ span: <span className='alt-highlight'/> }}
         />
       </Heading>
       <Flex className='inner-container'>

@@ -38,6 +38,8 @@ export declare type GRIDCardMainProps = React.PropsWithChildren<Partial<FlexProp
     description?: String;
     cardActionButtons?: React.ReactNode;
 } & {
+    property1?: "Green" | "Orange" | "Pink" | "Yellow";
+} & {
     overrides?: GRIDCardMainOverridesProps | undefined | null;
 }>;
 export default function GRIDCardMain(props: GRIDCardMainProps): React.ReactElement;

@@ -21,7 +21,7 @@ export default function MarketingFooterBrand(props) {
       alignItems="center"
       position="relative"
       padding="40px 40px 40px 40px"
-      backgroundColor="rgba(54,3,31,1)"
+      backgroundColor="rgba(15,25,56,1)"
       {...getOverrideProps(overrides, "MarketingFooterBrand")}
       {...rest}
     >
@@ -113,7 +113,7 @@ export default function MarketingFooterBrand(props) {
             height="unset"
             placeholder="Your email"
             shrink="0"
-            backgroundColor="rgba(255,255,255,1)"
+            backgroundColor="rgba(252,250,248,1)"
             size="default"
             isDisabled={false}
             labelHidden={true}

@@ -12,7 +12,7 @@ import {
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
-import useTranslation from '../../../i18n/client';
+import useTranslation from '../../i18n/client';
 
 interface FooterProps {
   lng: string;

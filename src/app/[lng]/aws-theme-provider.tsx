@@ -9,8 +9,8 @@ const theme = createTheme(
     tokens: {
       fonts: {
         default: {
-          variable: { value: 'Gotham Narrow, Raleway, sans-serif' },
-          static: { value: 'Gotham Narrow, Raleway, sans-serif' },
+          variable: { value: 'Gotham Narrow Book, Raleway, sans-serif' },
+          static: { value: 'Gotham Narrow Book, Raleway, sans-serif' },
         },
       },
       components: {

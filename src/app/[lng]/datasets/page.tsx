@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import { Flex, Heading, View } from '@aws-amplify/ui-react';
 import { getUrl } from 'aws-amplify/storage';
 import Papa from 'papaparse';
+import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
 import useTranslation from '../../i18n/client';
+import Container from '../components/Container';
 import DataCard from '../components/DataCard';
 
 interface RootLayoutProps {
@@ -77,20 +78,22 @@ const Datasets: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
   // const values = csvData.map((row) => Number(row.Value));
 
   return (
-    <View as='section' className='container section-padding'>
-      <Heading level={2}>
-        <Trans
-          t={t}
-          i18nKey='explore-data'
-          components={{ span: <span className='alt-highlight'/> }}
-        />
-      </Heading>
-      <Flex className='inner-container'>
-        <Flex className='cards-container'>
-          <DataCard fetchUrl={fetchUrl} />
+    <Container>
+      <View as='section' className='container section-padding'>
+        <Heading level={2}>
+          <Trans
+            t={t}
+            i18nKey='explore-data'
+            components={{ span: <span className='highlight' /> }}
+          />
+        </Heading>
+        <Flex className='inner-container'>
+          <Flex className='cards-container'>
+            <DataCard fetchUrl={fetchUrl} />
+          </Flex>
         </Flex>
-      </Flex>
-    </View>
+      </View>
+    </Container>
   );
 };
 

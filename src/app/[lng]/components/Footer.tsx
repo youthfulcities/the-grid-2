@@ -9,8 +9,9 @@ import {
   View,
   useTheme,
 } from '@aws-amplify/ui-react';
+import axios from 'axios';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import useTranslation from '../../i18n/client';
 
@@ -82,6 +83,36 @@ const OffsetImg = styled.img`
 const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
   const { t } = useTranslation(lng, 'translation');
   const { tokens } = useTheme();
+  const [formEmail, setEmail] = useState('');
+  const [statusCode, setStatusCode] = useState<number>();
+  const [status, setStatus] = useState<
+    'success' | 'error' | 'loading' | 'idle'
+  >('idle');
+  const [responseMsg, setResponseMsg] = useState<string>('');
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post('/api/newsletter', {
+        email: formEmail,
+      });
+      setStatus('success');
+      setStatusCode(response.status);
+      setEmail('');
+      setResponseMsg(response.data.message);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        setStatus('error');
+        setStatusCode(err.response?.status);
+        setResponseMsg(err.response?.data.error);
+      }
+    }
+  };
+
+  console.log(responseMsg, statusCode);
 
   return (
     <FooterBase as='footer' $background={tokens.colors.blue[100].value}>
@@ -104,9 +135,17 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
               $border={tokens.colors.secondary[60].value}
               label={t('newsletter-email')}
               labelHidden
+              value={formEmail}
+              onChange={(e) => handleEmailChange(e)}
               placeholder={t('email')}
+              disabled={status == 'loading'}
             />
-            <Button colorTheme='error' variation='primary'>
+            <Button
+              colorTheme='error'
+              variation='primary'
+              onClick={handleSubmit}
+              disabled={status == 'loading'}
+            >
               {t('subscribe')}
             </Button>
           </Flex>

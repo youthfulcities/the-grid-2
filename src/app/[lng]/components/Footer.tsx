@@ -12,7 +12,7 @@ import {
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
-import useTranslation from '../../../i18n/client';
+import useTranslation from '../../i18n/client';
 
 interface FooterProps {
   lng: string;
@@ -58,14 +58,6 @@ const LinkColumn = styled(Flex)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 2px;
-`;
-
-const SmallText = styled(Text)`
-  font-size: 16px;
-  font-weight: 400;
-  cursor: pointer;
-  text-decoration: none;
 `;
 
 const FooterBottomSection = styled(Flex)`
@@ -75,12 +67,24 @@ const FooterBottomSection = styled(Flex)`
   align-items: center;
 `;
 
+const HoverLink = styled(Link)<{ $hover: string; $color: string }>`
+  text-decoration: none;
+  color: var(--amplify-colors-font-inverse);
+  &:hover {
+    color: var(--amplify-colors-secondary-60);
+  }
+`;
+
+const OffsetImg = styled.img`
+  margin-left: -14px;
+`;
+
 const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
   const { t } = useTranslation(lng, 'translation');
   const { tokens } = useTheme();
 
   return (
-    <FooterBase as='footer' $background={tokens.colors.primary[60].value}>
+    <FooterBase as='footer' $background={tokens.colors.blue[100].value}>
       <Flex className='short-container' direction='column' alignItems='stretch'>
         <FooterTopSection>
           <Flex
@@ -110,44 +114,57 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
 
         <LinkSection>
           <LinkColumn>
-            <Link href={`${lng}/`} passHref>
-              <SmallText color={tokens.colors.font.inverse.value}>
-                {t('home')}
-              </SmallText>
-            </Link>
-            <Link href={`${lng}/about`} passHref>
-              <SmallText color={tokens.colors.font.inverse.value}>
-                {t('about')}
-              </SmallText>
-            </Link>
-            <Link href={`${lng}/datasets`} passHref>
-              <SmallText color={tokens.colors.font.inverse.value}>
-                {t('datasets')}
-              </SmallText>
-            </Link>
+            <HoverLink
+              href={`${lng}/`}
+              passHref
+              $hover={tokens.colors.primary[60].value}
+              $color={tokens.colors.font.inverse.value}
+            >
+              {t('home')}
+            </HoverLink>
+            <HoverLink
+              href={`${lng}/about`}
+              passHref
+              $hover={tokens.colors.primary[60].value}
+              $color={tokens.colors.font.inverse.value}
+            >
+              {t('about')}
+            </HoverLink>
+            <HoverLink
+              href={`${lng}/datasets`}
+              passHref
+              $hover={tokens.colors.primary[60].value}
+              $color={tokens.colors.font.inverse.value}
+            >
+              {t('datasets')}
+            </HoverLink>
           </LinkColumn>
           <LinkColumn>
-            <Link href={`${lng}/insights`} passHref>
-              <SmallText color={tokens.colors.font.inverse.value}>
-                {t('insights')}
-              </SmallText>
-            </Link>
-            <Link href={`${lng}/contact`} passHref>
-              <SmallText color={tokens.colors.font.inverse.value}>
-                {t('contact')}
-              </SmallText>
-            </Link>
+            <HoverLink
+              href={`${lng}/insights`}
+              passHref
+              $hover={tokens.colors.primary[60].value}
+              $color={tokens.colors.font.inverse.value}
+            >
+              {t('insights')}
+            </HoverLink>
+            <HoverLink
+              href={`${lng}/contact`}
+              passHref
+              $hover={tokens.colors.primary[60].value}
+              $color={tokens.colors.font.inverse.value}
+            >
+              {t('contact')}
+            </HoverLink>
           </LinkColumn>
         </LinkSection>
 
         <FooterBottomSection>
-          <View>
-            <img
-              src='/assets/theme_image/THE_GRID_logo_RGB_orange.png'
-              alt='Your Logo'
-              width='100px'
-            />
-          </View>
+          <OffsetImg
+            src='/assets/theme_image/THE_GRID_logo_RGB_orange.png'
+            alt='Your Logo'
+            width='100px'
+          />
           <Text fontSize='12px' color='white'>
             © 2023 The Grid. {t('rights')}
           </Text>

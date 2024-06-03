@@ -1,28 +1,41 @@
-'use client'
+'use client';
 
-import { Button, Flex, Menu, MenuItem, View } from '@aws-amplify/ui-react';
+import {
+  Button,
+  Flex,
+  Menu,
+  MenuItem,
+  View,
+  useTheme,
+} from '@aws-amplify/ui-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import useTranslation from '../../i18n/client';
 import styled from 'styled-components';
+import useTranslation from '../../i18n/client';
 
 interface NavBarProps {
   lng: string;
 }
 
-const StyledFlex = styled(Flex)`
+const StyledFlex = styled(Flex)<{ $background: string }>`
   display: flex;
-  flex-direction: row; 
+  flex-direction: row;
   justify-content: space-around;
   align-items: center;
   gap: 10px;
   width: 100%;
   overflow: hidden;
   position: relative;
-  box-shadow: 0px 2px 6px rgba(0.05098039284348488, 0.10196078568696976, 0.14901961386203766, 0.15000000596046448);
+  box-shadow: 0px 2px 6px
+    rgba(
+      0.05098039284348488,
+      0.10196078568696976,
+      0.14901961386203766,
+      0.15000000596046448
+    );
   padding: 16px 32px;
-  background-color: rgba(251,208,101,1);
+  background-color: ${(props) => props.$background};
 `;
 
 const NavigationLinks = styled(Flex)`
@@ -72,6 +85,8 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
 
+  const { tokens } = useTheme();
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -91,7 +106,7 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
   }
 
   return (
-    <StyledFlex as='nav'>
+    <StyledFlex as='nav' $background={tokens.colors.primary[60].value}>
       <Flex alignItems='center'>
         <Link href='/'>
           <img
@@ -101,11 +116,27 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
           />
         </Link>
         <View style={{ marginLeft: '20px' }}>
-          <Button colorTheme='overlay' border='0' width='30px' height='30px' size='small' fontWeight={lng === 'en' ? 600 : 300} onClick={() => handleLanguageChange('en')}>
+          <Button
+            colorTheme='overlay'
+            border='0'
+            width='30px'
+            height='30px'
+            size='small'
+            fontWeight={lng === 'en' ? 600 : 300}
+            onClick={() => handleLanguageChange('en')}
+          >
             EN
           </Button>
           |
-          <Button colorTheme='overlay' border='0' width='30px' height='30px' size='small' fontWeight={lng === 'fr' ? 600 : 300} onClick={() => handleLanguageChange('fr')}>
+          <Button
+            colorTheme='overlay'
+            border='0'
+            width='30px'
+            height='30px'
+            size='small'
+            fontWeight={lng === 'fr' ? 600 : 300}
+            onClick={() => handleLanguageChange('fr')}
+          >
             FR
           </Button>
         </View>

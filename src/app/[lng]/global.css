@@ -99,11 +99,11 @@
 }
 body,
 html {
-  background-color: #dad6cf;
   font-family: 'Gotham Narrow Book', sans-serif;
   margin: 0;
   padding: 0;
 }
+
 main {
   /* Overrides an existing CSS rule so the banner image can be "edge-to-edge" */
   margin: 0;
@@ -121,7 +121,7 @@ h1,
 h2,
 .amplify-heading--2 {
   font-family: 'Gotham Narrow Black', sans-serif;
-  color: var(--plum);
+  color: var(--amplify-colors-primary-60);
   font-size: 2.5rem;
   text-transform: uppercase;
   margin: 0 0 0 0;
@@ -175,7 +175,7 @@ a:hover {
 }
 
 .highlight {
-  color: var(--yellow);
+  color: var(--amplify-colors-secondary-60);
 }
 .alt-heading {
   color: var(--plum);

@@ -21,6 +21,7 @@
   "plugins": ["react", "prettier", "json"],
   "rules": {
     "@next/next/no-img-element": "off",
+    "import/no-unresolved": "warn",
     "spaced-comment": "off",
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-unused-vars": "warn",

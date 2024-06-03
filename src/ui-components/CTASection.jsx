@@ -21,7 +21,7 @@ export default function CTASection(props) {
       overflow="hidden"
       position="relative"
       padding="160px 160px 160px 160px"
-      backgroundColor="rgba(255,255,255,1)"
+      backgroundColor="rgba(33,33,33,1)"
       {...getOverrideProps(overrides, "CTASection")}
       {...rest}
     >

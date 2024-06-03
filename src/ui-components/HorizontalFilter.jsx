@@ -203,7 +203,7 @@ export default function HorizontalFilter(props) {
                 top="3px"
                 left="5.64px"
                 padding="0px 0px 0px 0px"
-                backgroundColor="rgba(205,137,174,1)"
+                backgroundColor="rgba(246,215,213,1)"
                 {...getOverrideProps(overrides, "Rectangle 1166")}
               ></View>
               <View
@@ -233,7 +233,7 @@ export default function HorizontalFilter(props) {
                 left="107.25px"
                 borderRadius="3000px"
                 padding="0px 0px 0px 0px"
-                backgroundColor="rgba(84,13,52,1)"
+                backgroundColor="rgba(242,107,95,1)"
                 {...getOverrideProps(overrides, "Rectangle 1165")}
               ></View>
               <View
@@ -248,16 +248,15 @@ export default function HorizontalFilter(props) {
                 left="0px"
                 borderRadius="3000px"
                 padding="0px 0px 0px 0px"
-                backgroundColor="rgba(84,13,52,1)"
+                backgroundColor="rgba(242,107,95,1)"
                 {...getOverrideProps(overrides, "Rectangle 1164")}
               ></View>
             </Flex>
           </Flex>
           <Button
-            width="unset"
-            height="26.88px"
+            width="94px"
+            height="27px"
             border="1px SOLID rgba(242,107,95,1)"
-            padding="4.629441738128662px 30.091371536254883px 4.629441738128662px 30.091371536254883px"
             shrink="0"
             backgroundColor="rgba(242,107,95,1)"
             size="large"
@@ -267,10 +266,9 @@ export default function HorizontalFilter(props) {
             {...getOverrideProps(overrides, "Apply Button")}
           ></Button>
           <Button
-            width="unset"
-            height="28.36px"
+            width="95.47px"
+            height="28.47px"
             border="1.74px SOLID rgba(242,107,95,1)"
-            padding="4.629441738128662px 30.091371536254883px 4.629441738128662px 30.091371536254883px"
             shrink="0"
             size="large"
             isDisabled={false}

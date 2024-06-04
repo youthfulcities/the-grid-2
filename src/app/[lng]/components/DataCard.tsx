@@ -8,8 +8,36 @@ import {
 } from '@aws-amplify/ui-react';
 import { FaFileArrowDown } from 'react-icons/fa6';
 
+import styled from 'styled-components';
+
 import datasetCards from '@/data/dataset-cards.json';
 import { v4 as uuidv4 } from 'uuid';
+
+const StyledButton = styled(Button)<{ $background: string; $inverse: string }>`
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  position: relative;
+  padding: 0;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.10000000149011612);
+  border-radius: 35px;
+  background-color: ${(props) => props.$background};
+  margin-top: auto;
+  color: ${(props) => props.$inverse};
+  &:hover {
+    background-color: ${(props) => props.$inverse};
+    color: ${(props) => props.$background};
+  }
+`;
+
+const StyledCard = styled(Card)<{ $background: string; $font: string }>`
+  min-height: 300px;
+  position: relative;
+  display: flex;
+  background-color: ${(props) => props.$background};
+  color: ${(props) => props.$font};
+`;
 
 interface AppProps {
   fetchUrl: (url: string) => Promise<{ url: URL; expiresAt: Date } | null>;
@@ -28,13 +56,49 @@ const DataCard = ({ fetchUrl }: AppProps) => {
     }
   };
 
+  const getColor = (i) => {
+    //array of all the different card color patterns
+    const options = [
+      {
+        background: tokens.colors.red[60].value,
+        titleFont: tokens.colors.font.primary.value,
+        font: tokens.colors.font.primary.value,
+        button: tokens.colors.yellow[60].value,
+        buttonInverse: tokens.colors.red[60].value,
+      },
+      {
+        background: tokens.colors.yellow[60].value,
+        titleFont: tokens.colors.font.primary.value,
+        font: tokens.colors.font.primary.value,
+        button: tokens.colors.red[60].value,
+        buttonInverse: tokens.colors.yellow[60].value,
+      },
+      {
+        background: tokens.colors.pink[60].value,
+        titleFont: tokens.colors.blue[60].value,
+        font: tokens.colors.font.primary.value,
+        button: tokens.colors.blue[60].value,
+        buttonInverse: tokens.colors.pink[60].value,
+      },
+      {
+        background: tokens.colors.green[60].value,
+        titleFont: tokens.colors.blue[60].value,
+        font: tokens.colors.font.primary.value,
+        button: tokens.colors.blue[60].value,
+        buttonInverse: tokens.colors.green[60].value,
+      },
+    ];
+
+    const position = i % options.length;
+    return options[position];
+  };
+
   return datasetCards.datasetCards.map((card, i) => (
-    <Card
+    <StyledCard
+      $background={getColor(i).background}
+      $font={getColor(i).font}
       key={uuidv4()}
-      minHeight={300}
       variation='elevated'
-      style={{ position: 'relative' }}
-      display='flex'
     >
       <div
         className={`card-img clip ${card.className}`}
@@ -45,14 +109,14 @@ const DataCard = ({ fetchUrl }: AppProps) => {
         }}
       />
       <Flex direction='column' paddingTop={150}>
-        <Heading level={3} fontSize='xl'>
+        <Heading level={3} fontSize='xl' color={getColor(i).titleFont}>
           {card.title}
         </Heading>
         <Text
           fontWeight='bold'
-          color='font.primary'
           fontSize='medium'
           marginTop='auto'
+          color={getColor(i).titleFont}
         >
           {card.date}
         </Text>
@@ -60,26 +124,17 @@ const DataCard = ({ fetchUrl }: AppProps) => {
           {card.description}
         </Text>
         <Flex grow={1}>
-          <Button
+          <StyledButton
+            $background={getColor(i).button}
+            $inverse={getColor(i).buttonInverse}
             variation='primary'
-            width='57px'
-            height='57px'
-            justifyContent='center'
-            alignItems='center'
-            position='relative'
-            boxShadow='0px 2px 2px rgba(0, 0, 0, 0.10000000149011612)'
-            borderRadius='35px'
-            padding='8px 16px 8px 16px'
-            backgroundColor='brand.secondary.60'
-            marginTop='auto'
             onClick={() => download(card.file)}
-            color='brand.primary.60'
           >
-            <FaFileArrowDown size='1.5em' />
-          </Button>
+            <FaFileArrowDown />
+          </StyledButton>
         </Flex>
       </Flex>
-    </Card>
+    </StyledCard>
   ));
 };
 

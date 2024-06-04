@@ -28,7 +28,7 @@ const DataCard = ({ fetchUrl }: AppProps) => {
     }
   };
 
-  return datasetCards.datasetCards.map((card) => (
+  return datasetCards.datasetCards.map((card, i) => (
     <Card
       key={uuidv4()}
       minHeight={300}
@@ -45,18 +45,18 @@ const DataCard = ({ fetchUrl }: AppProps) => {
         }}
       />
       <Flex direction='column' paddingTop={150}>
-        <Heading level={3} fontSize='xl' color='brand.secondary.60'>
+        <Heading level={3} fontSize='xl'>
           {card.title}
         </Heading>
         <Text
           fontWeight='bold'
-          color='brand.secondary.60'
+          color='font.primary'
           fontSize='medium'
           marginTop='auto'
         >
           {card.date}
         </Text>
-        <Text fontSize='small' marginTop='auto'>
+        <Text fontSize='small' marginTop='auto' color='font.primary'>
           {card.description}
         </Text>
         <Flex grow={1}>

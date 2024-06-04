@@ -32,7 +32,7 @@ export const POST = async (req: Request) => {
   // 3. Construct Mailchimp API request URL
   const url = `https://${API_SERVER}.api.mailchimp.com/3.0/lists/${AUDIENCE_ID}/members`;
 
-  // 4. Prepare request data
+  // 4. Prepare request data/home/genna/yc/the-grid-2/src/app/[lng]/components
   const data = {
     email_address: emailValidation.data,
     status: 'subscribed',
@@ -58,6 +58,7 @@ export const POST = async (req: Request) => {
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
+      console.log(error);
       console.error(
         `${error.response?.status}`,
         `${error.response?.data.title}`,

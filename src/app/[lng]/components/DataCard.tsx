@@ -12,6 +12,14 @@ import { FaFileArrowDown } from 'react-icons/fa6';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
+interface DatasetCard {
+  title: string;
+  date: string;
+  description: string;
+  file: string;
+  className: string;
+}
+
 const StyledButton = styled(Button)<{ $background: string; $inverse: string }>`
   justify-content: center;
   width: 40px;
@@ -98,7 +106,7 @@ const DataCard = ({ fetchUrl }: AppProps) => {
     return options[position];
   };
 
-  return sortedDatasetCards.map((card, i) => (
+  return sortedDatasetCards.map((card: DatasetCard, i: number) => (
     <StyledCard
       $background={getColor(i).background}
       $font={getColor(i).font}

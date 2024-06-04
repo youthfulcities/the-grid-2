@@ -1,18 +1,11 @@
 'use client';
 
-import {
-  Button,
-  Flex,
-  Heading,
-  Text,
-  TextField,
-  View,
-  useTheme,
-} from '@aws-amplify/ui-react';
+import { Flex, Heading, Text, View, useTheme } from '@aws-amplify/ui-react';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import useTranslation from '../../i18n/client';
+import Newsletter from './Newsletter';
 
 interface FooterProps {
   lng: string;
@@ -29,19 +22,6 @@ const FooterTopSection = styled(Flex)`
   justify-content: space-between;
   align-items: flex-start;
   flex-wrap: wrap;
-`;
-
-const StyledTextField = styled(TextField)<{ $border: string }>`
-  max-width: 100%;
-  flex-grow: 2;
-  background-color: white;
-  input {
-    border-color: transparent;
-  }
-
-  input:focus {
-    border-color: ${(props) => props.$border};
-  }
 `;
 
 const LinkSection = styled(Flex)`
@@ -99,17 +79,8 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
               {t('sign-up-text')}
             </Text>
           </Flex>
-          <Flex direction='row' alignContent='stretch' gap='10px'>
-            <StyledTextField
-              $border={tokens.colors.secondary[60].value}
-              label={t('newsletter-email')}
-              labelHidden
-              placeholder={t('email')}
-            />
-            <Button colorTheme='error' variation='primary'>
-              {t('subscribe')}
-            </Button>
-          </Flex>
+          
+            <Newsletter lng={lng} />
         </FooterTopSection>
 
         <LinkSection>

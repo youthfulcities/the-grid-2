@@ -1,3 +1,4 @@
+import datasetCards from '@/data/dataset-cards.json';
 import {
   Button,
   Card,
@@ -6,11 +7,9 @@ import {
   Text,
   useTheme,
 } from '@aws-amplify/ui-react';
+import _ from 'lodash';
 import { FaFileArrowDown } from 'react-icons/fa6';
-
 import styled from 'styled-components';
-
-import datasetCards from '@/data/dataset-cards.json';
 import { v4 as uuidv4 } from 'uuid';
 
 const StyledButton = styled(Button)<{ $background: string; $inverse: string }>`
@@ -46,6 +45,12 @@ interface AppProps {
 const DataCard = ({ fetchUrl }: AppProps) => {
   const { tokens } = useTheme();
 
+  const sortedDatasetCards = _.orderBy(
+    datasetCards.datasetCards,
+    'date',
+    'desc'
+  );
+
   const download = async (file: string) => {
     try {
       const getUrlResult: { url: URL; expiresAt: Date } | null =
@@ -56,7 +61,7 @@ const DataCard = ({ fetchUrl }: AppProps) => {
     }
   };
 
-  const getColor = (i) => {
+  const getColor = (i: number) => {
     //array of all the different card color patterns
     const options = [
       {
@@ -74,18 +79,18 @@ const DataCard = ({ fetchUrl }: AppProps) => {
         buttonInverse: tokens.colors.yellow[60].value,
       },
       {
-        background: tokens.colors.pink[60].value,
-        titleFont: tokens.colors.blue[60].value,
-        font: tokens.colors.font.primary.value,
-        button: tokens.colors.blue[60].value,
-        buttonInverse: tokens.colors.pink[60].value,
-      },
-      {
         background: tokens.colors.green[60].value,
         titleFont: tokens.colors.blue[60].value,
         font: tokens.colors.font.primary.value,
         button: tokens.colors.blue[60].value,
         buttonInverse: tokens.colors.green[60].value,
+      },
+      {
+        background: tokens.colors.pink[60].value,
+        titleFont: tokens.colors.blue[60].value,
+        font: tokens.colors.font.primary.value,
+        button: tokens.colors.blue[60].value,
+        buttonInverse: tokens.colors.pink[60].value,
       },
     ];
 
@@ -93,7 +98,7 @@ const DataCard = ({ fetchUrl }: AppProps) => {
     return options[position];
   };
 
-  return datasetCards.datasetCards.map((card, i) => (
+  return sortedDatasetCards.map((card, i) => (
     <StyledCard
       $background={getColor(i).background}
       $font={getColor(i).font}

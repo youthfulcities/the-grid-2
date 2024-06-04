@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 // https://agirlcodes.medium.com/setup-a-newsletter-with-next-js-and-mailchimp-d9933cfd785e
 
 import axios from 'axios';
@@ -49,7 +50,7 @@ export const POST = async (req: Request) => {
   try {
     const response = await axios.post(url, data, options);
     console.log(response);
-    if (response.status == 200) {
+    if (response.status === 200) {
       return NextResponse.json(
         { message: 'Awesome! You have successfully subscribed!' },
         { status: 201 }
@@ -63,7 +64,7 @@ export const POST = async (req: Request) => {
         `${error.response?.data.detail}`
       );
 
-      if (error.response?.data.title == 'Member Exists') {
+      if (error.response?.data.title === 'Member Exists') {
         return NextResponse.json(
           {
             error: "Uh oh, it looks like this email's already subscribed🧐",

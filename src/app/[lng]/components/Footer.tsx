@@ -1,19 +1,11 @@
 'use client';
 
-import {
-  Button,
-  Flex,
-  Heading,
-  Text,
-  TextField,
-  View,
-  useTheme,
-} from '@aws-amplify/ui-react';
-import axios from 'axios';
+import { Flex, Heading, Text, View, useTheme } from '@aws-amplify/ui-react';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import useTranslation from '../../i18n/client';
+import Newsletter from './Newsletter';
 
 interface FooterProps {
   lng: string;
@@ -30,19 +22,6 @@ const FooterTopSection = styled(Flex)`
   justify-content: space-between;
   align-items: flex-start;
   flex-wrap: wrap;
-`;
-
-const StyledTextField = styled(TextField)<{ $border: string }>`
-  max-width: 100%;
-  flex-grow: 2;
-  background-color: white;
-  input {
-    border-color: transparent;
-  }
-
-  input:focus {
-    border-color: ${(props) => props.$border};
-  }
 `;
 
 const LinkSection = styled(Flex)`
@@ -83,36 +62,6 @@ const OffsetImg = styled.img`
 const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
   const { t } = useTranslation(lng, 'translation');
   const { tokens } = useTheme();
-  const [formEmail, setEmail] = useState('');
-  const [statusCode, setStatusCode] = useState<number>();
-  const [status, setStatus] = useState<
-    'success' | 'error' | 'loading' | 'idle'
-  >('idle');
-  const [responseMsg, setResponseMsg] = useState<string>('');
-
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
-
-  const handleSubmit = async () => {
-    try {
-      const response = await axios.post('/api/newsletter', {
-        email: formEmail,
-      });
-      setStatus('success');
-      setStatusCode(response.status);
-      setEmail('');
-      setResponseMsg(response.data.message);
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        setStatus('error');
-        setStatusCode(err.response?.status);
-        setResponseMsg(err.response?.data.error);
-      }
-    }
-  };
-
-  console.log(responseMsg, statusCode);
 
   return (
     <FooterBase as='footer' $background={tokens.colors.blue[100].value}>
@@ -130,25 +79,8 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
               {t('sign-up-text')}
             </Text>
           </Flex>
-          <Flex direction='row' alignContent='stretch' gap='10px'>
-            <StyledTextField
-              $border={tokens.colors.secondary[60].value}
-              label={t('newsletter-email')}
-              labelHidden
-              value={formEmail}
-              onChange={(e) => handleEmailChange(e)}
-              placeholder={t('email')}
-              disabled={status == 'loading'}
-            />
-            <Button
-              colorTheme='error'
-              variation='primary'
-              onClick={handleSubmit}
-              disabled={status == 'loading'}
-            >
-              {t('subscribe')}
-            </Button>
-          </Flex>
+          
+            <Newsletter lng={lng} />
         </FooterTopSection>
 
         <LinkSection>

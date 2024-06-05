@@ -56,7 +56,7 @@ const DataCard = ({ fetchUrl }: AppProps) => {
     }
   };
 
-  const getColor = (i) => {
+  const getColor = (i: number) => {
     //array of all the different card color patterns
     const options = [
       {

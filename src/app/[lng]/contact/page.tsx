@@ -97,8 +97,8 @@ const ContactForm = () => {
       } else {
         throw new Error("Failed to send email");
       }
-    } catch (error) {
-      console.error("Error sending email:", error);
+    } catch (err) {
+      console.error("Error sending email:", err);
       setError("An error occurred while sending your message. Please try again.");
     } finally {
       setLoading(false);

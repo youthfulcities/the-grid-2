@@ -13,12 +13,12 @@ const EmailSchema = z
 // Subscription handler function
 export const POST = async (req: Request) => {
   // 1. Validate email address
-  const body = await req.json();
-  const emailValidation = EmailSchema.safeParse(body.email);
+  const { email } = await req.json();
+  const emailValidation = EmailSchema.safeParse(email);
   if (!emailValidation.success) {
     return NextResponse.json(
       {
-        error: `Please enter a valid email address, you entered ${body.email}`,
+        error: `Please enter a valid email address, you entered ${email}`,
       },
       { status: 400 }
     );
@@ -32,7 +32,7 @@ export const POST = async (req: Request) => {
   // 3. Construct Mailchimp API request URL
   const url = `https://${API_SERVER}.api.mailchimp.com/3.0/lists/${AUDIENCE_ID}/members`;
 
-  // 4. Prepare request data
+  // 4. Prepare request
   const data = {
     email_address: emailValidation.data,
     status: 'subscribed',

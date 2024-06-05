@@ -32,7 +32,7 @@ export default function HeroLayout1(props) {
     },
     {
       overrides: {
-        Eyebrow: { color: "rgba(153,77,119,1)", children: "Full-stack" },
+        Eyebrow: { color: "rgba(244,189,184,1)", children: "Full-stack" },
         Heading: { color: "rgba(255,255,255,1)" },
         Body: { color: "rgba(255,255,255,1)" },
         Message: {},
@@ -112,7 +112,7 @@ export default function HeroLayout1(props) {
               fontFamily="Inter"
               fontSize="16px"
               fontWeight="700"
-              color="rgba(84,13,52,1)"
+              color="rgba(242,107,95,1)"
               lineHeight="24px"
               textAlign="center"
               display="block"

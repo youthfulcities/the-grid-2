@@ -12,7 +12,7 @@ import config from '../../amplifyconfiguration.json';
 import StyledComponentsRegistry from '../../lib/registry';
 import { languages } from '../i18n/settings';
 import AWSThemeProvider from './aws-theme-provider';
-import Footer from './components/Footer/Footer';
+import Footer from './components/Footer';
 import NavBar from './components/NavBar';
 import './global.css';
 

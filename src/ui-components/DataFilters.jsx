@@ -21,7 +21,6 @@ export default function DataFilters(props) {
       alignItems="flex-start"
       position="relative"
       padding="32px 0px 32px 0px"
-      backgroundColor="rgba(236,233,228,1)"
       {...getOverrideProps(overrides, "DataFilters")}
       {...rest}
     >
@@ -509,7 +508,7 @@ export default function DataFilters(props) {
                     fontFamily="Inter"
                     fontSize="16px"
                     fontWeight="600"
-                    color="rgba(83,38,232,1)"
+                    color="rgba(81,37,232,1)"
                     lineHeight="24px"
                     textAlign="left"
                     display="block"
@@ -633,7 +632,7 @@ export default function DataFilters(props) {
                   fontFamily="Inter"
                   fontSize="16px"
                   fontWeight="600"
-                  color="rgba(83,38,232,1)"
+                  color="rgba(81,37,232,1)"
                   lineHeight="24px"
                   textAlign="right"
                   display="block"

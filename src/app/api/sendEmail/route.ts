@@ -10,7 +10,7 @@ const ses = new AWS.SES({
 });
 
 console.log(process.env.AWS_ACCESS_KEY_ID);
-console.log(process.env.AWS_ACCESS_KEY_ID);
+console.log(process.env.AWS_SECRET_ACCESS_KEY);
 
 export async function POST(req: NextRequest) {
   const { email, firstName, lastName, message } = await req.json();

@@ -9,13 +9,8 @@ const ses = new AWS.SES({
   region: 'ca-central-1',
 });
 
-if (process.env.AWS_ACCESS_KEY_ID === undefined) {
-  console.log('AWS_ACCESS_KEY_ID is undefined');
-}
-
-if (process.env.AWS_SECRET_ACCESS_KEY === undefined) {
-  console.log('AWS_SECRET_ACCESS_KEY is undefined');
-}
+console.log(process.env.AWS_ACCESS_KEY_ID);
+console.log(process.env.AWS_ACCESS_KEY_ID);
 
 export async function POST(req: NextRequest) {
   const { email, firstName, lastName, message } = await req.json();

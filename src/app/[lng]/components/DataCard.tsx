@@ -1,16 +1,9 @@
 import datasetCards from '@/data/dataset-cards.json';
-import {
-  Button,
-  Card,
-  Flex,
-  Heading,
-  Text,
-  useTheme,
-} from '@aws-amplify/ui-react';
+import { Card, Flex, Heading, Text, useTheme } from '@aws-amplify/ui-react';
 import _ from 'lodash';
-import { FaFileArrowDown } from 'react-icons/fa6';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
+import DataCardButton from './DataCardButton';
 
 interface DatasetCard {
   title: string;
@@ -19,24 +12,6 @@ interface DatasetCard {
   file: string;
   className: string;
 }
-
-const StyledButton = styled(Button)<{ $background: string; $inverse: string }>`
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  align-items: center;
-  position: relative;
-  padding: 0;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.10000000149011612);
-  border-radius: 35px;
-  background-color: ${(props) => props.$background};
-  margin-top: auto;
-  color: ${(props) => props.$inverse};
-  &:hover {
-    background-color: ${(props) => props.$inverse};
-    color: ${(props) => props.$background};
-  }
-`;
 
 const StyledCard = styled(Card)<{ $background: string; $font: string }>`
   min-height: 300px;
@@ -58,16 +33,6 @@ const DataCard = ({ fetchUrl }: AppProps) => {
     'date',
     'desc'
   );
-
-  const download = async (file: string) => {
-    try {
-      const getUrlResult: { url: URL; expiresAt: Date } | null =
-        await fetchUrl(file);
-      window.open(getUrlResult?.url.href);
-    } catch (error) {
-      console.error('Error downloading file:', error);
-    }
-  };
 
   const getColor = (i: number) => {
     //array of all the different card color patterns
@@ -106,10 +71,10 @@ const DataCard = ({ fetchUrl }: AppProps) => {
     return options[position];
   };
 
-  return sortedDatasetCards.map((card: DatasetCard, i: number) => (
+  return sortedDatasetCards.map((card: DatasetCard, index: number) => (
     <StyledCard
-      $background={getColor(i).background}
-      $font={getColor(i).font}
+      $background={getColor(index).background}
+      $font={getColor(index).font}
       key={uuidv4()}
       variation='elevated'
     >
@@ -122,14 +87,14 @@ const DataCard = ({ fetchUrl }: AppProps) => {
         }}
       />
       <Flex direction='column' paddingTop={150}>
-        <Heading level={3} fontSize='xl' color={getColor(i).titleFont}>
+        <Heading level={3} fontSize='xl' color={getColor(index).titleFont}>
           {card.title}
         </Heading>
         <Text
           fontWeight='bold'
           fontSize='medium'
           marginTop='auto'
-          color={getColor(i).titleFont}
+          color={getColor(index).titleFont}
         >
           {card.date}
         </Text>
@@ -137,14 +102,12 @@ const DataCard = ({ fetchUrl }: AppProps) => {
           {card.description}
         </Text>
         <Flex grow={1}>
-          <StyledButton
-            $background={getColor(i).button}
-            $inverse={getColor(i).buttonInverse}
-            variation='primary'
-            onClick={() => download(card.file)}
-          >
-            <FaFileArrowDown />
-          </StyledButton>
+          <DataCardButton
+            getColor={getColor}
+            index={index}
+            fetchUrl={fetchUrl}
+            card={card}
+          />
         </Flex>
       </Flex>
     </StyledCard>

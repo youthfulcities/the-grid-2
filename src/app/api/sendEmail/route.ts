@@ -1,40 +1,16 @@
 /* eslint-disable import/prefer-default-export */
 
-import * as AWS from 'aws-sdk';
+import AWS from 'aws-sdk';
 import { NextRequest, NextResponse } from 'next/server';
 
-const ssm = new AWS.SSM();
-
-const response = await ssm
-  .getParameters({
-    Names: ['EMAIL_AWS_ACCESS_KEY_ID', 'EMAIL_AWS_SECRET_ACCESS_KEY'],
-    WithDecryption: true,
-  })
-  .promise();
-
-const { Parameters } = response;
-
-if (!Parameters) {
-  throw new Error('Failed to retrieve parameters from AWS SSM.');
-}
-
 const ses = new AWS.SES({
-  accessKeyId: Parameters.find(
-    (param) => param.Name === 'EMAIL_AWS_ACCESS_KEY_ID'
-  )?.Value,
-  secretAccessKey: Parameters.find(
-    (param) => param.Name === 'EMAIL_AWS_SECRET_ACCESS_KEY'
-  )?.Value,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: 'ca-central-1',
 });
 
-console.log(
-  Parameters.find((param) => param.Name === 'EMAIL_AWS_ACCESS_KEY_ID')?.Value
-);
-console.log(
-  Parameters.find((param) => param.Name === 'EMAIL_AWS_SECRET_ACCESS_KEY')
-    ?.Value
-);
+console.log(process.env.AWS_ACCESS_KEY_ID);
+console.log(process.env.AWS_SECRET_ACCESS_KEY);
 
 export async function POST(req: NextRequest) {
   const { email, firstName, lastName, message } = await req.json();

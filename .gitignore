@@ -3,6 +3,7 @@ theme-reference.json
 .vscode/
 .env
 .env.local
+.env*
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend

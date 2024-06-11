@@ -63,6 +63,7 @@ configureAutoTrack({
 });
 
 Amplify.configure(config, {
+  ssr: true,
   Storage: {
     S3: {
       prefixResolver: async ({ accessLevel, targetIdentityId }) => {

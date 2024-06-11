@@ -1,0 +1,6 @@
+{
+  "AppSyncApiName": "thegrid2",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthModeLastUpdated": "2024-06-11T17:06:02.766Z"
+}

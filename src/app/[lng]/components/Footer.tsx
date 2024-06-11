@@ -79,8 +79,8 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
               {t('sign-up-text')}
             </Text>
           </Flex>
-          
-            <Newsletter lng={lng} />
+
+          <Newsletter lng={lng} />
         </FooterTopSection>
 
         <LinkSection>
@@ -137,7 +137,7 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
             width='100px'
           />
           <Text fontSize='12px' color='white'>
-            © 2023 The Grid. {t('rights')}
+            © 2023 Youthful Cities {t('rights')}
           </Text>
         </FooterBottomSection>
       </Flex>

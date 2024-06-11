@@ -84,8 +84,8 @@ export async function generateStaticParams() {
 }
 
 export const metadata: Metadata = {
-  title: 'THE GRID',
-  description: '',
+  title: 'Youth Data Lab',
+  description: 'Insights driving change',
 };
 
 const RootLayout: React.FC<RootLayoutProps> = ({

@@ -11,6 +11,8 @@ export { default as CTASection } from "./CTASection";
 export { default as CheckoutPayment } from "./CheckoutPayment";
 export { default as CircleButton } from "./CircleButton";
 export { default as CommentCard } from "./CommentCard";
+export { default as ContactSubmissionCreateForm } from "./ContactSubmissionCreateForm";
+export { default as ContactSubmissionUpdateForm } from "./ContactSubmissionUpdateForm";
 export { default as ContactUs } from "./ContactUs";
 export { default as DataFilters } from "./DataFilters";
 export { default as DataRow } from "./DataRow";

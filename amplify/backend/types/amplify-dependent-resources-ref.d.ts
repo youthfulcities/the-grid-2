@@ -11,6 +11,11 @@ export type AmplifyDependentResourcesAttributes = {
       "ApiId": "string",
       "ApiName": "string",
       "RootUrl": "string"
+    },
+    "thegrid2": {
+      "GraphQLAPIEndpointOutput": "string",
+      "GraphQLAPIIdOutput": "string",
+      "GraphQLAPIKeyOutput": "string"
     }
   },
   "auth": {
@@ -25,6 +30,13 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
+    "contactFormUploader": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "dataapi": {
       "Arn": "string",
       "LambdaExecutionRole": "string",

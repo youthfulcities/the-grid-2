@@ -19,6 +19,24 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "API Gateway"
+    },
+    "thegrid2": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDate": "2024-06-18T18:31:24.614Z",
+              "apiKeyExpirationDays": 7,
+              "description": "test"
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
     }
   },
   "auth": {
@@ -50,6 +68,21 @@
     }
   },
   "function": {
+    "contactFormUploader": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput"
+          ],
+          "category": "api",
+          "resourceName": "thegrid2"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "dataapi": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -57,6 +90,30 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_contactFormUploader_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "contactFormUploader"
+        }
+      ]
+    },
+    "AMPLIFY_function_contactFormUploader_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "contactFormUploader"
+        }
+      ]
+    },
+    "AMPLIFY_function_contactFormUploader_sesEmail": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "contactFormUploader"
+        }
+      ]
+    },
     "AMPLIFY_function_dataapi_deploymentBucketName": {
       "usedBy": [
         {

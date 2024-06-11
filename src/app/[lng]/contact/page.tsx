@@ -1,5 +1,7 @@
 "use client";
 
+
+
 import {
   Alert,
   Button,
@@ -8,11 +10,15 @@ import {
   SelectField,
   TextAreaField,
   TextField,
-  useTheme
 } from "@aws-amplify/ui-react";
-import React, { FormEvent, useState } from "react";
-import styled from "styled-components";
+
+
 import Container from "../components/Container";
+import { generateClient } from 'aws-amplify/api';
+import React, { FormEvent, useState } from 'react';
+import styled from 'styled-components';
+import { createContactSubmission } from '../../../graphql/mutations';
+
 
 const StyledForm = styled(Flex)`
   max-width: 80%;
@@ -51,23 +57,11 @@ const StyledSelect = styled(SelectField)`
   }
 `;
 
-const StyledHeading = styled(Heading)`
-  margin-bottom: 16px;
-`;
 
 const SubHeading = styled(Heading)`
   font-size: 1.2em;
   margin-bottom: 24px;
   color: white;
-`;
-
-const NameFields = styled(Flex)`
-
-  gap: 24px; 
-`;
-
-const HalfWidthInput = styled(StyledInput)`
-  flex: 1;
 `;
 
 const StyledButton = styled(Button)`
@@ -76,21 +70,26 @@ const StyledButton = styled(Button)`
     background-color: var(--amplify-colors-red-60); 
   `;
 
+const client = generateClient();
+
+
 const ContactForm = () => {
   
 
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    topic: "",
-    message: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    topic: '',
+    message: '',
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const { firstName, lastName, email, phoneNumber, topic, message } = formData;
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -107,39 +106,49 @@ const ContactForm = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
-    setSuccess("");
+    setError('');
+    setSuccess('');
 
     try {
-      const response = await fetch("/api/sendEmail", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const result = await client.graphql({
+        query: createContactSubmission,
+        variables: {
+          input: {
+            firstName,
+            lastName,
+            email,
+            phoneNumber,
+            topic,
+            message,
+          },
         },
-        body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
-        const result = await response.json();
-        console.log("Email sent successfully:", result);
-        setSuccess("Your message has been sent successfully!");
+      console.log(result);
+
+      if (result) {
+        console.log('Email sent successfully:', result);
+        setSuccess('Your message has been sent successfully!');
 
         // Reset form
         setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          phoneNumber: "",
-          topic: "",
-          message: "",
+          firstName: '',
+          lastName: '',
+          email: '',
+          phoneNumber: '',
+          topic: '',
+          message: '',
         });
       } else {
-        throw new Error("Failed to send email");
+        throw new Error('Failed to send email');
       }
     } catch (err) {
-      console.error("Error sending email:", err);
+
+
+      console.error('Error sending email:', err);
       setError(
-        "An error occurred while sending your message. Please try again."
+        'An error occurred while sending your message. Please try again.'
+
       );
     } finally {
       setLoading(false);
@@ -147,31 +156,34 @@ const ContactForm = () => {
   };
 
   return (
+    
     <Container>
       <StyledForm as="form" onSubmit={handleSubmit}>
-        <StyledHeading level={2}>Contact us</StyledHeading>
+        <Heading marginBottom="16px" level={2}>Contact us</Heading>
         <SubHeading>
           Have any questions? Or are you interested in our work? Feel free to
           reach out to us!
         </SubHeading>
         {error && <Alert variation="error">{error}</Alert>}
         {success && <Alert variation="success">{success}</Alert>}
-        <NameFields>
-          <HalfWidthInput
+        <Flex gap="24px">
+          <StyledInput
+            flex={1}
             label="First Name *"
             name="firstName"
             value={formData.firstName}
             onChange={handleChange}
             isRequired
           />
-          <HalfWidthInput
+          <StyledInput
+            flex={1}
             label="Last Name *"
             name="lastName"
             value={formData.lastName}
             onChange={handleChange}
             isRequired
           />
-        </NameFields>
+        </Flex>
         <StyledInput
           type="email"
           label="Email *"
@@ -212,6 +224,7 @@ const ContactForm = () => {
         </StyledButton>
       </StyledForm>
     </Container>
+
   );
 };
 

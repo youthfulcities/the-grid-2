@@ -14,7 +14,7 @@ exports.handler = async (event) => {
         unmarshall(record.dynamodb.NewImage);
 
       try {
-        await ses.send(
+        const response = await ses.send(
           new SendEmailCommand({
             Destination: {
               ToAddresses: [process.env.SES_EMAIL],
@@ -32,8 +32,23 @@ exports.handler = async (event) => {
             },
           })
         );
+        // Check response from SES API
+        if (response.$metadata.httpStatusCode === 200) {
+          console.log('Email sent successfully');
+          // Return success code or any other desired response
+          return { status: 'success' };
+        } else {
+          console.error(
+            'Failed to send email:',
+            response.$metadata.httpStatusCode
+          );
+          // Return error code or any other desired response
+          return { status: 'error' };
+        }
       } catch (err) {
-        console.error(err);
+        console.error('Error sending email:', err);
+        // Return error code or any other desired response
+        return { status: 'error' };
       }
     }
   }

@@ -89,7 +89,7 @@ const Datasets: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
         </Heading>
         <Flex className='inner-container'>
           <Flex className='cards-container'>
-            <DataCard fetchUrl={fetchUrl} />
+            <DataCard fetchUrl={fetchUrl} lng={lng} />
           </Flex>
         </Flex>
       </View>

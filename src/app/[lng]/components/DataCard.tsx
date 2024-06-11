@@ -7,8 +7,10 @@ import DataCardButton from './DataCardButton';
 
 interface DatasetCard {
   title: string;
+  titlefr: string;
   date: string;
-  description: string;
+  desc: string;
+  descfr: string;
   file: string;
   className: string;
 }
@@ -22,10 +24,11 @@ const StyledCard = styled(Card)<{ $background: string; $font: string }>`
 `;
 
 interface AppProps {
+  lng: string;
   fetchUrl: (url: string) => Promise<{ url: URL; expiresAt: Date } | null>;
 }
 
-const DataCard = ({ fetchUrl }: AppProps) => {
+const DataCard = ({ fetchUrl, lng }: AppProps) => {
   const { tokens } = useTheme();
 
   const sortedDatasetCards = _.orderBy(
@@ -53,14 +56,14 @@ const DataCard = ({ fetchUrl }: AppProps) => {
       },
       {
         background: tokens.colors.green[60].value,
-        titleFont: tokens.colors.blue[60].value,
+        titleFont: tokens.colors.font.primary.value,
         font: tokens.colors.font.primary.value,
         button: tokens.colors.blue[60].value,
         buttonInverse: tokens.colors.green[60].value,
       },
       {
         background: tokens.colors.pink[60].value,
-        titleFont: tokens.colors.blue[60].value,
+        titleFont: tokens.colors.font.primary.value,
         font: tokens.colors.font.primary.value,
         button: tokens.colors.blue[60].value,
         buttonInverse: tokens.colors.pink[60].value,
@@ -88,7 +91,7 @@ const DataCard = ({ fetchUrl }: AppProps) => {
       />
       <Flex direction='column' paddingTop={150}>
         <Heading level={3} fontSize='xl' color={getColor(index).titleFont}>
-          {card.title}
+          {lng === 'fr' ? card.titlefr : card.title}
         </Heading>
         <Text
           fontWeight='bold'
@@ -99,7 +102,7 @@ const DataCard = ({ fetchUrl }: AppProps) => {
           {card.date}
         </Text>
         <Text fontSize='small' marginTop='auto' color='font.primary'>
-          {card.description}
+          {lng === 'fr' ? card.descfr : card.desc}
         </Text>
         <Flex grow={1}>
           <DataCardButton
@@ -107,6 +110,7 @@ const DataCard = ({ fetchUrl }: AppProps) => {
             index={index}
             fetchUrl={fetchUrl}
             card={card}
+            lng={lng}
           />
         </Flex>
       </Flex>

@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 const ses = new AWS.SES({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: 'ca-central-1',
+  region: 'us-east-1',
 });
 
 console.log(process.env.AWS_ACCESS_KEY_ID);

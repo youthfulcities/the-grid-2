@@ -18,6 +18,14 @@ const theme = createTheme(
           backgroundColor: { value: '{colors.brand.primary.60.value}' },
           padding: { value: '{space.large.value}' },
         },
+        alert: {
+          success: {
+            color: { value: '{colors.green.90.value}' },
+          },
+          warning: {
+            color: { value: 'colors.red.90.value' },
+          },
+        },
         button: {},
       },
       // these colour definitions had to be made because typescript wasn't accepting the colors.brand notation in styled components, and for some reason the default primary and secondary colours weren't matching the brand theme

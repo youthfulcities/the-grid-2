@@ -1,8 +1,7 @@
-import { Button, Card, Heading, Text } from "@aws-amplify/ui-react";
-import Link from "next/link";
-import { FiArrowRight } from "react-icons/fi";
-
-
+import { Button, Card, Heading, Text, useTheme } from '@aws-amplify/ui-react';
+import Link from 'next/link';
+import { FaArrowRight } from 'react-icons/fa6';
+import styled from 'styled-components';
 
 interface InsightCardProps {
   title: string;
@@ -13,56 +12,82 @@ interface InsightCardProps {
   color: string;
 }
 
-const InsightCard: React.FC<InsightCardProps> = ({ title, href, dataset, date, description, color }) => {
+const ItalicText = styled(Text)`
+  font-style: italic;
+  transform: translateY(-10px);
+  position: absolute;
+`;
+
+const StyledButton = styled(Button)`
+  justify-content: center;
+  border: none;
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  position: absolute;
+  right: var(--amplify-space-medium);
+  bottom: var(--amplify-space-medium);
+  padding: 0;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.10000000149011612);
+  border-radius: 35px;
+  background-color: var(--amplify-colors-blue-60);
+  margin-top: auto;
+  color: var(--amplify-colors-font-inverse);
+  z-index: 1;
+  &:hover {
+    background-color: inherit;
+  }
+`;
+
+const InsightCard: React.FC<InsightCardProps> = ({
+  title,
+  href,
+  dataset,
+  date,
+  description,
+  color,
+}) => {
+  const { tokens } = useTheme();
+
   return (
-
-    
-      
-      <Card 
-        variation="elevated"
-        style={{ 
-          backgroundColor: color,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          width: '231px', 
-          height: '255px',
-          position: 'relative',
-          boxShadow: '0 4px 8px rgba(0,0,0,0.1)',          
-        }}
+    <Card
+      variation='elevated'
+      style={{
+        backgroundColor: color,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        position: 'relative',
+        height: '115%',
+        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+      }}
+    >
+      <Heading level={3}>{title}</Heading>
+      <ItalicText
+        as='em'
+        fontSize='small'
+        marginTop='auto'
+        color='font.primary'
       >
-
-
-
-        <Heading level={6} style={{color: "#253E88"}}>{title}</Heading>
-        <Text style={{color: "#253E88", fontSize: "12.82px", fontFamily: "Gotham Narrow Medium", fontStyle: "italic", fontWeight: "325", lineHeight: "16px"}}>{dataset}</Text>
-        <Text style={{color: "#253E88", fontSize: "12.82px", fontFamily: "Gotham Narrow Medium", fontWeight: "325", lineHeight: "16px", paddingTop: "5px"}}>{date}</Text>
-        <Text style={{color: "#201F1E", fontSize: "10.26px", fontFamily: "Gotham Narrow Medium", fontWeight: "325", lineHeight: "15px", paddingTop: "5px"}}>{description}</Text>
-        <Link href={href} passHref>
-        <Button 
-          style={{
-            position: 'absolute',
-            bottom: '10px',
-            right: '10px',
-            backgroundColor: '#253E88',
-            border: 'none',
-            color: 'white',
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '0',
-          }}
-        >
-          <FiArrowRight size={20} />
-        </Button>
+        {dataset}
+      </ItalicText>
+      <Text
+        fontWeight='bold'
+        fontSize='medium'
+        marginTop='xl'
+        color='font.primary'
+      >
+        {date}
+      </Text>
+      <Text fontSize='small' marginTop='auto' color='font.primary'>
+        {description}
+      </Text>
+      <Link href={href} passHref>
+        <StyledButton>
+          <FaArrowRight size={20} />
+        </StyledButton>
       </Link>
-        
-      </Card>
-    
+    </Card>
   );
 };
-
 
 export default InsightCard;

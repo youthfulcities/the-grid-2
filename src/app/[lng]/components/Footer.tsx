@@ -4,6 +4,7 @@ import { Flex, Heading, Text, View, useTheme } from '@aws-amplify/ui-react';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
+import { FaFacebook, FaInstagram, FaLinkedin, FaXTwitter } from 'react-icons/fa6';
 import useTranslation from '../../i18n/client';
 import Newsletter from './Newsletter';
 
@@ -59,6 +60,31 @@ const OffsetImg = styled.img`
   margin-left: -14px;
 `;
 
+const SocialMediaIcons = styled(Flex)`
+  gap: 30px;
+  position: relative;
+  top: 80px; /* Adjust the value as needed */
+`;
+
+const IconLink = styled.a`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.10000000149011612);
+  background-color: var(--amplify-colors-yellow-60);
+  color: var(--amplify-colors-blue-100);
+  border-radius: 35px;
+  text-decoration: none;
+  font-size: 23px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  &:hover {
+    background-color: var(--amplify-colors-blue-100);
+    color: var(--amplify-colors-yellow-60);
+  }
+`;
+
 const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
   const { t } = useTranslation(lng, 'translation');
   const { tokens } = useTheme();
@@ -79,8 +105,6 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
               {t('sign-up-text')}
             </Text>
           </Flex>
-
-          <Newsletter lng={lng} />
         </FooterTopSection>
 
         <LinkSection>

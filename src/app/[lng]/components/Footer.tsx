@@ -93,14 +93,14 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
             >
               {t('home')}
             </HoverLink>
-            <HoverLink
+            {/* <HoverLink
               href={`${lng}/about`}
               passHref
               $hover={tokens.colors.primary[60].value}
               $color={tokens.colors.font.inverse.value}
             >
               {t('about')}
-            </HoverLink>
+            </HoverLink> */}
             <HoverLink
               href={`${lng}/datasets`}
               passHref

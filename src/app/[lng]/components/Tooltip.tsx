@@ -9,12 +9,12 @@ interface TooltipProps {
 
 const StyledBadge = styled(Badge)<{ $show: boolean }>`
   position: absolute;
-  top: ${(props) => (props.$show ? '-190%' : '0')};
-  left: 50%;
+  top: ${(props) => (props.$show ? '-120%' : '0')};
+  left: 0;
   padding: var(--amplify-space-small);
   text-align: left;
   border-radius: var(--amplify-space-xs);
-  transform: translateX(-50%);
+  transform: translateX(0);
   transition: all 0.3s ease;
   visibility: ${(props) => (props.$show ? 'visible' : 'hidden')};
   opacity: ${(props) => (props.$show ? '1' : '0')};

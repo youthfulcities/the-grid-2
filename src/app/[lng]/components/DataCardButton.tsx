@@ -1,4 +1,5 @@
-import { Button } from '@aws-amplify/ui-react';
+import useTranslation from '@/app/i18n/client';
+import { Button, useTheme } from '@aws-amplify/ui-react';
 import { useState } from 'react';
 import { FaFileArrowDown } from 'react-icons/fa6';
 import styled from 'styled-components';
@@ -6,8 +7,8 @@ import Tooltip from './Tooltip';
 
 const StyledButton = styled(Button)<{ $background: string; $inverse: string }>`
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   align-items: center;
   position: relative;
   padding: 0;
@@ -25,8 +26,10 @@ const StyledButton = styled(Button)<{ $background: string; $inverse: string }>`
 
 interface DatasetCard {
   title: string;
+  titlefr: string;
   date: string;
-  description: string;
+  desc: string;
+  descfr: string;
   file: string;
   className: string;
 }
@@ -40,10 +43,13 @@ interface AppProps {
   index: number;
   getColor: ColorGetter;
   card: DatasetCard;
+  lng: string;
 }
 
-const DataCardButton = ({ getColor, index, fetchUrl, card }: AppProps) => {
+const DataCardButton = ({ getColor, index, fetchUrl, card, lng }: AppProps) => {
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
+  const { t } = useTranslation(lng, 'datasets');
+  const { tokens } = useTheme();
 
   const download = async (file: string) => {
     try {
@@ -66,8 +72,8 @@ const DataCardButton = ({ getColor, index, fetchUrl, card }: AppProps) => {
       onFocus={() => setShowTooltip(true)}
       onBlur={() => setShowTooltip(false)}
     >
-      <FaFileArrowDown />
-      <Tooltip showTooltip={showTooltip}>Download raw .csv file</Tooltip>
+      <FaFileArrowDown size={tokens.space.large.value} />
+      <Tooltip showTooltip={showTooltip}>{t('csv')}</Tooltip>
     </StyledButton>
   );
 };

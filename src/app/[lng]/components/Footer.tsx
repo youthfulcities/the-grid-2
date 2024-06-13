@@ -105,23 +105,6 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
               {t('sign-up-text')}
             </Text>
           </Flex>
-          <Flex direction='column' alignItems='flex-end'>
-            <Newsletter lng={lng} />
-            <SocialMediaIcons>
-              <IconLink href="https://www.facebook.com/youthfulcities" target="_blank" aria-label="Facebook">
-                <FaFacebook />
-              </IconLink>
-              <IconLink href="https://x.com/youthfulcities?s=09" target="_blank" aria-label="X">
-                <FaXTwitter />
-              </IconLink>
-              <IconLink href="https://www.instagram.com/youthfulcities/" target="_blank" aria-label="Instagram">
-                <FaInstagram />
-              </IconLink>
-              <IconLink href="https://www.linkedin.com/company/youthfulcities/" target="_blank" aria-label="LinkedIn">
-                <FaLinkedin />
-              </IconLink>
-            </SocialMediaIcons>
-          </Flex>
         </FooterTopSection>
 
         <LinkSection>
@@ -134,14 +117,14 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
             >
               {t('home')}
             </HoverLink>
-            <HoverLink
+            {/* <HoverLink
               href={`${lng}/about`}
               passHref
               $hover={tokens.colors.primary[60].value}
               $color={tokens.colors.font.inverse.value}
             >
               {t('about')}
-            </HoverLink>
+            </HoverLink> */}
             <HoverLink
               href={`${lng}/datasets`}
               passHref
@@ -178,7 +161,7 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
             width='100px'
           />
           <Text fontSize='12px' color='white'>
-            © 2023 The Grid. {t('rights')}
+            © 2023 Youthful Cities {t('rights')}
           </Text>
         </FooterBottomSection>
       </Flex>

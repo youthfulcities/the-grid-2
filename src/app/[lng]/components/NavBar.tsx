@@ -164,7 +164,7 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
           <NavLink href={`/${lng}/`}>{t('home')}</NavLink>
           <NavLink href={`/${lng}/datasets`}>{t('datasets')}</NavLink>
           <NavLink href={`/${lng}/insights`}>{t('insights')}</NavLink>
-          <NavLink href={`/${lng}/about`}>{t('about')}</NavLink>
+          {/* <NavLink href={`/${lng}/about`}>{t('about')}</NavLink> */}
           <NavLink href={`/${lng}/contact`}>{t('contact')}</NavLink>
         </NavigationLinks>
       )}

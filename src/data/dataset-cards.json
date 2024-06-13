@@ -2,301 +2,131 @@
   "datasetCards": [
     {
       "title": "CBYF Index",
+      "titlefr": "Répertoire, CBAJ",
       "organizationName": "Tamarack - CBYF",
       "date": "2021",
       "type": "index",
       "className": "image-card-cbyf-index",
-      "description": "Communities Building Youth Futures (CBYF) is a collective impact movement aimed at improving the future of 5,000 youth. Youthful Cities partnered with CBYF to create this index.",
+      "desc": "Communities Building Youth Futures (CBYF) is a collective impact movement aimed at improving the future of 5,000 youth. Youthful Cities partnered with CBYF to create this index.",
+      "descfr": "itations et transcriptions tirées de plus de 500 entretiens de 30 minutes avec des jeunes pour parler de leur ville pendant la pandémie de COVID-19 et de l’avenir.",
       "organization": "/pages/tamarack",
       "methodology": "/pages/methodology-tamarack",
       "file": "tamarack-index.csv",
-      "features": [
-        {
-          "title": "Table",
-          "link": "/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en",
-          "icon": "fa fa-table"
-        },
-        {
-          "title": "Map",
-          "link": "/explore/dataset/tamarack-index/map/?disjunctive.measurement_en&disjunctive.indicator_en&location=3,55.2641,-96.50415&basemap=jawg.streets",
-          "icon": "fa fa-globe"
-        },
-        {
-          "title": "Analyze",
-          "link": "/explore/dataset/tamarack-index/analyze/?disjunctive.measurement_en&disjunctive.indicator_en&dataChart=eyJxdWVyaWVzIjpbeyJjaGFydHMiOlt7InR5cGUiOiJjb2x1bW4iLCJmdW5jIjoiQVZHIiwieUF4aXMiOiJ2YWx1ZSIsInNjaWVudGlmaWNEaXNwbGF5Ijp0cnVlLCJjb2xvciI6InJhbmdlLWN1c3RvbSJ9XSwieEF4aXMiOiJjaXR5IiwibWF4cG9pbnRzIjpudWxsLCJ0aW1lc2NhbGUiOiIiLCJzb3J0IjoiIiwic2VyaWVzQnJlYWtkb3duIjoibWVhc3VyZW1lbnRfZW4iLCJjb25maWciOnsiZGF0YXNldCI6InRhbWFyYWNrLWluZGV4Iiwib3B0aW9ucyI6eyJkaXNqdW5jdGl2ZS5tZWFzdXJlbWVudF9lbiI6dHJ1ZSwiZGlzanVuY3RpdmUuaW5kaWNhdG9yX2VuIjp0cnVlfX19XSwiZGlzcGxheUxlZ2VuZCI6dHJ1ZSwiYWxpZ25Nb250aCI6dHJ1ZSwidGltZXNjYWxlIjoiIn0%3D",
-          "icon": "fa fa-bar-chart"
-        },
-        {
-          "title": "Insights",
-          "link": "/explore/dataset/tamarack-index/insights/?disjunctive.measurement_en&disjunctive.indicator_en",
-          "icon": "fa fa-lightbulb-o"
-        }
-      ],
       "keywords": ["cost of living"]
     },
     {
       "title": "Urban Work Index 2023",
+      "titlefr": "Indice du travail urbain 2023",
       "date": "2023",
       "type": "index",
       "className": "image-card-uwi",
-      "description": "Now in its third iteration, the Urban Work Index 2023 ranks 30 cities across Canada to find the best places for youth to work and live.",
+      "desc": "Now in its third iteration, the Urban Work Index 2023 ranks 30 cities across Canada to find the best places for youth to work and live.",
+      "descfr": "La troisième version de l’indice du travail urbain 2023 classe 30 villes au Canada afin de déterminer les meilleurs endroits où travailler et vivre pour les jeunes.",
       "methodology": "/pages/uwi-2023-methodology/",
       "file": "uwi-2023.csv",
-      "features": [
-        {
-          "title": "Table",
-          "link": "/explore/dataset/uwi-2023/table/?disjunctive.city&disjunctive.city_group&disjunctive.indicator_en&disjunctive.measurement_en",
-          "icon": "fa fa-table"
-        },
-        {
-          "title": "Map",
-          "link": "/explore/dataset/uwi-2023/map/?disjunctive.city&disjunctive.city_group&disjunctive.indicator_en&disjunctive.measurement_en&location=3,53.56495,-94.23319&basemap=jawg.streets",
-          "icon": "fa fa-globe"
-        },
-        {
-          "title": "Analyze",
-          "link": "/explore/dataset/uwi-2023/analyze/?disjunctive.city&disjunctive.city_group&disjunctive.indicator_en&disjunctive.measurement_en&dataChart=eyJxdWVyaWVzIjpbeyJjaGFydHMiOlt7InR5cGUiOiJjb2x1bW4iLCJmdW5jIjoiQVZHIiwieUF4aXMiOiJ2YWx1ZSIsInNjaWVudGlmaWNEaXNwbGF5Ijp0cnVlLCJjb2xvciI6IiM1NTBEMzUifV0sInhBeGlzIjoiY2l0eV9ncm91cCIsIm1heHBvaW50cyI6bnVsbCwidGltZXNjYWxlIjoiIiwic29ydCI6InNlcmllMS0xIiwiY29uZmlnIjp7ImRhdGFzZXQiOiJ1d2ktMjAyMyIsIm9wdGlvbnMiOnsiZGlzanVuY3RpdmUuY2l0eSI6dHJ1ZSwiZGlzanVuY3RpdmUuY2l0eV9ncm91cCI6dHJ1ZSwiZGlzanVuY3RpdmUuaW5kaWNhdG9yX2VuIjp0cnVlLCJkaXNqdW5jdGl2ZS5tZWFzdXJlbWVudF9lbiI6dHJ1ZX19fV0sImRpc3BsYXlMZWdlbmQiOnRydWUsImFsaWduTW9udGgiOnRydWUsInRpbWVzY2FsZSI6IiJ9",
-          "icon": "fa fa-bar-chart"
-        }
-      ],
       "keywords": ["cost of living"]
     },
     {
       "title": "Pivot 2020 Index",
+      "titlefr": "Répertoire, Pivot 2020",
       "date": "2020",
       "type": "index",
       "className": "image-card-pivot-2020-index",
-      "description": "Over 400 comparable indicators across Canada developed by young people to measure their city’s performance.",
+      "desc": "Over 400 comparable indicators across Canada developed by young people to measure their city’s performance.",
+      "descfr": "Plus de 400 indicateurs comparables au Canada, développés par des jeunes pour mesurer la situation dans leur ville.",
       "methodology": "/pages/methodology-pivot/#ind",
       "file": "index-2020-full.csv",
-      "features": [
-        {
-          "title": "Table",
-          "link": "/explore/dataset/index-2020-full/table/?disjunctive.measurement_en&disjunctive.city_cma&disjunctive.city",
-          "icon": "fa fa-table"
-        },
-        {
-          "title": "Map",
-          "link": "/explore/dataset/index-2020-full/map/?disjunctive.measurement_en&disjunctive.city_cma&disjunctive.city&location=4,53.8349,-88.10716&basemap=jawg.streets",
-          "icon": "fa fa-globe"
-        },
-        {
-          "title": "Analyze",
-          "link": "/explore/dataset/index-2020-full/analyze/?disjunctive.measurement_en&disjunctive.city_cma&disjunctive.city&location=4,53.8349,-88.10716&basemap=jawg.streets&dataChart=eyJxdWVyaWVzIjpbeyJjaGFydHMiOlt7InR5cGUiOiJjb2x1bW4iLCJmdW5jIjoiQVZHIiwieUF4aXMiOiJ2YWx1ZSIsInNjaWVudGlmaWNEaXNwbGF5Ijp0cnVlLCJjb2xvciI6InJhbmdlLWN1c3RvbSJ9XSwieEF4aXMiOiJjaXR5IiwibWF4cG9pbnRzIjpudWxsLCJ0aW1lc2NhbGUiOiIiLCJzb3J0IjoiIiwic2VyaWVzQnJlYWtkb3duIjoibWVhc3VyZW1lbnRfZW4iLCJzdGFja2VkIjoiIiwiY29uZmlnIjp7ImRhdGFzZXQiOiJpbmRleC0yMDIwLWZ1bGwiLCJvcHRpb25zIjp7ImRpc2p1bmN0aXZlLm1lYXN1cmVtZW50X2VuIjp0cnVlLCJkaXNqdW5jdGl2ZS5jaXR5X2NtYSI6dHJ1ZSwiZGlzanVuY3RpdmUuY2l0eSI6dHJ1ZX19fV0sImRpc3BsYXlMZWdlbmQiOnRydWUsImFsaWduTW9udGgiOnRydWUsInRpbWVzY2FsZSI6IiJ9",
-          "icon": "fa fa-bar-chart"
-        },
-        {
-          "title": "Insights",
-          "link": "/explore/dataset/index-2020-full/insights/?disjunctive.measurement_en&disjunctive.city_cma&disjunctive.city",
-          "icon": "fa fa-lightbulb-o"
-        }
-      ],
       "keywords": ["cost of living", "covid-19 pandemic"]
     },
     {
       "title": "Pivot 2020 Survey",
+      "titlefr": "Enquête Pivot 2020",
       "date": "2020",
       "type": "survey",
       "className": "image-card-pivot-2020-survey",
-      "description": "Behaviours, topics, and beliefs of around 3,000 young people between the ages of 15-29 about cities, and their experiences prior to and during the COVID-19 pandemic.",
+      "desc": "Behaviours, topics, and beliefs of around 3,000 young people between the ages of 15-29 about cities, and their experiences prior to and during the COVID-19 pandemic.",
+      "descfr": "Comportements, thèmes et impressions de plus de 3 000 jeunes de 15 à 29 ans à propos de leur ville et de leurs expériences avant et pendant la pandémie de COVID-19.",
       "methodology": "/pages/methodology-pivot/#surv",
       "file": "pivot-survey.csv",
-      "features": [
-        {
-          "title": "Table",
-          "link": "/explore/dataset/survey/table/?disjunctive.response&disjunctive.city_cma&disjunctive.city&disjunctive.respondentid",
-          "icon": "fa fa-table"
-        },
-        {
-          "title": "Analyze",
-          "link": "/explore/dataset/survey/analyze/?disjunctive.response&disjunctive.city_cma&disjunctive.city&disjunctive.respondentid&dataChart=eyJxdWVyaWVzIjpbeyJjaGFydHMiOlt7InR5cGUiOiJwaWUiLCJmdW5jIjoiQ09VTlQiLCJ5QXhpcyI6InJlc3BvbmRlbnRpZCIsInNjaWVudGlmaWNEaXNwbGF5Ijp0cnVlLCJjb2xvciI6InJhbmdlLWN1c3RvbSIsInBvc2l0aW9uIjoiY2VudGVyIn1dLCJ4QXhpcyI6InJlc3BvbnNlIiwibWF4cG9pbnRzIjo1MCwidGltZXNjYWxlIjoiIiwic29ydCI6IiIsInNlcmllc0JyZWFrZG93biI6IiIsInNlcmllc0JyZWFrZG93blRpbWVzY2FsZSI6IiIsImNvbmZpZyI6eyJkYXRhc2V0Ijoic3VydmV5Iiwib3B0aW9ucyI6eyJkaXNqdW5jdGl2ZS5yZXNwb25zZSI6dHJ1ZSwiZGlzanVuY3RpdmUuY2l0eV9jbWEiOnRydWUsImRpc2p1bmN0aXZlLmNpdHkiOnRydWUsImRpc2p1bmN0aXZlLnJlc3BvbmRlbnRpZCI6dHJ1ZX19fV0sImRpc3BsYXlMZWdlbmQiOnRydWUsImFsaWduTW9udGgiOnRydWUsInRpbWVzY2FsZSI6IiJ9",
-          "icon": "fa fa-bar-chart"
-        },
-        {
-          "title": "Quotes",
-          "link": "/explore/dataset/survey/quotes/?disjunctive.response&disjunctive.city_cma&disjunctive.city&disjunctive.respondentid",
-          "icon": "fa fa-quote-right"
-        }
-      ],
       "keywords": []
     },
     {
       "title": "Pivot 2020 Survey Aggregated",
+      "titlefr": "Enquête Pivot 2020 agrégée",
       "type": "survey",
       "date": "2020",
       "className": "image-card-pivot-2020-survey-aggregated",
-      "description": "Aggregated data from the Pivot 2020 Survey dataset, breaking responses down by percentage.",
+      "desc": "Aggregated data from the Pivot 2020 Survey dataset, breaking responses down by percentage.",
+      "descfr": "Données agrégées de l’ensemble de données de l’enquête Pivot 2020, avec des réponses présentées sous forme de pourcentage.",
       "methodology": "/pages/methodology-pivot/#surv",
       "file": "pivot-2020-survey-aggregated.csv",
-      "features": [
-        {
-          "title": "Table",
-          "link": "/explore/dataset/cma-banners/table/?disjunctive.cma",
-          "icon": "fa fa-table"
-        },
-        {
-          "title": "Analyze",
-          "link": "/explore/dataset/cma-banners/analyze/?disjunctive.cma&refine.question=q3.+I+am+(select+all+that+apply):&dataChart=eyJxdWVyaWVzIjpbeyJjaGFydHMiOlt7InR5cGUiOiJwaWUiLCJmdW5jIjoiQVZHIiwieUF4aXMiOiJhZ2dyZWdhdGVkX2RhdGEiLCJzY2llbnRpZmljRGlzcGxheSI6dHJ1ZSwiY29sb3IiOiJyYW5nZS1jdXN0b20iLCJwb3NpdGlvbiI6ImNlbnRlciJ9XSwieEF4aXMiOiJhbnN3ZXIiLCJtYXhwb2ludHMiOjUwLCJzb3J0IjoiIiwic2VyaWVzQnJlYWtkb3duIjoiIiwic2VyaWVzQnJlYWtkb3duVGltZXNjYWxlIjoiIiwiY29uZmlnIjp7ImRhdGFzZXQiOiJjbWEtYmFubmVycyIsIm9wdGlvbnMiOnsiZGlzanVuY3RpdmUuY21hIjp0cnVlLCJyZWZpbmUucXVlc3Rpb24iOiJxMy4gSSBhbSAoc2VsZWN0IGFsbCB0aGF0IGFwcGx5KToifX19XSwidGltZXNjYWxlIjoiIiwiZGlzcGxheUxlZ2VuZCI6dHJ1ZSwiYWxpZ25Nb250aCI6dHJ1ZX0%3D",
-          "icon": "fa fa-bar-chart"
-        }
-      ],
       "keywords": ["covid-19 pandemic"]
     },
     {
       "title": "Pivot 2020 Interview",
+      "titlefr": "Entrevue Pivot 2020",
       "type": "interview",
       "date": "2020",
       "className": "image-card-pivot-2020-interview",
-      "description": "Quotes and transcripts from more than 500, 30 min interviews with young people about cities during the COVID-19 pandemic and looking into the future.",
+      "desc": "Quotes and transcripts from more than 500, 30 min interviews with young people about cities during the COVID-19 pandemic and looking into the future.",
+      "descfr": "Citations et transcriptions tirées de plus de 500 entretiens de 30 minutes avec des jeunes pour parler de leur ville pendant la pandémie de COVID-19 et de l’avenir.",
       "methodology": "/pages/methodology-pivot/#int",
       "file": "pivot-2020-interview.csv",
-      "features": [
-        {
-          "title": "Table",
-          "link": "/explore/dataset/interview/table/?disjunctive.city",
-          "icon": "fa fa-table"
-        },
-        {
-          "title": "Map",
-          "link": "/explore/dataset/interview/map/?disjunctive.city&location=4,48.75119,-88.04208&basemap=jawg.streets",
-          "icon": "fa fa-globe"
-        },
-        {
-          "title": "Quotes",
-          "link": "/explore/dataset/interview/quotes/?disjunctive.city",
-          "icon": "fa fa-quote-right"
-        }
-      ],
       "keywords": ["cost of living", "covid-19 pandemic"]
     },
     {
       "title": "Real Affordability Index",
+      "titlefr": "Indice d’accessibilité réelle",
       "type": "index",
       "date": "2022",
       "className": "image-card-real-affordability-index",
-      "description": "The Real Affordability Index is a joint project between Youthful Cities and RBC Future Launch. It indexes real costs in 27 cities across Canada as of April 2022.",
+      "desc": "The Real Affordability Index is a joint project between Youthful Cities and RBC Future Launch. It indexes real costs in 27 cities across Canada as of April 2022.",
+      "descfr": "L’indice d’accessibilité réelle est un projet collectif de Youthful Cities et de RBC Objectif avenir. Il indexe les coûts réels dans 27 villes du Canada à partir d’avril 2022.",
       "file": "real-affordability-index-2022.csv",
-      "features": [
-        {
-          "title": "Table",
-          "link": "/explore/dataset/real-affordability-index-2022/table/?disjunctive.city&disjunctive.topic_en&disjunctive.measurement_en",
-          "icon": "fa fa-table"
-        },
-        {
-          "title": "Map",
-          "link": "/explore/dataset/real-affordability-index-2022/map/?disjunctive.city&disjunctive.topic_en&disjunctive.measurement_en&location=4,53.8349,-88.04676&basemap=jawg.streets",
-          "icon": "fa fa-globe"
-        },
-        {
-          "title": "Analyze",
-          "link": "/explore/dataset/real-affordability-index-2022/analyze/?disjunctive.city&disjunctive.topic_en&disjunctive.measurement_en&dataChart=eyJxdWVyaWVzIjpbeyJjaGFydHMiOlt7InR5cGUiOiJjb2x1bW4iLCJmdW5jIjoiU1VNIiwieUF4aXMiOiJ2YWx1ZSIsInNjaWVudGlmaWNEaXNwbGF5Ijp0cnVlLCJjb2xvciI6InJhbmdlLWN1c3RvbSJ9XSwieEF4aXMiOiJjaXR5IiwibWF4cG9pbnRzIjpudWxsLCJzb3J0IjoiIiwic2VyaWVzQnJlYWtkb3duIjoibWVhc3VyZW1lbnRfZW4iLCJzdGFja2VkIjoibm9ybWFsIiwiY29uZmlnIjp7ImRhdGFzZXQiOiJyZWFsLWFmZm9yZGFiaWxpdHktaW5kZXgtMjAyMiIsIm9wdGlvbnMiOnsiZGlzanVuY3RpdmUuY2l0eSI6dHJ1ZSwiZGlzanVuY3RpdmUudG9waWNfZW4iOnRydWUsImRpc2p1bmN0aXZlLm1lYXN1cmVtZW50X2VuIjp0cnVlfX19XSwidGltZXNjYWxlIjoiIiwiZGlzcGxheUxlZ2VuZCI6dHJ1ZSwiYWxpZ25Nb250aCI6dHJ1ZX0%3D",
-          "icon": "fa fa-bar-chart"
-        }
-      ],
       "keywords": ["cost of living"]
     },
     {
       "title": "Refugee Resettlement Index",
+      "titlefr": "Indice de réinstallation des réfugiés",
       "type": "index",
       "date": "2022",
       "className": "image-card-refugee-resettlement-index",
-      "description": "A collaboration between Youthful Cities and The Refugee Centre, this dataset measures indicators that are especially relevant to refugees and other newcomers to Canada. This dataset contains cost values and totals of available resources in each city. To see a list of resources with their contact information, see the Refugee Resources dataset.",
+      "desc": "A collaboration between Youthful Cities and The Refugee Centre, this dataset measures indicators that are especially relevant to refugees and other newcomers to Canada. This dataset contains cost values and totals of available resources in each city. To see a list of resources with their contact information, see the Refugee Resources dataset.",
+      "descfr": "Fruit d’une collaboration entre Youthful Cities et le Centre de réfugiés, cet ensemble de données mesure les indicateurs qui sont particulièrement pertinents pour les réfugiés et autres nouveaux arrivants au Canada.",
       "file": "refugee-data.csv",
-      "features": [
-        {
-          "title": "Table",
-          "link": "/explore/dataset/refugee-data/table/?disjunctive.city&disjunctive.edited_title&disjunctive.measurement_en",
-          "icon": "fa fa-table"
-        },
-        {
-          "title": "Map",
-          "link": "/explore/dataset/refugee-data/map/?disjunctive.city&disjunctive.edited_title&disjunctive.measurement_en&location=4,47.77514,-93.47642&basemap=jawg.streets",
-          "icon": "fa fa-globe"
-        },
-        {
-          "title": "Analyze",
-          "link": "/explore/dataset/refugee-data/analyze/?disjunctive.city&disjunctive.edited_title&disjunctive.measurement_en&dataChart=eyJxdWVyaWVzIjpbeyJjaGFydHMiOlt7InR5cGUiOiJjb2x1bW4iLCJmdW5jIjoiQVZHIiwieUF4aXMiOiJ2YWx1ZSIsInNjaWVudGlmaWNEaXNwbGF5Ijp0cnVlLCJjb2xvciI6InJhbmdlLWN1c3RvbSJ9XSwieEF4aXMiOiJjaXR5IiwibWF4cG9pbnRzIjoyMDAsInRpbWVzY2FsZSI6IiIsInNvcnQiOiIiLCJzZXJpZXNCcmVha2Rvd24iOiJtZWFzdXJlbWVudF9lbiIsImNvbmZpZyI6eyJkYXRhc2V0IjoicmVmdWdlZS1kYXRhIiwib3B0aW9ucyI6eyJkaXNqdW5jdGl2ZS5jaXR5Ijp0cnVlLCJkaXNqdW5jdGl2ZS5lZGl0ZWRfdGl0bGUiOnRydWUsImRpc2p1bmN0aXZlLm1lYXN1cmVtZW50X2VuIjp0cnVlfX19XSwiZGlzcGxheUxlZ2VuZCI6dHJ1ZSwiYWxpZ25Nb250aCI6dHJ1ZSwidGltZXNjYWxlIjoiIn0%3D",
-          "icon": "fa fa-bar-chart"
-        }
-      ],
       "keywords": []
     },
     {
       "title": "Refugee Resources",
+      "titlefr": "Ressources relatives aux réfugiés",
       "type": "resources",
       "date": "2022",
       "className": "image-card-refugee-resources",
-      "description": "A collection of resources used to populate the Refugee Resettlement Index. This dataset contains contact information for various programs and organizations that are helpful for newcomers to Canada. ",
+      "desc": "A collection of resources used to populate the Refugee Resettlement Index. This dataset contains contact information for various programs and organizations that are helpful for newcomers to Canada.",
+      "descfr": "Une collection de ressources utilisées pour alimenter l’Indice de réinstallation des réfugiés. Cet ensemble de données contient les coordonnées de divers programmes et organisations qui sont utiles aux personnes qui viennent d’arriver au Canada.",
       "file": "refugee-resources.csv",
-      "features": [
-        {
-          "title": "Table",
-          "link": "/explore/dataset/refugee-resources/table/",
-          "icon": "fa fa-table"
-        },
-        {
-          "title": "Map",
-          "link": "/explore/dataset/refugee-resources/map/?location=4,47.81577,-94.24701&basemap=jawg.streets",
-          "icon": "fa fa-globe"
-        },
-        {
-          "title": "Analyze",
-          "link": "/explore/dataset/refugee-resources/analyze/?location=4,47.81577,-94.24701&basemap=jawg.streets&dataChart=eyJxdWVyaWVzIjpbeyJjaGFydHMiOlt7InR5cGUiOiJjb2x1bW4iLCJmdW5jIjoiQ09VTlQiLCJ5QXhpcyI6InBrX2luZGV4Iiwic2NpZW50aWZpY0Rpc3BsYXkiOnRydWUsImNvbG9yIjoicmFuZ2UtY3VzdG9tIn1dLCJ4QXhpcyI6ImNpdHkiLCJtYXhwb2ludHMiOm51bGwsInNvcnQiOiIiLCJzZXJpZXNCcmVha2Rvd24iOiJlZGl0ZWRfdGl0bGUiLCJjb25maWciOnsiZGF0YXNldCI6InJlZnVnZWUtcmVzb3VyY2VzIiwib3B0aW9ucyI6e319fV0sInRpbWVzY2FsZSI6IiIsImRpc3BsYXlMZWdlbmQiOnRydWUsImFsaWduTW9udGgiOnRydWV9",
-          "icon": "fa fa-bar-chart"
-        }
-      ],
       "keywords": []
     },
     {
       "title": "Micro-grant and Youth Engagement Resources",
+      "titlefr": "Ressources sur les micro-subventions et l‘engagement des jeunes",
       "type": "resources",
       "date": "2022",
       "className": "image-card-microgrant",
-      "description": "This dataset focuses on micro-grants available at the city level. It was put together in collaboration with TakingITGlobal.",
+      "desc": "This dataset focuses on micro-grants available at the city level. It was put together in collaboration with TakingITGlobal.",
+      "descfr": "",
       "file": "micro-grant-index.csv",
-      "features": [
-        {
-          "title": "Table",
-          "link": "/explore/dataset/micro-grant-index/table/?disjunctive.organization_type&disjunctive.city&disjunctive.city_cma&disjunctive.province",
-          "icon": "fa fa-table"
-        },
-        {
-          "title": "Map",
-          "link": "/explore/dataset/micro-grant-index/map/?disjunctive.organization_type&disjunctive.city&disjunctive.city_cma&disjunctive.province&location=4,54.54439,-94.45233&basemap=jawg.streets",
-          "icon": "fa fa-globe"
-        },
-        {
-          "title": "Analyze",
-          "link": "/explore/dataset/micro-grant-index/analyze/?disjunctive.organization_type&disjunctive.city&disjunctive.city_cma&disjunctive.province&dataChart=eyJxdWVyaWVzIjpbeyJjaGFydHMiOlt7ImFsaWduTW9udGgiOnRydWUsInR5cGUiOiJjb2x1bW4iLCJmdW5jIjoiQ09VTlQiLCJ5QXhpcyI6ImNlbnN1c19kaXZpc2lvbl9jb2RlIiwic2NpZW50aWZpY0Rpc3BsYXkiOnRydWUsImNvbG9yIjoicmFuZ2UtY3VzdG9tIn1dLCJ4QXhpcyI6ImNpdHkiLCJtYXhwb2ludHMiOiIiLCJ0aW1lc2NhbGUiOiIiLCJzb3J0IjoiIiwic2VyaWVzQnJlYWtkb3duIjoiaW5kaWNhdG9yX2VuIiwiY29uZmlnIjp7ImRhdGFzZXQiOiJtaWNyby1ncmFudC1pbmRleCIsIm9wdGlvbnMiOnsiZGlzanVuY3RpdmUub3JnYW5pemF0aW9uX3R5cGUiOnRydWUsImRpc2p1bmN0aXZlLmNpdHkiOnRydWUsImRpc2p1bmN0aXZlLmNpdHlfY21hIjp0cnVlLCJkaXNqdW5jdGl2ZS5wcm92aW5jZSI6dHJ1ZX19fV0sImRpc3BsYXlMZWdlbmQiOnRydWUsImFsaWduTW9udGgiOnRydWUsInRpbWVzY2FsZSI6IiJ9",
-          "icon": "fa fa-bar-chart"
-        }
-      ],
       "keywords": []
     },
     {
       "title": "Urban Work Index 2021",
+      "titlefr": "Indice du travail urbain 2023",
       "type": "index",
       "date": "2021",
       "className": "image-card-uwi",
-      "description": "Data from the Urban Work Index 2021. This dataset was mostly based on data from the Pivot 2020 Index with the addition of a few unique indicators. Data is presented ‘as is’ and will be next updated for the 2023 Urban Work Index.",
+      "desc": "Data from the Urban Work Index 2021. This dataset was mostly based on data from the Pivot 2020 Index with the addition of a few unique indicators. Data is presented ‘as is’ and will be next updated for the 2023 Urban Work Index.",
+      "descfr": "La troisième version de l’indice du travail urbain 2023 classe 30 villes au Canada afin de déterminer les meilleurs endroits où travailler et vivre pour les jeunes.",
       "file": "uwi-2021.csv",
-      "features": [
-        {
-          "title": "Table",
-          "link": "/explore/dataset/uwi-2021/table/?disjunctive.indicator&disjunctive.measurement&disjunctive.city&disjunctive.city_cma&disjunctive.measurement_en",
-          "icon": "fa fa-table"
-        },
-        {
-          "title": "Map",
-          "link": "/explore/dataset/uwi-2021/map/?disjunctive.measurement_en&disjunctive.city&disjunctive.city_cma&refine.indicator_en=%23N%2FA&location=2,30.51163,0&basemap=jawg.streets",
-          "icon": "fa fa-globe"
-        },
-        {
-          "title": "Analyze",
-          "link": "/explore/dataset/uwi-2021/analyze/?disjunctive.measurement_en&disjunctive.city&disjunctive.city_cma&dataChart=eyJxdWVyaWVzIjpbeyJjaGFydHMiOlt7InR5cGUiOiJjb2x1bW4iLCJmdW5jIjoiQVZHIiwieUF4aXMiOiJoaWdoIiwic2NpZW50aWZpY0Rpc3BsYXkiOnRydWUsImNvbG9yIjoicmFuZ2UtY3VzdG9tIn1dLCJ4QXhpcyI6ImNpdHkiLCJtYXhwb2ludHMiOm51bGwsInNvcnQiOiIiLCJzZXJpZXNCcmVha2Rvd25UaW1lc2NhbGUiOiIiLCJzZXJpZXNCcmVha2Rvd24iOiJ0b3BpY19lbiIsInN0YWNrZWQiOiJub3JtYWwiLCJjb25maWciOnsiZGF0YXNldCI6InV3aS0yMDIxIiwib3B0aW9ucyI6eyJkaXNqdW5jdGl2ZS5tZWFzdXJlbWVudF9lbiI6dHJ1ZSwiZGlzanVuY3RpdmUuY2l0eSI6dHJ1ZSwiZGlzanVuY3RpdmUuY2l0eV9jbWEiOnRydWV9fX1dLCJ0aW1lc2NhbGUiOiIiLCJkaXNwbGF5TGVnZW5kIjp0cnVlLCJhbGlnbk1vbnRoIjp0cnVlfQ%3D%3D",
-          "icon": "fa fa-bar-chart"
-        }
-      ],
       "keywords": []
     }
   ]

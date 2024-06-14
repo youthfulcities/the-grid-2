@@ -70,8 +70,8 @@ const IconLink = styled.a`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 45px;
-  height: 45px;
+  width: 44px;
+  height: 44px;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.10000000149011612);
   background-color: var(--amplify-colors-yellow-60);
   color: var(--amplify-colors-blue-100);

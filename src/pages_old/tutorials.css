@@ -1,0 +1,108 @@
+/* Variables & Shared classes
+========================================================================== */
+:root {
+  /*YOUTHFUL CITIES COLOURS*/
+  --daisy: #fbd166;
+  --pink: #f6d9d7;
+  --green: #b8d98d;
+  --indigo: #253d88;
+  --red: #f2695d;
+  --brown: #673934;
+
+  /*THE GRID COLOURS*/
+  --yellow: #fbd166;
+  --orange: #f2695d;
+  --plum: #550d35;
+  --blue: #5125e8;
+  --light-blue: #c9d5e9;
+  --grey: #dad6cf;
+}
+
+h1 {
+  margin: 0;
+}
+
+h3 {
+  font-family: 'Gotham Narrow', sans-serif;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  margin: 15px 0;
+}
+
+h4 {
+  font-family: 'Gotham Narrow Book', sans-serif;
+  font-size: 1.25rem;
+  margin: 10px 0;
+}
+
+ul {
+  list-style: square;
+}
+
+/* Containers
+========================================================================== */
+.container {
+  padding-bottom: 100px;
+}
+
+/* Tables
+========================================================================== */
+table,
+th,
+td {
+  font-size: 15px;
+  padding: 10px;
+  border: 1px solid black;
+}
+.cma_table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border: none;
+}
+
+/* Accordion CSS
+========================================================================== */
+.accordion-group {
+  width: 100%;
+}
+
+.accordion {
+  width: 100%;
+  border-bottom: 4px solid var(--orange);
+  box-sizing: border-box;
+  transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.isopen {
+  background: var(--orange);
+}
+
+.label::after {
+  content: '+';
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.isopen::after {
+  content: '-';
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.content {
+  padding: 20px 10px;
+}
+
+table,
+th,
+td {
+  font-size: 15px;
+  padding: 10px;
+  border: 1px solid black;
+}
+
+.video-container {
+  height: 100%;
+  margin: 20px 0 40px -10px;
+}

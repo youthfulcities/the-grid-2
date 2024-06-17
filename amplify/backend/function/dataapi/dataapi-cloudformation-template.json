@@ -15,17 +15,6 @@
     },
     "s3Key": {
       "Type": "String"
-    },
-    "apithegrid2GraphQLAPIIdOutput": {
-      "Type": "String",
-      "Default": "apithegrid2GraphQLAPIIdOutput"
-    },
-    "apithegrid2GraphQLAPIEndpointOutput": {
-      "Type": "String",
-      "Default": "apithegrid2GraphQLAPIEndpointOutput"
-    },
-    "sesEmail": {
-      "Type": "String"
     }
   },
   "Conditions": {
@@ -58,12 +47,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "contactFormUploader",
+            "dataapi",
             {
               "Fn::Join": [
                 "",
                 [
-                  "contactFormUploader",
+                  "dataapi",
                   "-",
                   {
                     "Ref": "env"
@@ -80,9 +69,6 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
-            },
-            "SES_EMAIL": {
-              "Ref": "sesEmail"
             }
           }
         },
@@ -103,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "thegrid2LambdaRolec1cf1646",
+            "thegrid2LambdaRoleb4773e83",
             {
               "Fn::Join": [
                 "",
                 [
-                  "thegrid2LambdaRolec1cf1646",
+                  "thegrid2LambdaRoleb4773e83",
                   "-",
                   {
                     "Ref": "env"
@@ -174,72 +160,9 @@
                   }
                 ]
               }
-            },
-            {
-              "Action": [
-                "ses:SendEmail"
-              ],
-              "Effect": "Allow",
-              "Resource": "arn:aws:ses:us-east-1:730335589682:identity/*"
             }
           ]
         }
-      }
-    },
-    "LambdaTriggerPolicyContactSubmission": {
-      "DependsOn": [
-        "LambdaExecutionRole"
-      ],
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": "amplify-lambda-execution-policy-ContactSubmission",
-        "Roles": [
-          {
-            "Ref": "LambdaExecutionRole"
-          }
-        ],
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "dynamodb:DescribeStream",
-                "dynamodb:GetRecords",
-                "dynamodb:GetShardIterator",
-                "dynamodb:ListStreams"
-              ],
-              "Resource": {
-                "Fn::ImportValue": {
-                  "Fn::Sub": "${apithegrid2GraphQLAPIIdOutput}:GetAtt:ContactSubmissionTable:StreamArn"
-                }
-              }
-            }
-          ]
-        }
-      }
-    },
-    "LambdaEventSourceMappingContactSubmission": {
-      "Type": "AWS::Lambda::EventSourceMapping",
-      "DependsOn": [
-        "LambdaTriggerPolicyContactSubmission",
-        "LambdaExecutionRole"
-      ],
-      "Properties": {
-        "BatchSize": 100,
-        "Enabled": true,
-        "EventSourceArn": {
-          "Fn::ImportValue": {
-            "Fn::Sub": "${apithegrid2GraphQLAPIIdOutput}:GetAtt:ContactSubmissionTable:StreamArn"
-          }
-        },
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "LambdaFunction",
-            "Arn"
-          ]
-        },
-        "StartingPosition": "LATEST"
       }
     }
   },

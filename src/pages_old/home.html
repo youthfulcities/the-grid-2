@@ -1,0 +1,267 @@
+<div
+  ng-init="quotes=[{quote:'I’ll make this short. I’m a good tenant. I’m a hard worker. And I am a student. I had to apply to over 300 jobs this summer to pay rent because there is nothing in Halifax below 1500 that suited my needs in February when I was facing eviction because of a 200 dollar rent increase. Which was perfectly legal despite the rent cap, because my landlords tried to resend the offer of a rental renewal after I reminded them of the cap. And to be honest the rent has gone up so much since then. Every one of my friends that stayed in university with me over the years have condo’s in Halifax that their parents bought for them. My parents can’t and won’t do that for me. Something has to budge. Because this economic climate without any change isn’t livable. This isn’t just about the future of Canadian youth - this is also MY present. I can’t even begin to imagine how bad this will be in the future if I’m not even sure I am even going to make it there.', 
+              city: 'Halifax',
+              dob:'2000'},
+              {quote:'When the numbers just don’t add up, this breeds disillusionment with the system. Young millenials and gen Zers like myself (I am 25) are growing up in this gap - where things just don’t make sense, where people are moving in to rat-infested 1br apartments with people they just met on tinder because it’s the only way they can afford to stay in the city - where people are living in houses with 7 other roommates past age 30. To regain young people’s trust, we need to feel like the government is truly on our side - that there is room for us to live safe, happy and healthy lives in Canada’s cities.',
+              city: 'Vancouver',
+              dob:'1996'},
+              {quote:'This is a crisis, something needs to change or else we are doomed.',
+              city:'Halifax',
+              dob:'2000'},
+              {quote:'I’m having to chose between living in a country I can’t afford (Canada, home) and a country that is attacking my fundamental rights as a woman, and as a member of the LGBTQIA2+ community who would be protected in Canada (America, where I study) after I graduate from graduate school. Neither are good for my mental health. What a disgusting decision I have to make, but I need to eat to survive in hopes my choices as a human aren’t endangering me physically via the dangerous people who don’t accept me in America.',
+              city:'Calgary',
+              dob:'1996'},
+              {quote:'This level of unaffordability is unacceptable. Housing should not be an investment tool because it is necessary for people to live. Young Canadians are not even necessarily expecting to be able to buy a home, but rents should be much more affordable and it should not be possible to renovict renters in order to raise rents to excessive ‘market’ levels or to call new developments affordable at rents of $3000/month, leaving renters scrambling to find and compete for affordable properties near their jobs. It feels impossible to afford the type of living space that meets a family’s needs (3 bedrooms) in major cities and this is causing hardship and a great deal of stress as young people attempt to find jobs and homes to support their families.',
+              city:'',
+              dob:'1991'},
+              {quote:'As a single mother (21F) with no drivers license and an unfinished college degree (unfinished due to the inability to pay for the rest of my schooling) it is ridiculously hard to land a decent job in the Moncton area. Public transit isn’t great, the only jobs I am able to do are in sales or fast food. These jobs are minimum wage or 14$/hr at my current job, which is considered lucky and ‘a competitive wage’. I am also working less than 30hrs per week, despite wishing I was able to be given more hours. It is impossible for me to live on my own and support my child on these wages. (I am lucky enough to live with my parents for now).',
+              city:'Dieppe',
+              dob:'2000'}
+              ];"
+>
+  <!-- EXTRA QUOTES
+
+              {quote:'I think it\'s important to have programs in place or resources in place to allow new businesses to develop while being sustainable and inclusive and conscious of their impact on the community and on the environment',
+              city:'Waterloo',
+              dob:'1996'},
+              {quote:'The importance of having a strong public health system is that the health of your community depends on your access to services. And so, if we want to have vibrant and healthy communities, we need to have adequate and accessible services for all people.',
+              city:'Edmonton',
+              dob:'1995'},
+              {quote:'Stop building houses and start building community.',
+              city:'Brampton',
+              dob:'1996'},
+              {quote:'There\'s actually a small, or was a small, local golf course a couple blocks from my house that the community really loved and appreciated. And it ended up getting turned into housing, and that was something that the community was really disappointed in. And so, I guess something like that could be something that would stand in the way of protecting our green spaces.',
+              city:'Calgary',
+              dob:'1998'},
+              {quote:'I feel like when it comes back to job opportunities again, if you\'re not giving youth opportunities to develop their skills and build the life experience, or the three years of experience of work that you need, then they\'re not going to be able to be in those sort of city changing positions.',
+              city:'Toronto',
+              dob:'1998'},
+              {quote:'I feel like the public transit system is just concerned with making money. They\'re not really there to help their community. They\'re all about wages, and they\'re a major cash cow in the city. I just don\'t understand it.',
+              city:'Lethbridge',
+              dob:'1991'},
+              {quote:'Food and transportation, I\'d say would be the two biggest things that eat up a lot of the youth wallets.',
+              city:'Toronto',
+              dob:'1994'},
+              {quote:'Youth are so good at advocating for things that they feel strongly about. So, I feel like with our generation coming up, we\'re going to have a lot of very smart and outspoken people to help us make these changes the reality.',
+              city:'Toronto',
+              dob:'1998'},
+              {quote:'I think that we need subsidized fares like Calgary and many other cities across Canada that subsidize low income families and especially children. Children deserve to experience their community regardless of living in poverty or living below the line. And I feel like not having a subsidy program really infringes on our youth.',
+              city:'Lethbridge',
+              dob:'1991'}
+
+-->
+  <section class="home-header">
+    <div class="container">
+      <h1 class="header-text">
+        Democratizing Youth <span class="highlight">Data</span>
+      </h1>
+      <h3 class="header-subtext">
+        An open data portal powered by
+        <a href="https://youthfulcities.com/">Youthful Cities</a>
+      </h3>
+      <div class="relative-container">
+        <img
+          class="clip hero-img"
+          src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+          alt="New York City at sunset"
+        />
+        <img
+          class="hero-logo"
+          src="/assets/theme_image/THE_GRID_logo_RGB_yellow.png"
+          alt="THE GRID logo"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="highlight-bar soft-shadow">
+    <ods-dataset-context
+      context="stats"
+      stats-dataset="ods-datasets-monitoring"
+      stats-source="monitoring"
+    >
+      <div class="container">
+        <div
+          ods-aggregation="aggregation"
+          ods-aggregation-context="stats"
+          ods-aggregation-function="COUNT"
+          ods-aggregation-expression="dataset_id"
+        >
+          <div class="col-sm-3 fact">
+            <div
+              ng-if="true"
+              ng-init="from = 0;
+                                      nbticks = 30;
+                                      delay = 100;
+                                      tick = 0;"
+            >
+              <ods-timer
+                stop-condition="tick >= nbticks"
+                delay="delay"
+                auto-start="true"
+                exec="tick = tick + 1;"
+              >
+              </ods-timer>
+              <h4 class="light-heading">Datasets</h4>
+              <h3 class="outline-text">
+                {{ ((aggregation - 3 || 0) / nbticks) * tick | number:0
+                }}{{aggregation > 1000 ? "K" : ""}}
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div
+          ods-aggregation="aggregation"
+          ods-aggregation-context="stats"
+          ods-aggregation-function="SUM"
+          ods-aggregation-expression="records_count"
+        >
+          <div class="col-sm-4 fact">
+            <div
+              ng-if="true"
+              ng-init="from = 0;
+                                      nbticks = 30;
+                                      delay = 100;
+                                      tick = 0;"
+            >
+              <ods-timer
+                stop-condition="tick >= nbticks"
+                delay="delay"
+                auto-start="true"
+                exec="tick = tick + 1;"
+              >
+              </ods-timer>
+              <h4 class="light-heading">Records</h4>
+              <h3 class="outline-text">
+                {{ ((aggregation || 0) / nbticks) * tick | limitTo:3
+                }}{{aggregation > 1000 ? "K" : ""}}
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div
+          ods-aggregation="aggregation"
+          ods-aggregation-context="stats"
+          ods-aggregation-function="SUM"
+          ods-aggregation-expression="download_count"
+        >
+          <div class="col-sm-4 fact">
+            <div
+              ng-if="true"
+              ng-init="from = 0;
+                                      nbticks = 30;
+                                      delay = 100;
+                                      tick = 0;"
+            >
+              <ods-timer
+                stop-condition="tick >= nbticks"
+                delay="delay"
+                auto-start="true"
+                exec="tick = tick + 1;"
+              >
+              </ods-timer>
+              <h4 class="light-heading">Downloads</h4>
+              <h3 class="outline-text">
+                {{ ((aggregation || 0) / nbticks) * tick | limitTo:3
+                }}{{aggregation > 1000 ? "K" : ""}}
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ods-dataset-context>
+  </section>
+
+  <section
+    class="container section-padding"
+    ng-init="currentQuote=quotes[(quotes.length | math:'random' |  math:'floor')];"
+  >
+    <div class="inner-container">
+      <div class="outline-box">
+        <i class="fa fa-quote-left large-icon" aria-hidden="true"></i>
+        <h5><strong>"{{ currentQuote.quote }}"</strong></h5>
+        <p>
+          -
+          <em
+            >Individual, {{ currentQuote.city }}, Born in {{ currentQuote.dob
+            }}</em
+          >
+        </p>
+        <br />
+        <a
+          href="/explore/dataset/real-affordability-index-2022/quotes/?disjunctive.city&disjunctive.topic_en&disjunctive.measurement_en"
+          ><p>Read more quotes from the Real Affordability Index</p></a
+        >
+      </div>
+    </div>
+  </section>
+
+  <section class="container section-padding">
+    <h2>What's<span class="alt-highlight"> New</span></h2>
+    <div class="inner-container">
+      <div class="cards-container">
+        <a
+          href="/explore/dataset/uwi-2023/table/?disjunctive.city&disjunctive.city_group&disjunctive.indicator_en&disjunctive.measurement_en"
+          class="card-full-width soft-shadow hvr-float hvr-push"
+        >
+          <div class="card-img clip image-card-cities"></div>
+          <div class="card-content">
+            <h4 class="card-text">Urban Work <br />Index 2023</h4>
+            <p class="card-small-text">
+              Now in its third iteration, the Urban Work Index 2023 ranks 30
+              cities across Canada to find the best places for youth to work and
+              live.
+            </p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container section-padding">
+    <h2>Explore <span class="alt-highlight">Data</span></h2>
+    <div class="inner-container">
+      <div class="cards-container">
+        <a href="/pages/topics" class="card soft-shadow hvr-float hvr-push">
+          <div class="card-img clip image-card-topics"></div>
+          <h4 class="card-text-bottom-corner">Topics</h4>
+        </a>
+        <a href="/pages/datasets" class="card soft-shadow hvr-float hvr-push">
+          <div class="card-img clip image-card-datasets"></div>
+          <h4 class="card-text-bottom-corner">Datasets</h4>
+        </a>
+        <a href="/pages/cities" class="card soft-shadow hvr-float hvr-push">
+          <div class="card-img clip image-card-cities"></div>
+          <h4 class="card-text-bottom-corner">Cities</h4>
+        </a>
+        <a href="/pages/playground" class="card soft-shadow hvr-float hvr-push">
+          <div class="card-img clip image-card-playground"></div>
+          <h4 class="card-text-bottom-corner">Data<br />Playground</h4>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container section-padding">
+    <h2>What is the <span class="alt-highlight">Grid?</span></h2>
+    <div class="inner-container">
+      <p>
+        A free, open-source, intuitive data portal for young people,
+        communities, planners, organizations, governments, and more to improve
+        our future, inspire further research and shape youth-informed policies.
+      </p>
+      <p>
+        THE GRID highlights youth voices across 3,000+ survey responses, 20,000
+        minutes of interviews, and an index containing over 23,000+ data points,
+        allowing users to compare and contrast qualitative and quantitative data
+        across 47 Canadian cities and 23 topics.
+      </p>
+      <a
+        href="/pages/about-us"
+        class="outline-button top-margin thar-three hvr-push"
+      >
+        Learn More
+      </a>
+    </div>
+  </section>
+</div>

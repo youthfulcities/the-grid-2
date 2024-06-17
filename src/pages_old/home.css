@@ -1,0 +1,56 @@
+/* Variables & Shared classes
+========================================================================== */
+:root {
+  /*YOUTHFUL CITIES COLOURS*/
+  --daisy: #fbd166;
+  --pink: #f6d9d7;
+  --green: #b8d98d;
+  --indigo: #253d88;
+  --red: #f2695d;
+  --brown: #673934;
+
+  /*THE GRID COLOURS*/
+  --yellow: #fbd166;
+  --orange: #f2695d;
+  --plum: #550d35;
+  --blue: #5125e8;
+  --light-blue: #c9d5e9;
+  --grey: #dad6cf;
+}
+
+.container {
+  padding-bottom: 0;
+}
+
+.card {
+  position: relative;
+  background-color: var(--plum);
+  color: var(--yellow);
+  width: 100%;
+  padding: 0;
+  transition: all 0.8s ease;
+  box-sizing: content-box;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .card-front {
+    -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+  }
+
+  .card-back {
+    -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+    transform: rotateY(180deg);
+    opacity: 1;
+  }
+
+  .card.is-flipped {
+    transform: rotateY(180deg);
+  }
+
+  .card:focus,
+  .card:focus-within {
+    transform: rotateY(0deg);
+  }
+}

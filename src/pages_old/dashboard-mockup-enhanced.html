@@ -1,0 +1,875 @@
+<!--
+     The <ods-catalog-context> allows other widgets in this page to access the catalog of datasets in this platform.
+     Check the ods-widgets documentation to learn more about ods-catalog-context.
+-->
+<ods-catalog-context
+  context="catalog"
+  ng-init="resetFiltersButton = true;
+                              resetFiltersButtonLabel = 'Reset Filters';
+                              activeFilters = {};"
+>
+  <!-- Header Image
+      Check the .home-header class to change the background image
+    -->
+  <ods-dataset-context
+    context="uwi2023, ctx, scorectx, fullctx, mapctx, popctx"
+    ctx-dataset="uwi-2023-scores"
+    popctx-dataset="uwi-2023-scores"
+    scorectx-dataset="uwi-2023-scores"
+    fullctx-dataset="uwi-2023-scores"
+    fullctx-parameters="{'refine.city': 'Toronto'}"
+    popctx-parameters="{'disjunctive.measurement_en':true,'disjunctive.city':true,'disjunctive.city_group':true,'refine.city_group':['Vancouver','Toronto','Montréal']}"
+    scorectx-parameters="{'refine.city': 'Toronto', 'refine.calculation':'average of measures', 'q':'are there'}"
+    uwi2023-dataset="uwi-2023-scores"
+    uwi2023-parameters="{'disjunctive.measurement_en':true,'disjunctive.city':true,'disjunctive.city_group':true,'refine.city':'Toronto'}"
+    mapctx-dataset="uwi-2023-scores"
+    mapctx-parameters="{'disjunctive.measurement_en':true,'disjunctive.city':true,'disjunctive.city_group':true,'q.geofilter':'#distance(\'43.72885821330353,-79.39132690429688\',40999.786108739754)'}"
+  >
+    <section class="home-header"></section>
+    <!-- Welcome card and KPI cards -->
+    <section class="container grid-section">
+      <div class="row">
+        <div
+          class="col-md-4 full-height"
+          ods-results="results"
+          ods-results-context="fullctx"
+        >
+          <div class="welcome-card">
+            <h1 class="welcome-card-title">Toronto Dashboard</h1>
+            <p class="welcome-card-description">
+              Overview of the Urban Work Index 2023 for Toronto, Ontario.
+            </p>
+            <p class="welcome-card-description">
+              Please note that this is a beta version. Data is for demonstration
+              purposes only.
+            </p>
+            <!-- <a href="/explore/dataset/{{uwi2023.dataset.datasetid}}/table/?disjunctive.measurement_en&disjunctive.city_group&disjunctive.city{{uwi2023.getQueryStringURL()}}"
+                           class="welcome-card-link">
+                            Explore the raw data <i class="fa fa-long-arrow-right fa-fw" aria-hidden="true"></i>
+                        </a> -->
+          </div>
+        </div>
+        <div
+          class="col-md-4 full-height"
+          ods-aggregation="score"
+          ods-aggregation-context="fullctx"
+          ods-aggregation-function="AVG"
+          ods-aggregation-expression="scaled_i"
+        >
+          <div
+            class="kpi-card-no-flex"
+            ods-results="results"
+            ods-results-context="fullctx"
+          >
+            <div class="kpi-inner">
+              <h3>Overall Score</h3>
+              <br />
+              <ods-gauge display-mode="circle" max="821" value="501.76">
+              </ods-gauge>
+              <br />
+              <h3>501.76 / 821</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 full-height">
+          <div
+            class="kpi-card"
+            ods-results="results"
+            ods-results-context="fullctx"
+          >
+            <i class="kpi-icon fa fa-trophy" aria-hidden="true"></i>
+            <p class="kpi-title">#1</p>
+            <h3>Overall Rank</h3>
+          </div>
+        </div>
+      </div>
+      <div class="div4">
+        <div class="content-card">
+          <h3>
+            Scores By Topic
+            <span ng-if="uwi2023.parameters['refine.topic_en']">
+              — {{ uwi2023.parameters['refine.topic_en'] }}</span
+            ><span ng-if="uwi2023.parameters['refine.indicator_en']"
+              >, {{ uwi2023.parameters['refine.indicator_en'] }}</span
+            >
+          </h3>
+          <p>
+            <span ng-if="!uwi2023.parameters['refine.topic_en']"
+              >Click on a topic to expand the indicators.</span
+            ><span ng-if="uwi2023.parameters['refine.topic_en']"
+              >Click on an indicator to expand measurements.</span
+            >
+          </p>
+          <br />
+          <div ng-if="!uwi2023.parameters['refine.topic_en']">
+            <ods-chart align-month="true">
+              <ods-chart-query
+                context="uwi2023"
+                field-x="topic_en"
+                maxpoints="0"
+                sort="y"
+              >
+                <ods-chart-serie
+                  expression-y="topic_score"
+                  label-y="Average scaled ranking — Toronto"
+                  chart-type="column"
+                  function-y="AVG"
+                  color="#550D35"
+                  display-values="true"
+                  display-stack-values="false"
+                  max="100"
+                  scientific-display="true"
+                  color-thresholds='[{"color":"#C9D5E9","value":0},{"color":"#FBD166","value":25},{"color":"#5125E8","value":50},{"color":"#550D35","value":75}]'
+                  refine-on-click-context="mapctx,uwi2023,ctx,popctx"
+                  refine-on-click-mapctx-context-field="topic_en"
+                  refine-on-click-uwi2023-context-field="topic_en"
+                  refine-on-click-ctx-context-field="topic_en"
+                  refine-on-click-popctx-context-field="topic_en"
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+              <ods-chart-query context="ctx" field-x="topic_en" maxpoints="0">
+                <ods-chart-serie
+                  expression-y="topic_score"
+                  label-y="Average scaled ranking — Canada"
+                  chart-type="line"
+                  function-y="AVG"
+                  color="#F2695D"
+                  min="0"
+                  max="100"
+                  scientific-display="true"
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+            </ods-chart>
+          </div>
+          <div
+            ng-if="uwi2023.parameters['refine.topic_en'] && !uwi2023.parameters['refine.indicator_en']"
+          >
+            <ods-chart align-month="true">
+              <ods-chart-query
+                context="uwi2023"
+                field-x="indicator_en"
+                maxpoints="0"
+                sort="y"
+              >
+                <ods-chart-serie
+                  expression-y="indicator_score"
+                  chart-type="column"
+                  function-y="AVG"
+                  color="#F2695D"
+                  display-values="true"
+                  display-stack-values="false"
+                  max="100"
+                  scientific-display="true"
+                  color-thresholds='[{"color":"#C9D5E9","value":0},{"color":"#FBD166","value":25},{"color":"#5125E8","value":50},{"color":"#550D35","value":75}]'
+                  refine-on-click-context="mapctx,uwi2023,ctx,popctx"
+                  refine-on-click-mapctx-context-field="indicator_en"
+                  refine-on-click-uwi2023-context-field="indicator_en"
+                  refine-on-click-ctx-context-field="indicator_en"
+                  refine-on-click-popctx-context-field="indicator_en"
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+              <ods-chart-query
+                context="ctx"
+                field-x="indicator_en"
+                maxpoints="0"
+              >
+                <ods-chart-serie
+                  expression-y="indicator_score"
+                  label-y="Average scaled ranking — Canada"
+                  chart-type="line"
+                  function-y="AVG"
+                  color="#F2695D"
+                  min="0"
+                  max="100"
+                  scientific-display="true"
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+            </ods-chart>
+          </div>
+          <div
+            ng-if="uwi2023.parameters['refine.topic_en'] && uwi2023.parameters['refine.indicator_en']"
+          >
+            <ods-chart align-month="true">
+              <ods-chart-query
+                context="uwi2023"
+                field-x="measurement_en"
+                maxpoints="0"
+                sort="y"
+              >
+                <ods-chart-serie
+                  expression-y="measurement_score"
+                  chart-type="column"
+                  function-y="AVG"
+                  color="#F2695D"
+                  display-values="true"
+                  display-stack-values="false"
+                  max="100"
+                  scientific-display="true"
+                  color-thresholds='[{"color":"#C9D5E9","value":0},{"color":"#FBD166","value":25},{"color":"#5125E8","value":50},{"color":"#550D35","value":75}]'
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+              <ods-chart-query
+                context="ctx"
+                field-x="measurement_en"
+                maxpoints="0"
+              >
+                <ods-chart-serie
+                  expression-y="measurement_score"
+                  label-y="Average scaled ranking — Canada"
+                  chart-type="line"
+                  function-y="AVG"
+                  color="#F2695D"
+                  min="0"
+                  max="100"
+                  scientific-display="true"
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+            </ods-chart>
+          </div>
+          <p class="kpi-description">
+            Higher values mean better performance in comparision to other cities
+            measured in the index. A score of 100 means that the city ranked
+            first, and a score of 0 means that the city ranked last.
+          </p>
+          <div
+            ng-if="uwi2023.parameters['refine.topic_en'] && !uwi2023.parameters['refine.indicator_en']"
+          >
+            <br />
+            <button
+              class="outline-button center thar-three"
+              ng-click="uwi2023.parameters['refine.topic_en'] = undefined; popctx.parameters['refine.topic_en'] = undefined; mapctx.parameters['refine.topic_en'] = undefined; ctx.parameters['refine.topic_en'] = undefined; topics = []"
+            >
+              Back to topics
+            </button>
+          </div>
+          <div ng-if="uwi2023.parameters['refine.indicator_en']">
+            <br />
+            <button
+              class="outline-button center thar-three"
+              ng-click="uwi2023.parameters['refine.indicator_en'] = undefined; popctx.parameters['refine.indicator_en'] = undefined; mapctx.parameters['refine.indicator_en'] = undefined; ctx.parameters['refine.indicator_en'] = undefined;"
+            >
+              Back to indicators
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 full-height">
+          <div class="content-card">
+            <h3>
+              Overall Scores Ranked
+              <span ng-if="uwi2023.parameters['refine.topic_en']">
+                — {{ uwi2023.parameters['refine.topic_en'] }}</span
+              ><span ng-if="uwi2023.parameters['refine.indicator_en']"
+                >, {{ uwi2023.parameters['refine.indicator_en'] }}</span
+              >
+            </h3>
+            <p class="kpi-description">
+              Hover over the bars to see hidden values. Refine the results by
+              clicking on the "Scores By Topic" chart.
+            </p>
+            <br />
+            <ods-chart
+              align-month="true"
+              display-legend="false"
+              alignMonth="true"
+              ng-if="!uwi2023.parameters['refine.topic_en'] && !uwi2023.parameters['refine.indicator_en']"
+            >
+              <ods-chart-query
+                context="ctx"
+                field-x="city_group"
+                maxpoints="0"
+                sort="serie1-1"
+              >
+                <ods-chart-serie
+                  expression-y="total_score"
+                  chart-type="bar"
+                  display-values="true"
+                  function-y="AVG"
+                  label-y="Score"
+                  color="#550D35"
+                  scientific-display="false"
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+            </ods-chart>
+            <ods-chart
+              align-month="true"
+              display-legend="false"
+              alignMonth="true"
+              ng-if="uwi2023.parameters['refine.topic_en'] && !uwi2023.parameters['refine.indicator_en']"
+            >
+              <ods-chart-query
+                context="ctx"
+                field-x="city_group"
+                maxpoints="0"
+                sort="serie1-1"
+              >
+                <ods-chart-serie
+                  expression-y="indicator_score"
+                  chart-type="bar"
+                  display-values="true"
+                  function-y="AVG"
+                  color="#550D35"
+                  label-y="Score"
+                  scientific-display="false"
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+            </ods-chart>
+            <ods-chart
+              align-month="true"
+              display-legend="false"
+              alignMonth="true"
+              ng-if="uwi2023.parameters['refine.indicator_en']"
+            >
+              <ods-chart-query
+                context="ctx"
+                field-x="city_group"
+                maxpoints="0"
+                sort="serie1-1"
+              >
+                <ods-chart-serie
+                  expression-y="measurement_score"
+                  chart-type="bar"
+                  display-values="true"
+                  function-y="AVG"
+                  label-y="Score"
+                  color="#550D35"
+                  scientific-display="false"
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+            </ods-chart>
+          </div>
+        </div>
+        <div class="col-md-6 full-height">
+          <div class="content-card">
+            <h3>
+              Overall Score Breakdown by Percentage
+              <span ng-if="uwi2023.parameters['refine.topic_en']">
+                — {{ uwi2023.parameters['refine.topic_en'] }}</span
+              ><span ng-if="uwi2023.parameters['refine.indicator_en']"
+                >, {{ uwi2023.parameters['refine.indicator_en'] }}</span
+              >
+            </h3>
+            <p class="kpi-description">
+              Hover over the bars to see what section represents. Refine the
+              results by clicking on the "Scores By Topic" chart.
+            </p>
+            <br />
+            <ods-chart
+              align-month="true"
+              display-legend="false"
+              ng-if="!uwi2023.parameters['refine.topic_en'] && !uwi2023.parameters['refine.indicator_en']"
+            >
+              <ods-chart-query
+                context="ctx"
+                field-x="city_group"
+                maxpoints="0"
+                stacked="percent"
+                series-breakdown="topic_en"
+              >
+                <ods-chart-serie
+                  expression-y="indicator_score"
+                  chart-type="bar"
+                  function-y="AVG"
+                  label-y="Percentage"
+                  color="range-custom"
+                  scientific-display="true"
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+            </ods-chart>
+            <ods-chart
+              align-month="true"
+              display-legend="false"
+              ng-if="uwi2023.parameters['refine.topic_en'] && !uwi2023.parameters['refine.indicator_en']"
+            >
+              <ods-chart-query
+                context="ctx"
+                field-x="city_group"
+                maxpoints="0"
+                stacked="percent"
+                series-breakdown="indicator_en"
+              >
+                <ods-chart-serie
+                  expression-y="indicator_score"
+                  chart-type="bar"
+                  function-y="AVG"
+                  label-y="Percentage"
+                  color="range-custom"
+                  scientific-display="true"
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+            </ods-chart>
+            <ods-chart
+              align-month="true"
+              display-legend="false"
+              ng-if="uwi2023.parameters['refine.indicator_en']"
+            >
+              <ods-chart-query
+                context="ctx"
+                field-x="city_group"
+                maxpoints="0"
+                stacked="percent"
+                series-breakdown="measurement_en"
+              >
+                <ods-chart-serie
+                  expression-y="measurement_score"
+                  chart-type="bar"
+                  function-y="AVG"
+                  label-y="Percentage"
+                  color="range-custom"
+                  scientific-display="true"
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+            </ods-chart>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      class="container"
+      ng-init="dropdown.open = '';
+                          select = {}"
+    >
+      <h2 id="results">Breakdown of Values</h2>
+      <p>
+        This section gives the raw values for measurements. Select a topic and
+        indicator from the dropdown menu. You can also refine the results by
+        clicking on the "Scores By Topic" chart.
+      </p>
+      <div
+        ods-facet-results="results"
+        ods-facet-results-context="uwi2023"
+        ods-facet-results-facet-name="topic_en"
+      >
+        <ods-select
+          options="results"
+          label-modifier="name"
+          value-modifier="name"
+          selected-values="ctx.parameters['refine.topic_en']"
+          multiple="false"
+          placeholder="Select a topic"
+          on-change="popctx.parameters['refine.topic_en'] = ctx.parameters['refine.topic_en'][0]; mapctx.parameters['refine.topic_en'] = ctx.parameters['refine.topic_en'][0]; uwi2023.parameters['refine.topic_en'] = ctx.parameters['refine.topic_en'][0]"
+        >
+        </ods-select>
+      </div>
+      <br />
+      <div
+        ng-show="uwi2023.parameters['refine.topic_en'] || uwi2023.parameters['refine.indicator_en']"
+        ods-facet-results="results"
+        ods-facet-results-context="uwi2023"
+        ods-facet-results-facet-name="indicator_en"
+      >
+        <ods-select
+          options="results"
+          label-modifier="name"
+          value-modifier="name"
+          selected-values="ctx.parameters['refine.indicator_en']"
+          multiple="false"
+          placeholder="Select an indicator"
+          on-change="popctx.parameters['refine.indicator_en'] = ctx.parameters['refine.indicator_en'][0]; mapctx.parameters['refine.indicator_en'] = ctx.parameters['refine.indicator_en'][0]; uwi2023.parameters['refine.indicator_en'] = ctx.parameters['refine.indicator_en'][0]"
+        >
+        </ods-select>
+        <br />
+      </div>
+
+      <div>
+        <div class="odswidget-result-enumerator__results">
+          <div
+            ods-results="items"
+            ods-results-context="uwi2023"
+            ods-results-max="8"
+            ng-repeat="item in items"
+          >
+            <div class="kpi-wrapper">
+              <div class="kpi-card">
+                <h5>{{ item.fields.indicator_en }}</h5>
+                <p class="kpi-description">{{ item.fields.measurement_en }}</p>
+                <div
+                  ng-if="item.fields.is_per_capita === 1 && item.fields.is_per_capita_youth === 0"
+                >
+                  <p class="kpi-title">
+                    {{ item.fields.per_capita * 100000 | number : 2}}
+                  </p>
+                  <sub>*per 100,000 people</sub>
+                  <div
+                    ods-dataset-context
+                    context="temp"
+                    temp-dataset="uwi-2023-scores"
+                    temp-parameters="{'refine.measurement_en': item.fields.measurement_en}"
+                    ods-results="averages"
+                    ods-results-context="temp"
+                  >
+                    <div
+                      ods-aggregation="canada"
+                      ods-aggregation-context="temp"
+                      ods-aggregation-function="AVG"
+                      ods-aggregation-expression="per_capita * 100000"
+                    >
+                      <strong
+                        ><i
+                          ng-if="item.fields.per_capita * 100000 - canada > 0"
+                          class="fa fa-caret-up"
+                          ng-class="{green: item.fields.higher_is_better === 1, red: item.fields.higher_is_better === 0}"
+                          aria-hidden="true"
+                        ></i
+                        ><i
+                          ng-if="item.fields.per_capita * 100000 - canada < 0"
+                          class="fa fa-caret-down"
+                          ng-class="{green: item.fields.higher_is_better === 0, red: item.fields.higher_is_better === 1}"
+                          aria-hidden="true"
+                        ></i
+                        >{{ item.fields.per_capita * 100000 - canada |
+                        number:'2'}}</strong
+                      >
+                      <span
+                        ng-if="item.fields.per_capita * 100000 - canada >= 0"
+                        >more </span
+                      ><span
+                        ng-if="item.fields.per_capita * 100000 - canada < 0"
+                        >less </span
+                      >than Canadian average
+                    </div>
+                  </div>
+                </div>
+                <div ng-if="item.fields.is_per_capita === 0">
+                  <p class="kpi-title">
+                    {{ item.fields.value | number : 1.0-2 }}
+                  </p>
+                  <sub>({{ item.fields.note_en }})</sub>
+                  <div
+                    ods-dataset-context
+                    context="temp"
+                    temp-dataset="uwi-2023-scores"
+                    temp-parameters="{'refine.measurement_en': item.fields.measurement_en}"
+                    ods-results="averages"
+                    ods-results-context="temp"
+                  >
+                    <div
+                      ods-aggregation="canada"
+                      ods-aggregation-context="temp"
+                      ods-aggregation-function="AVG"
+                      ods-aggregation-expression="value"
+                    >
+                      <strong
+                        ><i
+                          ng-if="item.fields.value - canada > 0"
+                          class="fa fa-caret-up"
+                          ng-class="{green: item.fields.higher_is_better === 1, red: item.fields.higher_is_better === 0}"
+                          aria-hidden="true"
+                        ></i
+                        ><i
+                          ng-if="item.fields.value - canada < 0"
+                          class="fa fa-caret-down"
+                          ng-class="{green: item.fields.higher_is_better === 0, red: item.fields.higher_is_better === 1}"
+                          aria-hidden="true"
+                        ></i
+                        >{{ item.fields.value - canada | number:'2'}}</strong
+                      >
+                      <span ng-if="item.fields.value - canada >= 0">more </span
+                      ><span ng-if="item.fields.value - canada < 0">less </span
+                      >than Canadian average
+                    </div>
+                  </div>
+                </div>
+                <div
+                  ng-if="item.fields.is_per_capita === 1 && item.fields.is_per_capita_youth === 1"
+                >
+                  <p class="kpi-title">
+                    {{ item.fields.per_capita_youth * 100000 | number : 2}}
+                  </p>
+                  <sub>*per 100,000 youth</sub>
+                  <div
+                    ods-dataset-context
+                    context="temp"
+                    temp-dataset="uwi-2023-scores"
+                    temp-parameters="{'refine.measurement_en': item.fields.measurement_en}"
+                    ods-results="averages"
+                    ods-results-context="temp"
+                  >
+                    <div
+                      ods-aggregation="canada"
+                      ods-aggregation-context="temp"
+                      ods-aggregation-function="AVG"
+                      ods-aggregation-expression="per_capita_youth * 100000"
+                    >
+                      <strong
+                        ><i
+                          ng-if="item.fields.per_capita_youth * 100000 - canada > 0"
+                          class="fa fa-caret-up"
+                          ng-class="{green: item.fields.higher_is_better === 1, red: item.fields.higher_is_better === 0}"
+                          aria-hidden="true"
+                        ></i
+                        ><i
+                          ng-if="item.fields.per_capita_youth * 100000 - canada < 0"
+                          class="fa fa-caret-down"
+                          ng-class="{green: item.fields.higher_is_better === 0, red: item.fields.higher_is_better === 1}"
+                          aria-hidden="true"
+                        ></i
+                        >{{ item.fields.per_capita_youth * 100000 - canada |
+                        number:'2'}}</strong
+                      >
+                      <span
+                        ng-if="item.fields.per_capita_youth * 100000 - canada >= 0"
+                        >more </span
+                      ><span
+                        ng-if="item.fields.per_capita_youth * 100000 - canada < 0"
+                        >less </span
+                      >than Canadian average
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ods-pagination-block
+          context="uwi2023"
+          per-page="8"
+          container-identifier="results"
+        >
+        </ods-pagination-block>
+      </div>
+    </section>
+    <section class="container grid-section">
+      <h2>Maps</h2>
+      <div>
+        <div class="content-card">
+          <h3>
+            Overall Scores Compared to Cities with Similar Population
+            <span ng-if="popctx.parameters['refine.topic_en']">
+              — {{ popctx.parameters['refine.topic_en'] }}</span
+            ><span ng-if="popctx.parameters['refine.indicator_en']"
+              >, {{ popctx.parameters['refine.indicator_en'] }}</span
+            >
+          </h3>
+          <p class="kpi-description">
+            Refine the results by clicking on the "Scores By Topic" chart.
+          </p>
+          <br />
+          <ods-map
+            no-refit="true"
+            scroll-wheel-zoom="false"
+            basemap="jawg.streets"
+            location="4,42.65012,-97.55859"
+          >
+            <ods-map-layer-group>
+              <ods-map-layer
+                context="popctx"
+                color="#C32D1C"
+                picto="ods-circle"
+                show-marker="true"
+                display="clusters"
+                function="AVG"
+                expression="indicator_score"
+                shape-opacity="0.5"
+                point-opacity="1"
+                border-color="#FFFFFF"
+                border-opacity="1"
+                border-size="1"
+                border-pattern="solid"
+                size-min="3"
+                size-max="5"
+                size-function="linear"
+              ></ods-map-layer>
+            </ods-map-layer-group>
+          </ods-map>
+        </div>
+      </div>
+      <div>
+        <div class="content-card">
+          <h3>
+            Overall Scores By Region
+            <span ng-if="mapctx.parameters['refine.topic_en']">
+              — {{ mapctx.parameters['refine.topic_en'] }}</span
+            ><span ng-if="mapctx.parameters['refine.indicator_en']"
+              >, {{ mapctx.parameters['refine.indicator_en'] }}</span
+            >
+          </h3>
+          <p class="kpi-description">
+            Refine the results by clicking on the "Scores By Topic" chart.
+          </p>
+          <br />
+          <ods-map
+            no-refit="true"
+            scroll-wheel-zoom="false"
+            basemap="jawg.streets"
+            location="10,43.65645,-79.60831"
+          >
+            <ods-map-layer-group>
+              <ods-map-layer
+                context="mapctx"
+                color="#550D35"
+                picto="ods-circle"
+                show-marker="true"
+                display="clusters"
+                function="AVG"
+                expression="indicator_score"
+                shape-opacity="0.5"
+                point-opacity="1"
+                border-color="#FFFFFF"
+                border-opacity="1"
+                border-size="1"
+                border-pattern="solid"
+                caption-picto-color="#E5E5E5"
+                size-min="3"
+                size-max="5"
+                size-function="linear"
+              ></ods-map-layer>
+            </ods-map-layer-group>
+          </ods-map>
+        </div>
+      </div>
+      <div>
+        <div class="content-card">
+          <h3>Youth Interprovincial Migration 2015/2016 - 2021/2022</h3>
+          <ods-dataset-context
+            context="interprovincialmigration"
+            interprovincialmigration-dataset="interprovincial-migration"
+          >
+            <ods-map
+              no-refit="true"
+              scroll-wheel-zoom="false"
+              display-control="true"
+              toolbar-fullscreen="true"
+              basemap="jawg.streets"
+              location="4,48.19539,-89.56055"
+            >
+              <ods-map-layer-group>
+                <ods-map-layer
+                  context="interprovincialmigration"
+                  color-numeric-ranges="{'0':'#ED9A99','4847':'#BCD1B9','7926':'#8FAF89','11005':'#628E5A','14084':'#18630A','-7469':'#BA0129','-4390':'#E5362E','-1311':'#E87273'}"
+                  color-undefined="#F7B133"
+                  color-out-of-bounds="#F7B133"
+                  color-by-field="net_loss_gain"
+                  color-numeric-range-min="-10548"
+                  picto="ods-circle"
+                  show-marker="false"
+                  display="choropleth"
+                  shape-opacity="0.5"
+                  point-opacity="1"
+                  border-color="#FFFFFF"
+                  border-opacity="1"
+                  border-size="1"
+                  border-pattern="solid"
+                  caption="true"
+                  caption-title="Absolute"
+                  caption-picto-icon="ods-walking"
+                  caption-picto-color="#E5E5E5"
+                  title="Youth Interprovincial Migration — Absolute"
+                  size="10"
+                ></ods-map-layer>
+              </ods-map-layer-group>
+              <ods-map-layer-group>
+                <ods-map-layer
+                  context="interprovincialmigration"
+                  color-numeric-ranges="{'-0.016790':'#BA0129','-0.010140':'#E5362E','-0.003500':'#E87273','0.000001':'#ED9A99','0.009790':'#BCD1B9','0.016440':'#8FAF89','0.023080':'#628E5A','0.029730':'#18630A'}"
+                  color-undefined="#F7B133"
+                  color-out-of-bounds="#F7B133"
+                  color-by-field="per_capita_loss_gain"
+                  color-numeric-range-min="-0.02343"
+                  picto="ods-circle"
+                  show-marker="false"
+                  display="choropleth"
+                  shape-opacity="0.5"
+                  point-opacity="1"
+                  border-color="#FFFFFF"
+                  border-opacity="1"
+                  border-size="1"
+                  border-pattern="solid"
+                  caption="true"
+                  caption-title="Per Capita"
+                  caption-picto-icon="ods-walking"
+                  caption-picto-color="#E5E5E5"
+                  title="Youth Interprovincial Migration — Per Capita"
+                  size="5"
+                ></ods-map-layer>
+              </ods-map-layer-group>
+            </ods-map>
+          </ods-dataset-context>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 full-height">
+          <div
+            ng-if="uwi2023.parameters['refine.topic_en'] && !uwi2023.parameters['refine.indicator_en']"
+          >
+            <button
+              class="outline-button center thar-three"
+              ng-click="uwi2023.parameters['refine.topic_en'] = undefined; popctx.parameters['refine.topic_en'] = undefined; mapctx.parameters['refine.topic_en'] = undefined; ctx.parameters['refine.topic_en'] = undefined; topics = []"
+            >
+              Reset
+            </button>
+          </div>
+          <div ng-if="uwi2023.parameters['refine.indicator_en']">
+            <br />
+            <button
+              class="outline-button center thar-three"
+              ng-click="uwi2023.parameters['refine.indicator_en'] = undefined; popctx.parameters['refine.indicator_en'] = undefined; mapctx.parameters['refine.indicator_en'] = undefined; ctx.parameters['refine.indicator_en'] = undefined;"
+            >
+              Back one level
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--
+                <div>
+                    <div class="content-card">
+                        <h2 class="content-card-title">
+                            Positve vs. Negative Scores
+                        </h2>
+                        <p>
+                            1 = yes, 0 = no
+                        </p>
+                        <ods-chart align-month="true">
+                            <ods-chart-query context="scorectx" field-x="value" maxpoints="0">
+                                <ods-chart-serie expression-y="value" chart-type="pie" function-y="COUNT" color="range-custom" scientific-display="true">
+                                </ods-chart-serie>
+                            </ods-chart-query>
+                        </ods-chart>
+                    </div>
+                </div>
+-->
+    <!--
+        <section class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <!-- Most Popular Datasets
+                    <h2 class="home-subtitle">
+                        Most popular data
+                    </h2>
+                    <ods-most-popular-datasets context="catalog"></ods-most-popular-datasets>
+                </div>
+                <div class="col-md-4">
+                    <!-- Last modified datasets
+                    <h2 class="home-subtitle">
+                        Last updated data
+                    </h2>
+                    <ods-last-datasets-feed context="catalog"></ods-last-datasets-feed>
+                </div>
+                <div class="col-md-4">
+                    <!-- Twitter feed
+                    <h2 class="home-subtitle">
+                        On twitter
+                    </h2>
+                    <div class="twitter-timeline-container">
+                        <!-- To change the Twitter profile to display go to https://publish.twitter.com/#
+                        <a class="twitter-timeline" data-height="392" href="https://twitter.com/Opendatasoft?ref_src=twsrc%5Etfw">Tweets by Opendatasoft</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    </div>
+                </div>
+            </div> -->
+  </ods-dataset-context>
+</ods-catalog-context>

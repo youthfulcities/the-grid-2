@@ -89,7 +89,7 @@ export default function SideBar(props) {
                 position="relative"
                 borderRadius="4px"
                 padding="6px 6px 6px 6px"
-                backgroundColor="rgba(205,137,174,1)"
+                backgroundColor="rgba(246,215,213,1)"
                 {...getOverrideProps(overrides, "icon39493360")}
               >
                 <MyIcon
@@ -99,6 +99,7 @@ export default function SideBar(props) {
                   gap="unset"
                   alignItems="unset"
                   justifyContent="unset"
+                  overflow="hidden"
                   shrink="0"
                   position="relative"
                   padding="0px 0px 0px 0px"
@@ -110,7 +111,7 @@ export default function SideBar(props) {
                 fontFamily="Inter"
                 fontSize="16px"
                 fontWeight="400"
-                color="rgba(66,6,39,1)"
+                color="rgba(225,89,76,1)"
                 lineHeight="24px"
                 textAlign="left"
                 display="block"
@@ -186,7 +187,7 @@ export default function SideBar(props) {
                 position="relative"
                 borderRadius="4px"
                 padding="6px 6px 6px 6px"
-                backgroundColor="rgba(205,137,174,1)"
+                backgroundColor="rgba(246,215,213,1)"
                 {...getOverrideProps(overrides, "icon39493366")}
               >
                 <MyIcon
@@ -196,6 +197,7 @@ export default function SideBar(props) {
                   gap="unset"
                   alignItems="unset"
                   justifyContent="unset"
+                  overflow="hidden"
                   shrink="0"
                   position="relative"
                   padding="0px 0px 0px 0px"
@@ -207,7 +209,7 @@ export default function SideBar(props) {
                 fontFamily="Inter"
                 fontSize="16px"
                 fontWeight="400"
-                color="rgba(66,6,39,1)"
+                color="rgba(225,89,76,1)"
                 lineHeight="24px"
                 textAlign="left"
                 display="block"
@@ -249,7 +251,7 @@ export default function SideBar(props) {
                 position="relative"
                 borderRadius="4px"
                 padding="6px 6px 6px 6px"
-                backgroundColor="rgba(205,137,174,1)"
+                backgroundColor="rgba(246,215,213,1)"
                 {...getOverrideProps(overrides, "icon39493370")}
               >
                 <MyIcon
@@ -259,6 +261,7 @@ export default function SideBar(props) {
                   gap="unset"
                   alignItems="unset"
                   justifyContent="unset"
+                  overflow="hidden"
                   shrink="0"
                   position="relative"
                   padding="0px 0px 0px 0px"
@@ -270,7 +273,7 @@ export default function SideBar(props) {
                 fontFamily="Inter"
                 fontSize="16px"
                 fontWeight="400"
-                color="rgba(66,6,39,1)"
+                color="rgba(225,89,76,1)"
                 lineHeight="24px"
                 textAlign="left"
                 display="block"
@@ -312,7 +315,7 @@ export default function SideBar(props) {
                 position="relative"
                 borderRadius="4px"
                 padding="6px 6px 6px 6px"
-                backgroundColor="rgba(205,137,174,1)"
+                backgroundColor="rgba(246,215,213,1)"
                 {...getOverrideProps(overrides, "icon39493374")}
               >
                 <MyIcon
@@ -322,6 +325,7 @@ export default function SideBar(props) {
                   gap="unset"
                   alignItems="unset"
                   justifyContent="unset"
+                  overflow="hidden"
                   shrink="0"
                   position="relative"
                   padding="0px 0px 0px 0px"
@@ -333,7 +337,7 @@ export default function SideBar(props) {
                 fontFamily="Inter"
                 fontSize="16px"
                 fontWeight="400"
-                color="rgba(66,6,39,1)"
+                color="rgba(225,89,76,1)"
                 lineHeight="24px"
                 textAlign="left"
                 display="block"
@@ -409,7 +413,7 @@ export default function SideBar(props) {
                 position="relative"
                 borderRadius="4px"
                 padding="6px 6px 6px 6px"
-                backgroundColor="rgba(205,137,174,1)"
+                backgroundColor="rgba(246,215,213,1)"
                 {...getOverrideProps(overrides, "icon39493380")}
               >
                 <MyIcon
@@ -419,6 +423,7 @@ export default function SideBar(props) {
                   gap="unset"
                   alignItems="unset"
                   justifyContent="unset"
+                  overflow="hidden"
                   shrink="0"
                   position="relative"
                   padding="0px 0px 0px 0px"
@@ -430,7 +435,7 @@ export default function SideBar(props) {
                 fontFamily="Inter"
                 fontSize="16px"
                 fontWeight="400"
-                color="rgba(66,6,39,1)"
+                color="rgba(225,89,76,1)"
                 lineHeight="24px"
                 textAlign="left"
                 display="block"
@@ -472,7 +477,7 @@ export default function SideBar(props) {
                 position="relative"
                 borderRadius="4px"
                 padding="6px 6px 6px 6px"
-                backgroundColor="rgba(205,137,174,1)"
+                backgroundColor="rgba(246,215,213,1)"
                 {...getOverrideProps(overrides, "icon39493384")}
               >
                 <MyIcon
@@ -482,6 +487,7 @@ export default function SideBar(props) {
                   gap="unset"
                   alignItems="unset"
                   justifyContent="unset"
+                  overflow="hidden"
                   shrink="0"
                   position="relative"
                   padding="0px 0px 0px 0px"
@@ -493,7 +499,7 @@ export default function SideBar(props) {
                 fontFamily="Inter"
                 fontSize="16px"
                 fontWeight="400"
-                color="rgba(66,6,39,1)"
+                color="rgba(225,89,76,1)"
                 lineHeight="24px"
                 textAlign="left"
                 display="block"
@@ -535,7 +541,7 @@ export default function SideBar(props) {
                 position="relative"
                 borderRadius="4px"
                 padding="6px 6px 6px 6px"
-                backgroundColor="rgba(205,137,174,1)"
+                backgroundColor="rgba(246,215,213,1)"
                 {...getOverrideProps(overrides, "icon39493388")}
               >
                 <MyIcon
@@ -545,6 +551,7 @@ export default function SideBar(props) {
                   gap="unset"
                   alignItems="unset"
                   justifyContent="unset"
+                  overflow="hidden"
                   shrink="0"
                   position="relative"
                   padding="0px 0px 0px 0px"
@@ -556,7 +563,7 @@ export default function SideBar(props) {
                 fontFamily="Inter"
                 fontSize="16px"
                 fontWeight="400"
-                color="rgba(66,6,39,1)"
+                color="rgba(225,89,76,1)"
                 lineHeight="24px"
                 textAlign="left"
                 display="block"

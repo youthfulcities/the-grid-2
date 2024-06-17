@@ -1,0 +1,37 @@
+{
+  "cards": [
+    {
+      "title": "A Day in the Life",
+      "titlefr": "Une journée dans la vie",
+      "dataset": "Real Affordability dataset",
+      "datasetfr": "Indice d’accessibilité réelle",
+      "date": "2022",
+      "type": "",
+      "desc": "Using data from our 2022 Real Affordability dataset, we crafted a story of what it is like to live as youth, trying to thrive financially in Canada.",
+      "descfr": "À l'aide des données de notre Indice d'accessibilité réelle 2022, nous avons rédigé une histoire de ce que c'est que de vivre en tant que jeune, en essayant de s'épanouir financièrement au Canada.",
+      "link": "https://raiscrollytelling2022.youthfulcities.com/"
+    },
+    {
+      "title": "Best Work City",
+      "titlefr": "Trouver ma meilleure ville où travailler",
+      "dataset": "Urban Work dataset",
+      "datasetfr": "Indice du travail urbain 2023",
+      "date": "2023",
+      "type": "",
+      "desc": "Curious where your best work city is based on your needs? Try out our Best Work City Quiz",
+      "descfr": "Vous êtes curieux de savoir quelle est la ville qui vous convient le mieux en fonction de vos besoins ? Essayez notre Quiz de la meilleure ville de travail !",
+      "link": "https://bestworkcity.ca/"
+    },
+    {
+      "title": "Chatbot",
+      "titlefr": "Chatbot",
+      "dataset": "",
+      "datasetfr": "",
+      "date": "2024",
+      "type": "",
+      "desc": "Chat with data curated by Youthful Cities, including interviews conducted with youth in 2020 and 2024. This experimental tool provides unique insights into youth perspectives.",
+      "descfr": "Discutez avec des données collectées par Youthful Cities, notamment des entretiens menés avec des jeunes en 2020 et 2024. Cet outil expérimental offre un aperçu unique des perspectives des jeunes.",
+      "link": "http://99.231.34.125:8551/"
+    }
+  ]
+}

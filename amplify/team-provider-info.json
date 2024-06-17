@@ -24,11 +24,20 @@
       "function": {
         "dataapi": {
           "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
-          "s3Key": "amplify-builds/dataapi-685267475a4845693256-build.zip"
+          "s3Key": "amplify-builds/dataapi-346b2b5477434a767563-build.zip"
+        },
+        "contactFormUploader": {
+          "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
+          "s3Key": "amplify-builds/contactFormUploader-54314753343245625473-build.zip",
+          "sesEmail": "info@youthfulcities.com"
         }
       },
       "api": {
-        "s3": {}
+        "s3": {},
+        "thegrid2": {}
+      },
+      "analytics": {
+        "thegrid2": {}
       }
     }
   }

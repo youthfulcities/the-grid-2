@@ -1,0 +1,40 @@
+/* Variables & Shared classes
+========================================================================== */
+:root {
+  /*YOUTHFUL CITIES COLOURS*/
+  --daisy: #fbd166;
+  --pink: #f6d9d7;
+  --green: #b8d98d;
+  --indigo: #253d88;
+  --red: #f2695d;
+  --brown: #673934;
+
+  /*THE GRID COLOURS*/
+  --yellow: #fbd166;
+  --orange: #f2695d;
+  --plum: #550d35;
+  --blue: #5125e8;
+  --light-blue: #c9d5e9;
+  --grey: #dad6cf;
+}
+
+h1 {
+  margin: 0;
+}
+ul {
+  list-style: square;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
+li {
+  color: #000;
+}
+
+/* Containers
+========================================================================== */
+.container {
+  padding-bottom: 100px;
+}

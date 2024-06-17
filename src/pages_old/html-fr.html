@@ -1,0 +1,238 @@
+<div
+  ng-init="quotes=[{quote:'J\'ai pas de la misère à payer mon loyer en ce moment, mais je sais comme si j\'échange mon appartement je paye quelque chose comme 20-30% plus cher que je paye ce moment.', 
+              city:'Montréal', 
+              dob:'1997'},
+              {quote:'J\'aimerais bien, comme dans un futur lointain, avoir une maison Laval. Mais ça coûte tellement cher avoir une maison à Laval que je crois que je vais rester dans les villes environnantes. Je ne crois pas que je vais pouvoir m\'acheter une maison quand je vais être rendu à cette époque-là parce que le plus cher est exorbitant. Peut-être un condo, je ne sais pas encore. J\'aimerais bien reste à Laval.',
+              city:'Laval',
+              dob:'1997'},
+              {quote:'J\'ai été à une école internationale aussi, donc ça fait en sorte que je connais beaucoup de gens dans la ville et je sais que c\'est une ville très multiculturelle, tu peux voir toutes les cultures. Tu peux les embrace',
+              city:'Laval',
+              dob:'1997'},
+              {quote:'C\'est dure trouver ton premier emploi. C\'est toujours dure parce que tu n\'as pas d\'expérience et personne ne veux te donner de l\'expérience',
+              city:'Laval',
+              dob:'1997'},
+              {quote:'L\'éducation ça permet aux gens d\'être un peu plus critique, un peu moins dans leur biais cognitif, puis d\'être plus curieux, en apprendre sur les autres puis mieux comprendre les risques et les conséquences du changement climatique.',
+              city:'Montréal',
+              dob:'1993'},
+              {quote:'Les trucs trainent souvent. Aux finales, quelqu\’un pourrait arriver au Québec avec un projet vraiment intéressant. Puis c\'est arrivé que des gens sont arrivé avec des projets intéressants pour la ville, mais après ça, tout le processus, exemple tout le processus de consultations, le processus derrière l\'instauration d\'un projet vont juste tuer le projet parce qu’il aura trop de gens qui vont êtres contre. Ils ont peur de devenir comme Montréal, mais en même temps ils doivent comprendre que si la ville veut avancer, veux rester intéressant aux yeux des gens, ils doivent des comprimés.',
+              city:'Québec',
+              dob:'1998'}];"
+>
+  <section class="home-header">
+    <div class="container">
+      <h1 class="header-text">
+        DÉMOCRATISER LES DONNÉES RELATIVES
+        <span class="highlight">AUX JEUNES</span>
+      </h1>
+      <h3 class="header-subtext">
+        Un portail de données ouvertes alimenté par
+        <a href="https://youthfulcities.com/">Youthful Cities</a>
+      </h3>
+      <div class="relative-container">
+        <img
+          class="clip hero-img"
+          src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+          alt="New York City at sunset"
+        />
+        <img
+          class="hero-logo"
+          src="/assets/theme_image/THE_GRID_logo_RGB_yellow.png"
+          alt="THE GRID logo"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="highlight-bar soft-shadow">
+    <ods-dataset-context
+      context="stats"
+      stats-dataset="ods-datasets-monitoring"
+      stats-source="monitoring"
+    >
+      <div class="container">
+        <div
+          ods-aggregation="aggregation"
+          ods-aggregation-context="stats"
+          ods-aggregation-function="SUM"
+          ods-aggregation-expression="records_count"
+        >
+          <div class="col-sm-3 fact">
+            <div
+              ng-if="true"
+              ng-init="from = 0;
+                                      nbticks = 30;
+                                      delay = 100;
+                                      tick = 0;"
+            >
+              <ods-timer
+                stop-condition="tick >= nbticks"
+                delay="delay"
+                auto-start="true"
+                exec="tick = tick + 1;"
+              >
+              </ods-timer>
+              <h4 class="light-heading">Enregistrements</h4>
+              <h3 class="outline-text">
+                {{ ((aggregation || 0) / nbticks) * tick | limitTo:3
+                }}{{aggregation > 1000 ? "K" : ""}}
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div
+          ods-aggregation="aggregation"
+          ods-aggregation-context="stats"
+          ods-aggregation-function="SUM"
+          ods-aggregation-expression="download_count"
+        >
+          <div class="col-sm-4 fact">
+            <div
+              ng-if="true"
+              ng-init="from = 0;
+                                      nbticks = 30;
+                                      delay = 100;
+                                      tick = 0;"
+            >
+              <ods-timer
+                stop-condition="tick >= nbticks"
+                delay="delay"
+                auto-start="true"
+                exec="tick = tick + 1;"
+              >
+              </ods-timer>
+              <h4 class="light-heading">Téléchargements</h4>
+              <h3 class="outline-text">
+                {{ ((aggregation || 0) / nbticks) * tick | limitTo:3
+                }}{{aggregation > 1000 ? "K" : ""}}
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div
+          ods-aggregation="aggregation"
+          ods-aggregation-context="stats"
+          ods-aggregation-function="SUM"
+          ods-aggregation-expression="api_call_count"
+        >
+          <div class="col-sm-4 fact">
+            <div
+              ng-if="true"
+              ng-init="from = 0;
+                                      nbticks = 30;
+                                      delay = 100;
+                                      tick = 0;"
+            >
+              <ods-timer
+                stop-condition="tick >= nbticks"
+                delay="delay"
+                auto-start="true"
+                exec="tick = tick + 1;"
+              >
+              </ods-timer>
+              <h4 class="light-heading">Appels API</h4>
+              <h3 class="outline-text">
+                {{ ((aggregation || 0) / nbticks) * tick | limitTo:3
+                }}{{aggregation > 1000 ? "K" : ""}}
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ods-dataset-context>
+  </section>
+
+  <section
+    class="container section-padding"
+    ng-init="currentQuote=quotes[(quotes.length | math:'random' |  math:'floor')];"
+  >
+    <div class="inner-container">
+      <div class="outline-box">
+        <i class="fa fa-quote-left large-icon" aria-hidden="true"></i>
+        <h5><strong>"{{ currentQuote.quote }}"</strong></h5>
+        <p>
+          -
+          <em
+            >Personne née à {{ currentQuote.dob }}, {{ currentQuote.city }}</em
+          >
+        </p>
+        <br />
+        <a
+          href="https://pivothub.youthfulcities.com/explore/dataset/interview/information/?disjunctive.city"
+          ><p>Visitez l'ensemble de données d'entrevue</p></a
+        >
+      </div>
+    </div>
+  </section>
+  <section class="container section-padding">
+    <h2>Quoi de <span class="alt-highlight">neuf</span></h2>
+    <div class="inner-container">
+      <div class="cards-container">
+        <a
+          href="/explore/dataset/uwi-2023/table/"
+          class="card-full-width soft-shadow hvr-float hvr-push"
+        >
+          <div class="card-img clip image-card-cities"></div>
+          <div class="card-content">
+            <h4 class="card-text">Indice du <br />travail urbain 2023</h4>
+            <p class="card-small-text">
+              La troisième version de l’indice du travail urbain 2023 classe 30
+              villes au Canada afin de déterminer les meilleurs endroits où
+              travailler et vivre pour les jeunes.
+            </p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+  <section class="container section-padding">
+    <h2>Explorer <span class="alt-highlight">les données</span></h2>
+    <div class="inner-container">
+      <div class="cards-container">
+        <a href="/pages/topics" class="card soft-shadow hvr-float hvr-push">
+          <div class="card-img clip image-card-topics"></div>
+          <h4 class="card-text-bottom-corner">Thèmes</h4>
+        </a>
+        <a href="/pages/datasets" class="card soft-shadow hvr-float hvr-push">
+          <div class="card-img clip image-card-datasets"></div>
+          <h4 class="card-text-bottom-corner">Ensembles de données</h4>
+        </a>
+        <a href="/pages/cities" class="card soft-shadow hvr-float hvr-push">
+          <div class="card-img clip image-card-cities"></div>
+          <h4 class="card-text-bottom-corner">Villes</h4>
+        </a>
+        <a href="/pages/playground" class="card soft-shadow hvr-float hvr-push">
+          <div class="card-img clip image-card-playground"></div>
+          <h4 class="card-text-bottom-corner">
+            Terrain de jeux<br />des données
+          </h4>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container section-padding">
+    <h2>Qu'est-ce que <span class="alt-highlight">LA GRILLE?</span></h2>
+    <div class="inner-container">
+      <p>
+        Un portail de données gratuit, ouvert et intuitif pour les jeunes, les
+        communautés, les planificateurs, les organisations, les gouvernements et
+        bien d’autres encore, qui cherche à améliorer notre avenir, à inspirer
+        de nouvelles recherches et à élaborer des politiques façonnées par les
+        jeunes.
+      </p>
+      <p>
+        En mettant en avant les voix des jeunes à travers plus de 3 000 réponses
+        à une enquête, 20 000 minutes d’entretiens et un indice comprenant plus
+        de 23 000 points de données, THE GRID permet aux utilisateur·trice·s de
+        comparer et de différencier des données qualitatives et quantitatives
+        sur 23 thèmes et dans 47 villes canadiennes.
+      </p>
+      <a
+        href="/pages/about-us"
+        class="outline-button top-margin thar-three hvr-push"
+      >
+        En savoir plus
+      </a>
+    </div>
+  </section>
+</div>

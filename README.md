@@ -415,6 +415,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+Note: The name of the portal has been changed to "Youth Data Lab" but is referred to on github as the-grid-2.
+
 First, run the development server:
 
 ```bash

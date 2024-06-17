@@ -3,8 +3,13 @@
 import { Flex, Heading, Text, View, useTheme } from '@aws-amplify/ui-react';
 import Link from 'next/link';
 import React from 'react';
+import {
+  FaFacebook,
+  FaInstagram,
+  FaLinkedin,
+  FaXTwitter,
+} from 'react-icons/fa6';
 import styled from 'styled-components';
-import { FaFacebook, FaInstagram, FaLinkedin, FaXTwitter } from 'react-icons/fa6';
 import useTranslation from '../../i18n/client';
 import Newsletter from './Newsletter';
 
@@ -78,7 +83,9 @@ const IconLink = styled.a`
   border-radius: 35px;
   text-decoration: none;
   font-size: 23px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   &:hover {
     background-color: var(--amplify-colors-blue-100);
     color: var(--amplify-colors-yellow-60);
@@ -105,6 +112,39 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
               {t('sign-up-text')}
             </Text>
           </Flex>
+          <Flex direction='column' alignItems='flex-end'>
+            <Newsletter lng={lng} />
+            <SocialMediaIcons>
+              <IconLink
+                href='https://www.facebook.com/youthfulcities'
+                target='_blank'
+                aria-label='Facebook'
+              >
+                <FaFacebook />
+              </IconLink>
+              <IconLink
+                href='https://x.com/youthfulcities?s=09'
+                target='_blank'
+                aria-label='X'
+              >
+                <FaXTwitter />
+              </IconLink>
+              <IconLink
+                href='https://www.instagram.com/youthfulcities/'
+                target='_blank'
+                aria-label='Instagram'
+              >
+                <FaInstagram />
+              </IconLink>
+              <IconLink
+                href='https://www.linkedin.com/company/youthfulcities/'
+                target='_blank'
+                aria-label='LinkedIn'
+              >
+                <FaLinkedin />
+              </IconLink>
+            </SocialMediaIcons>
+          </Flex>
         </FooterTopSection>
 
         <LinkSection>
@@ -117,14 +157,14 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
             >
               {t('home')}
             </HoverLink>
-            {/* <HoverLink
+            <HoverLink
               href={`${lng}/about`}
               passHref
               $hover={tokens.colors.primary[60].value}
               $color={tokens.colors.font.inverse.value}
             >
               {t('about')}
-            </HoverLink> */}
+            </HoverLink>
             <HoverLink
               href={`${lng}/datasets`}
               passHref
@@ -161,7 +201,7 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
             width='100px'
           />
           <Text fontSize='12px' color='white'>
-            © 2023 Youthful Cities {t('rights')}
+            © 2024 Youthful Cities. {t('rights')}
           </Text>
         </FooterBottomSection>
       </Flex>

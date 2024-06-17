@@ -3,7 +3,7 @@
 import { Card, Flex, Heading, Text, View } from '@aws-amplify/ui-react';
 import Link from 'next/link';
 import { v4 as uuidv4 } from 'uuid';
-import Container from '../components/Container';
+import Container from '../components/Background';
 
 interface CardData {
   title: string;

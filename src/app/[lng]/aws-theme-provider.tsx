@@ -26,7 +26,6 @@ const theme = createTheme(
             color: { value: 'colors.red.90.value' },
           },
         },
-        button: {},
       },
       // these colour definitions had to be made because typescript wasn't accepting the colors.brand notation in styled components, and for some reason the default primary and secondary colours weren't matching the brand theme
       colors: {

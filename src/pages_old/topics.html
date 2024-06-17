@@ -1,0 +1,1332 @@
+<div>
+  <!-- <section class="header">
+        <div class="container">
+            <h1>
+                All <span class="highlight">Topics</span>
+            </h1>
+            <div class="clip hero-img image-card-topics"></div>
+        </div>
+    </section> -->
+
+  <section
+    class="container"
+    ng-init="topicCards = [
+                                        {
+                                        'title': 'Arts + Fashion + Design',
+                                        'title_fr': 'Arts + Mode + Design',
+                                        'className': 'image-card-arts-fashion-design',
+                                        'description': 'Access to visual and performing arts, museums, galleries, and the things people create, build, and see around them.',
+                                        'description_fr': 'Accès aux arts visuels, aux arts de la scène, aux galeries et à tout ce que les gens créent, construisent et voient autour d’eux.',
+                                        'datasets': [
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Arts+%2B+Fashion+%2B+Design',
+                                        'icon': 'fa fa-database',
+                                        'date':'2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Arts+%2B+Fashion+%2B+Design',
+                                        'icon': 'fa fa-check-square',
+                                        'date':'2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Arts+%2B+Fashion+%2B+Design',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'indigenous',
+                                        'designers',
+                                        'youth',
+                                        'public art',
+                                        'free art galleries',
+                                        'installations',
+                                        'grants',
+                                        'residency',
+                                        'art residencies',
+                                        'dance festivals',
+                                        'film festivals',
+                                        'music festivals',
+                                        'theatre festivals'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Civic Engagement',
+                                        'title_fr': 'Engagement civique',
+                                        'className': 'image-card-civic-engagement',
+                                        'description': 'Opportunities for people to participate in the life of a community to improve things for others or to help shape the future.',
+                                        'description_fr': 'Possibilités pour les gens de participer à la vie d’une communauté pour améliorer certaines choses pour les autres ou façonner l’avenir.',
+                                        'datasets': [
+                                        {
+                                        'title': 'Micro Grant & Youth Engagement Resources',
+                                        'link': '/explore/dataset/micro-grant-index/table/',
+                                        'icon': 'fa fa-phone-square',
+                                        'date':'2022'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Civic+Engagement',
+                                        'icon': 'fa fa-database',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Civic+Engagement',
+                                        'icon': 'fa fa-check-square',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Civic+Engagement',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'city',
+                                        'council',
+                                        'indigenous',
+                                        'advisory boards',
+                                        'youth fund',
+                                        'public',
+                                        'deputations',
+                                        'ombudsman',
+                                        'public advocate',
+                                        'leadership',
+                                        'diversity',
+                                        'ballots',
+                                        'polling',
+                                        'advisory body',
+                                        'representation',
+                                        'social media',
+                                        'vote',
+                                        'voting'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Climate Action',
+                                        'title_fr': 'Action climatique',
+                                        'className': 'image-card-climate-change',
+                                        'description': 'Addresses issues related to the environment, pollution, and sustainability.',
+                                        'description_fr': 'Prise de mesures en matière d’environnement, de pollution et de durabilité.',
+                                        'datasets': [
+                                        {
+                                        'title': 'Refugee Resettlement Index',
+                                        'link': '/explore/dataset/refugee-data/table/?refine.topic_en=Climate+Change',
+                                        'icon': 'fa fa-database',
+                                        'date':'2022'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2021',
+                                        'link': '/explore/dataset/uwi-2021/table/?refine.topic_en=Climate+Change',
+                                        'icon': 'fa fa-database',
+                                        'date':'2021'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2023',
+                                        'title_fr': 'Indice du travail urbain 2023',
+                                        'link': '/explore/dataset/uwi-2023/table/?disjunctive.city&disjunctive.city_group&disjunctive.indicator_en&disjunctive.measurement_en&refine.topic_en=Climate+Action',
+                                        'icon': 'fa fa-database',
+                                        'date':'2023'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Climate+Change',
+                                        'icon': 'fa fa-database',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Climate+Change',
+                                        'icon': 'fa fa-check-square',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Climate+Change',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'green vehicle',
+                                        'plastic bags',
+                                        'recycle',
+                                        'recyclable',
+                                        'waste diversion',
+                                        'climate advocacy groups',
+                                        'composting',
+                                        'education',
+                                        'solar panels',
+                                        'renewable energy',
+                                        'paper',
+                                        'emissions',
+                                        'green house gas GHG'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Affordability',
+                                        'title_fr':'Abordabilité',
+                                        'description': 'Affordable, reliable, and sufficient housing, food security, utilities, etc. ',
+                                        'description_fr':'Logements abordables, sûrs et en nombre suffisant, sécurité alimentaire, charges, etc.',
+                                        'className': 'image-card-cost-of-living',
+                                        'datasets': [
+                                        {
+                                        'title': 'Refugee Resettlement Index',
+                                        'link': '/explore/dataset/refugee-data/table/?refine.topic_en=Cost+of+Living',
+                                        'icon': 'fa fa-database',
+                                        'date':'2022'
+                                        },
+                                        {
+                                        'title': 'Refugee Resources',
+                                        'link': '/explore/dataset/refugee-resources/table/?refine.pivot_topic=Cost+of+Living',
+                                        'icon': 'fa fa-phone-square',
+                                        'date':'2022'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2021',
+                                        'link': '/explore/dataset/uwi-2021/table/?refine.topic_en=Cost+Of+Living',
+                                        'icon': 'fa fa-database',
+                                        'date':'2021'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2023',
+                                        'title_fr': 'Indice du travail urbain 2023',
+                                        'link': '/explore/dataset/uwi-2023/table/?disjunctive.city&disjunctive.city_group&disjunctive.indicator_en&disjunctive.measurement_en&refine.topic_en=Affordability',
+                                        'icon': 'fa fa-database',
+                                        'date':'2023'
+                                        },
+                                        {
+                                        'title': 'Real Affordability Index',
+                                        'link': '/explore/dataset/real-affordability-index-2022/table/',
+                                        'icon': 'fa fa-database',
+                                        'date':'2022'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Cost+Of+Living',
+                                        'icon': 'fa fa-database',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Cost+Of+Living',
+                                        'icon': 'fa fa-check-square',
+                                        'date':'2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Cost+Of+Living',
+                                        'icon': 'fa fa-quote-left',
+                                        'date':'2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'money',
+                                        'food bank',
+                                        'menstrual products',
+                                        'housing insecurity scale',
+                                        'public transit',
+                                        'rental housing',
+                                        'free',
+                                        'pass',
+                                        'tickets',
+                                        'campus',
+                                        'cost per',
+                                        'pregnancy test',
+                                        'homeless',
+                                        'student rate',
+                                        'houseless',
+                                        'youth',
+                                        'low income',
+                                        'vacancy rate',
+                                        'social assistance',
+                                        'supports',
+                                        'rental subsidy',
+                                        'rent subsidies',
+                                        'rice',
+                                        'eggs',
+                                        'wage gap',
+                                        'gender',
+                                        'debt',
+                                        'milk',
+                                        'livable wage',
+                                        'minimum wage'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Digital Access',
+                                        'title_fr':'Accès numérique',
+                                        'description': 'Reliable digital infrastructure (e.g. free public wifi), platforms (e.g. free, open data apps), etc. ',
+                                        'description_fr':'Fiabilité des infrastructures numériques (p. ex. Wi-Fi public gratuit), des plateformes (p. ex. applications de données ouvertes gratuites), etc.',
+                                        'className': 'image-card-digital-access',
+                                        'datasets': [
+                                        {
+                                        'title': 'Urban Work Index 2021',
+                                        'link': '/explore/dataset/uwi-2021/table/?refine.topic_en=Digital+Access',
+                                        'icon': 'fa fa-database',
+                                        'date':'2021'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2023',
+                                        'title_fr': 'Indice du travail urbain 2023',
+                                        'link': '/explore/dataset/uwi-2023/table/?disjunctive.city&disjunctive.city_group&disjunctive.indicator_en&disjunctive.measurement_en&refine.topic_en=Digital+Access',
+                                        'icon': 'fa fa-database',
+                                        'date':'2023'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Digital+Access',
+                                        'icon': 'fa fa-database',
+                                        'date':'2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Digital+Access',
+                                        'icon': 'fa fa-check-square',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Digital+Access',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'phone',
+                                        'device',
+                                        'internet',
+                                        'accessibility',
+                                        'broadband',
+                                        'free wifi',
+                                        'speed',
+                                        'high speed',
+                                        'download',
+                                        'upload',
+                                        'talk and text',
+                                        'laptop',
+                                        'students',
+                                        'mobile providers',
+                                        'cords'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Equity, Diversity, and Inclusion',
+                                        'title_fr':'Équité, diversité et inclusion',
+                                        'description': 'Welcoming, safe, and representative of the diverse cultures who live there, with public services that serve the needs of different people.',
+                                        'description_fr':'Ville accueillante et sûre, représentant la diversité des cultures qu’elle rassemble, avec des services publics qui prennent en compte les besoins et les capacités de différentes personnes.',
+                                        'className': 'image-card-accessibility-diversity-inclusion',
+                                        'datasets': [
+                                        {
+                                        'title': 'Refugee Resettlement Index',
+                                        'link': '/explore/dataset/refugee-data/table/?refine.pivot_topic=Diversity+%2B+Inclusion+%2B+Accessibility',
+                                        'icon': 'fa fa-database',
+                                        'date':'2022'
+                                        },
+                                        {
+                                        'title': 'Refugee Resources',
+                                        'link': '/explore/dataset/refugee-resources/table/?refine.pivot_topic=Diversity+%2B+Inclusion+%2B+Accessibility',
+                                        'icon': 'fa fa-phone-square',
+                                        'date':'2022'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2021',
+                                        'link': '/explore/dataset/uwi-2021/table/?refine.topic_en=Diversity+%2B+Inclusion+%2B+Accessibility',
+                                        'icon': 'fa fa-database',
+                                        'date':'2021'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2023',
+                                        'title_fr': 'Indice du travail urbain 2023',
+                                        'link': '/explore/dataset/uwi-2023/table/?disjunctive.city&disjunctive.city_group&disjunctive.indicator_en&disjunctive.measurement_en&refine.topic_en=/explore/dataset/uwi-2023/table/?disjunctive.city&disjunctive.city_group&disjunctive.indicator_en&disjunctive.measurement_en&refine.topic_en=Equity,+Diversity,+and+Inclusion',
+                                        'icon': 'fa fa-database',
+                                        'date':'2023'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Diversity+%2B+Inclusion+%2B+Accessibility',
+                                        'icon': 'fa fa-database',
+                                        'date':'2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Diversity+%2B+Inclusion+%2B+Accessibility',
+                                        'icon': 'fa fa-check-square',
+                                        'date':'2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Diversity+%2B+Inclusion+%2B+Accessibility',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'religion',
+                                        'religous',
+                                        'audio cue scale',
+                                        'discrimination',
+                                        'anti-discrimination scale',
+                                        'prayer rooms',
+                                        'sidewalks',
+                                        'ramps',
+                                        'bike lanes',
+                                        'curbcuts',
+                                        'accommodotions',
+                                        'hate crimes',
+                                        'public education',
+                                        'snow clearing',
+                                        'ice',
+                                        'public infrastructure',
+                                        'retrofit',
+                                        'physical',
+                                        'visual',
+                                        'hearing'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Education + Training',
+                                        'title_fr':'Études + Formation',
+                                        'description': 'Access to post-secondary institutions and training opportunities, as well as affordable education supports (e.g.tutors). ',
+                                        'description_fr':'Accès à des institutions postsecondaires et à des possibilités de formation, ainsi qu’à des soutiens éducatifs abordables (p. ex. tutorat).',
+                                        'className': 'image-card-education-and-training',
+                                        'datasets': [
+                                        {
+                                        'title': 'Refugee Resettlement Index',
+                                        'link': '/explore/dataset/refugee-data/table/?refine.topic_en=Education+%2B+Training',
+                                        'icon': 'fa fa-database',
+                                        'date':'2022'
+                                        },
+                                        {
+                                        'title': 'Refugee Resources',
+                                        'link': '/explore/dataset/refugee-resources/table/?refine.pivot_topic=Education+%2B+Training',
+                                        'icon': 'fa fa-phone-square',
+                                        'date':'2022'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2021',
+                                        'link': '/explore/dataset/uwi-2021/table/?refine.topic_en=Education+%2B+Training',
+                                        'icon': 'fa fa-database',
+                                        'date':'2021'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2023',
+                                        'title_fr': 'Indice du travail urbain 2023',
+                                        'link': '/explore/dataset/uwi-2023/table/?disjunctive.city&disjunctive.city_group&disjunctive.indicator_en&disjunctive.measurement_en&refine.topic_en=Education+%2B+Training',
+                                        'icon': 'fa fa-database',
+                                        'date':'2023'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Education+%2B+Training',
+                                        'icon': 'fa fa-database',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Education+%2B+Training',
+                                        'icon': 'fa fa-check-square',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Education+%2B+Training',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'school',
+                                        'trades',
+                                        'mentorship',
+                                        'apprenticeship',
+                                        'alternative learning',
+                                        'graduation rate',
+                                        'high school',
+                                        'food program',
+                                        'indigenous',
+                                        'support',
+                                        'heritage',
+                                        'traditional',
+                                        'safe',
+                                        'French',
+                                        'scholarships',
+                                        'post-secondary',
+                                        'universities',
+                                        'POC',
+                                        'college',
+                                        'cost',
+                                        'residence',
+                                        'meal plan',
+                                        'degrees',
+                                        'diplomas',
+                                        'tuition',
+                                        'non-school learning',
+                                        'First Nations',
+                                        'curriculum',
+                                        'hands on',
+                                        'workshops',
+                                        'international students',
+                                        'hours',
+                                        'application fee',
+                                        'class size',
+                                        'workforce',
+                                        'enrollement',
+                                        'library'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Entertainment + Shopping',
+                                        'title_fr':'Divertissement + Magasinage',
+                                        'description': 'Access to movies, music, festivals, block parties, nightlife, and choice of retail establishments (e.g. large malls, independent stores, etc.).',
+                                        'description_fr':'Accès aux films, à la musique, aux festivals, aux fêtes de quartier, à la vie nocturne et à divers commerces de détail (p. ex. centres commerciaux, boutiques indépendantes, etc.)',
+                                        'className': 'image-card-entertainment',
+                                        'datasets': [
+                                        {
+                                        'title': 'Urban Work Index 2021',
+                                        'link': '/explore/dataset/uwi-2021/table/?refine.topic_en=Entertainment+%2B+Shopping',
+                                        'icon': 'fa fa-database',
+                                        'date':'2021'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Entertainment+%2B+Shopping',
+                                        'icon': 'fa fa-database',
+                                        'date':'2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Entertainment+%2B+Shopping',
+                                        'icon': 'fa fa-check-square',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Entertainment+%2B+Shopping',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'recreation',
+                                        'fun',
+                                        'films',
+                                        'cinemas',
+                                        'languages',
+                                        'radio',
+                                        'movies',
+                                        'independent films',
+                                        'theater groups',
+                                        'recording studios',
+                                        'record labels',
+                                        'nightlife',
+                                        'courses',
+                                        'education',
+                                        'orchestra',
+                                        'youth',
+                                        'union',
+                                        'cost',
+                                        'concert',
+                                        'accessibility'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Entrepreneurial Spirit',
+                                        'title_fr':'Esprit d’initiative',
+                                        'description': 'Support of innovation, creativity, adaptability, and resourcefulness.',
+                                        'description_fr':'Soutien envers l’innovation, la créativité, l’adaptabilité et l’ingéniosité.',
+                                        'className': 'image-card-entrepreneurial-spirit',
+                                        'datasets': [
+                                        {
+                                        'title': 'Refugee Resettlement Index',
+                                        'link': '/explore/dataset/refugee-data/table/?refine.topic_en=Entrepreneurial+Spirit',
+                                        'icon': 'fa fa-database',
+                                        'date':'2022'
+                                        },
+                                        {
+                                        'title': 'Refugee Resources',
+                                        'link': '/explore/dataset/refugee-resources/table/?refine.pivot_topic=Entrepreneurial+Spirit',
+                                        'icon': 'fa fa-phone-square',
+                                        'date':'2022'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2021',
+                                        'link': '/explore/dataset/uwi-2021/table/?refine.topic_en=Entrepreneurial+Spirit',
+                                        'icon': 'fa fa-database',
+                                        'date':'2021'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2023',
+                                        'title_fr': 'Indice du travail urbain 2023',
+                                        'link': '/explore/dataset/uwi-2023/table/?disjunctive.city&disjunctive.city_group&disjunctive.indicator_en&disjunctive.measurement_en&refine.topic_en=Entrepreneurial+Spirit',
+                                        'icon': 'fa fa-database',
+                                        'date':'2023'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Entrepreneurial+Spirit',
+                                        'icon': 'fa fa-database',
+                                        'date':'2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Entrepreneurial+Spirit',
+                                        'icon': 'fa fa-check-square',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Entrepreneurial+Spirit',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'business',
+                                        'coworking spaces',
+                                        'not-for-profit',
+                                        'sole propriotorship',
+                                        'rental rate',
+                                        'incubator programs',
+                                        'support',
+                                        'digital'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Financial Services',
+                                        'title_fr':'Services financiers',
+                                        'description': 'Reliable access to banks, ATMs, credit unions, loans, etc.',
+                                        'description_fr':'Accès sans difficulté aux banques, aux distributeurs de billets, aux caisses populaires, aux prêts, etc.',
+                                        'className': 'image-card-financial-services',
+                                        'datasets': [
+                                        {
+                                        'title': 'Refugee Resettlement Index',
+                                        'link': '/explore/dataset/refugee-data/table/?refine.topic_en=Financial+Services',
+                                        'icon': 'fa fa-database',
+                                        'date':'2022'
+                                        },
+                                        {
+                                        'title': 'Refugee Resources',
+                                        'link': '/explore/dataset/refugee-resources/table/?refine.pivot_topic=Financial+Services',
+                                        'icon': 'fa fa-phone-square',
+                                        'date':'2022'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2021',
+                                        'link': '/explore/dataset/uwi-2021/table/?refine.topic_en=Financial+Services',
+                                        'icon': 'fa fa-database',
+                                        'date':'2021'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Financial+Services',
+                                        'icon': 'fa fa-database',
+                                        'date':'2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Financial+Services',
+                                        'icon': 'fa fa-check-square',
+                                        'date':'2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Financial+Services',
+                                        'icon': 'fa fa-quote-left',
+                                        'date':'2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'money',
+                                        'literacy',
+                                        'resources',
+                                        'community',
+                                        'financial',
+                                        'account fee',
+                                        'savings rate',
+                                        'mobile banking',
+                                        'online banking',
+                                        'education',
+                                        'minimum balance',
+                                        'credit'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Health Services',
+                                        'title_fr':'Services de santé',
+                                        'description': 'Access to doctors, clinics, physical and mental health information and services, sexual and reproductive health resources, etc. ',
+                                        'description_fr':'Accès aux médecins, aux cliniques, aux services et aux informations en matière de santé physique et mentale, aux ressources en matière de santé sexuelle et reproductive, etc.',
+                                        'className': 'image-card-public-health-services',
+                                        'datasets': [
+                                        {
+                                        'title': 'Refugee Resettlement Index',
+                                        'link': '/explore/dataset/refugee-data/table/?refine.topic_en=Health+Services',
+                                        'icon': 'fa fa-database',
+                                        'date':'2022'
+                                        },
+                                        {
+                                        'title': 'Refugee Resources',
+                                        'link': '/explore/dataset/refugee-resources/table/?refine.pivot_topic=Health+Services',
+                                        'icon': 'fa fa-phone-square',
+                                        'date':'2022'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2021',
+                                        'link': '/explore/dataset/uwi-2021/table/?refine.topic_en=Health+Services',
+                                        'icon': 'fa fa-database',
+                                        'date':'2021'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2023',
+                                        'title_fr': 'Indice du travail urbain 2023',
+                                        'link': '/explore/dataset/uwi-2023/table/?disjunctive.city&disjunctive.city_group&disjunctive.indicator_en&disjunctive.measurement_en&refine.topic_en=Health',
+                                        'icon': 'fa fa-database',
+                                        'date':'2023'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Health+Services',
+                                        'icon': 'fa fa-database',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Health+Services',
+                                        'icon': 'fa fa-check-square',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Health+Services',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'hospital',
+                                        'medical',
+                                        'sickness',
+                                        'mental health scale',
+                                        'reproductive health scale',
+                                        'sexual health scale',
+                                        'crisis hotlines',
+                                        'home kits',
+                                        'doulas',
+                                        'condoms',
+                                        'birth control',
+                                        'free',
+                                        'dental',
+                                        'gynocologist',
+                                        'safe abortion',
+                                        'MHFA',
+                                        'awareness',
+                                        'suicide prevention',
+                                        'counselling',
+                                        'cirriculum',
+                                        'victim',
+                                        'abuse',
+                                        'hotline',
+                                        'STI',
+                                        'testing',
+                                        'queer',
+                                        'anonymous',
+                                        'mifegymiso',
+                                        'wait times',
+                                        'IUD clinics',
+                                        'air quality',
+                                        'smoking',
+                                        'smoke free',
+                                        'COVID-19',
+                                        'test centers',
+                                        'family doctors',
+                                        'road accidents',
+                                        'tobacco'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'City Economy',
+                                        'title_fr':'Économie municipale',
+                                        'description': 'Positive economic growth for the stability and security of people in a city.',
+                                        'description_fr':'Croissance économique positive à des fins de stabilité et de sécurité des habitant·e·s d’une ville.',
+                                        'className': 'image-card-local-economic-growth',
+                                        'datasets': [
+                                        {
+                                        'title': 'Urban Work Index 2021',
+                                        'link': '/explore/dataset/uwi-2021/table/?refine.topic_en=Local+Economic+Growth',
+                                        'icon': 'fa fa-database',
+                                        'date':'2021'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2023',
+                                        'title_fr': 'Indice du travail urbain 2023',
+                                        'link': '/explore/dataset/uwi-2023/table/?disjunctive.city&disjunctive.city_group&disjunctive.indicator_en&disjunctive.measurement_en&refine.topic_en=City+Economy',
+                                        'icon': 'fa fa-database',
+                                        'date':'2023'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Local+Economic+Growth',
+                                        'icon': 'fa fa-database',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Local+Economic+Growth',
+                                        'icon': 'fa fa-check-square',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Local+Economic+Growth',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'businesses',
+                                        'money',
+                                        'income',
+                                        'chambers of commerce',
+                                        'equitable opportunities',
+                                        'BIAs',
+                                        'diversity',
+                                        'representation',
+                                        'buisness tax rate'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Public Built Space',
+                                        'title_fr':'Installations publiques',
+                                        'description': 'Access to libraries, skate parks, museums, galleries, etc.',
+                                        'description_fr':'Accès aux bibliothèques, aux parcs de planches à roulettes, aux musées, etc.',
+                                        'className': 'image-card-public-built-space',
+                                        'datasets': [
+                                        {
+                                        'title': 'Refugee Resettlement Index',
+                                        'link': '/explore/dataset/refugee-data/table/?refine.topic_en=Public+Built+Space',
+                                        'icon': 'fa fa-database',
+                                        'date': '2022'
+                                        },
+                                        {
+                                        'title': 'Refugee Resources',
+                                        'link': '/explore/dataset/refugee-resources/table/?refine.pivot_topic=Public+Built+Space',
+                                        'icon': 'fa fa-phone-square',
+                                        'date': '2022'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2021',
+                                        'link': '/explore/dataset/uwi-2021/table/?refine.topic_en=Public+Built+Space',
+                                        'icon': 'fa fa-database',
+                                        'date': '2021'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Public+Built+Space',
+                                        'icon': 'fa fa-database',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Public+Built+Space',
+                                        'icon': 'fa fa-check-square',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Public+Built+Space',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'tourism',
+                                        'recreation',
+                                        'open',
+                                        'dog parks',
+                                        'languages',
+                                        'remote programming',
+                                        'outdoor gyms',
+                                        'playgrounds',
+                                        'skate parks',
+                                        'public bathrooms',
+                                        'land acknowledgements',
+                                        'indigenous',
+                                        'swimming lessons',
+                                        'parking',
+                                        'Truth and Reconciliation',
+                                        'public pools'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Public Green Space',
+                                        'title_fr':'Espaces verts publics',
+                                        'description': 'Access to parks, community gardens, cemeteries, etc.',
+                                        'description_fr':'Accès aux parcs, aux jardins communautaires, aux cimetières, etc.',
+                                        'className': 'image-card-public-green-space',
+                                        'datasets': [
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Public+Green+Space',
+                                        'icon': 'fa fa-database',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Public+Green+Space',
+                                        'icon': 'fa fa-check-square',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Public+Green+Space',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'trees',
+                                        'plants',
+                                        'free',
+                                        'sports',
+                                        'fields',
+                                        'gardens',
+                                        'farmers markets',
+                                        'shoreline',
+                                        'cemetaries',
+                                        'artisanal markets'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Public Safety',
+                                        'title_fr':'Sécurité publique',
+                                        'description': 'Freedom from violence/crime/etc., comfortable with emergency and crisis response teams, accessible legal justice system. ',
+                                        'description_fr':'Environnement à l’abri de la violence, du crime, etc. et agréable avec des équipes d’intervention d’urgence et un système juridique et judiciaire accessible.',
+                                        'className': 'image-card-public-safety',
+                                        'datasets': [
+                                        {
+                                        'title': 'Urban Work Index 2021',
+                                        'link': '/explore/dataset/uwi-2021/table/?refine.topic_en=Public+Safety',
+                                        'icon': 'fa fa-database',
+                                        'date': '2021'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Public+Safety',
+                                        'icon': 'fa fa-database',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Public+Safety',
+                                        'icon': 'fa fa-check-square',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Public+Safety',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'courts',
+                                        'harm reduction scale',
+                                        'addiction',
+                                        'substance abuse',
+                                        'rehabilitation',
+                                        'social',
+                                        'justice',
+                                        'youth',
+                                        'crisis centres',
+                                        'recovery',
+                                        'therapy',
+                                        'violence',
+                                        'independent living',
+                                        'supervised injection sites',
+                                        'naloxone',
+                                        'Narcan',
+                                        'overdose',
+                                        'precincts',
+                                        'streetlights',
+                                        'homicides',
+                                        'distress buttons',
+                                        'night stop programs',
+                                        'fatalities'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Public Transportation',
+                                        'title_fr':'Transport public',
+                                        'description': 'Access to buses, trains, bicycle paths, and alternative transportation methods. ',
+                                        'description_fr':'Bus, trains, pistes cyclables et autres moyens de transport parallèles.',
+                                        'className': 'image-card-public-transit',
+                                        'datasets': [
+                                        {
+                                        'title': 'Refugee Resettlement Index',
+                                        'link': '/explore/dataset/refugee-data/table/?refine.topic_en=Public+Transportation',
+                                        'icon': 'fa fa-database',
+                                        'date': '2022'
+                                        },
+                                        {
+                                        'title': 'Refugee Resources',
+                                        'link': '/explore/dataset/refugee-resources/table/?refine.pivot_topic=Public+Transportation',
+                                        'icon': 'fa fa-phone-square',
+                                        'date': '2022'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2021',
+                                        'link': '/explore/dataset/uwi-2021/table/?refine.topic_en=Public+Transportation',
+                                        'icon': 'fa fa-database',
+                                        'date': '2021'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Public+Transportation',
+                                        'icon': 'fa fa-database',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Public+Transportation',
+                                        'icon': 'fa fa-check-square',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Public+Transportation',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2023',
+                                        'title_fr': 'Indice du travail urbain 2023',
+                                        'link': '/explore/dataset/uwi-2023/table/?disjunctive.city&disjunctive.city_group&disjunctive.indicator_en&disjunctive.measurement_en&refine.topic_en=Transportation',
+                                        'icon': 'fa fa-database',
+                                        'date': '2023'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'ride share',
+                                        'travel',
+                                        'roads',
+                                        'accessibility',
+                                        'bus service',
+                                        'frequency',
+                                        'community centres',
+                                        'health clinics',
+                                        'high schools',
+                                        'designated seating',
+                                        'parks',
+                                        'recreation',
+                                        'hours',
+                                        'bike lanes',
+                                        'bikes',
+                                        'commute',
+                                        'green vehicle',
+                                        'airport',
+                                        'public bike rental',
+                                        'transit app',
+                                        'designated seating',
+                                        'public scooter rental'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Restaurants + Bars',
+                                        'title_fr':'Restaurants + Bars',
+                                        'description': 'Access to a choice of eating and drinking establishments.',
+                                        'description_fr':'Accès à divers restaurants et bars.',
+                                        'className': 'image-card-restaurants-and-bars',
+                                        'datasets': [
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Restaurants+%2B+Bars',
+                                        'icon': 'fa fa-database',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Restaurants+%2B+Bars',
+                                        'icon': 'fa fa-check-square',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Restaurants+%2B+Bars',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'foods',
+                                        'eating',
+                                        'food delivery services',
+                                        'price',
+                                        'cost',
+                                        'casual dining',
+                                        'fine dining',
+                                        'cafe',
+                                        'indigenous',
+                                        'fast food',
+                                        'legal age to drink',
+                                        'alcohol',
+                                        'cuisines'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Sports + Recreation',
+                                        'title_fr':'Sports + Récréation',
+                                        'description': 'Access to lots of facilities and programs for physical activity.',
+                                        'description_fr':'Accès à un grand nombre d’installations et de programmes destinés à une activité physique.',
+                                        'className': 'image-card-sports-and-recreation',
+                                        'datasets': [
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Sports+%2B+Recreation',
+                                        'icon': 'fa fa-database',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Sports+%2B+Recreation',
+                                        'icon': 'fa fa-check-square',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Sports+%2B+Recreation',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'fun',
+                                        'hobby',
+                                        'free time',
+                                        'subsidies',
+                                        'community centres',
+                                        'wheelchair',
+                                        'accessibility',
+                                        'youth',
+                                        'free',
+                                        'dance',
+                                        'ice hockey',
+                                        'cost'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Travel + Tourism',
+                                        'title_fr':'Voyage + Tourisme',
+                                        'description': 'The city is a tourist destination.',
+                                        'description_fr':'La ville est une destination touristique.',
+                                        'className': 'image-card-travel-and-tourism',
+                                        'datasets': [
+                                        {
+                                        'title': 'Urban Work Index 2021',
+                                        'link': '/explore/dataset/uwi-2021/table/?refine.topic_en=Travel+%2B+Tourism',
+                                        'icon': 'fa fa-database',
+                                        'date': '2021'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Travel+%2B+Tourism',
+                                        'icon': 'fa fa-database',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Travel+%2B+Tourism',
+                                        'icon': 'fa fa-check-square',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Travel+%2B+Tourism',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'cost',
+                                        'gas',
+                                        'hotels',
+                                        'visitors',
+                                        'commute',
+                                        'public transit',
+                                        'bed',
+                                        'room',
+                                        'car rental',
+                                        'getaway',
+                                        'direct flights'
+                                        ]
+                                        },
+                                        {
+                                        'title': 'Good Youth Jobs',
+                                        'title_fr':'Bons emplois pour les jeunes',
+                                        'description': 'Access to work opportunities for 15-29 year olds that are meaningful, successful, relevant to one’s field of study, pay fairly, and are safe.',
+                                        'description_fr':'Accès à des perspectives d’emploi pour les jeunes de 15 à 29 ans qui ont du sens, sont couronnées de succès, sont pertinentes par rapport aux études, offrent une rémunération équitable et sont sécuritaires.',
+                                        'className': 'image-card-youth-employment',
+                                        'datasets': [
+                                        {
+                                        'title': 'Refugee Resettlement Index',
+                                        'link': '/explore/dataset/refugee-data/table/?refine.topic_en=Youth+Employment',
+                                        'icon': 'fa fa-database',
+                                        'date': '2022'
+                                        },
+                                        {
+                                        'title': 'Refugee Resources',
+                                        'link': '/explore/dataset/refugee-resources/table/?refine.pivot_topic=Youth+Employment',
+                                        'icon': 'fa fa-phone-square',
+                                        'date': '2022'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2021',
+                                        'link': '/explore/dataset/uwi-2021/table/?refine.topic_en=Youth+Employment',
+                                        'icon': 'fa fa-database',
+                                        'date': '2021'
+                                        },
+                                        {
+                                        'title': 'Urban Work Index 2023',
+                                        'title_fr': 'Indice du travail urbain 2023',
+                                        'link': '/explore/dataset/uwi-2023/table/?disjunctive.city&disjunctive.city_group&disjunctive.indicator_en&disjunctive.measurement_en&refine.topic_en=Good+Youth+Jobs',
+                                        'icon': 'fa fa-database',
+                                        'date': '2023'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Index',
+                                        'link': '/explore/dataset/index-2020-full/table/?disjunctive.city_cma&disjunctive.city&refine.program=Pivot+2020&refine.topic_en=Youth+Employment',
+                                        'icon': 'fa fa-database',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Survey',
+                                        'link': '/explore/dataset/survey/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Youth+Employment',
+                                        'icon': 'fa fa-check-square',
+                                        'date': '2020'
+                                        },
+                                        {
+                                        'title': 'Pivot 2020 Interview',
+                                        'link': '/explore/dataset/interview/table/?disjunctive.city_cma&disjunctive.city&refine.topic_en=Youth+Employment',
+                                        'icon': 'fa fa-quote-left',
+                                        'date': '2020'
+                                        }
+                                        ],
+                                        'keywords': [
+                                        'young people',
+                                        'adolescents',
+                                        'young adults',
+                                        'youth employment centres',
+                                        'paid',
+                                        'internships',
+                                        'money',
+                                        'income',
+                                        'undergrad',
+                                        'post-secondary',
+                                        'high schools',
+                                        'placements',
+                                        'certification',
+                                        'training',
+                                        'workshops',
+                                        'mentorship',
+                                        'profession',
+                                        'peer',
+                                        'unemployment',
+                                        'rental subsidy',
+                                        'rent subsidies',
+                                        'COVID-19',
+                                        'safe',
+                                        'transit',
+                                        'businesses',
+                                        'career office',
+                                        'education'
+                                        ]
+                                        }
+                                        ];"
+  >
+    <div class="padding">
+      <h1 class="alt-heading">All <span class="alt-highlight">Topics</span></h1>
+    </div>
+    <div class="top-margin">
+      <nav class="breadcrumbs"><a href="/">Home</a> / All Topics</nav>
+    </div>
+
+    <div class="inner-container padding">
+      <div class="outline-box">
+        <i class="fa fa-question large-icon" aria-hidden="true"></i>
+        <p>On this page you will find all the topics covered on THE GRID.</p>
+        <p>
+          Click the topic cards to find which datasets address these topics.
+          Indexes are value-based datasets for data that is quantifiable; for
+          example, minimum wage has a value in each city that we can measure.
+          Survey datasets record the responses to questionnaires. Interview
+          datasets contain quotes from participants.
+        </p>
+      </div>
+      <a href="/pages/cities" class="outline-button thar-three hvr-push">
+        All Cities
+      </a>
+
+      <a href="/pages/datasets" class="outline-button thar-three hvr-push">
+        All Datasets
+      </a>
+    </div>
+    <!-- SEARCH -->
+    <div class="inner-container padding">
+      <h4>Search</h4>
+      <div class="search-module">
+        <i class="fa fa-search search-module-icon" aria-hidden="true"></i>
+        <input
+          ng-model="searchText"
+          placeholder="Search Topic Cards"
+          ng-model-options="{ updateOn: 'keyup', debounce: { 'default': 300, 'blur': 0 }}"
+          class="search-module-input"
+          type="text"
+          name="searchInput"
+        />
+      </div>
+    </div>
+
+    <div class="inner-container">
+      <div class="cards-container">
+        <!-- DYNAMICALLY GENERATED CARDS -->
+        <div
+          ng-repeat="card in topicCards | filter:searchText | orderBy:'title'"
+          class="card soft-shadow"
+          ng-init="isFlipped = false"
+          ng-click="isFlipped = !isFlipped"
+          ng-class="{'is-flipped': isFlipped}"
+          tab-index="0"
+          aria-roledescription="flipping card"
+        >
+          <div class="card-front" tab-index="0">
+            <div class="card-img clip {{card.className}}"></div>
+            <div class="card-content">
+              <h4 class="card-text">{{ card.title }}</h4>
+              <p class="card-small-text">{{ card.description }}</p>
+            </div>
+          </div>
+          <div class="card-back" tab-index="0">
+            <div class="card-content">
+              <h4 class="card-text">{{ card.title }}</h4>
+              <h5>Datasets</h5>
+              <ul
+                ng-repeat="dataset in card.datasets | orderBy:'-date'"
+                class="card-dataset hvr-forward"
+              >
+                <li>
+                  <a href="{{ dataset.link }}">
+                    <i class="fa {{ dataset.icon }}" aria-hidden="true"></i>
+                    <p class="card-small-text">{{ dataset.title }}</p>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

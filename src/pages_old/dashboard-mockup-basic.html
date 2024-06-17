@@ -1,0 +1,434 @@
+<!--
+     The <ods-catalog-context> allows other widgets in this page to access the catalog of datasets in this platform.
+     Check the ods-widgets documentation to learn more about ods-catalog-context.
+-->
+<ods-catalog-context
+  context="catalog"
+  ng-init="resetFiltersButton = true;
+                              resetFiltersButtonLabel = 'Reset Filters';
+                              activeFilters = {};"
+>
+  <!-- Header Image
+      Check the .home-header class to change the background image
+    -->
+  <ods-dataset-context
+    context="uwi2021, ctx, scorectx, fullctx, mapctx, popctx"
+    ctx-dataset="uwi-2021"
+    popctx-dataset="uwi-2021"
+    scorectx-dataset="uwi-2021"
+    fullctx-dataset="uwi-2021"
+    fullctx-parameters="{'refine.city': 'Toronto'}"
+    popctx-parameters="{'disjunctive.measurement_en':true,'disjunctive.city':true,'disjunctive.city_cma':true,'refine.city_cma':['Greater Vancouver','Toronto','Montréal']}"
+    scorectx-parameters="{'refine.city': 'Toronto', 'refine.calculation':'average of measures', 'q':'are there'}"
+    uwi2021-dataset="uwi-2021"
+    uwi2021-parameters="{'disjunctive.measurement_en':true,'disjunctive.city':true,'disjunctive.city_cma':true,'refine.city':'Toronto'}"
+    mapctx-dataset="uwi-2021"
+    mapctx-parameters="{'disjunctive.measurement_en':true,'disjunctive.city':true,'disjunctive.city_cma':true,'q.geofilter':'#distance(\'43.72885821330353,-79.39132690429688\',40999.786108739754)'}"
+  >
+    <section class="home-header"></section>
+    <!-- Welcome card and KPI cards -->
+    <section
+      class="container grid-section"
+      ods-dataset-context
+      context="fullctx"
+      fullctx-dataset="uwi-2021"
+      fullctx-parameters="{'refine.city': 'Toronto'}"
+    >
+      <div class="row">
+        <div
+          class="col-md-4 full-height"
+          ods-results="results"
+          ods-results-context="fullctx"
+        >
+          <div class="welcome-card">
+            <h1 class="welcome-card-title">Toronto Dashboard</h1>
+            <p class="welcome-card-description">
+              Overview of the Urban Work Index 2021 for Toronto, Ontario.
+            </p>
+            <p class="welcome-card-description">
+              Please note that this is a beta version and not the final
+              dashboard. Data is for demonstration purposes only. Scores have
+              not been adjusted to reflect measurements where a lower value
+              would result in a better score (for example, rent prices).
+            </p>
+            <p class="welcome-card-description">
+              Total data points: <strong>{{ fullctx.nhits }}</strong>
+            </p>
+            <a
+              href="/explore/dataset/{{uwi2021.dataset.datasetid}}/table/?disjunctive.measurement_en&disjunctive.city_cma&disjunctive.city{{uwi2021.getQueryStringURL()}}"
+              class="welcome-card-link"
+            >
+              Explore the raw data
+              <i class="fa fa-long-arrow-right fa-fw" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+        <div
+          class="col-md-4 full-height"
+          ods-aggregation="score"
+          ods-aggregation-context="fullctx"
+          ods-aggregation-function="AVG"
+          ods-aggregation-expression="scaled_i"
+        >
+          <div
+            class="kpi-card-no-flex"
+            ods-results="results"
+            ods-results-context="fullctx"
+          >
+            <div class="kpi-inner">
+              <ods-gauge display-mode="circle" max="100" value="score">
+              </ods-gauge>
+              <br />
+              <h3>Overall Score</h3>
+            </div>
+          </div>
+        </div>
+        <div
+          class="col-md-4 full-height"
+          ods-dataset-context
+          context="fullctx"
+          fullctx-dataset="index-2020-full"
+          fullctx-parameters="{'refine.city': 'Toronto'}"
+        >
+          <div
+            class="kpi-card"
+            ods-results="results"
+            ods-results-context="fullctx"
+          >
+            <i class="kpi-icon fa fa-trophy" aria-hidden="true"></i>
+            <p class="kpi-title">#8</p>
+            <h3>Overall Rank</h3>
+          </div>
+        </div>
+      </div>
+      <div class="div4">
+        <div class="content-card">
+          <h3>
+            Scores By Topic
+            <span ng-if="uwi2021.parameters['refine.topic_en']">
+              — {{ uwi2021.parameters['refine.topic_en'] }}</span
+            ><span ng-if="uwi2021.parameters['refine.indicator_en']"
+              >, {{ uwi2021.parameters['refine.indicator_en'] }}</span
+            >
+          </h3>
+          <p>
+            <span ng-if="!uwi2021.parameters['refine.topic_en']"
+              >Click on a topic to expand the indicators.</span
+            ><span ng-if="uwi2021.parameters['refine.topic_en']"
+              >Click on an indicator to expand measurements.</span
+            >
+          </p>
+          <br />
+          <div ng-if="!uwi2021.parameters['refine.topic_en']">
+            <ods-chart align-month="true">
+              <ods-chart-query
+                context="uwi2021"
+                field-x="topic_en"
+                maxpoints="0"
+                sort="y"
+              >
+                <ods-chart-serie
+                  expression-y="scaled_i"
+                  label-y="Average scaled ranking — Toronto"
+                  chart-type="column"
+                  function-y="AVG"
+                  color="#550D35"
+                  display-values="true"
+                  display-stack-values="false"
+                  max="100"
+                  scientific-display="true"
+                  color-thresholds='[{"color":"#C9D5E9","value":0},{"color":"#FBD166","value":25},{"color":"#5125E8","value":50},{"color":"#550D35","value":75}]'
+                  refine-on-click-context="mapctx,uwi2021,ctx,popctx"
+                  refine-on-click-mapctx-context-field="topic_en"
+                  refine-on-click-uwi2021-context-field="topic_en"
+                  refine-on-click-ctx-context-field="topic_en"
+                  refine-on-click-popctx-context-field="topic_en"
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+              <ods-chart-query context="ctx" field-x="topic_en" maxpoints="0">
+                <ods-chart-serie
+                  expression-y="scaled_i"
+                  label-y="Average scaled ranking — Canada"
+                  chart-type="line"
+                  function-y="AVG"
+                  color="#F2695D"
+                  min="0"
+                  max="100"
+                  scientific-display="true"
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+            </ods-chart>
+          </div>
+          <div
+            ng-if="uwi2021.parameters['refine.topic_en'] && !uwi2021.parameters['refine.indicator_en']"
+          >
+            <ods-chart align-month="true">
+              <ods-chart-query
+                context="uwi2021"
+                field-x="indicator_en"
+                maxpoints="0"
+                sort="y"
+              >
+                <ods-chart-serie
+                  expression-y="scaled_i"
+                  chart-type="column"
+                  function-y="AVG"
+                  color="#F2695D"
+                  display-values="true"
+                  display-stack-values="false"
+                  max="100"
+                  scientific-display="true"
+                  color-thresholds='[{"color":"#C9D5E9","value":0},{"color":"#FBD166","value":25},{"color":"#5125E8","value":50},{"color":"#550D35","value":75}]'
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+              <ods-chart-query
+                context="ctx"
+                field-x="indicator_en"
+                maxpoints="0"
+              >
+                <ods-chart-serie
+                  expression-y="scaled_i"
+                  label-y="Average scaled ranking — Canada"
+                  chart-type="line"
+                  function-y="AVG"
+                  color="#F2695D"
+                  min="0"
+                  max="100"
+                  scientific-display="true"
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+            </ods-chart>
+          </div>
+          <div
+            ng-if="uwi2021.parameters['refine.topic_en'] && uwi2021.parameters['refine.indicator_en']"
+          >
+            <ods-chart align-month="true">
+              <ods-chart-query
+                context="uwi2021"
+                field-x="measurement_en"
+                maxpoints="0"
+                sort="y"
+              >
+                <ods-chart-serie
+                  expression-y="scaled_i"
+                  chart-type="column"
+                  function-y="AVG"
+                  color="#F2695D"
+                  display-values="true"
+                  display-stack-values="false"
+                  max="100"
+                  scientific-display="true"
+                  color-thresholds='[{"color":"#C9D5E9","value":0},{"color":"#FBD166","value":25},{"color":"#5125E8","value":50},{"color":"#550D35","value":75}]'
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+              <ods-chart-query
+                context="ctx"
+                field-x="measurement_en"
+                maxpoints="0"
+              >
+                <ods-chart-serie
+                  expression-y="scaled_i"
+                  label-y="Average scaled ranking — Canada"
+                  chart-type="line"
+                  function-y="AVG"
+                  color="#F2695D"
+                  min="0"
+                  max="100"
+                  scientific-display="true"
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+            </ods-chart>
+          </div>
+          <p class="kpi-description">
+            Higher values mean better performance in comparision to other cities
+            measured in the index. A score of 100 means that the city ranked
+            first, and a score of 0 means that the city ranked last.
+          </p>
+          <div
+            ng-if="uwi2021.parameters['refine.topic_en'] && !uwi2021.parameters['refine.indicator_en']"
+          >
+            <br />
+            <button
+              class="outline-button center thar-three"
+              ng-click="uwi2021.parameters['refine.topic_en'] = undefined; popctx.parameters['refine.topic_en'] = undefined; mapctx.parameters['refine.topic_en'] = undefined; ctx.parameters['refine.topic_en'] = undefined; topics = []"
+            >
+              Back to topics
+            </button>
+          </div>
+          <div ng-if="uwi2021.parameters['refine.indicator_en']">
+            <br />
+            <button
+              class="outline-button center thar-three"
+              ng-click="uwi2021.parameters['refine.indicator_en'] = undefined; popctx.parameters['refine.indicator_en'] = undefined mapctx.parameters['refine.indicator_en'] = undefined; ctx.parameters['refine.indicator_en'] = undefined;"
+            >
+              Back to indicators
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="content-card">
+          <h3>
+            Overall Scores Compared to Cities with Similar Population
+            <span ng-if="popctx.parameters['refine.topic_en']">
+              — {{ popctx.parameters['refine.topic_en'] }}</span
+            ><span ng-if="popctx.parameters['refine.indicator_en']"
+              >, {{ popctx.parameters['refine.indicator_en'] }}</span
+            >
+          </h3>
+          <p class="kpi-description">
+            Refine the results by clicking on the "Scores By Topic" chart.
+          </p>
+          <br />
+          <ods-map
+            no-refit="true"
+            scroll-wheel-zoom="false"
+            basemap="jawg.streets"
+            location="4,42.65012,-97.55859"
+          >
+            <ods-map-layer-group>
+              <ods-map-layer
+                context="popctx"
+                color="#C32D1C"
+                picto="ods-circle"
+                show-marker="true"
+                display="clusters"
+                function="AVG"
+                expression="scaled_i"
+                shape-opacity="0.5"
+                point-opacity="1"
+                border-color="#FFFFFF"
+                border-opacity="1"
+                border-size="1"
+                border-pattern="solid"
+                size-min="3"
+                size-max="5"
+                size-function="linear"
+              ></ods-map-layer>
+            </ods-map-layer-group>
+          </ods-map>
+        </div>
+      </div>
+      <div>
+        <div class="content-card">
+          <h3>
+            Overall Scores By Region
+            <span ng-if="mapctx.parameters['refine.topic_en']">
+              — {{ mapctx.parameters['refine.topic_en'] }}</span
+            ><span ng-if="mapctx.parameters['refine.indicator_en']"
+              >, {{ mapctx.parameters['refine.indicator_en'] }}</span
+            >
+          </h3>
+          <p class="kpi-description">
+            Refine the results by clicking on the "Scores By Topic" chart.
+          </p>
+          <br />
+          <ods-map
+            no-refit="true"
+            scroll-wheel-zoom="false"
+            basemap="jawg.streets"
+            location="10,43.65645,-79.60831"
+          >
+            <ods-map-layer-group>
+              <ods-map-layer
+                context="mapctx"
+                color="#550D35"
+                picto="ods-circle"
+                show-marker="true"
+                display="clusters"
+                function="AVG"
+                expression="scaled_i"
+                shape-opacity="0.5"
+                point-opacity="1"
+                border-color="#FFFFFF"
+                border-opacity="1"
+                border-size="1"
+                border-pattern="solid"
+                caption-picto-color="#E5E5E5"
+                size-min="3"
+                size-max="5"
+                size-function="linear"
+              ></ods-map-layer>
+            </ods-map-layer-group>
+          </ods-map>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 full-height">
+          <div
+            ng-if="uwi2021.parameters['refine.topic_en'] && !uwi2021.parameters['refine.indicator_en']"
+          >
+            <button
+              class="outline-button center thar-three"
+              ng-click="uwi2021.parameters['refine.topic_en'] = undefined; popctx.parameters['refine.topic_en'] = undefined; mapctx.parameters['refine.topic_en'] = undefined; ctx.parameters['refine.topic_en'] = undefined; topics = []"
+            >
+              Reset
+            </button>
+          </div>
+          <div ng-if="uwi2021.parameters['refine.indicator_en']">
+            <br />
+            <button
+              class="outline-button center thar-three"
+              ng-click="uwi2021.parameters['refine.indicator_en'] = undefined; popctx.parameters['refine.indicator_en'] = undefined; mapctx.parameters['refine.indicator_en'] = undefined; ctx.parameters['refine.indicator_en'] = undefined;"
+            >
+              Back one level
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--
+                <div>
+                    <div class="content-card">
+                        <h2 class="content-card-title">
+                            Positve vs. Negative Scores
+                        </h2>
+                        <p>
+                            1 = yes, 0 = no
+                        </p>
+                        <ods-chart align-month="true">
+                            <ods-chart-query context="scorectx" field-x="value" maxpoints="0">
+                                <ods-chart-serie expression-y="value" chart-type="pie" function-y="COUNT" color="range-custom" scientific-display="true">
+                                </ods-chart-serie>
+                            </ods-chart-query>
+                        </ods-chart>
+                    </div>
+                </div>
+-->
+    <!--
+        <section class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <!-- Most Popular Datasets
+                    <h2 class="home-subtitle">
+                        Most popular data
+                    </h2>
+                    <ods-most-popular-datasets context="catalog"></ods-most-popular-datasets>
+                </div>
+                <div class="col-md-4">
+                    <!-- Last modified datasets
+                    <h2 class="home-subtitle">
+                        Last updated data
+                    </h2>
+                    <ods-last-datasets-feed context="catalog"></ods-last-datasets-feed>
+                </div>
+                <div class="col-md-4">
+                    <!-- Twitter feed
+                    <h2 class="home-subtitle">
+                        On twitter
+                    </h2>
+                    <div class="twitter-timeline-container">
+                        <!-- To change the Twitter profile to display go to https://publish.twitter.com/#
+                        <a class="twitter-timeline" data-height="392" href="https://twitter.com/Opendatasoft?ref_src=twsrc%5Etfw">Tweets by Opendatasoft</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    </div>
+                </div>
+            </div> -->
+  </ods-dataset-context>
+</ods-catalog-context>

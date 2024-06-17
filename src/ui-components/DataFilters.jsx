@@ -21,7 +21,6 @@ export default function DataFilters(props) {
       alignItems="flex-start"
       position="relative"
       padding="32px 0px 32px 0px"
-      backgroundColor="rgba(236,233,228,1)"
       {...getOverrideProps(overrides, "DataFilters")}
       {...rest}
     >
@@ -68,7 +67,7 @@ export default function DataFilters(props) {
             {...getOverrideProps(overrides, "Active Filters")}
           >
             <Flex
-              gap="16px"
+              gap="79px"
               direction="row"
               width="unset"
               height="unset"
@@ -327,7 +326,7 @@ export default function DataFilters(props) {
                   position="relative"
                   padding="0px 0px 0px 0px"
                   whiteSpace="pre-wrap"
-                  children="Search..."
+                  children="Search Filters..."
                   {...getOverrideProps(overrides, "placeholder")}
                 ></Text>
                 <Button
@@ -495,8 +494,6 @@ export default function DataFilters(props) {
                   {...getOverrideProps(overrides, "Frame 439")}
                 >
                   <MyIcon
-                    width="14px"
-                    height="14px"
                     display="block"
                     gap="unset"
                     alignItems="unset"
@@ -511,7 +508,7 @@ export default function DataFilters(props) {
                     fontFamily="Inter"
                     fontSize="16px"
                     fontWeight="600"
-                    color="rgba(83,38,232,1)"
+                    color="rgba(81,37,232,1)"
                     lineHeight="24px"
                     textAlign="left"
                     display="block"
@@ -635,7 +632,7 @@ export default function DataFilters(props) {
                   fontFamily="Inter"
                   fontSize="16px"
                   fontWeight="600"
-                  color="rgba(83,38,232,1)"
+                  color="rgba(81,37,232,1)"
                   lineHeight="24px"
                   textAlign="right"
                   display="block"

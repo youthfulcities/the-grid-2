@@ -1,0 +1,254 @@
+<div
+  ng-init="datasets=[
+              {'name':'Indice du travail urbain 2023', 'id':'uwi-2023'},
+              {'name':'Pivot 2020 Index', 'id':'index-2020-full'},
+              {'name':'Real Affordability Index', 'id':'real-affordability-index-2022'},
+              {'name':'CBYF Index', 'id':'tamarack-index'}];
+              resetFiltersButton = true;
+              resetFiltersButtonLabel = 'Reset Filters';
+              activeFilters = {};"
+>
+  <!-- <section class="header">
+        <div class="container">
+            <h1>
+                Terrain de jeux <span class="highlight">des données</span>
+            </h1>
+            <div class="clip hero-img image-card-playground"></div>
+        </div>
+    </section> -->
+
+  <section class="container">
+    <div class="padding">
+      <h1 class="alt-heading">
+        Terrain de <span class="alt-highlight">jeux des données</span>
+      </h1>
+    </div>
+    <div class="top-margin">
+      <nav class="breadcrumbs">
+        <a href="/">Accueil</a> / Terrain de jeux des données
+      </nav>
+    </div>
+
+    <div class="inner-container padding">
+      <div class="outline-box">
+        <i class="fa fa-question large-icon" aria-hidden="true"></i>
+        <p>
+          Utilisez le terrain de jeu des données pour explorer les indices sur
+          THE GRID, visualiser les mesures et générer des informations. Visitez
+          les ensembles de données individuels pour des options plus avancées de
+          graphisme et de visualisation.
+        </p>
+      </div>
+      <a href="/pages/datasets" class="outline-button thar-three hvr-push">
+        Tous les ensembles de données
+      </a>
+    </div>
+    <div
+      class="inner-container padding"
+      ng-init="dropdown.open = '';
+                      select = {}"
+    >
+      <h5 class="filter-heading">Choisir un ensemble de données</h5>
+      <ods-select
+        selected-values="activeFilters.dataset"
+        multiple="false"
+        options="datasets"
+        label-modifier="name"
+        placeholder="Choisir un ensemble de données"
+        value-modifier="id"
+      ></ods-select>
+      <div ng-repeat="dataset in activeFilters.dataset">
+        <ods-dataset-context
+          context="ctx"
+          ctx-dataset="{{dataset}}"
+          ctx-domain="https://thegrid.youthfulcities.com/"
+        >
+          <h5 class="filter-heading">Choisir un thème</h5>
+          <div
+            ods-facet-results="topics"
+            ods-facet-results-context="ctx"
+            ods-facet-results-facet-name="topic_fr"
+          >
+            <ods-select
+              selected-values="ctx.parameters['refine.topic_fr']"
+              multiple="false"
+              options="topics"
+              label-modifier="name"
+              value-modifier="name"
+              placeholder="Choisir un thème"
+            >
+            </ods-select>
+          </div>
+          <h5 class="filter-heading">Choisir une mesure</h5>
+          <div
+            ods-facet-results="measurements"
+            ods-facet-results-context="ctx"
+            ods-facet-results-facet-name="measurement_fr"
+          >
+            <ods-select
+              selected-values="ctx.parameters['refine.measurement_fr']"
+              multiple="false"
+              options="measurements"
+              label-modifier="name"
+              value-modifier="name"
+              on-change="activeFilters.push('measurement')"
+              placeholder="Choisir une mesure"
+            >
+            </ods-select>
+          </div>
+          <div
+            ods-results="results"
+            ods-results-context="ctx"
+            ods-results-max="1"
+            ods-aggregation="analysis, mincity, maxcity, count"
+            ods-aggregation-context="ctx"
+            ods-aggregation-count-function="COUNT"
+            ods-aggregation-analysis-function="AVG"
+            ods-aggregation-mincity-function="MIN"
+            ods-aggregation-maxcity-function="MAX"
+            ods-aggregation-count-expression="value"
+            ods-aggregation-analysis-expression="value"
+            ods-aggregation-mincity-expression="value"
+            ods-aggregation-maxcity-expression="value"
+          >
+            <div
+              ng-show="count < 100"
+              ng-repeat="result in results"
+              class="top-margin-large"
+            >
+              <div class="inner-container-shift">
+                <h2>
+                  {{ result.fields.measurement_fr }}
+                  <span class="alt-highlight"
+                    >({{ result.fields.indicator_fr }})</span
+                  >
+                </h2>
+              </div>
+              <span
+                ods-analysis="cities"
+                ods-analysis-context="ctx"
+                ods-analysis-x="city"
+                ods-analysis-sort="val"
+                ods-analysis-serie-val="AVG(value)"
+              >
+                <div
+                  ng-if="true"
+                  ng-init="from = 0;
+                                                  nbticks = 30;
+                                                  delay = 100;
+                                                  tick = 0;"
+                >
+                  <ods-timer
+                    stop-condition="tick >= nbticks"
+                    delay="delay"
+                    auto-start="true"
+                    exec="tick = tick + 1;"
+                  >
+                  </ods-timer>
+                  <div class="facts">
+                    <div class="col-sm-6 col-md-4 fact">
+                      <h4>Le plus élevé</h4>
+                      <sup>{{ result.fields.notefr }}</sup>
+                      <sup>{{ maxcity }}</sup>
+                      <div class="typography">
+                        <h3 class="outline-text">
+                          {{ ((maxcity || 0) / nbticks) * tick | number:0 }}
+                        </h3>
+                        <ul ng-if="(maxcity !== mincity)">
+                          <li ng-repeat="city in cities.results | limitTo:5 ">
+                            {{ city.val == maxcity ? city.x : null }}
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="fact">
+                      <h4>Moyenne</h4>
+                      <sup>{{ result.fields.notefr }}</sup>
+                      <sup>{{analysis}}</sup>
+                      <div class="typography">
+                        <h3 class="outline-text">
+                          {{ ((analysis || 0) / nbticks) * tick | number:0}}
+                        </h3>
+                        <ul ng-if="(maxcity !== mincity)">
+                          <li ng-repeat="city in cities.results | limitTo:5 ">
+                            {{ city.val == analysis ? city.x : null }}
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 fact">
+                      <h4>Le moins élevé</h4>
+                      <sup>{{ result.fields.notefr }}</sup>
+                      <sup>{{ mincity }}</sup>
+                      <div class="typography">
+                        <h3 class="outline-text">
+                          {{ ((mincity || 0) / nbticks) * tick | number:0 }}
+                        </h3>
+                        <ul>
+                          <li
+                            ng-repeat="city in cities.results | orderBy:'val' | limitTo:5 "
+                          >
+                            {{ city.val == mincity ? city.x : null }}
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </span>
+            </div>
+            <ods-chart class="top-margin" align-month="true">
+              <ods-chart-query
+                context="ctx"
+                field-x="city"
+                category-colors="{'Greater Victoria':'#550d35','Victoria':'#5125e8','Brampton':'#662549','Burnaby':'#773d5d','Calgary':'#885672','Charlottetown':'#996e86','City of Vancouver':'#5125e8','Colwood':'#623bea','Coquitlam':'#7451ed','Delta':'#8566ef','Edmonton':'#5125e8','Esquimalt':'#f2695d','Fredericton':'#f3786d','Gatineau':'#f5877d','Halifax':'#f6968e','Hamilton':'#f2695d','Kelowna':'#550d35','Kitchener-Waterloo':'#5125e8','Langford':'#550d35','Langley':'#f2695d','Laval':'#c9d5e9','Lethbridge':'#4d0c30','London':'#440a2a','Maple Ridge':'#3b0925','Metro Vancouver':'#330820','Mississauga':'#2b071b','Moncton':'#da5f54','Montreal':'#c2544a','New Westminster':'#a94a41','North Vancouver':'#913f38','Oak Bay':'#79352f','Oshawa':'#4921d1','Ottawa':'#411eba','Pitt Meadows':'#391aa2','Port Coquitlam':'#31168b','Port Moody':'#291374','Quebec City':'#200f5d','Regina':'#180b46','Richmond':'#5125e8','Saanich':'#550d35','Saskatoon':'#550d35','St. John\'s':'#f2695d','Sudbury':'#550d35','Surrey':'#c9d5e9','Toronto':'#f2695d','West Vancouver':'#550d35','White Rock':'#5125e8','Winnipeg':'#550d35','Ottawa-Gatineau':'#f2695d','Yellowknife':'#c9d5e9'}"
+              >
+                <ods-chart-serie
+                  expression-y="value"
+                  chart-type="treemap"
+                  function-y="AVG"
+                  color="range-custom"
+                  scientific-display="true"
+                >
+                </ods-chart-serie>
+              </ods-chart-query>
+            </ods-chart>
+            <ods-map
+              class="top-margin"
+              basemap="jawg.light"
+              location="4,53.5925,-93.2959"
+            >
+              <ods-map-layer-group>
+                <ods-map-layer
+                  context="ctx"
+                  color="#550d35"
+                  picto="circle"
+                  show-marker="false"
+                  display="clusters"
+                  function="AVG"
+                  expression="value"
+                  shape-opacity="0.5"
+                  point-opacity="1"
+                  border-color="#FFFFFF"
+                  border-opacity="1"
+                  border-size="0"
+                  border-pattern="solid"
+                  size-min="2"
+                  size-max="6"
+                  size-function="linear"
+                ></ods-map-layer>
+              </ods-map-layer-group>
+            </ods-map>
+          </div>
+          <a
+            target="_blank"
+            href="/explore/dataset/{{ctx.dataset.datasetid}}/table/?disjunctive.measurement_en&disjunctive.city_cma&disjunctive.city{{ctx.getQueryStringURL()}}"
+            class="outline-button thar-three hvr-push top-margin"
+          >
+            Visualiser les données brutes
+          </a>
+        </ods-dataset-context>
+      </div>
+    </div>
+  </section>
+</div>

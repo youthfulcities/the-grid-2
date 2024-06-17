@@ -1,0 +1,833 @@
+<div>
+  <!-- <section class="header">
+        <div class="container">
+            <h1>
+                Institut Tamarack — <span class="highlight">Communautés bâtissant l’avenir des jeunes</span>
+            </h1>
+            <div class="clip hero-img image-card-tamarack"></div>
+        </div>
+    </section> -->
+
+  <!-- Modify this array to change the content of the cards -->
+  <section
+    class="container"
+    ng-init="
+                                        tamarackTopicCards = [
+                                        {
+                                        'title': 'Emploi et mentorat',
+                                        'description': 'Emploi des jeunes',
+                                        'className': 'image-card-youth-employment',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&refine.topic_en=Youth%20Employment',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['young people', 'adolescents', 'young adults', 'youth employment centres', 'paid', 'internships', 'money', 'income', 'undergrad', 'post-secondary', 'high schools', 'placements', 'certification', 'training', 'workshops', 'mentorship', 'profession', 'peer', 'unemployment']
+                                        },
+                                        {
+                                        'title': 'Accessibilité de l’éducation',
+                                        'description': 'Études + Formation',
+                                        'className': 'image-card-education-and-training',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&refine.topic_en=Education+%2B+Training',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['school', 'trades', 'mentorship', 'apprenticeship', 'alternative learning', 'graduation rate', 'high school', 'food program', 'indigenous', 'support', 'heritage', 'traditional', 'safe', 'French', 'scholarships', 'post-secondary', 'universities', 'POC', 'college', 'cost', 'residence', 'meal plan', 'degrees', 'diplomas', 'tuition', 'non-school learning', 'First Nations', 'curriculum', 'hands on', 'workshops', 'international students', 'hours', 'application fee', 'class size', 'workforce']
+                                        },
+                                        {  
+                                        'title': 'Santé globale et bien-être',
+                                        'description': 'Services de santé / Coût de la vie / Sécurité publique',
+                                        'className': 'image-card-public-health-services',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.indicator_en&disjunctive.measurement_en&refine.indicator_en=Cost+of+menstrual+products&refine.indicator_en=Sexual+health+scale&refine.indicator_en=Health+clinics&refine.indicator_en=Reproductive+health+scale&refine.indicator_en=Post+secondary+mental+health+scale&refine.indicator_en=Harm+reduction+scale&refine.indicator_en=Food+bank+scale&refine.indicator_en=Funding+of+community+and+social+programming&refine.indicator_en=high+school+mental+health+scale',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['menstrual products', 'food bank', 'harm reduction scale', 'addiction', 'substance abuse', 'rehabilitation', 'hospital', 'medical', 'sickness', 'mental health scale', 'reproductive health scale', 'sexual health scale', 'crisis hotlines', 'home kits', 'doulas', 'condoms', 'birth control', 'free', 'dental', 'gynocologist', 'safe abortion', 'MHFA', 'awareness', 'suicide prevention', 'counselling', 'cirriculum', 'victim', 'abuse', 'hotline', 'STI', 'testing', 'queer', 'anonymous', 'mifegymiso', 'wait times']
+                                        },
+                                        {
+                                        'title': 'Identité et liens sociaux',
+                                        'description': 'Installations publiques / Espaces verts publics / Sports + Récréation
+                                        Engagement et leadership des jeunes = Engagement civique
+                                        ',
+                                        'className': 'image-card-public-built-space',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.indicator_en&disjunctive.measurement_en&refine.indicator_en=Library+scale&refine.indicator_en=Traditional+Knowledge&refine.indicator_en=Safe+spaces,+connections,+and+learning&refine.indicator_en=Community+centre+accessibility+scale&refine.indicator_en=Sports+facilities%2Ffields&refine.indicator_en=Community+recreation+centres&refine.indicator_en=Recreational+space',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['library scale', 'traditional knowledge', 'safe spaces', 'community centres', 'gardens', 'tourism', 'recreation', 'open', 'dog parks', 'languages', 'remote programming', 'outdoor gyms', 'playgrounds', 'skate parks']
+                                        },
+                                        {
+                                        'title': 'Engagement et leadership des jeunes',
+                                        'description': 'Engagement civique',
+                                        'className': 'image-card-civic-engagement',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.indicator_en&disjunctive.measurement_en&refine.topic_en=Civic+Engagement',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['city', 'council', 'indigenous', 'advisory boards', 'youth fund', 'public', 'deputations', 'ombudsman', 'public advocate', 'leadership']
+                                        },
+                                        {
+                                        'title': 'Orientation par rapport aux services et accès aux mesures de soutien ',
+                                        'description': 'Coût de la vie / Transport public / Services financiers / Accès numérique',
+                                        'className': 'image-card-digital-access',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.indicator_en&disjunctive.measurement_en&refine.indicator_en=Housing+insecurity+scale&refine.indicator_en=Rental+housing&refine.indicator_en=Transit+accessibility&refine.indicator_en=Financial+literacy+resources&refine.indicator_en=Broadband+internet+scale&refine.indicator_en=Free+wifi&refine.indicator_en=Public+Transit',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['public transportation', 'financial literacy programs', 'rental housing', 'housing insecurity scale', 'phone', 'device', 'internet', 'accessibility', 'broadband', 'free wifi', 'speed', 'high speed', 'download', 'upload']
+                                        }
+                                        ];
+
+                                        topicCards = [{
+                                        'title': 'Engagement civique',
+                                        'description': 'Possibilités pour les gens de participer à la vie d’une communauté pour améliorer certaines choses pour les autres ou façonner l’avenir.',
+                                        'className': 'image-card-civic-engagement',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.topic_en=Civic+Engagement',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['city', 'council', 'indigenous', 'advisory boards', 'youth fund', 'public', 'deputations', 'ombudsman', 'public advocate', 'leadership']
+                                        },
+                                        {
+                                        'title': 'Coût de la vie',
+                                        'description': 'Logements abordables, sûrs et en nombre suffisant, sécurité alimentaire, charges, etc.',
+                                        'className': 'image-card-cost-of-living',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.topic_en=Cost+Of+Living',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['Holistic Health and Wellbeing', 'money', 'food bank', 'menstrual products', 'housing insecurity scale', 'public transit', 'rental housing', 'free', 'pass', 'tickets', 'campus', 'cost per', 'pregnancy test', 'homeless', 'student rate', 'houseless', 'youth', 'low income', 'vacancy rate', 'social assistance', 'supports', 'rental subsidy', 'rent subsidies']
+                                        },
+                                        {
+                                        'title': 'Accès numérique',
+                                        'description': 'Fiabilité des infrastructures numériques (p. ex. Wi-Fi public gratuit), des plateformes (p. ex. applications de données ouvertes gratuites), etc.',
+                                        'className': 'image-card-digital-access',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.topic_en=Digital+Access',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['phone', 'device', 'internet', 'accessibility', 'broadband', 'free wifi', 'speed', 'high speed', 'download', 'upload']
+                                        },
+                                        {
+                                        'title': 'Études + Formation',
+                                        'description': 'Accès à des institutions postsecondaires et à des possibilités de formation, ainsi qu’à des soutiens éducatifs abordables (p. ex. tutorat).',
+                                        'className': 'image-card-education-and-training',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.topic_en=Education+%2B+Training',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['Accessible Education', 'school', 'trades', 'mentorship', 'apprenticeship', 'alternative learning', 'graduation rate', 'high school', 'food program', 'indigenous', 'support', 'heritage', 'traditional', 'safe', 'French', 'scholarships', 'post-secondary', 'universities', 'POC', 'college', 'cost', 'residence', 'meal plan', 'degrees', 'diplomas', 'tuition', 'non-school learning', 'First Nations', 'curriculum', 'hands on', 'workshops', 'international students', 'hours', 'application fee', 'class size', 'workforce']
+                                        },
+                                        {
+                                        'title': 'Services financiers',
+                                        'description': 'Accès sans difficulté aux banques, aux distributeurs de billets, aux caisses populaires, aux prêts, etc.',
+                                        'className': 'image-card-financial-services',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.topic_en=Financial+Services',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['money', 'literacy', 'resources', 'community', 'financial']
+                                        },
+                                        {  
+                                        'title': 'Services de santé',
+                                        'description': 'Accès aux médecins, aux cliniques, aux services et aux informations en matière de santé physique et mentale, aux ressources en matière de santé sexuelle et reproductive, etc.',
+                                        'className':'image-card-public-health-services',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.topic_en=Health+Services',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['Holistic Health and Wellbeing', 'hospital', 'medical', 'sickness', 'mental health scale', 'reproductive health scale', 'sexual health scale', 'crisis hotlines', 'home kits', 'doulas', 'condoms', 'birth control', 'free', 'dental', 'gynocologist', 'safe abortion', 'MHFA', 'awareness', 'suicide prevention', 'counselling', 'cirriculum', 'victim', 'abuse', 'hotline', 'STI', 'testing', 'queer', 'anonymous', 'mifegymiso', 'wait times']
+                                        },
+                                        {
+                                        'title': 'Installations publiques',
+                                        'description': 'Accès aux bibliothèques, aux parcs de planches à roulettes, aux musées, etc.',
+                                        'className': 'image-card-public-built-space',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.topic_en=Public+Built+Space',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['tourism', 'recreation', 'open', 'dog parks', 'languages', 'remote programming', 'outdoor gyms', 'playgrounds', 'skate parks']
+                                        },
+                                        {
+                                        'title': 'Espaces verts publics',
+                                        'description': 'Accès aux parcs, aux jardins communautaires, aux cimetières, etc.',
+                                        'className': 'image-card-public-green-space',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.topic_en=Public+Green+Space',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['trees', 'plants', 'free', 'sports', 'fields']
+                                        },
+                                        {
+                                        'title': 'Sécurité publique',
+                                        'description': 'Environnement à l’abri de la violence, du crime, etc. et agréable avec des équipes d’intervention d’urgence et un système juridique et judiciaire accessible.',
+                                        'className': 'image-card-public-safety',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.topic_en=Public+Safety',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['Holistic Health and Wellbeing','courts', 'harm reduction scale', 'addiction', 'substance abuse', 'rehabilitation', 'social', 'justice', 'youth', 'crisis centres', 'recovery', 'therapy', 'violence', 'independent living', 'supervised injection sites', 'naloxone', 'Narcan']
+                                        },
+                                        {
+                                        'title': 'Transport public',
+                                        'description': 'Bus, trains, pistes cyclables et autres moyens de transport parallèles.',
+                                        'className': 'image-card-public-transit',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.topic_en=Public+Transportation',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['ride share', 'travel', 'roads', 'accessibility', 'bus service', 'frequency', 'community centres', 'health clinics', 'high schools', 'designated seating', 'parks', 'recreation', 'hours']
+                                        },
+                                        {
+                                        'title': 'Sports + Récréation',
+                                        'description': 'Accès à un grand nombre d’installations et de programmes destinés à une activité physique.',
+                                        'className': 'image-card-sports-and-recreation',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.topic_en=Sports+%2B+Recreation',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['fun', 'hobby', 'free time', 'subsidies', 'community centres', 'wheelchair', 'accessibility', 'youth', 'free']
+                                        },
+                                        {
+                                        'title': 'Emploi des jeunes',
+                                        'description': 'Accès à des perspectives d’emploi pour les jeunes de 15 à 29 ans qui ont du sens, sont couronnées de succès, sont pertinentes par rapport aux études, offrent une rémunération équitable et sont sécuritaires.',
+                                        'className': 'image-card-youth-employment',
+                                        'datasets': [{ 
+                                        'title': 'Index',
+                                        'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.topic_en=Youth+Employment',
+                                        'icon': 'fa fa-database'
+                                        }],
+                                        'keywords':['Employment and Mentorship','young people', 'adolescents', 'young adults', 'youth employment centres', 'paid', 'internships', 'money', 'income', 'undergrad', 'post-secondary', 'high schools', 'placements', 'certification', 'training', 'workshops', 'mentorship', 'profession', 'peer', 'unemployment']
+                                        }];
+
+                                        cityCards = [
+    {
+      'title': 'Alberni-Clayoquot',
+      'province': 'BC',
+      'description': '',
+      'className': 'image-card-alberni-clayoquot',
+      'datasets': [ {
+          'title': 'CBYF Index (Communities Building Youth Futures)',
+          'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&disjunctive.city&refine.city=Alberni-Clayoquot',
+          'icon': 'fa fa-database'
+        }
+      ],
+      'keywords': ['British Columbia', 'BC', 'B.C.', 'West Coast']
+    },
+    {
+      'title': 'Kahnawà:ke',
+      'province': 'QC',
+      'description': '',
+      'className': 'image-card-kahnawake',
+      'datasets': [
+        {
+          'title': 'CBYF Index (Communities Building Youth Futures)',
+          'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&disjunctive.city&refine.city=Kahnawà:ke',
+          'icon': 'fa fa-database'
+        }
+      ],
+      'keywords': ['Quebec', 'Québec', 'Kahnawake']
+    },
+    {
+      'title': 'Chippewas of the Thames',
+      'province': 'ON',
+      'description': '',
+      'className': 'image-card-chippewas',
+      'datasets': [
+        {
+          'title': 'CBYF Index (Communities Building Youth Futures)',
+          'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&disjunctive.city&refine.city=Chippewas+of+the+Thames',
+          'icon': 'fa fa-database'
+        }
+      ],
+      'keywords': ['Ontario', 'ON']
+    },
+    {
+      'title': 'Oxford County',
+      'province': 'ON',
+      'description': '',
+      'className': 'image-card-oxford-county',
+      'datasets': [
+        {
+          'title': 'CBYF Index (Communities Building Youth Futures)',
+          'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&disjunctive.city&refine.city=Oxford+County',
+          'icon': 'fa fa-database'
+        }
+      ],
+      'keywords': ['Ontario', 'Southern Ontario']
+    },
+    {
+      'title': 'Prince Edward County',
+      'province': 'ON',
+      'description': '',
+      'className': 'image-card-prince-edward-county',
+      'datasets': [
+        {
+          'title': 'CBYF Index (Communities Building Youth Futures)',
+          'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&disjunctive.city&refine.city=Prince+Edward+County',
+          'icon': 'fa fa-database'
+        }
+      ],
+      'keywords': ['Ontario']
+    },
+    {
+      'title': 'Saint-Léonard',
+      'province': 'QC',
+      'description': '',
+      'className': 'image-card-saint-leonard',
+      'datasets': [
+        {
+          'title': 'CBYF Index (Communities Building Youth Futures)',
+          'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&disjunctive.city&refine.city=Saint-Léonard',
+          'icon': 'fa fa-database'
+        }
+      ],
+      'keywords': ['Quebec', 'Québec']
+    },
+    {
+      'title': 'Chatham-Kent',
+      'description': '',
+      'className': 'image-card-chatham-kent',
+      'datasets': [
+        {
+          'title': 'Index',
+          'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.city=Chatham-Kent',
+          'icon': 'fa fa-database'
+        }
+      ],
+      'keywords': [
+        'Ontario',
+        'Ont.',
+        'municipality',
+        'southwestern',
+        'Wallaceburg',
+        'Tilbury',
+        'Blenheim',
+        'Ridgetown',
+        'Wheatley',
+        'Dresden',
+        'rural',
+        'Moravian',
+        'ON'
+      ]
+    },
+    {
+      'title': 'Chilliwack',
+      'description': '',
+      'className': 'image-card-chilliwack',
+      'datasets': [
+        {
+          'title': 'Index',
+          'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.city=Chilliwack',
+          'icon': 'fa fa-database'
+        }
+      ],
+      'keywords': [
+        'British Columbia',
+        'BC',
+        'B.C.',
+        'West Coast',
+        'Greendale',
+        'Eastern Hillsides',
+        'Ryder Lake',
+        'Fairfield Island',
+        'Vedder Crossing',
+        'Yarrow Ecovillage',
+        'suburban',
+        'Harrison Hot Springs',
+        'Kent',
+        'Fraser Valley',
+        'Kwawkwawapilt',
+        'Skwah',
+        'Soowahlie',
+        'Tzeachten',
+        'Yakweakwioose',
+        'Seabird Island',
+        'Scowlitz',
+        'Tseatah',
+        'Aitchelitch',
+        'Cheam',
+        'Schelowat',
+        'Popkum',
+        'Skwahla',
+        'Skowkale',
+        'Squiaala'
+      ]
+    },
+    {
+      'title': 'Corner Brook',
+      'description': '',
+      'className': 'image-card-corner-brook',
+      'datasets': [
+        {
+          'title': 'CBYF Index (Communities Building Youth Futures)',
+          'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.city=Corner+Brook',
+          'icon': 'fa fa-database'
+        }
+      ],
+      'keywords': [
+        'Newfoundland',
+        'Labrador',
+        'Atlantic',
+        'East Coast',
+        'N.L.',
+        'NL',
+        'Gillams',
+        'Steady Brook',
+        'Pasadena',
+        'Massey Drive',
+        'Humber Arm South',
+        'McIvers',
+        'Meadows',
+        'Hughes Brook',
+        'Irishtown-Summerside',
+        'Mount Moriah'
+      ]
+    },
+    {
+      'title': 'Digby',
+      'description': '',
+      'className': 'image-card-digby',
+      'datasets': [
+        {
+          'title': 'Index',
+          'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.city=Digby',
+          'icon': 'fa fa-database'
+        }
+      ],
+      'keywords': ['Nova Scotia', 'Atlantic', 'East Coast', 'N.S.', 'NS']
+    },
+    {
+      'title': 'Grande Prairie',
+      'description': '',
+      'className': 'image-card-grande-prairie',
+      'datasets': [
+        {
+          'title': 'Index',
+          'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.city=Grande+Prairie',
+          'icon': 'fa fa-database'
+        }
+      ],
+      'keywords': [
+        'Alberta',
+        'Peace River Country',
+        'Prairies',
+        'Alta.',
+        'Alb.',
+        'AB'
+      ]
+    },
+    {
+      'title': 'Prince Albert',
+      'description': '',
+      'className': 'image-card-prince-albert',
+      'datasets': [
+        {
+          'title': 'Index',
+          'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.city=Prince+Albert',
+          'icon': 'fa fa-database'
+        }
+      ],
+      'keywords': [
+        'Saskatchewan',
+        'Sask.',
+        'SK',
+        'Prairies',
+        'North Saskatchewan River',
+        'Garden River',
+        'Albertville',
+        'Meath Park',
+        'Buckland',
+        'Wahpaton'
+      ]
+    },
+    {
+      'title': 'Portage la Prairie',
+      'description': '',
+      'className': 'image-card-portage-la-prairie',
+      'datasets': [
+        {
+          'title': 'Index',
+          'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.city=Portage+la+Prairie',
+          'icon': 'fa fa-database'
+        }
+      ],
+      'keywords': [
+        'Manitoba',
+        'Man.',
+        'MB',
+        'Prairies',
+        'Central Plains Region'
+      ]
+    },
+    {
+      'title': 'Sudbury',
+      'description': '',
+      'className': 'image-card-sudbury',
+      'datasets': [
+        {
+          'title': 'Index',
+          'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.city=Sudbury',
+          'icon': 'fa fa-database'
+        }
+      ],
+      'keywords': [
+        'Ontario',
+        'Ont.',
+        'ON',
+        'Greater Sudbury',
+        'Ramsey Lake',
+        'northern'
+      ]
+    },
+    {
+      'title': 'Whitehorse',
+      'description': '',
+      'className': 'image-card-whitehorse',
+      'datasets': [
+        {
+          'title': 'Index',
+          'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.city=Whitehorse',
+          'icon': 'fa fa-database'
+        }
+      ],
+      'keywords': [
+        'Yukon Territory',
+        'Y.T.',
+        'YT',
+        'territories',
+        'Miles Canyon',
+        'Lake Laberge',
+        'Mt. Lorne',
+        'Ibex Valley',
+        'Marsh Lake',
+        'Macpherson-Grizzly Valley'
+      ]
+    },
+    {
+      'title': 'Yellowknife',
+      'description': '',
+      'className': 'image-card-yellowknife',
+      'datasets': [
+        {
+          'title': 'Index',
+          'link': '/explore/dataset/tamarack-index/table/?disjunctive.measurement_en&disjunctive.indicator_en&refine.city=Yellowknife',
+          'icon': 'fa fa-database'
+        }
+      ],
+      'keywords': [
+        'Northwest Territories',
+        'nwt',
+        'N.W.T.',
+        'NT',
+        'territory',
+        'Northwest Territories'
+      ]
+    }
+  ];"
+  >
+    <div class="padding">
+      <h1 class="alt-heading">
+        Institut Tamarack —
+        <span class="alt-highlight"
+          >Communautés bâtissant l’avenir des jeunes</span
+        >
+      </h1>
+    </div>
+    <div class="top-margin">
+      <nav>
+        <a href="/">Accueil</a> / Institut Tamarack — Communautés bâtissant
+        l’avenir des jeunes
+      </nav>
+    </div>
+
+    <article class="inner-container padding">
+      <div class="outline-box">
+        <i class="fa fa-question large-icon" aria-hidden="true"></i>
+        <p>
+          <strong
+            >Communautés bâtissant l’avenir des jeunes est un mouvement à impact
+            collectif visant à améliorer le futur de 5 000 jeunes.</strong
+          >
+          <br /><br />
+          Par le biais du programme Droit au but, l’Institut Tamarack et le
+          Gouvernement du Canada se sont engagés dans un projet pancanadien de
+          cinq ans visant à développer l’impact collectif et des solutions
+          systémiques pour les jeunes à mesure qu’ils élaborent et mettent en
+          œuvre des projets pour leur avenir.
+          <br /><br />
+          Communautés bâtissant l’avenir des jeunes s’engage à améliorer les
+          conséquences pour les jeunes qui affrontent des obstacles dans le
+          cadre de leur enseignement et de la transition vers des emplois. Nous
+          comprenons que ce travail demande des solutions collaboratives et
+          rendues possibles par les communautés avec le leadership des jeunes et
+          l’implication des jeunes.
+          <br />
+          <a href="https://www.tamarackcommunity.ca/cbyf-guide-on-a-page"
+            >En savoir plus sur Communautés bâtissant l’avenir des jeunes et
+            l’Institut Tamarack ⟶</a
+          >
+          <br /><br />
+        </p>
+        <p>
+          <strong>Emploi et mentorat</strong> = Emploi des jeunes
+          <br />
+          <strong>Accessibilité de l’éducation</strong> = Études + Formation
+          <br />
+          <strong>Santé globale et bien-être</strong> = Services de santé / Coût
+          de la vie / Sécurité publique
+          <br />
+          <strong>Identité et liens sociaux</strong> = Installations publiques /
+          Espaces verts publics / Sports + Récréation
+          <br />
+          <strong>Engagement et leadership des jeunes</strong> = Engagement
+          civique
+          <br />
+          <strong
+            >Orientation par rapport aux services et accès aux mesures de
+            soutien</strong
+          >
+          = Coût de la vie / Transport public / Services financiers / Accès
+          numérique
+        </p>
+      </div>
+      <a
+        href="/pages/methodology-tamarack"
+        class="outline-button thar-three hvr-push"
+      >
+        Méthodologie <i class="fa fa-external-link" aria-hidden="true"></i>
+      </a>
+    </article>
+
+    <div
+      class="padding"
+      ng-init="cbyf = true; topic = false; city = false; insight = false;"
+    >
+      <h2>
+        <span ng-show="cbyf === true">
+          Ensembles de données par
+          <span class="alt-highlight">priorités CBAJ</span>
+        </span>
+        <span ng-show="topic === true">
+          Ensembles de données par
+          <span class="alt-highlight">thèmes Youthful Cities</span>
+        </span>
+        <span ng-show="city === true">
+          Ensembles de données par <span class="alt-highlight">communauté</span>
+        </span>
+      </h2>
+    </div>
+
+    <div class="inner-container">
+      <span ng-show="cbyf == false">
+        <button
+          class="outline-button thar-three hvr-push"
+          ng-click="cbyf = true; topic = false; city = false; insight = false;"
+        >
+          Priorités CBAJ
+        </button>
+      </span>
+      <span ng-show="topic == false">
+        <button
+          class="outline-button thar-three hvr-push"
+          ng-click="cbyf = false; topic = true; city = false; insight = false;"
+        >
+          Thèmes Youthful Cities
+        </button>
+      </span>
+      <span ng-show="city == false">
+        <button
+          class="outline-button thar-three hvr-push"
+          ng-click="cbyf = false; topic = false; city = true; insight = false;"
+        >
+          Communautés
+        </button>
+      </span>
+    </div>
+
+    <!-- DYNAMICALLY GENERATED CARDS FOR TAMARACK PRIORITIES-->
+    <div ng-if="cbyf == true">
+      <!-- SEARCH -->
+      <div class="inner-container padding">
+        <h4>Rechercher</h4>
+        <div class="search-module">
+          <i class="fa fa-search search-module-icon" aria-hidden="true"></i>
+          <input
+            ng-model="searchTextTamarack"
+            placeholder="Rechercher"
+            ng-model-options="{ updateOn: 'keyup', debounce: { 'default': 300, 'blur': 0 }}"
+            class="search-module-input"
+            type="text"
+            name="searchInput"
+          />
+        </div>
+      </div>
+      <div class="inner-container">
+        <div class="cards-container">
+          <div
+            ng-repeat="card in tamarackTopicCards | filter:searchTextTamarack | orderBy:'title'"
+            class="card soft-shadow"
+            ng-init="isFlipped = false"
+            ng-click="isFlipped = !isFlipped"
+            ng-class="{'is-flipped': isFlipped}"
+            tab-index="0"
+            aria-roledescription="flipping card"
+          >
+            <div class="card-front" tab-index="0">
+              <div class="card-img clip {{card.className}}"></div>
+              <div class="card-content">
+                <h4 class="card-text">{{ card.title }}</h4>
+                <p class="card-small-text">{{ card.description }}</p>
+              </div>
+            </div>
+            <div class="card-back" tab-index="0">
+              <div class="card-content">
+                <h4 class="card-text">{{ card.title }}</h4>
+                <h5>Jeux de données</h5>
+                <ul
+                  ng-repeat="dataset in card.datasets"
+                  class="card-dataset hvr-forward"
+                >
+                  <li>
+                    <a href="{{ dataset.link }}">
+                      <i class="{{ dataset.icon }}" aria-hidden="true"> </i>
+                      <p class="card-small-text">{{ dataset.title }}</p>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DYNAMICALLY GENERATED TOPIC CARDS -->
+    <div ng-if="topic == true">
+      <div class="inner-container padding">
+        <h4>Rechercher</h4>
+        <div class="search-module">
+          <i class="fa fa-search search-module-icon" aria-hidden="true"></i>
+          <input
+            ng-model="searchText"
+            placeholder="Rechercher"
+            ng-model-options="{ updateOn: 'keyup', debounce: { 'default': 300, 'blur': 0 }}"
+            class="search-module-input"
+            type="text"
+            name="searchInput"
+          />
+        </div>
+      </div>
+
+      <div class="inner-container">
+        <div class="cards-container">
+          <div
+            ng-repeat="card in topicCards | filter:searchText | orderBy:'title'"
+            class="card soft-shadow"
+            ng-init="isFlipped = false"
+            ng-click="isFlipped = !isFlipped"
+            ng-class="{'is-flipped': isFlipped}"
+            tab-index="0"
+            aria-roledescription="flipping card"
+          >
+            <div class="card-front" tab-index="0">
+              <div class="card-img clip {{card.className}}"></div>
+              <div class="card-content">
+                <h4 class="card-text">{{ card.title }}</h4>
+                <p class="card-small-text">{{ card.description }}</p>
+              </div>
+            </div>
+
+            <div class="card-back" tab-index="0">
+              <div class="card-content">
+                <h4 class="card-text">{{ card.title }}</h4>
+                <h5>Jeux de données</h5>
+                <ul
+                  ng-repeat="dataset in card.datasets"
+                  class="card-dataset hvr-forward"
+                >
+                  <li>
+                    <a href="{{ dataset.link }}">
+                      <i class="{{ dataset.icon }}" aria-hidden="true"> </i>
+                      <p class="card-small-text">{{ dataset.title }}</p>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- DYNAMICALLY GENERATED CITY CARDS -->
+    <div ng-if="city == true">
+      <div class="inner-container padding">
+        <h4>Rechercher</h4>
+        <div class="search-module">
+          <i class="fa fa-search search-module-icon" aria-hidden="true"></i>
+          <input
+            ng-model="searchTextCity"
+            placeholder="Rechercher"
+            ng-model-options="{ updateOn: 'keyup', debounce: { 'default': 300, 'blur': 0 }}"
+            class="search-module-input"
+            type="text"
+            name="searchInput"
+          />
+        </div>
+      </div>
+      <div class="inner-container">
+        <div class="cards-container">
+          <div
+            ng-repeat="card in cityCards | filter:searchTextCity | orderBy:'title'"
+            class="card soft-shadow"
+            ng-init="isFlipped = false"
+            ng-click="isFlipped = !isFlipped"
+            ng-class="{'is-flipped': isFlipped}"
+            tab-index="0"
+            aria-roledescription="flipping card"
+          >
+            <div class="card-front" tab-index="0">
+              <div class="card-img clip {{card.className}}"></div>
+              <div class="card-content">
+                <h4 class="card-text">{{ card.title }}</h4>
+              </div>
+            </div>
+            <div class="card-back" tab-index="0">
+              <div class="card-content">
+                <h4 class="card-text">{{ card.title }}</h4>
+                <h5>Jeux de données</h5>
+                <ul
+                  ng-repeat="dataset in card.datasets"
+                  class="card-dataset hvr-forward"
+                >
+                  <li>
+                    <a href="{{ dataset.link }}">
+                      <i class="{{ dataset.icon }}" aria-hidden="true"> </i>
+                      <p class="card-small-text">{{ dataset.title }}</p>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

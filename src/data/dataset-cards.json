@@ -1,0 +1,133 @@
+{
+  "datasetCards": [
+    {
+      "title": "CBYF Index",
+      "titlefr": "Répertoire, CBAJ",
+      "organizationName": "Tamarack - CBYF",
+      "date": "2021",
+      "type": "index",
+      "className": "image-card-cbyf-index",
+      "desc": "Communities Building Youth Futures (CBYF) is a collective impact movement aimed at improving the future of 5,000 youth. Youthful Cities partnered with CBYF to create this index.",
+      "descfr": "itations et transcriptions tirées de plus de 500 entretiens de 30 minutes avec des jeunes pour parler de leur ville pendant la pandémie de COVID-19 et de l’avenir.",
+      "organization": "/pages/tamarack",
+      "methodology": "/pages/methodology-tamarack",
+      "file": "tamarack-index.csv",
+      "keywords": ["cost of living"]
+    },
+    {
+      "title": "Urban Work Index 2023",
+      "titlefr": "Indice du travail urbain 2023",
+      "date": "2023",
+      "type": "index",
+      "className": "image-card-uwi",
+      "desc": "Now in its third iteration, the Urban Work Index 2023 ranks 30 cities across Canada to find the best places for youth to work and live.",
+      "descfr": "La troisième version de l’indice du travail urbain 2023 classe 30 villes au Canada afin de déterminer les meilleurs endroits où travailler et vivre pour les jeunes.",
+      "methodology": "/pages/uwi-2023-methodology/",
+      "file": "uwi-2023.csv",
+      "keywords": ["cost of living"]
+    },
+    {
+      "title": "Pivot 2020 Index",
+      "titlefr": "Répertoire, Pivot 2020",
+      "date": "2020",
+      "type": "index",
+      "className": "image-card-pivot-2020-index",
+      "desc": "Over 400 comparable indicators across Canada developed by young people to measure their city’s performance.",
+      "descfr": "Plus de 400 indicateurs comparables au Canada, développés par des jeunes pour mesurer la situation dans leur ville.",
+      "methodology": "/pages/methodology-pivot/#ind",
+      "file": "index-2020-full.csv",
+      "keywords": ["cost of living", "covid-19 pandemic"]
+    },
+    {
+      "title": "Pivot 2020 Survey",
+      "titlefr": "Enquête Pivot 2020",
+      "date": "2020",
+      "type": "survey",
+      "className": "image-card-pivot-2020-survey",
+      "desc": "Behaviours, topics, and beliefs of around 3,000 young people between the ages of 15-29 about cities, and their experiences prior to and during the COVID-19 pandemic.",
+      "descfr": "Comportements, thèmes et impressions de plus de 3 000 jeunes de 15 à 29 ans à propos de leur ville et de leurs expériences avant et pendant la pandémie de COVID-19.",
+      "methodology": "/pages/methodology-pivot/#surv",
+      "file": "pivot-survey.csv",
+      "keywords": []
+    },
+    {
+      "title": "Pivot 2020 Survey Aggregated",
+      "titlefr": "Enquête Pivot 2020 agrégée",
+      "type": "survey",
+      "date": "2020",
+      "className": "image-card-pivot-2020-survey-aggregated",
+      "desc": "Aggregated data from the Pivot 2020 Survey dataset, breaking responses down by percentage.",
+      "descfr": "Données agrégées de l’ensemble de données de l’enquête Pivot 2020, avec des réponses présentées sous forme de pourcentage.",
+      "methodology": "/pages/methodology-pivot/#surv",
+      "file": "pivot-2020-survey-aggregated.csv",
+      "keywords": ["covid-19 pandemic"]
+    },
+    {
+      "title": "Pivot 2020 Interview",
+      "titlefr": "Entrevue Pivot 2020",
+      "type": "interview",
+      "date": "2020",
+      "className": "image-card-pivot-2020-interview",
+      "desc": "Quotes and transcripts from more than 500, 30 min interviews with young people about cities during the COVID-19 pandemic and looking into the future.",
+      "descfr": "Citations et transcriptions tirées de plus de 500 entretiens de 30 minutes avec des jeunes pour parler de leur ville pendant la pandémie de COVID-19 et de l’avenir.",
+      "methodology": "/pages/methodology-pivot/#int",
+      "file": "pivot-2020-interview.csv",
+      "keywords": ["cost of living", "covid-19 pandemic"]
+    },
+    {
+      "title": "Real Affordability Index",
+      "titlefr": "Indice d’accessibilité réelle",
+      "type": "index",
+      "date": "2022",
+      "className": "image-card-real-affordability-index",
+      "desc": "The Real Affordability Index is a joint project between Youthful Cities and RBC Future Launch. It indexes real costs in 27 cities across Canada as of April 2022.",
+      "descfr": "L’indice d’accessibilité réelle est un projet collectif de Youthful Cities et de RBC Objectif avenir. Il indexe les coûts réels dans 27 villes du Canada à partir d’avril 2022.",
+      "file": "real-affordability-index-2022.csv",
+      "keywords": ["cost of living"]
+    },
+    {
+      "title": "Refugee Resettlement Index",
+      "titlefr": "Indice de réinstallation des réfugiés",
+      "type": "index",
+      "date": "2022",
+      "className": "image-card-refugee-resettlement-index",
+      "desc": "A collaboration between Youthful Cities and The Refugee Centre, this dataset measures indicators that are especially relevant to refugees and other newcomers to Canada. This dataset contains cost values and totals of available resources in each city. To see a list of resources with their contact information, see the Refugee Resources dataset.",
+      "descfr": "Fruit d’une collaboration entre Youthful Cities et le Centre de réfugiés, cet ensemble de données mesure les indicateurs qui sont particulièrement pertinents pour les réfugiés et autres nouveaux arrivants au Canada.",
+      "file": "refugee-data.csv",
+      "keywords": []
+    },
+    {
+      "title": "Refugee Resources",
+      "titlefr": "Ressources relatives aux réfugiés",
+      "type": "resources",
+      "date": "2022",
+      "className": "image-card-refugee-resources",
+      "desc": "A collection of resources used to populate the Refugee Resettlement Index. This dataset contains contact information for various programs and organizations that are helpful for newcomers to Canada.",
+      "descfr": "Une collection de ressources utilisées pour alimenter l’Indice de réinstallation des réfugiés. Cet ensemble de données contient les coordonnées de divers programmes et organisations qui sont utiles aux personnes qui viennent d’arriver au Canada.",
+      "file": "refugee-resources.csv",
+      "keywords": []
+    },
+    {
+      "title": "Micro-grant and Youth Engagement Resources",
+      "titlefr": "Ressources sur les micro-subventions et l‘engagement des jeunes",
+      "type": "resources",
+      "date": "2022",
+      "className": "image-card-microgrant",
+      "desc": "This dataset focuses on micro-grants available at the city level. It was put together in collaboration with TakingITGlobal.",
+      "descfr": "",
+      "file": "micro-grant-index.csv",
+      "keywords": []
+    },
+    {
+      "title": "Urban Work Index 2021",
+      "titlefr": "Indice du travail urbain 2023",
+      "type": "index",
+      "date": "2021",
+      "className": "image-card-uwi",
+      "desc": "Data from the Urban Work Index 2021. This dataset was mostly based on data from the Pivot 2020 Index with the addition of a few unique indicators. Data is presented ‘as is’ and will be next updated for the 2023 Urban Work Index.",
+      "descfr": "La troisième version de l’indice du travail urbain 2023 classe 30 villes au Canada afin de déterminer les meilleurs endroits où travailler et vivre pour les jeunes.",
+      "file": "uwi-2021.csv",
+      "keywords": []
+    }
+  ]
+}

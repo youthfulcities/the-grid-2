@@ -1,0 +1,213 @@
+<div
+  ng-init="questions = [
+              {
+              'q':'Qu’est-ce que THE GRID?',
+              'a':'<p>THE GRID est un portail de données ouvertes axé sur les villes canadiennes et les jeunes.</p>'
+              },
+              {
+              'q':'Que sont des données ouvertes?', 
+              'a':'<p><a href=&#34;https://open.canada.ca/en/open-data-principles&#34;>L’abc des données ouvertes</a> 
+              explique que « les données ouvertes sont définies comme des données structurées lisibles par machine, librement partagées, utilisées et exploitées sans restriction. »</p>'
+              },
+              {
+              'q':'Qu’est-ce qu’un centre de données ouvertes?', 
+              'a':'<p>
+              Il s’agit d’une plateforme basée sur le Web et disponible gratuitement regroupant des données lisibles par machine, simples d’accès et faciles à être réutilisées. 
+              Rendez-vous sur la page
+              <a href=&#34;https://open.canada.ca/en/open-data-principles&#34;>L’abc des données ouvertes du Gouvernement du Canada</a> 
+              pour en savoir plus.
+              </p>'
+              },
+              {
+              'q':'Qu’est-ce que les données brutes?', 
+              'a':'<p>Les données brutes, également appelées données primaires, sont des données collectées à partir d’une source. Chaque transaction est enregistrée et stockée dans une base de données sans aucune modification.</p>'
+              },
+              {
+              'q':'Qu’est-ce que les données traitées?', 
+              'a':'<p>Les données traitées ont été traitées, segmentées ou classées à partir de leur état brut. En général, les données traitées sont prêtes à être analysées.</p>'
+              },
+              {
+              'q':'Sur quelle plateforme le centre de données ouvertes est-il hébergé?', 
+              'a':'<p>Nous avons opté pour 
+              <a href=&#34;https://www.opendatasoft.com/&#34;>Opendatasoft</a>
+              , une entreprise basée en France qui fournit des services de plateforme de gestion des données. La mission d’Opendatasoft est d’accompagner les organisations en aidant les personnes à accéder aux données et à les comprendre.</p>'
+              },
+              {
+              'q':'À qui appartiennent les données de THE GRID?', 
+              'a':'
+              <p>Les données collectées et analysées par Pivot 2020 appartiennent à l’Université Simon Fraser (SFU). SFU est responsable des données publiées, de la qualité des jeux de données et de toute action relative à des problèmes de qualité des données.</p>
+              <p>Pour tous les autres ensembles de données, les données appartiennent à Youthful Cities (un projet de Decode Inc.).</p>
+              <p>Consultez les conditions d’utilisation pour en savoir plus.</p>
+              '
+              },
+              {
+              'q':'Qui gère les données de THE GRID?', 
+              'a':'<p>Youthful Cities assume la gérance des données collectées et analysées dans le cadre de Pivot 2020 et des projets subséquents.</p>'
+              }];
+
+              usingQuestions = [
+              {'q':'Pouvez-vous filtrer plusieurs villes à la fois?',
+              'a':'<p>Oui, sélectionnez plus d’une ville pour filtrer plusieurs villes.</p>'
+              },
+              {'q':'Pouvez-vous filtrer plusieurs thèmes à la fois?',
+              'a':'<p>Non, vous pouvez seulement sélectionner une option de thème. Toutefois, il est possible de sélectionner plusieurs mesures.</p>'
+              },
+              {'q':'Comment télécharger uniquement une section du jeu de données?',
+              'a':'<p>Choisissez le jeu de données pour la sous-section qui vous intéresse, puis appliquez les filtres souhaités à gauche. Puis, allez dans l’onglet Export. Vous aurez la possibilité de télécharger l’ensemble du jeu de données ou seulement la sous-section qui correspond aux filtres choisis.</p>'
+              },
+              {'q':'Pourquoi les thèmes varient-ils d’un jeu de données à un autre?',
+              'a':'<p>Les jeux de données ont différents thèmes selon la méthode de recherche, le moment de la collecte et son objectif. Une colonne Thème unificatrice a été ajoutée aux ensembles de données, normalisant les sujets spécifiques aux ensembles de données en groupes.</p>'
+              },
+              {'q':'À quoi fait référence « Région métropolitaine de recensement » (RMR, ou CMA en anglais)?',
+              'a':'<p>
+              À une ou plusieurs municipalités environnantes situées autour d’une région urbaine principale. 
+              Pour en savoir plus sur les RMR, rendez-vous sur <a href=&#34;https://www150.statcan.gc.ca/n1/pub/92-195-x/2011001/geo/cma-rmr/def-eng.htm&#34;>Statistique Canada.</a> 
+              </p>'
+              },
+              {'q':'Que faire si je remarque des incohérences dans les informations ou des problèmes liés à l’hygiène des données?',
+              'a':'<p>
+              Les données de THE GRID ont été manuellement collectées à partir de différentes sources. Si une mesure est vide ou indique 0 dans la valeur, cela signifie qu’aucune donnée pertinente n’a été recueillie pendant la phase de collecte des données. Si vous souhaitez contribuer à THE GRID en fournissant des données avec leur source ou si vous remarquez des incohérences dans les informations, veuillez nous le faire savoir en utilisant le formulaire
+              <a href=&#34;/pages/contact&#34;>Nous contacter</a>.
+              </p>'
+              }
+              ];
+
+              researchQuestions = [
+              {
+              'q':'Qu’est-ce qu’un indice?', 
+              'a':'<p>Un indice est une collection d’indicateurs que nous pouvons utiliser pour noter et classer les villes. Les indicateurs sont décomposés en mesures, chaque mesure ayant une valeur quantifiable. Ces valeurs sont comparables et nous permettent de voir comment une ville ou une région se comporte dans un domaine particulier. Par exemple, « l’accessibilité des transports en commun » est un indicateur, et le « nombre de modes de transport en commun différents » est une mesure utilisée pour mesurer cet indicateur. </p>'
+              },
+              {
+              'q':'Quelle est la précision des données de l’indice?', 
+              'a':'<p>Les données de l’indice ont été jugées exactes au moment de leur dernière mise à jour, mais elles sont sujettes à l’erreur humaine. Toutes les ressources qui n’ont pas pu être trouvées dans un délai de recherche raisonnable (environ une heure) ont été jugées inaccessibles et n’ont donc pas été incluses dans l’indice malgré le fait qu’elles puissent exister.</p>
+              <p>Si votre organisation aimerait financer une mise à jour de l’indice en fonction de thèmes nouveaux ou existants, n’hésitez pas à communiquer avec nous.</p>'
+              },
+              {
+              'q':'Qu’est-ce qu’un indicateur?',
+              'a':'<p>Un indicateur est quelque chose qui oriente, mesure ou fournit un aperçu d’un concept spécifique. Un ensemble d’indicateurs regroupés s’appelle un indice. Un bon indicateur doit être mesurable et pertinent. Il doit être facile d’accès et permettre d’en tirer des informations facilement.</p>'
+              },
+              {
+              'q':'Pourquoi avons-nous besoin d’indicateurs?',
+              'a':'<p>Grâce aux chiffres et aux données, les indicateurs nous offrent un langage commun permettant de décrire ou d’expliquer une situation. Les indicateurs mettent en avant les possibilités, les écarts et les défis. Ils permettent d’identifier des problèmes et d’offrir des solutions.</p>
+              <p>Il existe deux types d’indicateurs :</p>
+              <p>Les indicateurs centraux peuvent être collectés à partir de bases de données comme Statistique Canada ou d’une agence gouvernementale.</p>
+              <p>Les indicateurs locaux sont destinés à être collectés dans des contextes intégrés, c’est-à-dire en appelant la bibliothèque locale pour demander des informations sur la planification à distance.</p>'
+              },
+              {
+              'q':'Les indicateurs présentent-ils des limites?',
+              'a':'<p>Les données secondaires sur les populations racialisées au Canada sont limitées. Nous reconnaissons que l’absence de données sur la race entraîne des implications. L’absence de données sur la race peut en partie être liée au fait que les villes ne posent pas de questions sur le sujet. Un pas pour pallier ceci est la décision active, pendant la vérification sur l’équité de l’indice, de créer spécifiquement des indicateurs avec les populations autochtones urbaines, directement par de jeunes autochtones. Ce que nous ne voulons pas que les utilisateur·trice·s fassent, est comparer l’enquête et l’indice avec l’intention d’infirmer les expériences des jeunes dont le vécu n’a pas été capturé par les indicateurs. Utilisons plutôt les indicateurs pour soutenir ce que les jeunes indiquent vivre dans l’enquête et lors des entretiens.</p>'
+              },
+              {
+              'q':'Qu’est-ce qu’une mesure?',
+              'a':'<p>Une mesure forme l’indicateur en une valeur singulière par ville sous forme de question. De multiplesmmesures peuvent exister pour une seule mesure.</p>
+              <p>p. ex. mesure 1 : Quel est le coût de la passe annuelle de transport en commun? (Valeur = $)</p>
+              <p>p. ex. mesure 2 : Les transports en commun permettent-ils de se rendre à l’école secondaire? (Valeur = Oui/Non)</p>
+              <p>p. ex. mesure 3 : Quelle est la fréquence des transports en commun aux heures de pointe ? (valeur = nombre en minutes)</p>'
+              },
+              {
+              'q':'Qu’est-ce qu’un barème?',
+              'a':'<p>Un barème est une combinaison de différentes mesures en un seul indicateur qui nous permet de quantifier des éléments d’une ville autrement abstraits ou qualitatifs.</p>'
+              },
+              {
+              'q':'Qu’est-ce qu’un examen déontologique et quelles étaient les méthodes utilisées?',
+              'a':'                                
+              <p> 
+              L’enquête et l’entretien de Pivot 2020 ont fait l’objet d’un processus d’examen déontologique. L’Université Simon Fraser est l’un des partenaires fondateurs de Pivot 2020. En tant qu’université d’enseignement supérieur recevant des fonds des trois organismes de recherche fédéraux du Canada <sup>1</sup>, elle est tenue de respecter l’ Énoncé de politique des trois conseils : 
+              <a href=&#34;https://ethics.gc.ca/eng/policy-politique_tcps2-eptc2_2018.html&#34;> Éthique de la recherche avec des êtres humains (EPTC 2)</a>.  
+              Dans ce cadre, tous les établissements postsecondaires sont tenus de mettre en place un processus d’évaluation interne pour s’assurer que la recherche relative à des êtres humains qu’ils mènent est conforme à l’EPTC 2. Le CER est généralement un corps indépendant constitué de membres du corps professoral de divers départements et de diverses disciplines et d’un·e représentant·e du bureau ou du département d’éthique de la recherche.
+              <br /><br />
+              </p>
+              <p style=&#34;font-size:12px;&#34;>
+              <sup>1</sup> Les Instituts de recherche en santé du Canada (IRSC), le Conseil de recherches en sciences naturelles et en génie du Canada (CRSNG) et le Conseil de recherches en sciences humaines du Canada (CRSH).
+              </p>'
+              }
+              ];"
+>
+  <!--<section class="header">
+        <div class="container">
+            <h1>
+                Questions <span class="highlight">fréquemment posées</span>
+            </h1>
+            <div class="clip hero-img image-card-methodology"></div>
+        </div>
+    </section> -->
+  <div class="container">
+    <div class="padding">
+      <h1 class="alt-heading">
+        Questions <span class="alt-highlight">fréquemment posées</span>
+      </h1>
+    </div>
+    <nav class="breadcrumbs top-margin"><a href="/">Accueil</a> / FAQ</nav>
+  </div>
+  <!-- QUESTIONS SECTION (FAQs) -->
+  <section class="container" id="faqs">
+    <div class="inner-container">
+      <h3>THE GRID et les données ouvertes</h3>
+      <div ng-repeat="question in questions" class="accordion">
+        <div ng-init="open = false">
+          <button
+            class="label thar-three {{open && 'isopen'}}"
+            ng-click="open = !open"
+            aria-controls="q{{$index}}-a"
+            id="q{{$index}}"
+            aria-expanded="{{open}}"
+          >
+            <h4>{{question.q}}</h4>
+          </button>
+          <div
+            id="q{{$index}}-a"
+            aria-labelledby="q{{$index}}"
+            class="content"
+            ng-show="open"
+          >
+            <div ng-bind-html="question.a"></div>
+          </div>
+        </div>
+      </div>
+      <h3 class="padding">Utilisation de THE GRID</h3>
+      <div ng-repeat="question in usingQuestions" class="accordion">
+        <div ng-init="open = false">
+          <button
+            class="label thar-three {{open && 'isopen'}}"
+            ng-click="open = !open"
+            aria-controls="q{{$index}}-a"
+            id="q{{$index}}"
+            aria-expanded="{{open}}"
+          >
+            <h4>{{question.q}}</h4>
+          </button>
+          <div
+            id="q{{$index}}-a"
+            aria-labelledby="q{{$index}}"
+            class="content"
+            ng-show="open"
+          >
+            <div ng-bind-html="question.a"></div>
+          </div>
+        </div>
+      </div>
+      <h3 class="padding">Méthodes de recherche</h3>
+      <div ng-repeat="question in researchQuestions" class="accordion">
+        <div ng-init="open = false">
+          <button
+            class="label thar-three {{open && 'isopen'}}"
+            ng-click="open = !open"
+            aria-controls="q{{$index}}-a"
+            id="q{{$index}}"
+            aria-expanded="{{open}}"
+          >
+            <h4>{{question.q}}</h4>
+          </button>
+          <div
+            id="q{{$index}}-a"
+            aria-labelledby="q{{$index}}"
+            class="content"
+            ng-show="open"
+          >
+            <div ng-bind-html="question.a"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

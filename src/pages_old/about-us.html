@@ -1,0 +1,257 @@
+<div
+  ng-init="cards = [{'title':'Usability', 'description':'Users have access to data that is easy to navigate and clear to understand. It has multiple options for analyzing the data and downloading various formats.'},
+              {'title':'Accessible', 'description':'An open source platform where users can access data in English and French without sharing personal information and that is compatible with desktop and mobile devices.'},
+              {'title':'Transparent', 'description':'Clear explanation of who collected the data and what the process was. It also clearly states the updates made, funding sources, references, potential conflicts of interest, and limitations.'},
+              {'title':'Reflexive', 'description':'Provides space for users to learn and teach through access to resources on site navigation. THE GRID will support users in learning how to use and analyze the data.'},
+              {'title':'Tells a Story', 'description':'Through storytelling, THE GRID empowers users to better understand their circumstances, drawing comparisons and exploring differences to others within their city and across other cities. The data communicates the experiences of youth respectfully and proactively.
+              '}];"
+>
+  <!-- <section class="header">
+        <div class="container">
+            <h1>
+                About <span class="highlight">THE GRID</span>
+            </h1>
+            <div class="clip hero-img image-card-methodology"></div>
+        </div>
+    </section> -->
+  <div class="container">
+    <div class="padding">
+      <h1 class="alt-heading">
+        About <span class="alt-highlight">THE GRID</span>
+      </h1>
+    </div>
+    <nav class="breadcrumbs top-margin">
+      <a href="/">Home</a> / About THE GRID
+    </nav>
+  </div>
+  <section id="about" class="container">
+    <h2>What is <span class="alt-highlight"> THE GRID? </span></h2>
+    <div class="inner-container">
+      <p>
+        THE GRID is a free, open-source, intuitive portal with accessible and
+        reliable data that can be used by young people, communities, planners,
+        organizations, governments, and more.
+      </p>
+      <br />
+      <p>
+        THE GRID is powered by
+        <a href="https://youthfulcities.com/">Youthful Cities</a>. If you’d like
+        to learn more about THE GRID and open data, visit the
+        <a href="/pages/faq">FAQ section</a> or
+        <a href="/pages/contact">get in touch with us.</a>
+      </p>
+    </div>
+    <h2 class="padding">
+      How Did THE GRID<span class="alt-highlight"> Begin? </span>
+    </h2>
+    <div class="inner-container">
+      <p>
+        THE GRID, formerly known as Pivot Hub, started with the Pivot 2020
+        project. COVID-19 brought lives to a halt and dramatically shifted
+        everything. Our society was seeing the highest rates of youth
+        unemployment in Canadian history. Young people were bearing the brunt of
+        this crisis with the closing of schools and precarious work
+        environments, as well as massive interruptions to social connection and
+        support services. Cities can feel like closed, isolated, dire and
+        un-youthful places. Pivot 2020 was created to support young people in
+        driving the post-pandemic recovery. We know the power of young people to
+        generate momentous change, and we need that energy and capacity for
+        innovation to pivot from isolation, fear and despair to hope,
+        opportunity, renewal and connection.
+      </p>
+      <br />
+      <p>
+        Pivot 2020 began with 1,100+ young people in various Canadian cities by
+        surveying and interviewing young people, and collecting benchmark
+        information on the issues that matter to them most.
+      </p>
+      <br />
+      <p>
+        Information was gathered over 7 weeks in fall 2020 and covered three
+        main components: an index, a youth survey and youth interviews. The
+        scope of the project covers 47 Canadian cities, including all the
+        smaller communities that make up Vancouver and Victoria. The index
+        consists of publicly available third-party information that measures and
+        compares how well cities across Canada are supporting young people to
+        live, work, play and thrive. The survey covered 23 topics to help
+        understand interactions with youth and their cities before and after
+        COVID-19. Finally, the interviews were formal conversations with youth
+        in Canada to identify gaps, challenges and opportunities related to the
+        city’s COVID-19 crisis response and recovery, based on individual
+        viewpoints and experiences. After the research was compiled, over 20
+        data analysts prepared the data for the hub and developed insight
+        reports to explore the challenges that young people are currently
+        facing.
+        <a href="/pages/methodology-pivot"
+          >Read more about Pivot 2020 methodology.</a
+        >
+      </p>
+      <br />
+      <p>
+        Since its inception with Pivot 2020, Youthful Cities has continued to
+        expand THE GRID and partner with more organizations using the lessons
+        learned from that project.
+      </p>
+    </div>
+    <h2 class="padding">
+      THE GRID <span class="alt-highlight">Design Principles</span>
+    </h2>
+    <div class="inner-container">
+      <p>
+        Following Pivot 2020 research, internal engagement activities took place
+        with a group of 15 young people who were involved with the project.
+        Through a series of workshops, they set out to create design principles
+        that were drafted and later finalized to help guide the design of THE
+        GRID.
+      </p>
+      <div class="cards-container">
+        <!-- DYNAMICALLY GENERATED CARDS -->
+        <div ng-repeat="card in cards" class="card soft-shadow">
+          <div>
+            <div class="card-content">
+              <h4 class="card-text">{{ card.title }}</h4>
+              <p class="card-small-text">{{ card.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="container padding" id="acknowledgements">
+    <h2>Land <span class="alt-highlight">Acknowledgements</span></h2>
+    <div class="inner-container">
+      <p>
+        The Pivot 2020 project was led by Simon Fraser University’s Morris J.
+        Wosk Centre for Dialogue, which is located on Squamish (Sḵwx̱wú7mesh),
+        Tsleil-Waututh (səl̓ilw̓ətaʔɬ) and Musqueam (xʷməθkʷəy̓əm) territory, and
+        Canada Council for Youth Prosperity and Youthful Cities, which are on
+        the traditional territory of the Wendat, Anishnaabe, Haudenosaunee,
+        Mississaugas of the New Credit.
+      </p>
+      <br />
+      <p>
+        We are grateful to have had the opportunity to collect data from the
+        following areas:
+      </p>
+      <p>
+        On the West coast, the traditional, ancestral, unceded territory of the
+        xʷməθkʷəy̓əm (Musqueam), səl̓ilwətaɬ (Tsleil-Waututh), skwxwú7mesh
+        (Squamish), Katzie, Kwantlen, Kwikwetlem, Matsqui, Qayqayt, Semiahmoo,
+        Stó:lō, Tsawwassen, W̱SÁNEĆ, and the lək̓ʷəŋən (Lekwungen) People, today
+        known as the Esquimalt and the Songhees Nations.
+      </p>
+      <p>
+        In the North, Interior, and on the Prairies, the territory of the syilx
+        (Okanagan Nation); Chief Drygeese Territory to the north, traditional
+        home of the Yellowknives Dene and the North Slave Métis; Treaties 1, 4,
+        6, and 7, the lands of the Blackfoot Confederacy (including the Siksika,
+        Piikani, and Kainai First Nations), the Tsuu T’ina, Anishinaabeg, Cree,
+        OjiCree, Dene, the Nakota / Lakota / Dakota Peoples, and the homeland of
+        the Métis Nation.
+      </p>
+      <p>
+        In what is known as Ontario and Quebec, a territory encompassing many
+        treaties, including the Dish with One Spoon Wampum Belt Covenant, the
+        Between the Lakes Purchase (1792), the Haldimand Tract, Upper Canada
+        Treaties, Williams Treaties, Robinson-Huron Treaties, the Wabanaki
+        Confederacy, the territories of the Anishinaabeg, Attawandaron, Erie,
+        Haudenosaunee, Kanien’kehá:ka, Lūnaapéewak, Mississaugas, Oneida of the
+        Thames, Six Nations of the Grand River, Wendat, and the Abenaki peoples.
+      </p>
+      <p>
+        On the East Coast, the traditional unceded territory of the Maliseet,
+        the Mi’kmaq People, and the Beothuk, the land of the Peace and
+        Friendship treaties.
+      </p>
+      <p>
+        We would like to share our deep gratitude for the 1,000+ youth whose
+        work has led to an open and accessible database to make cities bigger,
+        brighter, and better for all.
+      </p>
+    </div>
+  </section>
+  <section class="container padding" id="acknowledgements">
+    <h2>
+      Equity, Diversity, and Inclusion in<span class="alt-highlight">
+        Open Data</span
+      >
+    </h2>
+    <div class="video-container col-md-12">
+      <iframe
+        width="100%"
+        height="315"
+        src="https://www.youtube.com/embed/MtD7NgvhIh0"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </section>
+  <section class="container padding" id="partners">
+    <h2>Partners & Funding</h2>
+    <div class="inner-container">
+      <div class="cards-container">
+        <div class="logo-card">
+          <a href="https://youthfulcities.com/">
+            <img
+              src="/assets/theme_image/YC_colour_black_RGB.png"
+              alt="Youthful Cities logo"
+            />
+          </a>
+        </div>
+        <div class="logo-card">
+          <a href="https://www.therefugeecentre.org/">
+            <img
+              src="/assets/theme_image/refugee-centre-logo.png"
+              alt="The Refugee Centre logo"
+            />
+          </a>
+        </div>
+        <div class="logo-card">
+          <img
+            src="/assets/theme_image/CCYP.png"
+            alt="Canadian Council for Youth Prosperity logo"
+          />
+        </div>
+        <div class="logo-card">
+          <a
+            href="https://www.tamarackcommunity.ca/communitiesbuildingyouthfutures"
+          >
+            <img
+              src="/assets/theme_image/tamarack-logo.png"
+              alt="Tamarack Institute logo"
+            />
+          </a>
+        </div>
+        <div class="logo-card">
+          <img
+            src="/assets/theme_image/SFU.png"
+            alt="Simon Fraser University logo"
+          />
+        </div>
+
+        <div class="logo-card">
+          <img
+            src="/assets/theme_image/Gov Canada Logo.png"
+            alt="Government of Canada logo"
+          />
+        </div>
+        <div class="logo-card">
+          <a href="https://www.rbc.com/dms/enterprise/futurelaunch/">
+            <img
+              src="/assets/theme_image/rbc-logo.svg"
+              alt="RBC Future Launch logo"
+            />
+          </a>
+        </div>
+        <div class="logo-card">
+          <img
+            src="/assets/theme_image/northpine-logo.png"
+            alt="Northpine Foundation logo"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

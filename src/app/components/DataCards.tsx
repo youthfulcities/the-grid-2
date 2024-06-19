@@ -96,12 +96,11 @@ const DataCard = ({ fetchUrl, lng }: AppProps) => {
         <Text
           fontWeight='bold'
           fontSize='medium'
-          marginTop='auto'
           color={getColor(index).titleFont}
         >
           {card.date}
         </Text>
-        <Text fontSize='small' marginTop='auto' color='font.primary'>
+        <Text fontSize='small' color='font.primary'>
           {lng === 'fr' ? card.descfr : card.desc}
         </Text>
         <Flex grow={1}>

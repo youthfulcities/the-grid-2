@@ -5,9 +5,9 @@ import { getUrl } from 'aws-amplify/storage';
 import Papa from 'papaparse';
 import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
+import Container from '../../components/Background';
+import DataCard from '../../components/DataCards';
 import useTranslation from '../../i18n/client';
-import Container from '../components/Background';
-import DataCard from '../components/DataCards';
 
 interface RootLayoutProps {
   params: { lng: string };

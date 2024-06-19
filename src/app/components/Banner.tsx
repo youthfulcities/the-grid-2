@@ -1,7 +1,7 @@
 import cityCards from '@/data/city-cards.json';
 import { Flex, Heading, Text, View, useTheme } from '@aws-amplify/ui-react';
 import styled from 'styled-components';
-import useTranslation from '../../i18n/client';
+import useTranslation from '../i18n/client';
 
 // .outline-text {
 // color: var(--light-blue);

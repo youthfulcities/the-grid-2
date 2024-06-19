@@ -10,10 +10,10 @@ import Script from 'next/script';
 import React from 'react';
 import config from '../../amplifyconfiguration.json';
 import StyledComponentsRegistry from '../../lib/registry';
+import Footer from '../components/Footer';
+import NavBar from '../components/NavBar';
 import { languages } from '../i18n/settings';
 import AWSThemeProvider from './aws-theme-provider';
-import Footer from './components/Footer';
-import NavBar from './components/NavBar';
 import './global.css';
 
 interface RootLayoutProps {

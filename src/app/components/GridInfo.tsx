@@ -1,6 +1,6 @@
 import { Heading, Text, View } from '@aws-amplify/ui-react';
 import { Trans } from 'react-i18next/TransWithoutContext';
-import useTranslation from '../../i18n/client';
+import useTranslation from '../i18n/client';
 
 const GridInfo: React.FC<{ lng: string }> = ({ lng }) => {
   const { t } = useTranslation(lng, 'home');

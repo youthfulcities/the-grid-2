@@ -4,7 +4,7 @@ import { Alert, Button, Flex, Loader, TextField } from '@aws-amplify/ui-react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import useTranslation from '../../i18n/client';
+import useTranslation from '../i18n/client';
 
 interface NewsletterProps {
   lng: string;
@@ -21,10 +21,6 @@ const StyledTextField = styled(TextField)`
   background-color: white;
   input {
     border-color: transparent;
-  }
-
-  input:focus {
-    border-color: var(--amplify-colors-secondary-60);
   }
 `;
 

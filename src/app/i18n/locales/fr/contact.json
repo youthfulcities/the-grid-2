@@ -1,0 +1,22 @@
+{
+  "title": "Contact",
+  "subtitle": "Vous avez des questions ? Vous souhaitez travailler avec Youthful Cities ? Prenez contact avec nous.",
+  "fname": "Prénom *",
+  "lname": "Nom de famille *",
+  "name": "Nom",
+  "phone": "Numéro de téléphone",
+  "email": "Adresse courriel *",
+  "media": "Demandes médiatiques",
+  "technical": "Difficultés techniques",
+  "collaborate": "Collaborer avec nous",
+  "bug": "Signaler un bogue",
+  "other": "Autre",
+  "message": "Message *",
+  "type": "Écrivez votre message ici…",
+  "category": "Catégorie",
+  "reason": "Raison de la prise de contact",
+  "select": "Sélectionnez un sujet",
+  "error": "Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer.",
+  "success": "Votre message a été envoyé avec succès !",
+  "submit": "Envoyer"
+}

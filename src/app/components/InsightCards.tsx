@@ -126,12 +126,7 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng }) => {
             <Heading level={3}>
               {lng === 'fr' ? card.titlefr : card.title}
             </Heading>
-            <ItalicText
-              as='em'
-              fontSize='small'
-              marginTop='auto'
-              color='font.primary'
-            >
+            <ItalicText as='em' fontSize='small' color='font.primary'>
               {lng === 'fr' ? card.datasetfr : card.dataset}
             </ItalicText>
             <Text

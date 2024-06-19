@@ -4,8 +4,8 @@ import useTranslation from '@/app/i18n/client';
 
 import { Flex, Heading, View } from '@aws-amplify/ui-react';
 
-import Container from '../components/Background';
-import InsightCards from '../components/InsightCards';
+import Container from '../../components/Background';
+import InsightCards from '../../components/InsightCards';
 
 //TODO: Convert inner-container and cards-container classes to their own components or convert to styled components?
 

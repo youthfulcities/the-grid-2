@@ -1,0 +1,22 @@
+{
+  "title": "Contact Us",
+  "subtitle": "Have questions? Interested in working with Youthful Cities? Get in touch with us.",
+  "fname": "First Name *",
+  "lname": "Last Name *",
+  "name": "Name",
+  "phone": "Phone Number",
+  "email": "Email *",
+  "media": "Media Inquiry",
+  "technical": "Technical Issues",
+  "collaborate": "Collaborate with us",
+  "bug": "Report a bug",
+  "other": "Other",
+  "message": "Message *",
+  "type": "Type your message here...",
+  "category": "Category",
+  "reason": "Reason for Contacting",
+  "select": "Select a topic",
+  "error": "An error occurred while sending your message. Please try again.",
+  "success": "Your message has been sent successfully!",
+  "submit": "Submit"
+}

@@ -113,6 +113,7 @@ const ContactForm = () => {
   const [success, setSuccess] = useState('');
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'contact');
+  const { t: tsubscribe } = useTranslation(lng, 'newsletter');
   const { tokens } = useTheme();
 
   const { firstName, lastName, email, phoneNumber, topic, message } = formData;
@@ -217,14 +218,14 @@ const ContactForm = () => {
               }}
             />
           </SubHeading>
-          {error && (
+          {error && statusSubscribe != 'loading' && (
             <Alert marginBottom={tokens.space.medium.value} variation='error'>
-              {error} {t(responseMsgSubscribe)}
+              {error} {tsubscribe(responseMsgSubscribe)}
             </Alert>
           )}
-          {success && (
+          {success && statusSubscribe != 'loading' && (
             <Alert marginBottom={tokens.space.medium.value} variation='success'>
-              {success} {t(responseMsgSubscribe)}
+              {success} {tsubscribe(responseMsgSubscribe)}
             </Alert>
           )}
           <Flex gap='24px'>

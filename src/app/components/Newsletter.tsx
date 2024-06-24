@@ -43,7 +43,7 @@ const Newsletter: React.FC<NewsletterProps> = ({ lng }) => {
     try {
       const response = await axios.post('/api/newsletter', {
         email: formEmail,
-        lng: lng,
+        lng,
       });
       setStatus('success');
       setStatusCode(response.status);

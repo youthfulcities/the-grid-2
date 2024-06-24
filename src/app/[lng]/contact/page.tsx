@@ -186,8 +186,8 @@ const ContactForm = () => {
       const response = await axios.post('/api/newsletter', {
         fname: firstName,
         lname: lastName,
-        email: email,
-        lng: lng,
+        email,
+        lng,
       });
       setStatusSubscribe('success');
       setStatusCodeSubscribe(response.status);

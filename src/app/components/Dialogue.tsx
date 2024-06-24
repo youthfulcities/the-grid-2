@@ -1,7 +1,10 @@
 import { Button, Heading, Text, View } from '@aws-amplify/ui-react';
 import Dialog from '@mui/material/Dialog';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { Trans } from 'react-i18next/TransWithoutContext';
 import styled from 'styled-components';
+import useTranslation from '../i18n/client';
 
 interface SimpleDialogProps {
   open: boolean;
@@ -22,22 +25,23 @@ const StyledButton = styled(Button)`
 
 const Dialogue = (props: SimpleDialogProps) => {
   const { onClose, open } = props;
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'insights');
 
   return (
     <Dialog onClose={onClose} open={open}>
       <View padding='large'>
-        <Heading level={3}>Note</Heading>
+        <Heading level={3}>{t('note')}</Heading>
+        <Text>{t('disclaimer')}</Text>
+        <Text>{t('login')}</Text>
         <Text>
-          You can log into the chatbot with the following credentials:
-        </Text>
-        <Text>
-          <strong>Email:</strong> chatbot@youthfulcities.com
+          <Trans t={t} i18nKey='email' components={{ strong: <strong /> }} />
         </Text>
         <Text marginBottom='large'>
-          <strong>Password:</strong> demo
+          <Trans t={t} i18nKey='password' components={{ strong: <strong /> }} />
         </Text>
         <Link href='http://99.231.34.125:8551/' target='_blank'>
-          <StyledButton variation='primary'>Go to Chatbot</StyledButton>
+          <StyledButton variation='primary'>{t('goto')}</StyledButton>
         </Link>
       </View>
     </Dialog>

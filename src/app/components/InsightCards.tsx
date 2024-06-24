@@ -50,6 +50,7 @@ const StyledButton = styled(Button)<{
   z-index: 1;
   &:hover {
     background-color: ${(props) => props.$inverse};
+    color: ${(props) => props.$background};
   }
 `;
 

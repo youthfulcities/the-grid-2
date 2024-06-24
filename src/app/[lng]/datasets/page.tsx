@@ -1,6 +1,6 @@
 'use client';
 
-import { Flex, Heading, View } from '@aws-amplify/ui-react';
+import { Flex, Heading, Text, View } from '@aws-amplify/ui-react';
 import { getUrl } from 'aws-amplify/storage';
 import Papa from 'papaparse';
 import React, { useEffect, useState } from 'react';
@@ -72,7 +72,7 @@ const Datasets: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
 
   // console.log(loading, csvData);
 
-  const { t } = useTranslation(lng, 'home');
+  const { t } = useTranslation(lng, 'datasets');
 
   // const labels = csvData.map((row) => String(row.City));
   // const values = csvData.map((row) => Number(row.Value));
@@ -87,6 +87,22 @@ const Datasets: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
             components={{ span: <span className='highlight' /> }}
           />
         </Heading>
+        <View className='inner-container'>
+          <Text>{t('description')}</Text>
+          <Text>
+            <Trans t={t} i18nKey='index' components={{ strong: <strong /> }} />
+          </Text>
+          <Text>
+            <Trans t={t} i18nKey='survey' components={{ strong: <strong /> }} />
+          </Text>
+          <Text>
+            <Trans
+              t={t}
+              i18nKey='interview'
+              components={{ strong: <strong /> }}
+            />
+          </Text>
+        </View>
         <Flex className='inner-container'>
           <Flex className='cards-container'>
             <DataCard fetchUrl={fetchUrl} lng={lng} />

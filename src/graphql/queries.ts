@@ -17,6 +17,7 @@ export const getContactSubmission = /* GraphQL */ `query GetContactSubmission($i
     phoneNumber
     topic
     message
+    subscribed
     createdAt
     updatedAt
     __typename
@@ -44,6 +45,7 @@ export const listContactSubmissions = /* GraphQL */ `query ListContactSubmission
       phoneNumber
       topic
       message
+      subscribed
       createdAt
       updatedAt
       __typename

@@ -34,13 +34,9 @@ exports.handler = async (event) => {
               Body: {
                 Text: {
                   Data: `You have received a new message from ${firstName} ${lastName} 
-                  &nbsp;
                   ${phoneNumber}
-                  &nbsp;
                   (${email})
-                  &nbsp;
                   ${message}
-                  &nbsp;
                   Subscribed: ${subscribed}`,
                 },
               },

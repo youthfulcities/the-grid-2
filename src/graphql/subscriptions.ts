@@ -19,6 +19,7 @@ export const onCreateContactSubmission = /* GraphQL */ `subscription OnCreateCon
     phoneNumber
     topic
     message
+    subscribed
     createdAt
     updatedAt
     __typename
@@ -39,6 +40,7 @@ export const onUpdateContactSubmission = /* GraphQL */ `subscription OnUpdateCon
     phoneNumber
     topic
     message
+    subscribed
     createdAt
     updatedAt
     __typename
@@ -59,6 +61,7 @@ export const onDeleteContactSubmission = /* GraphQL */ `subscription OnDeleteCon
     phoneNumber
     topic
     message
+    subscribed
     createdAt
     updatedAt
     __typename

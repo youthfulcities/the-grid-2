@@ -10,8 +10,15 @@ const ses = new SESClient();
 exports.handler = async (event) => {
   for (const record of event.Records) {
     if (record.eventName === 'INSERT') {
-      const { firstName, lastName, email, topic, phoneNumber, message } =
-        unmarshall(record.dynamodb.NewImage);
+      const {
+        firstName,
+        lastName,
+        email,
+        topic,
+        phoneNumber,
+        message,
+        subscribed,
+      } = unmarshall(record.dynamodb.NewImage);
 
       try {
         const response = await ses.send(
@@ -26,7 +33,15 @@ exports.handler = async (event) => {
               },
               Body: {
                 Text: {
-                  Data: `You have received a new message from ${firstName} ${lastName} ${phoneNumber}. (${email}): ${message}`,
+                  Data: `You have received a new message from ${firstName} ${lastName} 
+                  &nbsp;
+                  ${phoneNumber}
+                  &nbsp;
+                  (${email})
+                  &nbsp;
+                  ${message}
+                  &nbsp;
+                  Subscribed: ${subscribed}`,
                 },
               },
             },

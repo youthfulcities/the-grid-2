@@ -6,7 +6,13 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
 import { getContactSubmission } from "../graphql/queries";
@@ -31,6 +37,7 @@ export default function ContactSubmissionUpdateForm(props) {
     phoneNumber: "",
     topic: "",
     message: "",
+    subscribed: false,
   };
   const [firstName, setFirstName] = React.useState(initialValues.firstName);
   const [lastName, setLastName] = React.useState(initialValues.lastName);
@@ -40,6 +47,7 @@ export default function ContactSubmissionUpdateForm(props) {
   );
   const [topic, setTopic] = React.useState(initialValues.topic);
   const [message, setMessage] = React.useState(initialValues.message);
+  const [subscribed, setSubscribed] = React.useState(initialValues.subscribed);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = contactSubmissionRecord
@@ -51,6 +59,7 @@ export default function ContactSubmissionUpdateForm(props) {
     setPhoneNumber(cleanValues.phoneNumber);
     setTopic(cleanValues.topic);
     setMessage(cleanValues.message);
+    setSubscribed(cleanValues.subscribed);
     setErrors({});
   };
   const [contactSubmissionRecord, setContactSubmissionRecord] = React.useState(
@@ -78,6 +87,7 @@ export default function ContactSubmissionUpdateForm(props) {
     phoneNumber: [{ type: "Phone" }],
     topic: [],
     message: [],
+    subscribed: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -111,6 +121,7 @@ export default function ContactSubmissionUpdateForm(props) {
           phoneNumber: phoneNumber ?? null,
           topic: topic ?? null,
           message: message ?? null,
+          subscribed: subscribed ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -177,6 +188,7 @@ export default function ContactSubmissionUpdateForm(props) {
               phoneNumber,
               topic,
               message,
+              subscribed,
             };
             const result = onChange(modelFields);
             value = result?.firstName ?? value;
@@ -206,6 +218,7 @@ export default function ContactSubmissionUpdateForm(props) {
               phoneNumber,
               topic,
               message,
+              subscribed,
             };
             const result = onChange(modelFields);
             value = result?.lastName ?? value;
@@ -235,6 +248,7 @@ export default function ContactSubmissionUpdateForm(props) {
               phoneNumber,
               topic,
               message,
+              subscribed,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -265,6 +279,7 @@ export default function ContactSubmissionUpdateForm(props) {
               phoneNumber: value,
               topic,
               message,
+              subscribed,
             };
             const result = onChange(modelFields);
             value = result?.phoneNumber ?? value;
@@ -294,6 +309,7 @@ export default function ContactSubmissionUpdateForm(props) {
               phoneNumber,
               topic: value,
               message,
+              subscribed,
             };
             const result = onChange(modelFields);
             value = result?.topic ?? value;
@@ -323,6 +339,7 @@ export default function ContactSubmissionUpdateForm(props) {
               phoneNumber,
               topic,
               message: value,
+              subscribed,
             };
             const result = onChange(modelFields);
             value = result?.message ?? value;
@@ -337,6 +354,36 @@ export default function ContactSubmissionUpdateForm(props) {
         hasError={errors.message?.hasError}
         {...getOverrideProps(overrides, "message")}
       ></TextField>
+      <SwitchField
+        label="Subscribed"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={subscribed}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phoneNumber,
+              topic,
+              message,
+              subscribed: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.subscribed ?? value;
+          }
+          if (errors.subscribed?.hasError) {
+            runValidationTasks("subscribed", value);
+          }
+          setSubscribed(value);
+        }}
+        onBlur={() => runValidationTasks("subscribed", subscribed)}
+        errorMessage={errors.subscribed?.errorMessage}
+        hasError={errors.subscribed?.hasError}
+        {...getOverrideProps(overrides, "subscribed")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

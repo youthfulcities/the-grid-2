@@ -1,4 +1,10 @@
 {
   "description": "<p>Comment trouver un sens aux données ? Comment utiliser les chiffres et les informations pour mieux comprendre ?</p><p>L'équipe de Youthful Cities a créé des outils pour aider le public à donner un sens aux données que nous avons recueillies sur et avec les jeunes. Nous savons que ce que nous avons fait n'est qu'une interprétation parmi d'autres. Nous espérons et nous vous encourageons à en trouver d'autres en téléchargeant notre répertoire de données ouvertes et en les utilisant pour créer de nouvelles perspectives.</p>",
-  "insights": "Perspectives"
+  "insights": "Perspectives",
+  "note": "Remarque",
+  "disclaimer": "Le chatbot Youthful Cities utilise le modèle linguistique GPT-4. Toutes les données d'entraînement pour le modèle sont gérées par Youthful Cities. Comme toute IA, GPT-4 ne comprend pas le contexte en temps réel et peut parfois produire des réponses non pertinentes ou absurdes. Ses réponses doivent être évaluées de manière critique, en particulier dans les situations sensibles ou complexes où le jugement humain est crucial.",
+  "login": "Vous pouvez vous connecter au chatbot avec les informations d'identification suivantes :",
+  "email": "<strong>Courriel :</strong> chatbot@youthfulcities.com",
+  "password": "<strong>Mot de passe :</strong> demo",
+  "goto": "Accéder au chatbot"
 }

@@ -18,5 +18,6 @@
   "select": "Sélectionnez un sujet",
   "error": "Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer.",
   "success": "Votre message a été envoyé avec succès !",
-  "submit": "Envoyer"
+  "submit": "Envoyer",
+  "subscribe": "S'abonner à la lettre d'information des villes jeunes"
 }

@@ -1,4 +1,9 @@
 {
+  "explore-data": "Explorer <span>les données</span>",
+  "description": "Sur cette page, vous trouverez tous les ensembles de données de Youth Data Lab. Téléchargez les données ouvertes pour  les utiliser dans vos projets de recherche ou pour apporter un éclairage sur les jeunes aux données existantes de votre organisation.",
+  "index": "<strong>Les indices</strong> sont des ensembles de données fondés sur des valeurs pour des données quantifiables. Par exemple, le salaire minimum a une valeur dans chaque ville que nous pouvons mesurer.",
+  "survey": "<strong>Les ensembles de données d'enquête</strong> comprennent les réponses aux questionnaires de Youthful Cities, qui donnent un meilleur aperçu des données quantifiables",
+  "interview": "<strong>Les ensembles de données d'entretiens</strong> contiennent des citations des participants et sont utiles pour comprendre le contexte des idées.",
   "csv": "Télécharger le fichier .csv",
   "report": "Télécharger le rapport"
 }

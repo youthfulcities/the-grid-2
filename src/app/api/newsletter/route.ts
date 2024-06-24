@@ -13,12 +13,12 @@ const EmailSchema = z
 // Subscription handler function
 export const POST = async (req: Request) => {
   // 1. Validate email address
-  const { email } = await req.json();
+  const { email, lng } = await req.json();
   const emailValidation = EmailSchema.safeParse(email);
   if (!emailValidation.success) {
     return NextResponse.json(
       {
-        error: `Please enter a valid email address, you entered ${email}`,
+        error: 'invalid',
       },
       { status: 400 }
     );
@@ -51,10 +51,7 @@ export const POST = async (req: Request) => {
     const response = await axios.post(url, data, options);
     console.log(response);
     if (response.status === 200) {
-      return NextResponse.json(
-        { message: 'Awesome! You have successfully subscribed!' },
-        { status: 201 }
-      );
+      return NextResponse.json({ message: 'success' }, { status: 201 });
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -67,7 +64,7 @@ export const POST = async (req: Request) => {
       if (error.response?.data.title === 'Member Exists') {
         return NextResponse.json(
           {
-            error: "Uh oh, it looks like this email's already subscribed🧐",
+            error: 'duplicate',
           },
           { status: 400 }
         );
@@ -76,8 +73,7 @@ export const POST = async (req: Request) => {
 
     return NextResponse.json(
       {
-        error:
-          "Oops! There was an error subscribing you to the newsletter. Please email me at info@youthfulcities.com and I'll add you to the list.",
+        error: 'error',
       },
       { status: 500 }
     );

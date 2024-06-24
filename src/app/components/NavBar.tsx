@@ -49,7 +49,7 @@ const NavigationLinks = styled(Flex)`
   position: relative;
 `;
 
-const NavLink = styled(Link)`
+const NavLink = styled(Link)<{ $currentPage: boolean }>`
   font-family: 'Gotham Narrow Medium';
   font-size: 16px;
   font-weight: 450;
@@ -70,7 +70,7 @@ const NavLink = styled(Link)`
     bottom: 0;
     left: 0;
     background-color: white;
-    transform: scaleX(0);
+    transform: ${(props) => (props.$currentPage ? 'scaleX(1)' : 'scaleX(0)')};
     transform-origin: right;
     transition: transform 0.3s ease-in-out;
     border-radius: 5px;
@@ -96,13 +96,17 @@ const StyledMenuButton = styled(MenuButton)`
   }
 `;
 
+const StyledMenuItem = styled(MenuItem)<{ $currentPage: boolean }>``;
+
 const NavBar: React.FC<NavBarProps> = ({ lng }) => {
   const { t } = useTranslation(lng, 'translation');
   const pathname = usePathname();
+  const pathNoLocale = pathname.substring(3);
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
 
   const { tokens } = useTheme();
+  console.log(pathname);
 
   //TODO: Refactor into reusable hook
   useEffect(() => {
@@ -117,7 +121,6 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
   }, []);
 
   function handleLanguageChange(locale: string) {
-    const pathNoLocale = pathname.substring(3);
     const newPath = `/${locale}${pathNoLocale}`;
     router.prefetch(newPath);
     router.push(newPath, { scroll: false });
@@ -171,29 +174,58 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
               </StyledMenuButton>
             }
           >
-            <MenuItem as='a' href={`/${lng}/`}>
+            <MenuItem isDisabled={pathNoLocale === ''} as='a' href={`/${lng}/`}>
               {t('home')}
             </MenuItem>
-            <MenuItem as='a' href={`/${lng}/datasets`}>
+            <MenuItem
+              isDisabled={pathNoLocale === 'datasets'}
+              as='a'
+              href={`/${lng}/datasets`}
+            >
               {t('datasets')}
             </MenuItem>
-            <MenuItem as='a' href={`/${lng}/insights`}>
+            <MenuItem
+              isDisabled={pathNoLocale === 'insights'}
+              as='a'
+              href={`/${lng}/insights`}
+            >
               {t('insights')}
             </MenuItem>
             {/* <MenuItem as='a' href={`/${lng}/about`}>
             {t('about')}
           </MenuItem> */}
-            <MenuItem as='a' href={`/${lng}/contact`}>
+            <MenuItem
+              isDisabled={pathNoLocale === 'contact'}
+              as='a'
+              href={`/${lng}/contact`}
+            >
               {t('contact')}
             </MenuItem>
           </Menu>
         ) : (
           <NavigationLinks>
-            <NavLink href={`/${lng}/`}>{t('home')}</NavLink>
-            <NavLink href={`/${lng}/datasets`}>{t('datasets')}</NavLink>
-            <NavLink href={`/${lng}/insights`}>{t('insights')}</NavLink>
+            <NavLink $currentPage={pathNoLocale === ''} href={`/${lng}/`}>
+              {t('home')}
+            </NavLink>
+            <NavLink
+              $currentPage={pathNoLocale === '/datasets'}
+              href={`/${lng}/datasets`}
+            >
+              {t('datasets')}
+            </NavLink>
+            <NavLink
+              $currentPage={pathNoLocale === '/insights'}
+              href={`/${lng}/insights`}
+            >
+              {t('insights')}
+            </NavLink>
             {/* <NavLink href={`/${lng}/about`}>{t('about')}</NavLink> */}
-            <NavLink href={`/${lng}/contact`}>{t('contact')}</NavLink>
+            <NavLink
+              $currentPage={pathNoLocale === '/contact'}
+              href={`/${lng}/contact`}
+            >
+              {t('contact')}
+            </NavLink>
           </NavigationLinks>
         )}
       </Flex>

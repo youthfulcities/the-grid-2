@@ -37,6 +37,7 @@ const StyledFlex = styled(Flex)`
       0.15000000596046448
     );
   background-color: var(--amplify-colors-neutral-100);
+  z-index: 100;
 `;
 
 const NavigationLinks = styled(Flex)`

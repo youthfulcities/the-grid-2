@@ -196,8 +196,6 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
               >
                 {t('datasets')}
               </HoverLink>
-            </LinkColumn>
-            <LinkColumn>
               <HoverLink
                 href={`/insights`}
                 passHref
@@ -206,6 +204,8 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
               >
                 {t('insights')}
               </HoverLink>
+            </LinkColumn>
+            <LinkColumn>
               <HoverLink
                 href={`/contact`}
                 passHref
@@ -213,6 +213,14 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
                 $color={tokens.colors.font.inverse.value}
               >
                 {t('contact')}
+              </HoverLink>
+              <HoverLink
+                href={`/cookie-policy`}
+                passHref
+                $hover={tokens.colors.primary[60].value}
+                $color={tokens.colors.font.inverse.value}
+              >
+                {t('cookie')}
               </HoverLink>
             </LinkColumn>
           </LinkSection>

@@ -3,7 +3,7 @@
     {
       "title": "A Day in the Life",
       "titlefr": "Une journée dans la vie",
-      "dataset": "Real Affordability dataset",
+      "dataset": "Real Affordability Index",
       "datasetfr": "Indice d’accessibilité réelle",
       "date": "2022",
       "type": "",
@@ -14,11 +14,11 @@
     {
       "title": "Best Work City",
       "titlefr": "Trouver ma meilleure ville où travailler",
-      "dataset": "Urban Work dataset",
+      "dataset": "Urban Work Index",
       "datasetfr": "Indice du travail urbain 2023",
       "date": "2023",
       "type": "",
-      "desc": "Curious where your best work city is based on your needs? Try out our Best Work City Quiz",
+      "desc": "Curious where your best work city is based on your needs? Try out our Best Work City Quiz.",
       "descfr": "Vous êtes curieux de savoir quelle est la ville qui vous convient le mieux en fonction de vos besoins ? Essayez notre Quiz de la meilleure ville de travail !",
       "link": "https://bestworkcity.ca/"
     },

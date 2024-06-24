@@ -20,6 +20,12 @@
   },
   "plugins": ["react", "prettier", "json"],
   "rules": {
+    "jsx-a11y/control-has-associated-label": "warn",
+    "jsx-a11y/anchor-has-content": "warn",
+    "@typescript-eslint/ban-ts-comment": "warn",
+    "no-use-before-define": "warn",
+    "import/no-duplicates": "warn",
+    "import/prefer-default-export": "warn",
     "@next/next/no-img-element": "off",
     "import/no-unresolved": "warn",
     "spaced-comment": "off",

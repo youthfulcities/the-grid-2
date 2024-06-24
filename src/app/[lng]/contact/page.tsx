@@ -15,6 +15,7 @@ import useTranslation from '@/app/i18n/client';
 import { generateClient } from 'aws-amplify/api';
 import { useParams } from 'next/navigation';
 import React, { FormEvent, useState } from 'react';
+import { Trans } from 'react-i18next/TransWithoutContext';
 import styled from 'styled-components';
 import { createContactSubmission } from '../../../graphql/mutations';
 import Container from '../../components/Background';
@@ -161,9 +162,25 @@ const ContactForm = () => {
           <Heading marginBottom='16px' level={2}>
             {t('title')}
           </Heading>
-          <SubHeading>{t('subtitle')}</SubHeading>
-          {error && <Alert variation='error'>{error}</Alert>}
-          {success && <Alert variation='success'>{success}</Alert>}
+          <SubHeading>
+            <Trans
+              t={t}
+              i18nKey='subtitle'
+              components={{
+                a: <a href='https://www.youthfulcities.com/about-us/' />,
+              }}
+            />
+          </SubHeading>
+          {error && (
+            <Alert marginBottom='16px' variation='error'>
+              {error}
+            </Alert>
+          )}
+          {success && (
+            <Alert marginBottom='16px' variation='success'>
+              {success}
+            </Alert>
+          )}
           <Flex gap='24px'>
             <StyledInput
               flex={1}

@@ -1,7 +1,7 @@
 {
   "home": "Accueil",
   "datasets": "Ensembles de données",
-  "insights": "Analyses",
+  "insights": "Perspectives",
   "about": "À propos",
   "contact": "Contact",
   "cities": "Villes",
@@ -10,7 +10,8 @@
   "subscribe": "S'abonner",
   "email": "Votre email",
   "sign-up": "S'inscrire à notre lettre d'information",
-  "sign-up-text": "Restez connecté et au courant des nouvelles données, perspectives ou offres d'emploi.",
+  "sign-up-text": "Restez connecté et au courant des nouvelles données, perspectives et offres d'emploi.",
   "rights": "Tous droits réservés",
-  "newsletter-email": "Courriel de la lettre d'information"
+  "newsletter-email": "Courriel de la lettre d'information",
+  "cookie": "Gestion des cookies"
 }

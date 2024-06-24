@@ -1,0 +1,6 @@
+{
+  "success": "Vous vous êtes abonné avec succès !",
+  "duplicate": "Uh oh, il semble que cet email soit déjà souscrit.🧐",
+  "error": "Oups ! Une erreur s'est produite lors de votre inscription à la lettre d'information. Veuillez nous envoyer un courriel à info@youthfulcities.com et nous vous ajouterons manuellement à la liste.",
+  "invalid": "Veuillez saisir une adresse électronique valide."
+}

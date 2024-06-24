@@ -32,7 +32,7 @@ const Newsletter: React.FC<NewsletterProps> = ({ lng }) => {
   >('idle');
   const [responseMsg, setResponseMsg] = useState<string>('');
 
-  const { t } = useTranslation(lng, 'translation');
+  const { t } = useTranslation(lng, 'newsletter');
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -43,6 +43,7 @@ const Newsletter: React.FC<NewsletterProps> = ({ lng }) => {
     try {
       const response = await axios.post('/api/newsletter', {
         email: formEmail,
+        lng: lng,
       });
       setStatus('success');
       setStatusCode(response.status);
@@ -89,7 +90,7 @@ const Newsletter: React.FC<NewsletterProps> = ({ lng }) => {
           isDismissible
           variation={status === 'success' ? 'success' : 'error'}
         >
-          {responseMsg}
+          {t(responseMsg)}
         </StyledAlert>
       )}
     </Flex>

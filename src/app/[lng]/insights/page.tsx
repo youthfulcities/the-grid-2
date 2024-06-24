@@ -2,8 +2,9 @@
 
 import useTranslation from '@/app/i18n/client';
 
-import { Flex, Heading, View } from '@aws-amplify/ui-react';
+import { Flex, Heading, Text, View } from '@aws-amplify/ui-react';
 
+import { Trans } from 'react-i18next/TransWithoutContext';
 import Container from '../../components/Background';
 import InsightCards from '../../components/InsightCards';
 
@@ -22,6 +23,9 @@ const Insights: React.FC<InsightLayoutProps> = ({ params: { lng } }) => {
         <Heading level={2} style={{ color: '#F26B5F' }}>
           {t('insights')}
         </Heading>
+        <View className='inner-container'>
+          <Trans t={t} i18nKey='description' components={{ p: <Text /> }} />
+        </View>
         <Flex className='inner-container'>
           <Flex className='cards-container'>
             <InsightCards lng={lng} />

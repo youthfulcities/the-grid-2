@@ -8,6 +8,7 @@ import {
   defaultTheme,
   useTheme,
 } from '@aws-amplify/ui-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import {
@@ -79,8 +80,6 @@ const HoverLink = styled(Link)<{ $hover: string; $color: string }>`
     color: var(--amplify-colors-secondary-60);
   }
 `;
-
-const OffsetImg = styled.img``;
 
 const SocialMediaIcons = styled(Flex)``;
 
@@ -226,11 +225,24 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
           </LinkSection>
         </LinkAndIconSection>
         <FooterBottomSection>
-          <OffsetImg
-            src='/assets/theme_image/YDL_White.png'
-            alt='Your Logo'
-            width='100px'
-          />
+          <Flex alignItems='center'>
+            <Link href={`/${lng}/`}>
+              <Image
+                src='/assets/theme_image/YDL_White.png'
+                alt='Youth Data Lab Logo'
+                width={100}
+                height={46}
+              />
+            </Link>
+            <a href='https://www.youthfulcities.com/' target='_blank'>
+              <Image
+                src='/assets/theme_image/YC_SMALL_ALT_colour_white_RGB.png'
+                alt='Youthful Cities Logo'
+                width={100}
+                height={100}
+              />
+            </a>
+          </Flex>
           <Text fontSize='12px' color='white'>
             © 2024 Youthful Cities. {t('rights')}
           </Text>

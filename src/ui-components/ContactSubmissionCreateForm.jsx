@@ -6,7 +6,13 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
 import { createContactSubmission } from "../graphql/mutations";
@@ -29,6 +35,7 @@ export default function ContactSubmissionCreateForm(props) {
     phoneNumber: "",
     topic: "",
     message: "",
+    subscribed: false,
   };
   const [firstName, setFirstName] = React.useState(initialValues.firstName);
   const [lastName, setLastName] = React.useState(initialValues.lastName);
@@ -38,6 +45,7 @@ export default function ContactSubmissionCreateForm(props) {
   );
   const [topic, setTopic] = React.useState(initialValues.topic);
   const [message, setMessage] = React.useState(initialValues.message);
+  const [subscribed, setSubscribed] = React.useState(initialValues.subscribed);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setFirstName(initialValues.firstName);
@@ -46,6 +54,7 @@ export default function ContactSubmissionCreateForm(props) {
     setPhoneNumber(initialValues.phoneNumber);
     setTopic(initialValues.topic);
     setMessage(initialValues.message);
+    setSubscribed(initialValues.subscribed);
     setErrors({});
   };
   const validations = {
@@ -55,6 +64,7 @@ export default function ContactSubmissionCreateForm(props) {
     phoneNumber: [{ type: "Phone" }],
     topic: [],
     message: [],
+    subscribed: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -88,6 +98,7 @@ export default function ContactSubmissionCreateForm(props) {
           phoneNumber,
           topic,
           message,
+          subscribed,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -156,6 +167,7 @@ export default function ContactSubmissionCreateForm(props) {
               phoneNumber,
               topic,
               message,
+              subscribed,
             };
             const result = onChange(modelFields);
             value = result?.firstName ?? value;
@@ -185,6 +197,7 @@ export default function ContactSubmissionCreateForm(props) {
               phoneNumber,
               topic,
               message,
+              subscribed,
             };
             const result = onChange(modelFields);
             value = result?.lastName ?? value;
@@ -214,6 +227,7 @@ export default function ContactSubmissionCreateForm(props) {
               phoneNumber,
               topic,
               message,
+              subscribed,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -244,6 +258,7 @@ export default function ContactSubmissionCreateForm(props) {
               phoneNumber: value,
               topic,
               message,
+              subscribed,
             };
             const result = onChange(modelFields);
             value = result?.phoneNumber ?? value;
@@ -273,6 +288,7 @@ export default function ContactSubmissionCreateForm(props) {
               phoneNumber,
               topic: value,
               message,
+              subscribed,
             };
             const result = onChange(modelFields);
             value = result?.topic ?? value;
@@ -302,6 +318,7 @@ export default function ContactSubmissionCreateForm(props) {
               phoneNumber,
               topic,
               message: value,
+              subscribed,
             };
             const result = onChange(modelFields);
             value = result?.message ?? value;
@@ -316,6 +333,36 @@ export default function ContactSubmissionCreateForm(props) {
         hasError={errors.message?.hasError}
         {...getOverrideProps(overrides, "message")}
       ></TextField>
+      <SwitchField
+        label="Subscribed"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={subscribed}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phoneNumber,
+              topic,
+              message,
+              subscribed: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.subscribed ?? value;
+          }
+          if (errors.subscribed?.hasError) {
+            runValidationTasks("subscribed", value);
+          }
+          setSubscribed(value);
+        }}
+        onBlur={() => runValidationTasks("subscribed", subscribed)}
+        errorMessage={errors.subscribed?.errorMessage}
+        hasError={errors.subscribed?.hasError}
+        {...getOverrideProps(overrides, "subscribed")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

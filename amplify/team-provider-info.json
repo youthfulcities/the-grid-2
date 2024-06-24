@@ -40,5 +40,12 @@
         "thegrid2": {}
       }
     }
+  },
+  "prodclone": {
+    "categories": {
+      "auth": {
+        "thegrid2fafc44b3": {}
+      }
+    }
   }
 }

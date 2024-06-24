@@ -18,5 +18,6 @@
   "select": "Select a topic",
   "error": "An error occurred while sending your message. Please try again.",
   "success": "Your message has been sent successfully!",
-  "submit": "Submit"
+  "submit": "Submit",
+  "subscribe": "Subscribe to the Youthful Cities newsletter"
 }

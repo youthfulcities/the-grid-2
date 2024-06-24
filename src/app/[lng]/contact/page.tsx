@@ -1,18 +1,21 @@
 'use client';
 
+import useTranslation from '@/app/i18n/client';
 import {
   Alert,
   Button,
+  CheckboxField,
   Flex,
   Heading,
   SelectField,
+  Text,
   TextAreaField,
   TextField,
   View,
+  useTheme,
 } from '@aws-amplify/ui-react';
-
-import useTranslation from '@/app/i18n/client';
 import { generateClient } from 'aws-amplify/api';
+import axios from 'axios';
 import { useParams } from 'next/navigation';
 import React, { FormEvent, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
@@ -27,7 +30,7 @@ const StyledForm = styled(Flex)`
 
 const StyledInput = styled(TextField)`
   border: none;
-  margin-bottom: 24px;
+  margin-bottom: var(--amplify-space-large);
   label {
     color: white;
   }
@@ -38,7 +41,7 @@ const StyledInput = styled(TextField)`
 `;
 
 const StyledTextArea = styled(TextAreaField)`
-  margin-bottom: 24px;
+  margin-bottom: var(--amplify-space-large);
   label {
     color: white;
   }
@@ -49,7 +52,7 @@ const StyledTextArea = styled(TextAreaField)`
 `;
 
 const StyledSelect = styled(SelectField)`
-  margin-bottom: 24px;
+  margin-bottom: var(--amplify-space-large);
   label {
     color: white;
   }
@@ -63,17 +66,27 @@ const StyledSelect = styled(SelectField)`
   }
 `;
 
-const SubHeading = styled(Heading)`
-  font-size: 1.2em;
-  margin-bottom: 24px;
+const SubHeading = styled(Text)`
+  margin-bottom: var(--amplify-space-xl);
   color: white;
 `;
 
 const StyledButton = styled(Button)`
   border-color: transparent;
-  margin-bottom: 24px;
+  margin-bottom: var(--amplify-space-small);
   width: 100%;
   background-color: var(--amplify-colors-red-60);
+`;
+
+const StyledCheckbox = styled(CheckboxField)`
+  color: var(--amplify-colors-font-inverse);
+  margin-bottom: var(--amplify-space-large);
+  .amplify-flex {
+    align-items: center;
+  }
+  .amplify-text {
+    margin: 0;
+  }
 `;
 
 const client = generateClient();
@@ -88,11 +101,19 @@ const ContactForm = () => {
     message: '',
   });
 
+  const [statusCodeSubscribe, setStatusCodeSubscribe] = useState<number>();
+  const [statusSubscribe, setStatusSubscribe] = useState<
+    'success' | 'error' | 'loading' | 'idle'
+  >('idle');
+  const [responseMsgSubscribe, setResponseMsgSubscribe] = useState<string>('');
+  const [subscribe, setSubscribe] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'contact');
+  const { tokens } = useTheme();
 
   const { firstName, lastName, email, phoneNumber, topic, message } = formData;
 
@@ -106,6 +127,10 @@ const ContactForm = () => {
       ...prevState,
       [name]: value,
     }));
+  };
+
+  const handleSubscribe = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSubscribe(e.target.checked);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -125,6 +150,7 @@ const ContactForm = () => {
             phoneNumber,
             topic,
             message,
+            subscribed: subscribe,
           },
         },
       });
@@ -144,6 +170,8 @@ const ContactForm = () => {
           topic: '',
           message: '',
         });
+
+        setSubscribe(false);
       } else {
         throw new Error('Failed to send email');
       }
@@ -153,13 +181,31 @@ const ContactForm = () => {
     } finally {
       setLoading(false);
     }
+
+    try {
+      const response = await axios.post('/api/newsletter', {
+        fname: firstName,
+        lname: lastName,
+        email: email,
+        lng: lng,
+      });
+      setStatusSubscribe('success');
+      setStatusCodeSubscribe(response.status);
+      setResponseMsgSubscribe(response.data.message);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        setStatusSubscribe('error');
+        setStatusCodeSubscribe(err.response?.status);
+        setResponseMsgSubscribe(err.response?.data.error);
+      }
+    }
   };
 
   return (
     <Container>
       <View as='section' className='container section-padding'>
         <StyledForm as='form' onSubmit={handleSubmit}>
-          <Heading marginBottom='16px' level={2}>
+          <Heading marginBottom={tokens.space.medium.value} level={2}>
             {t('title')}
           </Heading>
           <SubHeading>
@@ -172,13 +218,13 @@ const ContactForm = () => {
             />
           </SubHeading>
           {error && (
-            <Alert marginBottom='16px' variation='error'>
-              {error}
+            <Alert marginBottom={tokens.space.medium.value} variation='error'>
+              {error} {t(responseMsgSubscribe)}
             </Alert>
           )}
           {success && (
-            <Alert marginBottom='16px' variation='success'>
-              {success}
+            <Alert marginBottom={tokens.space.medium.value} variation='success'>
+              {success} {t(responseMsgSubscribe)}
             </Alert>
           )}
           <Flex gap='24px'>
@@ -206,6 +252,14 @@ const ContactForm = () => {
             value={formData.email}
             onChange={handleChange}
             isRequired
+          />
+          <StyledCheckbox
+            label={t('subscribe')}
+            name='subscribe'
+            value='true'
+            size='large'
+            onChange={handleSubscribe}
+            checked={subscribe}
           />
           <StyledInput
             label={t('phone')}

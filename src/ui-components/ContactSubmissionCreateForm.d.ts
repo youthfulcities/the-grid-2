@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -28,6 +28,7 @@ export declare type ContactSubmissionCreateFormInputValues = {
     phoneNumber?: string;
     topic?: string;
     message?: string;
+    subscribed?: boolean;
 };
 export declare type ContactSubmissionCreateFormValidationValues = {
     firstName?: ValidationFunction<string>;
@@ -36,6 +37,7 @@ export declare type ContactSubmissionCreateFormValidationValues = {
     phoneNumber?: ValidationFunction<string>;
     topic?: ValidationFunction<string>;
     message?: ValidationFunction<string>;
+    subscribed?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type ContactSubmissionCreateFormOverridesProps = {
@@ -46,6 +48,7 @@ export declare type ContactSubmissionCreateFormOverridesProps = {
     phoneNumber?: PrimitiveOverrideProps<TextFieldProps>;
     topic?: PrimitiveOverrideProps<TextFieldProps>;
     message?: PrimitiveOverrideProps<TextFieldProps>;
+    subscribed?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type ContactSubmissionCreateFormProps = React.PropsWithChildren<{
     overrides?: ContactSubmissionCreateFormOverridesProps | undefined | null;

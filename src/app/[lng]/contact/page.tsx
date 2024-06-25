@@ -1,19 +1,20 @@
 'use client';
 
 import useTranslation from '@/app/i18n/client';
-import {
-  Alert,
-  Button,
-  CheckboxField,
-  Flex,
-  Heading,
-  SelectField,
-  Text,
-  TextAreaField,
-  TextField,
-  View,
-  useTheme,
-} from '@aws-amplify/ui-react';
+import
+  {
+    Alert,
+    Button,
+    CheckboxField,
+    Flex,
+    Heading,
+    SelectField,
+    Text,
+    TextAreaField,
+    TextField,
+    View,
+    useTheme,
+  } from '@aws-amplify/ui-react';
 import { generateClient } from 'aws-amplify/api';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
@@ -218,12 +219,12 @@ const ContactForm = () => {
               }}
             />
           </SubHeading>
-          {error && statusSubscribe != 'loading' && (
+          {error && statusSubscribe !== 'loading' && (
             <Alert marginBottom={tokens.space.medium.value} variation='error'>
               {error} {tsubscribe(responseMsgSubscribe)}
             </Alert>
           )}
-          {success && statusSubscribe != 'loading' && (
+          {success && statusSubscribe !== 'loading' && (
             <Alert marginBottom={tokens.space.medium.value} variation='success'>
               {success} {tsubscribe(responseMsgSubscribe)}
             </Alert>

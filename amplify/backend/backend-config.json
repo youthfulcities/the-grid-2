@@ -114,6 +114,14 @@
         }
       ]
     },
+    "AMPLIFY_function_contactFormUploader_sesEmailDev": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "contactFormUploader"
+        }
+      ]
+    },
     "AMPLIFY_function_dataapi_deploymentBucketName": {
       "usedBy": [
         {

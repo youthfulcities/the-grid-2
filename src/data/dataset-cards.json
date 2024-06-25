@@ -22,8 +22,15 @@
       "className": "image-card-uwi",
       "desc": "Now in its third iteration, the Urban Work Index 2023 ranks 30 cities across Canada to find the best places for youth to work and live.",
       "descfr": "La troisième version de l’indice du travail urbain 2023 classe 30 villes au Canada afin de déterminer les meilleurs endroits où travailler et vivre pour les jeunes.",
-      "methodology": "/pages/uwi-2023-methodology/",
+      "methodology": "",
       "file": "uwi-2023.csv",
+      "downloads": [
+        {
+          "title": "",
+          "type": "",
+          "icon": ""
+        }
+      ],
       "keywords": ["cost of living"]
     },
     {
@@ -36,6 +43,15 @@
       "descfr": "Plus de 400 indicateurs comparables au Canada, développés par des jeunes pour mesurer la situation dans leur ville.",
       "methodology": "/pages/methodology-pivot/#ind",
       "file": "index-2020-full.csv",
+      "downloads": [
+        {
+          "title": "Urban Youth Impact Report",
+          "titlefr": "Impact sur les jeunes en ville",
+          "type": "report",
+          "file": "EN-Urban-Youth-Impact-Report.pdf",
+          "filefr": "FR-Urban-Youth-Impact-Report.pdf"
+        }
+      ],
       "keywords": ["cost of living", "covid-19 pandemic"]
     },
     {
@@ -48,6 +64,21 @@
       "descfr": "Comportements, thèmes et impressions de plus de 3 000 jeunes de 15 à 29 ans à propos de leur ville et de leurs expériences avant et pendant la pandémie de COVID-19.",
       "methodology": "/pages/methodology-pivot/#surv",
       "file": "pivot-survey.csv",
+      "downloads": [
+        {
+          "title": "Urban Youth Impact Report",
+          "titlefr": "Impact sur les jeunes en ville",
+          "type": "report",
+          "file": "EN-Urban-Youth-Impact-Report.pdf",
+          "filefr": "FR-Urban-Youth-Impact-Report.pdf"
+        },
+        {
+          "title": "Survey Questionaire",
+          "titlefr": "Questionnaire d'enquête",
+          "type": "methodology",
+          "file": "Pivot-2020-Survey-Questionnaire.pdf"
+        }
+      ],
       "keywords": []
     },
     {
@@ -60,6 +91,15 @@
       "descfr": "Données agrégées de l’ensemble de données de l’enquête Pivot 2020, avec des réponses présentées sous forme de pourcentage.",
       "methodology": "/pages/methodology-pivot/#surv",
       "file": "pivot-2020-survey-aggregated.csv",
+      "downloads": [
+        {
+          "title": "Urban Youth Impact Report",
+          "titlefr": "Impact sur les jeunes en ville",
+          "type": "report",
+          "file": "EN-Urban-Youth-Impact-Report.pdf",
+          "filefr": "FR-Urban-Youth-Impact-Report.pdf"
+        }
+      ],
       "keywords": ["covid-19 pandemic"]
     },
     {
@@ -72,6 +112,28 @@
       "descfr": "Citations et transcriptions tirées de plus de 500 entretiens de 30 minutes avec des jeunes pour parler de leur ville pendant la pandémie de COVID-19 et de l’avenir.",
       "methodology": "/pages/methodology-pivot/#int",
       "file": "pivot-2020-interview.csv",
+      "downloads": [
+        {
+          "title": "Urban Youth Impact Report",
+          "titlefr": "Impact sur les jeunes en ville",
+          "type": "report",
+          "file": "EN-Urban-Youth-Impact-Report.pdf",
+          "filefr": "FR-Urban-Youth-Impact-Report.pdf"
+        }
+      ],
+      "keywords": ["cost of living", "covid-19 pandemic"]
+    },
+    {
+      "title": "Coventry – City of Culture",
+      "titlefr": "Coventry - Ville de la culture",
+      "type": "index",
+      "date": "2020",
+      "className": "image-card-pivot-2020-interview",
+      "desc": "The Youthful Cities Program is a partnership between Coventry UK City of Culture, the British Council and Youthful Cities to facilitate a cultural and creative skills exchange between young people across the globe. It has been developed to enable young adults (age 18-25) to creatively respond to important, urgent and youth-focused issues in their cities, encouraging more active participation in civic matters.",
+      "descfr": "Le programme Youthful Cities est un partenariat entre Coventry UK City of Culture, le British Council et Youthful Cities pour faciliter l'échange de compétences culturelles et créatives entre les jeunes du monde entier. Il a été conçu pour permettre aux jeunes adultes (âgés de 18 à 25 ans) de répondre de manière créative à des questions importantes, urgentes et axées sur la jeunesse dans leurs villes, en encourageant une participation plus active aux questions civiques.",
+      "methodology": "",
+      "file": "youthful-cities-city-of-culture-index-final.pdf",
+      "link": "https://www.youthfulcities.com/blog/reports/coventry-city-of-culture/",
       "keywords": ["cost of living", "covid-19 pandemic"]
     },
     {
@@ -83,6 +145,38 @@
       "desc": "The Real Affordability Index is a joint project between Youthful Cities and RBC Future Launch. It indexes real costs in 27 cities across Canada as of April 2022.",
       "descfr": "L’indice d’accessibilité réelle est un projet collectif de Youthful Cities et de RBC Objectif avenir. Il indexe les coûts réels dans 27 villes du Canada à partir d’avril 2022.",
       "file": "real-affordability-index-2022.csv",
+      "link": "https://www.youthfulcities.com/blog/reports/real-affordability-index-2022/",
+      "downloads": [
+        {
+          "title": "A Day in the Life",
+          "titlefr": "Une journée dans la vie",
+          "desc": "Using data from our 2022 Real Affordability dataset, we crafted a story of what it is like to live as youth, trying to thrive financially in Canada.",
+          "descfr": "À l'aide des données de notre Indice d'accessibilité réelle 2022, nous avons rédigé une histoire de ce que c'est que de vivre en tant que jeune, en essayant de s'épanouir financièrement au Canada.",
+          "type": "tool",
+          "file": "https://raiscrollytelling2022.youthfulcities.com/"
+        },
+        {
+          "title": "Press Release",
+          "titlefr": "Communiqué de presse",
+          "type": "press",
+          "file": "Youthful-Cities-RAI-press-release.pdf",
+          "filefr": "Youthful-Cities-RAI-press-release-fr.pdf"
+        },
+        {
+          "title": "Codebook",
+          "titlefr": "Codebook",
+          "type": "codebook",
+          "file": "rbc_rai_codebook.xlsx"
+        },
+        {
+          "title": "Quotes",
+          "desc": "Responses from youth collected after the release of the Real Affordability Index.",
+          "descfr": "Réponses des jeunes recueillies après la publication de l'indice d'accessibilité réelle.",
+          "titlefr": "Citations",
+          "type": "quotes",
+          "file": "rbc_rai_codebook.xlsx"
+        }
+      ],
       "keywords": ["cost of living"]
     },
     {
@@ -127,6 +221,15 @@
       "desc": "Data from the Urban Work Index 2021. This dataset was mostly based on data from the Pivot 2020 Index with the addition of a few unique indicators. Data is presented ‘as is’ and will be next updated for the 2023 Urban Work Index.",
       "descfr": "La troisième version de l’indice du travail urbain 2023 classe 30 villes au Canada afin de déterminer les meilleurs endroits où travailler et vivre pour les jeunes.",
       "file": "uwi-2021.csv",
+      "link": "https://www.youthfulcities.com/blog/reports/urban-work-index-2021/",
+      "downloads": [
+        {
+          "title": "Methodology and Data Sources",
+          "titlefr": "Méthodologie et sources de données",
+          "type": "methodology",
+          "file": "Urban-Work-Index-Methodology-Data-Source-and-Measures.xlsx"
+        }
+      ],
       "keywords": []
     }
   ]

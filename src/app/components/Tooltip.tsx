@@ -1,14 +1,19 @@
-import { Badge } from '@aws-amplify/ui-react';
+import { Badge, Text } from '@aws-amplify/ui-react';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 interface TooltipProps {
   showTooltip: boolean;
   tooltipMsg: string;
+  tooltipDesc?: string;
   children: ReactNode;
 }
 
-const StyledBadge = styled(Badge)<{ $show: boolean; $height: number }>`
+const StyledBadge = styled(Badge)<{
+  $show: boolean;
+  $height: number;
+  $isBig: boolean;
+}>`
   position: absolute;
   top: ${(props) => (props.$show ? -props.$height - 10 + 'px' : '0')};
   left: 0;
@@ -22,12 +27,33 @@ const StyledBadge = styled(Badge)<{ $show: boolean; $height: number }>`
   visibility: ${(props) => (props.$show ? 'visible' : 'hidden')};
   opacity: ${(props) => (props.$show ? '1' : '0')};
   word-break: keep-all;
+  width: ${(props) => (props.$isBig ? '300%' : 'auto')};
   z-index: 1;
 `;
 
-const MyTooltip = ({ tooltipMsg, showTooltip, children }: TooltipProps) => {
+const SmallText = styled(Text)`
+  margin-top: var(--amplify-space-small);
+  color: var(--amplify-colors-font-primary);
+  font-weight: 400;
+  font-size: var(--amplify-fontsizes-xs);
+`;
+
+const MyTooltip = ({
+  tooltipMsg,
+  showTooltip,
+  tooltipDesc,
+  children,
+}: TooltipProps) => {
   const [elementHeight, setElementHeight] = useState<number>(0);
   const elementRef = useRef<HTMLDivElement>(null);
+
+  const isBig = () => {
+    if (tooltipDesc || tooltipMsg.length > 50) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   useEffect(() => {
     const updateHeight = () => {
@@ -48,12 +74,16 @@ const MyTooltip = ({ tooltipMsg, showTooltip, children }: TooltipProps) => {
     };
   }, []);
 
-  console.log(tooltipMsg, elementHeight);
-
   return (
     <>
-      <StyledBadge ref={elementRef} $show={showTooltip} $height={elementHeight}>
+      <StyledBadge
+        ref={elementRef}
+        $show={showTooltip}
+        $height={elementHeight}
+        $isBig={isBig()}
+      >
         {tooltipMsg}
+        {tooltipDesc && <SmallText>{tooltipDesc}</SmallText>}
       </StyledBadge>
       {children}
     </>

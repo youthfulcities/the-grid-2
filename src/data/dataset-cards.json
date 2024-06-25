@@ -22,13 +22,22 @@
       "className": "image-card-uwi",
       "desc": "Now in its third iteration, the Urban Work Index 2023 ranks 30 cities across Canada to find the best places for youth to work and live.",
       "descfr": "La troisième version de l’indice du travail urbain 2023 classe 30 villes au Canada afin de déterminer les meilleurs endroits où travailler et vivre pour les jeunes.",
-      "methodology": "",
       "file": "uwi-2023.csv",
+      "link": "https://www.youthfulcities.com/blog/reports/urban-work-index-2023/",
       "downloads": [
         {
-          "title": "",
-          "type": "",
-          "icon": ""
+          "title": "Press Release",
+          "titlefr": "Communiqué de presse",
+          "type": "press",
+          "file": "News-Release-RBC-FINAL-Youthful-Cities-EN-May-30-2023.pdf",
+          "filefr": "UWI-2023-press-release-FR.pdf"
+        },
+        {
+          "title": "Methodology",
+          "titlefr": "Méthodologie",
+          "type": "methodology",
+          "file": "UWI 2023 Methodology.pdf",
+          "filefr": "UWI 2023 Methodology FR.pdf"
         }
       ],
       "keywords": ["cost of living"]
@@ -41,7 +50,6 @@
       "className": "image-card-pivot-2020-index",
       "desc": "Over 400 comparable indicators across Canada developed by young people to measure their city’s performance.",
       "descfr": "Plus de 400 indicateurs comparables au Canada, développés par des jeunes pour mesurer la situation dans leur ville.",
-      "methodology": "/pages/methodology-pivot/#ind",
       "file": "index-2020-full.csv",
       "downloads": [
         {
@@ -128,7 +136,7 @@
       "titlefr": "Coventry - Ville de la culture",
       "type": "index",
       "date": "2020",
-      "className": "image-card-pivot-2020-interview",
+      "className": "image-card-arts-fashion-design",
       "desc": "The Youthful Cities Program is a partnership between Coventry UK City of Culture, the British Council and Youthful Cities to facilitate a cultural and creative skills exchange between young people across the globe. It has been developed to enable young adults (age 18-25) to creatively respond to important, urgent and youth-focused issues in their cities, encouraging more active participation in civic matters.",
       "descfr": "Le programme Youthful Cities est un partenariat entre Coventry UK City of Culture, le British Council et Youthful Cities pour faciliter l'échange de compétences culturelles et créatives entre les jeunes du monde entier. Il a été conçu pour permettre aux jeunes adultes (âgés de 18 à 25 ans) de répondre de manière créative à des questions importantes, urgentes et axées sur la jeunesse dans leurs villes, en encourageant une participation plus active aux questions civiques.",
       "methodology": "",
@@ -214,12 +222,12 @@
     },
     {
       "title": "Urban Work Index 2021",
-      "titlefr": "Indice du travail urbain 2023",
+      "titlefr": "Indice du travail urbain 2021",
       "type": "index",
       "date": "2021",
       "className": "image-card-uwi",
-      "desc": "Data from the Urban Work Index 2021. This dataset was mostly based on data from the Pivot 2020 Index with the addition of a few unique indicators. Data is presented ‘as is’ and will be next updated for the 2023 Urban Work Index.",
-      "descfr": "La troisième version de l’indice du travail urbain 2023 classe 30 villes au Canada afin de déterminer les meilleurs endroits où travailler et vivre pour les jeunes.",
+      "desc": "Data from the Urban Work Index 2021. This dataset was mostly based on data from the Pivot 2020 Index with the addition of a few unique indicators. Data is presented ‘as is.’",
+      "descfr": "Données de l'indice de travail urbain 2021. Cet ensemble de données est principalement basé sur les données de l'indice Pivot 2020 avec l'ajout de quelques indicateurs uniques. Les données sont présentées 'telles quelles'",
       "file": "uwi-2021.csv",
       "link": "https://www.youthfulcities.com/blog/reports/urban-work-index-2021/",
       "downloads": [
@@ -230,6 +238,103 @@
           "file": "Urban-Work-Index-Methodology-Data-Source-and-Measures.xlsx"
         }
       ],
+      "keywords": []
+    },
+    {
+      "title": "Canadian Index 2018",
+      "titlefr": "Indice Canadien 2018",
+      "type": "index",
+      "date": "2018",
+      "className": "image-card-cities",
+      "desc": "A ranking of the most youthful cities in Canada.",
+      "descfr": "Un classement des villes les plus jeunes du Canada.",
+      "file": "YouthfulCities_CanadianIndex_2018.pdf",
+      "filefr": "YouthfulCities_CanadianIndex_2018_French.pdf",
+      "keywords": []
+    },
+    {
+      "title": "Canadian Index 2019",
+      "titlefr": "Indice Canadien 2019",
+      "type": "index",
+      "date": "2019",
+      "className": "image-card-ottawa",
+      "desc": "A ranking of the most youthful cities in Canada.",
+      "descfr": "Un classement des villes les plus jeunes du Canada.",
+      "file": "YouthfulCities_Canadian-Index_June2019_English.pdf",
+      "filefr": "YouthfulCities_CanadianIndex_2019_French.pdf",
+      "downloads": [
+        {
+          "title": "Press Release",
+          "titlefr": "Communiqué de presse",
+          "type": "press",
+          "file": "YouthfulCities_CanadianIndex_2019_PressRelease.pdf"
+        }
+      ],
+      "keywords": []
+    },
+    {
+      "title": "Global Urban Millennial Survey",
+      "titlefr": "Enquête mondiale sur les jeunes urbains",
+      "type": "survey",
+      "date": "2016",
+      "className": "image-card-entertainment",
+      "desc": "A survey of millennials' perceptions of what a youthful city is and how their city is performing.",
+      "descfr": "Une enquête sur la perception qu'ont les milléniaux de ce qu'est une ville jeune et sur les performances de leur ville.",
+      "file": "YouthfulCities_GlobalUrbanMillennialSurvey_2016.pdf",
+      "keywords": []
+    },
+    {
+      "title": "Urban Work Index 2019",
+      "titlefr": "Indice du travail urbain 2019",
+      "type": "index",
+      "date": "2019",
+      "className": "image-card-entrepreneurial-spirit",
+      "desc": "A ranking of the best cities to work in Canada.",
+      "descfr": "Un classement des meilleures villes où travailler au Canada.",
+      "file": "YouthfulCities_Urban_Work_Index_2019.pdf",
+      "filefr": "YouthfulCities_UrbanWorkIndex_2019_French.pdf",
+      "downloads": [
+        {
+          "title": "Press Release",
+          "titlefr": "Communiqué de presse",
+          "type": "press",
+          "file": "YouthfulCities_UrbanWorkIndex_2019_PressRelease.pdf",
+          "filefr": "YouthfulCities_UrbanWorkIndex_2019_PressRelease_French.pdf"
+        }
+      ],
+      "keywords": []
+    },
+    {
+      "title": "Global Index 2015",
+      "titlefr": "Indice mondial 2015",
+      "type": "index",
+      "date": "2015",
+      "className": "image-card-public-built-space",
+      "desc": "A ranking of the most youthful cities in the world.",
+      "descfr": "Un classement des villes les plus jeunes du monde.",
+      "file": "YouthfulCities_GlobalIndex_2015.pdf",
+      "keywords": []
+    },
+    {
+      "title": "Global Index 2014",
+      "titlefr": "Indice mondial 2014",
+      "type": "index",
+      "date": "2014",
+      "className": "image-card-restaurants-and-bars",
+      "desc": "A ranking of the most youthful cities in the world.",
+      "descfr": "Un classement des villes les plus jeunes du monde.",
+      "file": "YouthfulCities_GlobalIndex_2014.pdf",
+      "keywords": []
+    },
+    {
+      "title": "Global Affordability Index 2014",
+      "titlefr": "Indice mondial d'accessibilité financière 2014",
+      "type": "index",
+      "date": "2014",
+      "className": "image-card-local-economic-growth",
+      "desc": "A ranking of the most affordable cities in the world.",
+      "descfr": "Classement des villes les plus abordables du monde.",
+      "file": "YouthfulCities_GlobalAffordabilityIndex_2014.pdf",
       "keywords": []
     }
   ]

@@ -55,6 +55,7 @@ interface AppProps {
   link?: string;
   type?: string;
   tooltipMsg: string;
+  tooltipDesc?: string;
   children?: ReactNode;
 }
 
@@ -66,6 +67,7 @@ const DataCardButton = ({
   lng,
   link,
   tooltipMsg,
+  tooltipDesc,
   type = 'button',
   children,
 }: AppProps) => {
@@ -124,7 +126,11 @@ const DataCardButton = ({
         </StyledLink>
       ) : (
         <TooltipWrapper>
-          <Tooltip showTooltip={showTooltip} tooltipMsg={tooltipMsg}>
+          <Tooltip
+            showTooltip={showTooltip}
+            tooltipMsg={tooltipMsg}
+            tooltipDesc={tooltipDesc}
+          >
             <StyledButton
               $background={getColor(index).button}
               $inverse={getColor(index).buttonInverse}

@@ -5,7 +5,12 @@
 const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 const { unmarshall } = require('@aws-sdk/util-dynamodb');
 
-const ses = new SESClient();
+// Configuration object
+const config = {
+  region: 'us-east-1',
+};
+
+const ses = new SESClient(config);
 
 exports.handler = async (event) => {
   for (const record of event.Records) {
@@ -24,7 +29,7 @@ exports.handler = async (event) => {
         const response = await ses.send(
           new SendEmailCommand({
             Destination: {
-              ToAddresses: [process.env.SES_EMAIL],
+              ToAddresses: [process.env.SES_EMAIL, process.env.SES_EMAIL_DEV],
             },
             Source: process.env.SES_EMAIL,
             Message: {
@@ -35,7 +40,7 @@ exports.handler = async (event) => {
                 Text: {
                   Data: `You have received a new message from ${firstName} ${lastName} 
                   ${phoneNumber}
-                  (${email})
+                  ${email}
                   ${message}
                   Subscribed: ${subscribed}`,
                 },

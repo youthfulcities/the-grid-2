@@ -10,6 +10,7 @@ export type CreateContactSubmissionInput = {
   phoneNumber?: string | null,
   topic?: string | null,
   message?: string | null,
+  subscribed?: boolean | null,
 };
 
 export type ModelContactSubmissionConditionInput = {
@@ -19,6 +20,7 @@ export type ModelContactSubmissionConditionInput = {
   phoneNumber?: ModelStringInput | null,
   topic?: ModelStringInput | null,
   message?: ModelStringInput | null,
+  subscribed?: ModelBooleanInput | null,
   and?: Array< ModelContactSubmissionConditionInput | null > | null,
   or?: Array< ModelContactSubmissionConditionInput | null > | null,
   not?: ModelContactSubmissionConditionInput | null,
@@ -66,6 +68,13 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
+export type ModelBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
 export type ContactSubmission = {
   __typename: "ContactSubmission",
   id: string,
@@ -75,6 +84,7 @@ export type ContactSubmission = {
   phoneNumber?: string | null,
   topic?: string | null,
   message?: string | null,
+  subscribed?: boolean | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -87,6 +97,7 @@ export type UpdateContactSubmissionInput = {
   phoneNumber?: string | null,
   topic?: string | null,
   message?: string | null,
+  subscribed?: boolean | null,
 };
 
 export type DeleteContactSubmissionInput = {
@@ -101,6 +112,7 @@ export type ModelContactSubmissionFilterInput = {
   phoneNumber?: ModelStringInput | null,
   topic?: ModelStringInput | null,
   message?: ModelStringInput | null,
+  subscribed?: ModelBooleanInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelContactSubmissionFilterInput | null > | null,
@@ -138,6 +150,7 @@ export type ModelSubscriptionContactSubmissionFilterInput = {
   phoneNumber?: ModelSubscriptionStringInput | null,
   topic?: ModelSubscriptionStringInput | null,
   message?: ModelSubscriptionStringInput | null,
+  subscribed?: ModelSubscriptionBooleanInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionContactSubmissionFilterInput | null > | null,
@@ -174,6 +187,11 @@ export type ModelSubscriptionStringInput = {
   notIn?: Array< string | null > | null,
 };
 
+export type ModelSubscriptionBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+};
+
 export type CreateContactSubmissionMutationVariables = {
   input: CreateContactSubmissionInput,
   condition?: ModelContactSubmissionConditionInput | null,
@@ -189,6 +207,7 @@ export type CreateContactSubmissionMutation = {
     phoneNumber?: string | null,
     topic?: string | null,
     message?: string | null,
+    subscribed?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -209,6 +228,7 @@ export type UpdateContactSubmissionMutation = {
     phoneNumber?: string | null,
     topic?: string | null,
     message?: string | null,
+    subscribed?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -229,6 +249,7 @@ export type DeleteContactSubmissionMutation = {
     phoneNumber?: string | null,
     topic?: string | null,
     message?: string | null,
+    subscribed?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -248,6 +269,7 @@ export type GetContactSubmissionQuery = {
     phoneNumber?: string | null,
     topic?: string | null,
     message?: string | null,
+    subscribed?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -271,6 +293,7 @@ export type ListContactSubmissionsQuery = {
       phoneNumber?: string | null,
       topic?: string | null,
       message?: string | null,
+      subscribed?: boolean | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -292,6 +315,7 @@ export type OnCreateContactSubmissionSubscription = {
     phoneNumber?: string | null,
     topic?: string | null,
     message?: string | null,
+    subscribed?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -311,6 +335,7 @@ export type OnUpdateContactSubmissionSubscription = {
     phoneNumber?: string | null,
     topic?: string | null,
     message?: string | null,
+    subscribed?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -330,6 +355,7 @@ export type OnDeleteContactSubmissionSubscription = {
     phoneNumber?: string | null,
     topic?: string | null,
     message?: string | null,
+    subscribed?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,

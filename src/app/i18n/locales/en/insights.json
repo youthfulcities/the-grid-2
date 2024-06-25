@@ -1,3 +1,10 @@
 {
-  "insights": "Insights"
+  "description": "<p>How can we find meaning in data? How can we use numbers and information to create understanding?</p><p>The team at Youthful Cities has created tools to help the public make sense of the data we’ve gathered about and with youth. We know that what we’ve done is just one interpretation. We expect and encourage you to find others by downloading our repository of open data and using it to create new insights.</p>",
+  "insights": "Insights",
+  "note": "Note",
+  "disclaimer": "The Youthful Cities chatbot utilizes the GPT-4 language model. All training data for the model is curated by Youthful Cities. As with any AI, GPT-4 lacks real-time understanding of context and may occasionally produce irrelevant or nonsensical responses. Its responses should be evaluated critically, especially in sensitive or complex situations where human judgment is crucial.",
+  "login": "You can log into the chatbot with the following credentials:",
+  "email": "<strong>Email:</strong> chatbot@youthfulcities.com",
+  "password": "<strong>Password:</strong> demo",
+  "goto": "Go to chatbot"
 }

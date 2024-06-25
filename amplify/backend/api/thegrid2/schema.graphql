@@ -9,4 +9,5 @@ type ContactSubmission
   phoneNumber: AWSPhone
   topic: String
   message: String
+  subscribed: Boolean
 }

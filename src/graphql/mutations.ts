@@ -20,6 +20,7 @@ export const createContactSubmission = /* GraphQL */ `mutation CreateContactSubm
     phoneNumber
     topic
     message
+    subscribed
     createdAt
     updatedAt
     __typename
@@ -41,6 +42,7 @@ export const updateContactSubmission = /* GraphQL */ `mutation UpdateContactSubm
     phoneNumber
     topic
     message
+    subscribed
     createdAt
     updatedAt
     __typename
@@ -62,6 +64,7 @@ export const deleteContactSubmission = /* GraphQL */ `mutation DeleteContactSubm
     phoneNumber
     topic
     message
+    subscribed
     createdAt
     updatedAt
     __typename

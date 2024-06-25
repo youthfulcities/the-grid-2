@@ -63,7 +63,7 @@
         },
         "contactFormUploader": {
           "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
-          "s3Key": "amplify-builds/contactFormUploader-54314753343245625473-build.zip",
+          "s3Key": "amplify-builds/contactFormUploader-687651357568564c796d-build.zip",
           "sesEmail": "info@youthfulcities.com"
         }
       },
@@ -73,6 +73,13 @@
       },
       "analytics": {
         "thegrid2": {}
+      }
+    }
+  },
+  "prodclone": {
+    "categories": {
+      "auth": {
+        "thegrid2fafc44b3": {}
       }
     }
   }

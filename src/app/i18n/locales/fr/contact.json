@@ -1,6 +1,6 @@
 {
   "title": "Contact",
-  "subtitle": "Vous avez des questions ? Vous souhaitez travailler avec Youthful Cities ? Prenez contact avec nous.",
+  "subtitle": "Vous avez des questions ? Vous souhaitez travailler avec Youthful Cities ? <a>Pour en savoir plus sur nous, cliquez ici.</a> Nous aimerions que vous nous expliquiez comment vous souhaitez utiliser Youth Data Lab.",
   "fname": "Prénom *",
   "lname": "Nom de famille *",
   "name": "Nom",
@@ -18,5 +18,6 @@
   "select": "Sélectionnez un sujet",
   "error": "Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer.",
   "success": "Votre message a été envoyé avec succès !",
-  "submit": "Envoyer"
+  "submit": "Envoyer",
+  "subscribe": "S'abonner à la lettre d'information des villes jeunes"
 }

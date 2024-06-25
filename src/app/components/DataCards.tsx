@@ -167,6 +167,7 @@ const DataCard = ({ fetchUrl, lng }: AppProps) => {
                 lng={lng}
                 type={download.type}
                 tooltipMsg={download.title}
+                tooltipDesc={download.desc}
               />
             ))}
         </Flex>

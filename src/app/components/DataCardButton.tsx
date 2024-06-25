@@ -1,7 +1,19 @@
 import useTranslation from '@/app/i18n/client';
-import { Button, useTheme } from '@aws-amplify/ui-react';
-import { useState } from 'react';
-import { FaFileArrowDown } from 'react-icons/fa6';
+import { Button, useTheme, View } from '@aws-amplify/ui-react';
+import { ReactNode, useState } from 'react';
+import { IconType } from 'react-icons';
+import {
+  FaBook,
+  FaDownload,
+  FaFileArrowDown,
+  FaFilePdf,
+  FaNewspaper,
+  FaQuoteLeft,
+  FaTable,
+  FaUpRightFromSquare,
+  FaVideo,
+  FaWrench,
+} from 'react-icons/fa6';
 import styled from 'styled-components';
 import Tooltip from './Tooltip';
 
@@ -24,15 +36,11 @@ const StyledButton = styled(Button)<{ $background: string; $inverse: string }>`
   }
 `;
 
-interface DatasetCard {
-  title: string;
-  titlefr: string;
-  date: string;
-  desc: string;
-  descfr: string;
-  file: string;
-  className: string;
-}
+const TooltipWrapper = styled(View)`
+  position: relative;
+`;
+
+const StyledLink = styled.a``;
 
 interface ColorGetter {
   (index: number): { button: string; buttonInverse: string };
@@ -42,14 +50,28 @@ interface AppProps {
   fetchUrl: (url: string) => Promise<{ url: URL; expiresAt: Date } | null>;
   index: number;
   getColor: ColorGetter;
-  card: DatasetCard;
+  file: string;
   lng: string;
+  link?: string;
+  type?: string;
+  tooltipMsg: string;
+  children?: ReactNode;
 }
 
-const DataCardButton = ({ getColor, index, fetchUrl, card, lng }: AppProps) => {
-  const [showTooltip, setShowTooltip] = useState<boolean>(false);
+const DataCardButton = ({
+  getColor,
+  index,
+  fetchUrl,
+  file,
+  lng,
+  link,
+  tooltipMsg,
+  type = 'button',
+  children,
+}: AppProps) => {
   const { t } = useTranslation(lng, 'datasets');
   const { tokens } = useTheme();
+  const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
   const download = async (file: string) => {
     try {
@@ -61,20 +83,64 @@ const DataCardButton = ({ getColor, index, fetchUrl, card, lng }: AppProps) => {
     }
   };
 
+  // Define a mapping from type to icon component
+  const typeToIconMap: { [key: string]: IconType } = {
+    press: FaNewspaper,
+    tool: FaWrench,
+    methodology: FaBook,
+    pdf: FaFilePdf,
+    download: FaFileArrowDown,
+    link: FaUpRightFromSquare,
+    video: FaVideo,
+    codebook: FaTable,
+    quotes: FaQuoteLeft,
+  };
+
+  const checkType = (type: string) => {
+    return typeToIconMap[type] || FaDownload;
+  };
+
+  const Icon = checkType(type);
+
   return (
-    <StyledButton
-      $background={getColor(index).button}
-      $inverse={getColor(index).buttonInverse}
-      variation='primary'
-      onClick={() => download(card.file)}
-      onMouseEnter={() => setShowTooltip(true)}
-      onMouseLeave={() => setShowTooltip(false)}
-      onFocus={() => setShowTooltip(true)}
-      onBlur={() => setShowTooltip(false)}
-    >
-      <FaFileArrowDown size={tokens.space.large.value} />
-      <Tooltip showTooltip={showTooltip}>{t('csv')}</Tooltip>
-    </StyledButton>
+    <>
+      {type === 'link' ? (
+        <StyledLink href={link} target='_blank'>
+          <TooltipWrapper>
+            <Tooltip showTooltip={showTooltip} tooltipMsg={tooltipMsg}>
+              <StyledButton
+                $background={getColor(index).button}
+                $inverse={getColor(index).buttonInverse}
+                variation='primary'
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+                onFocus={() => setShowTooltip(true)}
+                onBlur={() => setShowTooltip(false)}
+              >
+                <Icon size={tokens.space.large.value} />
+              </StyledButton>
+            </Tooltip>
+          </TooltipWrapper>
+        </StyledLink>
+      ) : (
+        <TooltipWrapper>
+          <Tooltip showTooltip={showTooltip} tooltipMsg={tooltipMsg}>
+            <StyledButton
+              $background={getColor(index).button}
+              $inverse={getColor(index).buttonInverse}
+              variation='primary'
+              onClick={() => download(file)}
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+              onFocus={() => setShowTooltip(true)}
+              onBlur={() => setShowTooltip(false)}
+            >
+              <Icon size={tokens.space.large.value} />
+            </StyledButton>
+          </Tooltip>
+        </TooltipWrapper>
+      )}
+    </>
   );
 };
 

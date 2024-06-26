@@ -8,7 +8,7 @@
       "type": "index",
       "className": "image-card-cbyf-index",
       "desc": "Communities Building Youth Futures (CBYF) is a collective impact movement aimed at improving the future of 5,000 youth. Youthful Cities partnered with CBYF to create this index.",
-      "descfr": "itations et transcriptions tirées de plus de 500 entretiens de 30 minutes avec des jeunes pour parler de leur ville pendant la pandémie de COVID-19 et de l’avenir.",
+      "descfr": "",
       "organization": "/pages/tamarack",
       "methodology": "/pages/methodology-tamarack",
       "file": "tamarack-index.csv",
@@ -81,7 +81,7 @@
           "filefr": "FR-Urban-Youth-Impact-Report.pdf"
         },
         {
-          "title": "Survey Questionaire",
+          "title": "Survey Questionnaire",
           "titlefr": "Questionnaire d'enquête",
           "type": "methodology",
           "file": "Pivot-2020-Survey-Questionnaire.pdf"
@@ -106,6 +106,12 @@
           "type": "report",
           "file": "EN-Urban-Youth-Impact-Report.pdf",
           "filefr": "FR-Urban-Youth-Impact-Report.pdf"
+        },
+        {
+          "title": "Survey Questionnaire",
+          "titlefr": "Questionnaire d'enquête",
+          "type": "methodology",
+          "file": "Pivot-2020-Survey-Questionnaire.pdf"
         }
       ],
       "keywords": ["covid-19 pandemic"]
@@ -216,7 +222,7 @@
       "date": "2022",
       "className": "image-card-microgrant",
       "desc": "This dataset focuses on micro-grants available at the city level. It was put together in collaboration with TakingITGlobal.",
-      "descfr": "",
+      "descfr": "Cet ensemble de données se concentre sur les micro-subventions disponibles au niveau des villes. Il a été élaboré en collaboration avec TakingITGlobal.",
       "file": "micro-grant-index.csv",
       "keywords": []
     },
@@ -227,7 +233,7 @@
       "date": "2021",
       "className": "image-card-uwi",
       "desc": "Data from the Urban Work Index 2021. This dataset was mostly based on data from the Pivot 2020 Index with the addition of a few unique indicators. Data is presented ‘as is.’",
-      "descfr": "Données de l'indice de travail urbain 2021. Cet ensemble de données est principalement basé sur les données de l'indice Pivot 2020 avec l'ajout de quelques indicateurs uniques. Les données sont présentées 'telles quelles'",
+      "descfr": "Données de l'indice de travail urbain 2021. Cet ensemble de données est principalement basé sur les données de l'indice Pivot 2020 avec l'ajout de quelques indicateurs uniques. Les données sont présentées 'telles quelles.'",
       "file": "uwi-2021.csv",
       "link": "https://www.youthfulcities.com/blog/reports/urban-work-index-2021/",
       "downloads": [

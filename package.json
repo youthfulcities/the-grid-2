@@ -37,6 +37,7 @@
     "isomorphic-unfetch": "^4.0.2",
     "lodash": "^4.17.21",
     "next": "^13.5.6",
+    "next-transpile-modules": "^10.0.1",
     "papaparse": "^5.4.1",
     "prettier": "^3.2.5",
     "prettier-eslint": "^16.3.0",

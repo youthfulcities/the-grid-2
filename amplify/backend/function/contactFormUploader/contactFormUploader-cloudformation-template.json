@@ -26,6 +26,9 @@
     },
     "sesEmail": {
       "Type": "String"
+    },
+    "sesEmailDev": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -83,6 +86,9 @@
             },
             "SES_EMAIL": {
               "Ref": "sesEmail"
+            },
+            "SES_EMAIL_DEV": {
+              "Ref": "sesEmailDev"
             }
           }
         },

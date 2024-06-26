@@ -50,9 +50,8 @@ const MyTooltip = ({
   const isBig = () => {
     if (tooltipDesc || tooltipMsg.length > 50) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   };
 
   useEffect(() => {

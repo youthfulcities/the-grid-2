@@ -1,4 +1,3 @@
-import useTranslation from '@/app/i18n/client';
 import insightCards from '@/data/insight-cards.json';
 import {
   Button,
@@ -68,7 +67,6 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng }) => {
   const { tokens } = useTheme();
   const sortedInsightCards = _.orderBy(insightCards.cards, 'date', 'desc');
   const [openDialogue, setOpenDialogue] = useState(false);
-  const { t } = useTranslation(lng, 'home');
 
   const handleOpen = () => {
     setOpenDialogue(true);

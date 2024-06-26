@@ -1,7 +1,7 @@
 //
 
 import '@aws-amplify/ui-react/styles.css';
-import { GoogleAnalytics } from '@next/third-parties/google';
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { Amplify } from 'aws-amplify';
 import { configureAutoTrack } from 'aws-amplify/analytics';
 import { dir } from 'console';
@@ -100,8 +100,15 @@ const RootLayout: React.FC<RootLayoutProps> = ({
         type='text/javascript'
         src='https://cdn-cookieyes.com/client_data/36b079cad9fec46bd01a04bc/script.js'
       />
+      <Script
+        id='adsense'
+        async
+        src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6052560776293450'
+        crossOrigin='anonymous'
+      />
       <body>
-        <GoogleAnalytics gaId='G-7S1Y1B2YXC' />
+        <GoogleAnalytics gaId='G-GEF0PPKZXD' />
+        <GoogleTagManager gtmId='GTM-MXZ2WJTV' />
         <StyledComponentsRegistry>
           <AWSThemeProvider>
             <NavBar lng={lng} />

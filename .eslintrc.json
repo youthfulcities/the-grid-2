@@ -1,4 +1,4 @@
-i{
+{
   "env": {
     "browser": true,
     "es2021": true
@@ -20,6 +20,9 @@ i{
   },
   "plugins": ["react", "prettier", "json"],
   "rules": {
+    "react/jsx-no-useless-fragment": "warn",
+    "prefer-template": "warn",
+    "react/require-default-props": "off",
     "jsx-a11y/control-has-associated-label": "warn",
     "jsx-a11y/anchor-has-content": "warn",
     "@typescript-eslint/ban-ts-comment": "warn",

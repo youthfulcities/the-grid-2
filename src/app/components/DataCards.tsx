@@ -8,6 +8,7 @@ import {
   View,
 } from '@aws-amplify/ui-react';
 import _ from 'lodash';
+import { useParams } from 'next/navigation';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import useTranslation from '../i18n/client';
@@ -29,7 +30,8 @@ interface DatasetCard {
   date: string;
   desc: string;
   descfr?: string;
-  file: string;
+  file?: string;
+  filefr?: string;
   link?: string;
   className: string;
   downloads?: Download[];
@@ -44,12 +46,12 @@ const StyledCard = styled(Card)<{ $background: string; $font: string }>`
 `;
 
 interface AppProps {
-  lng: string;
   fetchUrl: (url: string) => Promise<{ url: URL; expiresAt: Date } | null>;
 }
 
-const DataCard = ({ fetchUrl, lng }: AppProps) => {
+const DataCard = ({ fetchUrl }: AppProps) => {
   const { tokens } = useTheme();
+  const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'datasets');
 
   const sortedDatasetCards = _.orderBy(
@@ -139,17 +141,16 @@ const DataCard = ({ fetchUrl, lng }: AppProps) => {
           <DataCardButton
             getColor={getColor}
             index={index}
-            file={card.file}
+            file={(lng === 'fr' && card.filefr) || card.file}
             fetchUrl={fetchUrl}
             lng={lng}
             type='download'
-            tooltipMsg={t('download', { type: getFileType(card.file) })}
+            tooltipMsg={t('download', { type: getFileType(card.file || '') })}
           />
           {card.link && (
             <DataCardButton
               getColor={getColor}
               index={index}
-              file={card.file}
               fetchUrl={fetchUrl}
               lng={lng}
               type='link'
@@ -160,14 +161,17 @@ const DataCard = ({ fetchUrl, lng }: AppProps) => {
           {card.downloads &&
             card.downloads.map((download) => (
               <DataCardButton
+                key={uuidv4()}
                 getColor={getColor}
                 index={index}
-                file={download.file}
+                file={(lng === 'fr' && download.filefr) || download.file}
                 fetchUrl={fetchUrl}
                 lng={lng}
                 type={download.type}
-                tooltipMsg={download.title}
-                tooltipDesc={download.desc}
+                tooltipMsg={
+                  (lng === 'fr' && download.titlefr) || download.title
+                }
+                tooltipDesc={lng === 'fr' ? download.descfr : download.desc}
               />
             ))}
         </Flex>

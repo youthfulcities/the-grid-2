@@ -1,11 +1,11 @@
-import useTranslation from '@/app/i18n/client';
 import { Button, useTheme, View } from '@aws-amplify/ui-react';
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { IconType } from 'react-icons';
 import {
   FaBook,
   FaDownload,
   FaFileArrowDown,
+  FaFileLines,
   FaFilePdf,
   FaNewspaper,
   FaQuoteLeft,
@@ -50,13 +50,12 @@ interface AppProps {
   fetchUrl: (url: string) => Promise<{ url: URL; expiresAt: Date } | null>;
   index: number;
   getColor: ColorGetter;
-  file: string;
+  file?: string;
   lng: string;
   link?: string;
   type?: string;
   tooltipMsg: string;
   tooltipDesc?: string;
-  children?: ReactNode;
 }
 
 const DataCardButton = ({
@@ -69,16 +68,14 @@ const DataCardButton = ({
   tooltipMsg,
   tooltipDesc,
   type = 'button',
-  children,
 }: AppProps) => {
-  const { t } = useTranslation(lng, 'datasets');
   const { tokens } = useTheme();
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
-  const download = async (file: string) => {
+  const download = async (currentFile: string) => {
     try {
       const getUrlResult: { url: URL; expiresAt: Date } | null =
-        await fetchUrl(file);
+        await fetchUrl(currentFile);
       window.open(getUrlResult?.url.href);
     } catch (error) {
       console.error('Error downloading file:', error);
@@ -94,13 +91,13 @@ const DataCardButton = ({
     download: FaFileArrowDown,
     link: FaUpRightFromSquare,
     video: FaVideo,
+    report: FaFileLines,
     codebook: FaTable,
     quotes: FaQuoteLeft,
   };
 
-  const checkType = (type: string) => {
-    return typeToIconMap[type] || FaDownload;
-  };
+  const checkType = (currentType: string) =>
+    typeToIconMap[currentType] || FaDownload;
 
   const Icon = checkType(type);
 
@@ -135,7 +132,7 @@ const DataCardButton = ({
               $background={getColor(index).button}
               $inverse={getColor(index).buttonInverse}
               variation='primary'
-              onClick={() => download(file)}
+              onClick={() => download(file || '')}
               onMouseEnter={() => setShowTooltip(true)}
               onMouseLeave={() => setShowTooltip(false)}
               onFocus={() => setShowTooltip(true)}

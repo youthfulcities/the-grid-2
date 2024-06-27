@@ -166,10 +166,11 @@ p,
 }
 
 a {
-  color: var(--blue);
+  color: var(--amplify-colors-secondary-60);
   text-decoration: none;
 }
 a:hover {
+  color: var(--amplify-colors-primary-60);
   -webkit-text-decoration-color: inherit;
   text-decoration-color: inherit;
 }
@@ -200,7 +201,7 @@ ol {
   list-style-type: decimal;
 }
 li {
-  color: #000;
+  color: var(--amplify-colors-font-inverse);
 }
 /* Containers
 ========================================================================== */

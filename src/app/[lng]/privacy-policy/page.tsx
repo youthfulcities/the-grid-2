@@ -20,7 +20,7 @@ const page = () => {
         </Heading>
         <View className='inner-container'>
           <Text>
-            Youthfulcities ("we", "us", "our") is committed to protecting the
+            Youthfulcities (“we”, “us”, “our”) is committed to protecting the
             privacy and security of your personal information. This privacy
             policy (the “Policy”) describes how we collect, protect, use and
             share information gathered about you, including on our website (the

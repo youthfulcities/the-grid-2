@@ -1,24 +1,23 @@
 'use client';
 
 import useTranslation from '@/app/i18n/client';
-import
-  {
-    Alert,
-    Button,
-    CheckboxField,
-    Flex,
-    Heading,
-    SelectField,
-    Text,
-    TextAreaField,
-    TextField,
-    View,
-    useTheme,
-  } from '@aws-amplify/ui-react';
+import {
+  Alert,
+  Button,
+  CheckboxField,
+  Flex,
+  Heading,
+  SelectField,
+  Text,
+  TextAreaField,
+  TextField,
+  View,
+  useTheme,
+} from '@aws-amplify/ui-react';
 import { generateClient } from 'aws-amplify/api';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
 import styled from 'styled-components';
 import { createContactSubmission } from '../../../graphql/mutations';
@@ -108,10 +107,10 @@ const ContactForm = () => {
   >('idle');
   const [responseMsgSubscribe, setResponseMsgSubscribe] = useState<string>('');
   const [subscribe, setSubscribe] = useState(false);
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'contact');
   const { t: tsubscribe } = useTranslation(lng, 'newsletter');
@@ -135,11 +134,22 @@ const ContactForm = () => {
     setSubscribe(e.target.checked);
   };
 
+  useEffect(() => {
+    // automatically clear alert
+    const timer = setTimeout(() => {
+      setError('');
+      setSuccess('');
+      setResponseMsgSubscribe('');
+      setStatusSubscribe('idle');
+    }, 6000);
+
+    // Cleanup function to clear the timeout if the component unmounts
+    return () => clearTimeout(timer);
+  }, [error, success, responseMsgSubscribe]);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
-    setSuccess('');
 
     try {
       const result = await client.graphql({
@@ -157,23 +167,9 @@ const ContactForm = () => {
         },
       });
 
-      console.log(result);
-
       if (result) {
         console.log('Email sent successfully:', result);
         setSuccess(t('success'));
-
-        // Reset form
-        setFormData({
-          firstName: '',
-          lastName: '',
-          email: '',
-          phoneNumber: '',
-          topic: '',
-          message: '',
-        });
-
-        setSubscribe(false);
       } else {
         throw new Error('Failed to send email');
       }
@@ -181,27 +177,50 @@ const ContactForm = () => {
       console.error('Error sending email:', err);
       setError(t('error'));
     } finally {
+      // Reset form
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
+        topic: '',
+        message: '',
+      });
+
+      setSubscribe(false);
       setLoading(false);
     }
 
-    try {
-      const response = await axios.post('/api/newsletter', {
-        fname: firstName,
-        lname: lastName,
-        email,
-        lng,
-      });
-      setStatusSubscribe('success');
-      setStatusCodeSubscribe(response.status);
-      setResponseMsgSubscribe(response.data.message);
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        setStatusSubscribe('error');
-        setStatusCodeSubscribe(err.response?.status);
-        setResponseMsgSubscribe(err.response?.data.error);
+    if (subscribe === true) {
+      try {
+        setStatusSubscribe('loading');
+        const response = await axios.post('/api/newsletter', {
+          fname: firstName,
+          lname: lastName,
+          phone: phoneNumber,
+          email,
+          lng,
+        });
+        setStatusSubscribe('success');
+        setStatusCodeSubscribe(response.status);
+        setResponseMsgSubscribe(response.data.message);
+      } catch (err) {
+        if (axios.isAxiosError(err)) {
+          setStatusSubscribe('error');
+          setStatusCodeSubscribe(err.response?.status);
+          setResponseMsgSubscribe(err.response?.data.error);
+        }
       }
     }
   };
+
+  // Determine if all required fields are filled
+  const isFormValid =
+    firstName.trim() !== '' &&
+    lastName.trim() !== '' &&
+    email.trim() !== '' &&
+    topic.trim() !== '' &&
+    message.trim() !== '';
 
   return (
     <Container>
@@ -219,12 +238,12 @@ const ContactForm = () => {
               }}
             />
           </SubHeading>
-          {error && statusSubscribe !== 'loading' && (
+          {error.length > 0 && statusSubscribe !== 'loading' && (
             <Alert marginBottom={tokens.space.medium.value} variation='error'>
               {error} {tsubscribe(responseMsgSubscribe)}
             </Alert>
           )}
-          {success && statusSubscribe !== 'loading' && (
+          {success.length > 0 && statusSubscribe !== 'loading' && (
             <Alert marginBottom={tokens.space.medium.value} variation='success'>
               {success} {tsubscribe(responseMsgSubscribe)}
             </Alert>
@@ -289,7 +308,11 @@ const ContactForm = () => {
             onChange={handleChange}
             isRequired
           />
-          <StyledButton type='submit' isLoading={loading}>
+          <StyledButton
+            type='submit'
+            isLoading={loading}
+            disabled={!isFormValid}
+          >
             {t('submit')}
           </StyledButton>
         </StyledForm>

@@ -203,8 +203,6 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
               >
                 {t('insights')}
               </HoverLink>
-            </LinkColumn>
-            <LinkColumn>
               <HoverLink
                 href={`/contact`}
                 passHref
@@ -213,6 +211,8 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
               >
                 {t('contact')}
               </HoverLink>
+            </LinkColumn>
+            <LinkColumn>
               <HoverLink
                 href='/cookie-policy'
                 passHref
@@ -220,6 +220,22 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
                 $color={tokens.colors.font.inverse.value}
               >
                 {t('cookie')}
+              </HoverLink>
+              <HoverLink
+                href='/terms'
+                passHref
+                $hover={tokens.colors.primary[60].value}
+                $color={tokens.colors.font.inverse.value}
+              >
+                {t('terms')}
+              </HoverLink>
+              <HoverLink
+                href='/privacy-policy'
+                passHref
+                $hover={tokens.colors.primary[60].value}
+                $color={tokens.colors.font.inverse.value}
+              >
+                {t('privacy')}
               </HoverLink>
             </LinkColumn>
           </LinkSection>

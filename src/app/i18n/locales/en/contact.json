@@ -14,7 +14,7 @@
   "message": "Message *",
   "type": "Type your message here...",
   "category": "Category",
-  "reason": "Reason for Contacting",
+  "reason": "Reason for Contacting *",
   "select": "Select a topic",
   "error": "An error occurred while sending your message. Please try again.",
   "success": "Your message has been sent successfully!",

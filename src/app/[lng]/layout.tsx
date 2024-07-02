@@ -1,7 +1,7 @@
 //
 
 import '@aws-amplify/ui-react/styles.css';
-import { GoogleAnalytics } from '@next/third-parties/google';
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { Amplify } from 'aws-amplify';
 import { configureAutoTrack } from 'aws-amplify/analytics';
 import { dir } from 'console';
@@ -100,8 +100,28 @@ const RootLayout: React.FC<RootLayoutProps> = ({
         type='text/javascript'
         src='https://cdn-cookieyes.com/client_data/36b079cad9fec46bd01a04bc/script.js'
       />
+      <Script
+        id='adsense'
+        async
+        src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6052560776293450'
+        crossOrigin='anonymous'
+      />
+      <Script id='hotjar'>
+        {' '}
+        {`
+          (function (h, o, t, j, a, r)
+          {
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:5039963,hjsv:6};
+        a=o.getElementsByTagName('head')[0];
+        r=o.createElement('script');r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+        a.appendChild(r);
+    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`}
+      </Script>
       <body>
-        <GoogleAnalytics gaId='G-7S1Y1B2YXC' />
+        <GoogleAnalytics gaId='G-GEF0PPKZXD' />
+        <GoogleTagManager gtmId='GTM-MXZ2WJTV' />
         <StyledComponentsRegistry>
           <AWSThemeProvider>
             <NavBar lng={lng} />

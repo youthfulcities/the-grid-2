@@ -20,6 +20,7 @@ import { useParams } from 'next/navigation';
 import React, { FormEvent, useEffect, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
 import styled from 'styled-components';
+import { z } from 'zod';
 import { createContactSubmission } from '../../../graphql/mutations';
 import Container from '../../components/Background';
 
@@ -76,6 +77,12 @@ const StyledButton = styled(Button)`
   margin-bottom: var(--amplify-space-small);
   width: 100%;
   background-color: var(--amplify-colors-red-60);
+
+  &:disabled {
+    background-color: var(--amplify-colors-neutral-60);
+    color: var(--amplify-colors-neutral-90);
+    cursor: not-allowed;
+  }
 `;
 
 const StyledCheckbox = styled(CheckboxField)`
@@ -110,6 +117,14 @@ const ContactForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [formErrors, setFormErrors] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    topic: '',
+    message: '',
+  });
 
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'contact');
@@ -117,6 +132,17 @@ const ContactForm = () => {
   const { tokens } = useTheme();
 
   const { firstName, lastName, email, phoneNumber, topic, message } = formData;
+  const phoneRegex =
+    /^(|([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])*)$/;
+
+  const schema = z.object({
+    firstName: z.string().min(1, t('fname_required')),
+    lastName: z.string().min(1, t('lname_required')),
+    email: z.string().email({ message: t('email_invalid') }),
+    phoneNumber: z.string().regex(phoneRegex, t('phone_invalid')).optional(),
+    topic: z.string().min(1, t('topic_required')),
+    message: z.string().min(1, t('message_required')),
+  });
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -124,6 +150,28 @@ const ContactForm = () => {
     >
   ) => {
     const { name, value } = e.target;
+
+    // Validate the field using zod.safeParse for that specific field
+    const fieldSchema = schema.pick({ [name]: true } as any);
+    const validation = fieldSchema.safeParse({ [name]: value });
+
+    // Update form errors for the specific field
+    if (!validation.success) {
+      const fieldErrors = validation.error.errors.reduce((acc, curr) => {
+        return { ...acc, [curr.path[0]]: curr.message };
+      }, {});
+      setFormErrors((prevState) => ({
+        ...prevState,
+        ...fieldErrors,
+      }));
+    } else {
+      setFormErrors((prevState) => ({
+        ...prevState,
+        [name]: '',
+      }));
+    }
+
+    // Update form data
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
@@ -214,13 +262,10 @@ const ContactForm = () => {
     }
   };
 
-  // Determine if all required fields are filled
-  const isFormValid =
-    firstName.trim() !== '' &&
-    lastName.trim() !== '' &&
-    email.trim() !== '' &&
-    topic.trim() !== '' &&
-    message.trim() !== '';
+  const validation = schema.safeParse(formData);
+  const isFormValid = validation.success;
+
+  console.log(validation);
 
   return (
     <Container>
@@ -256,6 +301,8 @@ const ContactForm = () => {
               value={formData.firstName}
               onChange={handleChange}
               isRequired
+              hasError={!!formErrors.firstName}
+              errorMessage={formErrors.firstName}
             />
             <StyledInput
               flex={1}
@@ -264,6 +311,8 @@ const ContactForm = () => {
               value={formData.lastName}
               onChange={handleChange}
               isRequired
+              hasError={!!formErrors.lastName}
+              errorMessage={formErrors.lastName}
             />
           </Flex>
           <StyledInput
@@ -273,6 +322,8 @@ const ContactForm = () => {
             value={formData.email}
             onChange={handleChange}
             isRequired
+            hasError={!!formErrors.email}
+            errorMessage={formErrors.email}
           />
           <StyledCheckbox
             label={t('subscribe')}
@@ -287,6 +338,8 @@ const ContactForm = () => {
             name='phoneNumber'
             value={formData.phoneNumber}
             onChange={handleChange}
+            hasError={!!formErrors.phoneNumber}
+            errorMessage={formErrors.phoneNumber}
           />
           <StyledSelect
             label={t('reason')}
@@ -294,6 +347,8 @@ const ContactForm = () => {
             value={formData.topic}
             onChange={handleChange}
             required
+            hasError={!!formErrors.topic}
+            errorMessage={formErrors.topic}
           >
             <option value=''>{t('select')}</option>
             <option value='Report a technical issue'>{t('technical')}</option>
@@ -307,11 +362,13 @@ const ContactForm = () => {
             value={formData.message}
             onChange={handleChange}
             isRequired
+            hasError={!!formErrors.message}
+            errorMessage={formErrors.message}
           />
           <StyledButton
             type='submit'
             isLoading={loading}
-            disabled={!isFormValid}
+            disabled={!isFormValid || loading}
           >
             {t('submit')}
           </StyledButton>

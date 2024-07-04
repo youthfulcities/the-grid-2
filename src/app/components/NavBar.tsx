@@ -10,15 +10,11 @@ import {
   useTheme,
 } from '@aws-amplify/ui-react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { FaBars } from 'react-icons/fa6';
 import styled from 'styled-components';
 import useTranslation from '../i18n/client';
-
-interface NavBarProps {
-  lng: string;
-}
 
 const StyledFlex = styled(Flex)`
   display: flex;
@@ -98,7 +94,8 @@ const StyledMenuButton = styled(MenuButton)`
 
 const StyledMenuItem = styled(MenuItem)<{ $currentPage: boolean }>``;
 
-const NavBar: React.FC<NavBarProps> = ({ lng }) => {
+const NavBar = () => {
+  const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'translation');
   const pathname = usePathname();
   const pathNoLocale = pathname.substring(3);
@@ -131,11 +128,19 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
       <Flex justifyContent='space-between' className='short-container'>
         <Flex alignItems='center'>
           <Link href='/'>
-            <img
-              src='/assets/theme_image/YDL_White.png'
-              alt='Logo'
-              height='60px'
-            />
+            {lng === 'fr' ? (
+              <img
+                src='/assets/theme_image/YDL_white_fr.png'
+                alt='Logo du Labo Data Jeunesse'
+                height='60px'
+              />
+            ) : (
+              <img
+                src='/assets/theme_image/YDL_White.png'
+                alt='Youth Data Lab Logo'
+                height='60px'
+              />
+            )}
           </Link>
           <View style={{ marginLeft: '20px' }}>
             <Button
@@ -178,14 +183,14 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
               {t('home')}
             </MenuItem>
             <MenuItem
-              isDisabled={pathNoLocale === 'datasets'}
+              isDisabled={pathNoLocale === '/datasets'}
               as='a'
               href={`/${lng}/datasets`}
             >
               {t('datasets')}
             </MenuItem>
             <MenuItem
-              isDisabled={pathNoLocale === 'insights'}
+              isDisabled={pathNoLocale === '/insights'}
               as='a'
               href={`/${lng}/insights`}
             >
@@ -195,7 +200,7 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
             {t('about')}
           </MenuItem> */}
             <MenuItem
-              isDisabled={pathNoLocale === 'contact'}
+              isDisabled={pathNoLocale === '/contact'}
               as='a'
               href={`/${lng}/contact`}
             >

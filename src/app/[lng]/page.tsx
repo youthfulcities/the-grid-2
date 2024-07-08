@@ -22,7 +22,7 @@ const App: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
 
   return (
     <Container>
-      <HomeHeader lng={lng} />
+      <HomeHeader />
       <Banner lng={lng} />
       <Insights params={params} />
       {/* <GridInfo lng={lng} /> */}

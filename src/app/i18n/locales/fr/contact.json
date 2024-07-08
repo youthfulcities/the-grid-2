@@ -14,7 +14,7 @@
   "message": "Message *",
   "type": "Écrivez votre message ici…",
   "category": "Catégorie",
-  "reason": "Raison de la prise de contact",
+  "reason": "Raison de la prise de contact *",
   "select": "Sélectionnez un sujet",
   "error": "Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer.",
   "success": "Votre message a été envoyé avec succès !",

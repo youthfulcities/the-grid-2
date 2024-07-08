@@ -1,5 +1,6 @@
 import { Flex, View, useTheme } from '@aws-amplify/ui-react';
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 import { Trans } from 'react-i18next/TransWithoutContext';
 import styled from 'styled-components';
 import ycLogo from '../../../public/assets/theme_image/YC_SMALL_FULL_colour_white_RGB copy.png';
@@ -43,7 +44,8 @@ const HeroLogo = styled.img`
   }
 `;
 
-const HomeHeader: React.FC<{ lng: string }> = ({ lng }) => {
+const HomeHeader = () => {
+  const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'home');
   const { tokens } = useTheme();
 
@@ -68,13 +70,20 @@ const HomeHeader: React.FC<{ lng: string }> = ({ lng }) => {
         <View as='div' className='relative-container' shrink={3}>
           <img
             className='clip hero-img'
-            src='https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
-            alt='New York City at sunset'
+            src='/assets/theme_image/summit_19.jpg'
+            alt='Youth posting sticky notes on a board at a Youthful Cities summit.'
           />
-          <HeroLogo
-            src='/assets/theme_image/YDL_White.png'
-            alt='Youth Data Lab logo'
-          />
+          {lng === 'fr' ? (
+            <HeroLogo
+              src='/assets/theme_image/YDL_white_fr.png'
+              alt='Logo du Labo Data Jeunesse'
+            />
+          ) : (
+            <HeroLogo
+              src='/assets/theme_image/YDL_White.png'
+              alt='Youth Data Lab logo'
+            />
+          )}
         </View>
       </Flex>
     </HomeHeaderSection>

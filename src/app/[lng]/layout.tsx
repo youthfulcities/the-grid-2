@@ -5,7 +5,7 @@ import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { Amplify } from 'aws-amplify';
 import { configureAutoTrack } from 'aws-amplify/analytics';
 import { dir } from 'console';
-import type { Metadata } from 'next';
+import type { Metadata, ResolvingMetadata } from 'next';
 import Script from 'next/script';
 import React from 'react';
 import config from '../../amplifyconfiguration.json';
@@ -20,6 +20,9 @@ interface RootLayoutProps {
   children: React.ReactNode;
   params: { lng: string };
 }
+
+// Define the possible languages
+type Language = 'en' | 'fr';
 
 //configure Amazon Pinpoint tracking
 configureAutoTrack({
@@ -83,9 +86,27 @@ export async function generateStaticParams() {
   return languages.map((lng) => ({ lng }));
 }
 
-export const metadata: Metadata = {
-  title: 'Youth Data Lab',
-  description: 'Insights driving change',
+// Function to generate metadata dynamically based on language
+const generateMetadata = async (
+  { params }: RootLayoutProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> => {
+  const { lng } = params;
+
+  const titles: { [key in Language]: string } = {
+    en: 'Youth Data Lab',
+    fr: 'Labo Data Jeunesse',
+  };
+
+  const descriptions: { [key in Language]: string } = {
+    en: 'Insights driving change',
+    fr: "L'intelligence au service du changement",
+  };
+
+  return {
+    title: titles[lng as Language] || 'Youth Data Lab',
+    description: descriptions[lng as Language] || 'Insights driving change',
+  };
 };
 
 const RootLayout: React.FC<RootLayoutProps> = ({
@@ -124,9 +145,9 @@ const RootLayout: React.FC<RootLayoutProps> = ({
         <GoogleTagManager gtmId='GTM-MXZ2WJTV' />
         <StyledComponentsRegistry>
           <AWSThemeProvider>
-            <NavBar lng={lng} />
+            <NavBar />
             {children}
-            <Footer lng={lng} />
+            <Footer />
           </AWSThemeProvider>
         </StyledComponentsRegistry>
       </body>
@@ -134,4 +155,5 @@ const RootLayout: React.FC<RootLayoutProps> = ({
   );
 };
 
+export { generateMetadata };
 export default RootLayout;

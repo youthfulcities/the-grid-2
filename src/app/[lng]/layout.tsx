@@ -145,9 +145,18 @@ const RootLayout: React.FC<RootLayoutProps> = ({
         <GoogleTagManager gtmId='GTM-MXZ2WJTV' />
         <StyledComponentsRegistry>
           <AWSThemeProvider>
-            <NavBar />
-            {children}
-            <Footer />
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: '100vh',
+                height: '100%',
+              }}
+            >
+              <NavBar />
+              {children}
+              <Footer />
+            </div>
           </AWSThemeProvider>
         </StyledComponentsRegistry>
       </body>

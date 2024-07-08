@@ -23,6 +23,10 @@ const NameSchema = z.object({
 // Language validation schema
 const LanguageSchema = z.string().optional();
 
+const md5 = (string: string) => {
+  return crypto.createHash('md5').update(string).digest('hex');
+};
+
 // Subscription handler function
 export const POST = async (req: Request) => {
   // 1. Validate email address
@@ -159,13 +163,13 @@ export const POST = async (req: Request) => {
 
             return NextResponse.json({ message: 'success' }, { status: 200 });
           }
-        } catch (error) {
-          if (axios.isAxiosError(error)) {
+        } catch (err) {
+          if (axios.isAxiosError(err)) {
             console.error(
-              `${error.response?.status}`,
-              `${error.response?.data.title}`,
-              `${error.response?.data.detail}`,
-              `${JSON.stringify(error.response?.data.errors)}`
+              `${err.response?.status}`,
+              `${err.response?.data.title}`,
+              `${err.response?.data.detail}`,
+              `${JSON.stringify(err.response?.data.errors)}`
             );
           }
         }
@@ -186,7 +190,3 @@ export const POST = async (req: Request) => {
     );
   }
 };
-
-function md5(string: string) {
-  return crypto.createHash('md5').update(string).digest('hex');
-}

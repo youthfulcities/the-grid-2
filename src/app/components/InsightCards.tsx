@@ -141,26 +141,15 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng }) => {
             </Text>
           </View>
           <Flex justifyContent='flex-end' alignItems='flex-end'>
-            {card.title === 'Chatbot' ? (
+            <Link href={card.link || '/'} passHref target='_blank'>
               <StyledButton
                 $background={getColor(index).button}
                 $inverse={getColor(index).buttonInverse}
                 $color={getColor(index).buttonInverse}
-                onClick={() => handleOpen()}
               >
                 <FaArrowRight size={20} />
               </StyledButton>
-            ) : (
-              <Link href={card.link || '/'} passHref target='_blank'>
-                <StyledButton
-                  $background={getColor(index).button}
-                  $inverse={getColor(index).buttonInverse}
-                  $color={getColor(index).buttonInverse}
-                >
-                  <FaArrowRight size={20} />
-                </StyledButton>
-              </Link>
-            )}
+            </Link>
           </Flex>
         </StyledCard>
       ))}

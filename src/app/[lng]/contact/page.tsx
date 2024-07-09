@@ -139,18 +139,21 @@ const ContactForm = () => {
     firstName: z.string().min(1, t('fname_required')),
     lastName: z.string().min(1, t('lname_required')),
     email: z.string().email({ message: t('email_invalid') }),
-    phoneNumber: z.string().regex(phoneRegex, t('phone_invalid')).optional(),
+    phoneNumber: z
+      .string()
+      .max(10, t('phone_long'))
+      .regex(phoneRegex, t('phone_invalid'))
+      .optional(),
     topic: z.string().min(1, t('topic_required')),
     message: z.string().min(1, t('message_required')),
   });
 
-  const handleChange = (
+  const validate = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
     const { name, value } = e.target;
-
     // Validate the field using zod.safeParse for that specific field
     const fieldSchema = schema.pick({ [name]: true } as any);
     const validation = fieldSchema.safeParse({ [name]: value });
@@ -170,6 +173,16 @@ const ContactForm = () => {
         [name]: '',
       }));
     }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+
+    validate(e);
 
     // Update form data
     setFormData((prevState) => ({
@@ -265,8 +278,6 @@ const ContactForm = () => {
   const validation = schema.safeParse(formData);
   const isFormValid = validation.success;
 
-  console.log(validation);
-
   return (
     <Container>
       <View as='section' className='container section-padding'>
@@ -300,6 +311,7 @@ const ContactForm = () => {
               name='firstName'
               value={formData.firstName}
               onChange={handleChange}
+              onFocus={(e) => validate(e)}
               isRequired
               hasError={!!formErrors.firstName}
               errorMessage={formErrors.firstName}
@@ -310,6 +322,7 @@ const ContactForm = () => {
               name='lastName'
               value={formData.lastName}
               onChange={handleChange}
+              onFocus={(e) => validate(e)}
               isRequired
               hasError={!!formErrors.lastName}
               errorMessage={formErrors.lastName}
@@ -321,6 +334,7 @@ const ContactForm = () => {
             name='email'
             value={formData.email}
             onChange={handleChange}
+            onFocus={(e) => validate(e)}
             isRequired
             hasError={!!formErrors.email}
             errorMessage={formErrors.email}
@@ -338,6 +352,7 @@ const ContactForm = () => {
             name='phoneNumber'
             value={formData.phoneNumber}
             onChange={handleChange}
+            onFocus={(e) => validate(e)}
             hasError={!!formErrors.phoneNumber}
             errorMessage={formErrors.phoneNumber}
           />
@@ -346,6 +361,7 @@ const ContactForm = () => {
             name='topic'
             value={formData.topic}
             onChange={handleChange}
+            onFocus={(e) => validate(e)}
             required
             hasError={!!formErrors.topic}
             errorMessage={formErrors.topic}
@@ -361,6 +377,7 @@ const ContactForm = () => {
             name='message'
             value={formData.message}
             onChange={handleChange}
+            onFocus={(e) => validate(e)}
             isRequired
             hasError={!!formErrors.message}
             errorMessage={formErrors.message}

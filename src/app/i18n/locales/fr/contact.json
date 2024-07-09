@@ -19,5 +19,12 @@
   "error": "Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer.",
   "success": "Votre message a été envoyé avec succès !",
   "submit": "Envoyer",
-  "subscribe": "S'abonner à la lettre d'information des villes jeunes"
+  "subscribe": "S'abonner à la lettre d'information des villes jeunes",
+  "fname_required": "Veuillez remplir ce champ.",
+  "lname_required": "Veuillez remplir ce champ.",
+  "email_invalid": "Veuillez vous assurer que votre courriel est valide.",
+  "phone_invalid": "Assurez-vous que votre numéro de téléphone est valide.",
+  "phone_long": "Le numéro de téléphone peut comporter un maximum de 10 caractères.",
+  "topic_required": "Veuillez sélectionner un sujet.",
+  "message_required": "Veuillez inclure un message."
 }

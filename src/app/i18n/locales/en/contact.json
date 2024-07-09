@@ -19,5 +19,12 @@
   "error": "An error occurred while sending your message. Please try again.",
   "success": "Your message has been sent successfully!",
   "submit": "Submit",
-  "subscribe": "Subscribe to the Youthful Cities newsletter"
+  "subscribe": "Subscribe to the Youthful Cities newsletter",
+  "fname_required": "Please fill out this field.",
+  "lname_required": "Please fill out this field.",
+  "email_invalid": "Please make sure your email is valid.",
+  "phone_invalid": "Please make sure your phone number is valid.",
+  "phone_long": "Phone number can be a maximum of 10 characters.",
+  "topic_required": "Please select a topic.",
+  "message_required": "Please include a message."
 }

@@ -109,7 +109,6 @@ const NavBar = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   const { tokens } = useTheme();
-  console.log(pathname);
 
   //TODO: Refactor into reusable hook
   useEffect(() => {

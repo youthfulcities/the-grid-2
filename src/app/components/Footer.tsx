@@ -176,14 +176,6 @@ const FooterComponent = () => {
               >
                 {t('home')}
               </HoverLink>
-              {/* <HoverLink
-              href={`${lng}/about`}
-              passHref
-              $hover={tokens.colors.primary[60].value}
-              $color={tokens.colors.font.inverse.value}
-            >
-              {t('about')}
-            </HoverLink> */}
               <HoverLink
                 href='/datasets'
                 passHref
@@ -199,6 +191,14 @@ const FooterComponent = () => {
                 $color={tokens.colors.font.inverse.value}
               >
                 {t('insights')}
+              </HoverLink>
+              <HoverLink
+                href='/about'
+                passHref
+                $hover={tokens.colors.primary[60].value}
+                $color={tokens.colors.font.inverse.value}
+              >
+                {t('about')}
               </HoverLink>
               <HoverLink
                 href={`/contact`}

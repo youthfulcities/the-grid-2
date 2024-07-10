@@ -92,7 +92,13 @@ const StyledMenuButton = styled(MenuButton)`
   }
 `;
 
-const StyledMenuItem = styled(MenuItem)<{ $currentPage: boolean }>``;
+const MobileLink = styled(Link)`
+  width: 100%;
+`;
+
+const MobileMenuItem = styled(MenuItem)`
+  width: 100%;
+`;
 
 const NavBar = () => {
   const { lng } = useParams<{ lng: string }>();
@@ -103,7 +109,6 @@ const NavBar = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   const { tokens } = useTheme();
-  console.log(pathname);
 
   //TODO: Refactor into reusable hook
   useEffect(() => {
@@ -179,33 +184,31 @@ const NavBar = () => {
               </StyledMenuButton>
             }
           >
-            <MenuItem isDisabled={pathNoLocale === ''} as='a' href={`/${lng}/`}>
-              {t('home')}
-            </MenuItem>
-            <MenuItem
-              isDisabled={pathNoLocale === '/datasets'}
-              as='a'
-              href={`/${lng}/datasets`}
-            >
-              {t('datasets')}
-            </MenuItem>
-            <MenuItem
-              isDisabled={pathNoLocale === '/insights'}
-              as='a'
-              href={`/${lng}/insights`}
-            >
-              {t('insights')}
-            </MenuItem>
-            {/* <MenuItem as='a' href={`/${lng}/about`}>
-            {t('about')}
-          </MenuItem> */}
-            <MenuItem
-              isDisabled={pathNoLocale === '/contact'}
-              as='a'
-              href={`/${lng}/contact`}
-            >
-              {t('contact')}
-            </MenuItem>
+            <MobileLink href='/'>
+              <MobileMenuItem isDisabled={pathNoLocale === ''}>
+                {t('home')}
+              </MobileMenuItem>
+            </MobileLink>
+            <MobileLink href='/datasets'>
+              <MobileMenuItem isDisabled={pathNoLocale === '/datasets'}>
+                {t('datasets')}
+              </MobileMenuItem>
+            </MobileLink>
+            <MobileLink href='/insights'>
+              <MobileMenuItem isDisabled={pathNoLocale === '/insights'}>
+                {t('insights')}
+              </MobileMenuItem>
+            </MobileLink>
+            <MobileLink href='/about'>
+              <MobileMenuItem isDisabled={pathNoLocale === '/about'}>
+                {t('about')}
+              </MobileMenuItem>
+            </MobileLink>
+            <MobileLink href='/contact'>
+              <MobileMenuItem isDisabled={pathNoLocale === '/contact'}>
+                {t('contact')}
+              </MobileMenuItem>
+            </MobileLink>
           </Menu>
         ) : (
           <NavigationLinks>
@@ -224,7 +227,12 @@ const NavBar = () => {
             >
               {t('insights')}
             </NavLink>
-            {/* <NavLink href={`/${lng}/about`}>{t('about')}</NavLink> */}
+            <NavLink
+              $currentPage={pathNoLocale === '/about'}
+              href={`/${lng}/about`}
+            >
+              {t('about')}
+            </NavLink>
             <NavLink
               $currentPage={pathNoLocale === '/contact'}
               href={`/${lng}/contact`}

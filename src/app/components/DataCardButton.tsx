@@ -1,4 +1,4 @@
-import { Button, useTheme, View } from '@aws-amplify/ui-react';
+import { Button, useTheme, View, useAuthenticator } from '@aws-amplify/ui-react';
 import { useState } from 'react';
 import { IconType } from 'react-icons';
 import {
@@ -16,6 +16,8 @@ import {
 } from 'react-icons/fa6';
 import styled from 'styled-components';
 import Tooltip from './Tooltip';
+import { useRouter } from 'next/navigation';
+
 
 const StyledButton = styled(Button)<{ $background: string; $inverse: string }>`
   justify-content: center;
@@ -71,8 +73,18 @@ const DataCardButton = ({
 }: AppProps) => {
   const { tokens } = useTheme();
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
+  const router = useRouter();
+  const { user } = useAuthenticator((context) => [context.user]);
 
   const download = async (currentFile: string) => {
+
+    if (!user) {
+      sessionStorage.setItem('postLoginRedirect', '/datasets');
+      sessionStorage.setItem('fileToDownload', currentFile);
+      router.push('/authentication');
+      return;
+    }
+
     try {
       const getUrlResult: { url: URL; expiresAt: Date } | null =
         await fetchUrl(currentFile);

@@ -1,4 +1,4 @@
-//
+
 
 import '@aws-amplify/ui-react/styles.css';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
@@ -15,6 +15,7 @@ import NavBar from '../components/NavBar';
 import { languages } from '../i18n/settings';
 import AWSThemeProvider from './aws-theme-provider';
 import './global.css';
+import AutheticatorProvider from '../components/AuthenticatorProvider'
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -120,14 +121,17 @@ const RootLayout: React.FC<RootLayoutProps> = ({
     })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`}
       </Script>
       <body>
+
         <GoogleAnalytics gaId='G-GEF0PPKZXD' />
         <GoogleTagManager gtmId='GTM-MXZ2WJTV' />
         <StyledComponentsRegistry>
+          <AutheticatorProvider>
           <AWSThemeProvider>
             <NavBar lng={lng} />
             {children}
             <Footer lng={lng} />
           </AWSThemeProvider>
+          </AutheticatorProvider>
         </StyledComponentsRegistry>
       </body>
     </html>

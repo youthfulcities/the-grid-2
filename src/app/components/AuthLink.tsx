@@ -1,12 +1,10 @@
-
-
 'use client';
 
-import React from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { useRouter } from 'next/navigation';
-import styled from 'styled-components';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import React from 'react';
+import styled from 'styled-components';
 
 const StyledAuthLink = styled(Link)<{ $currentPage: boolean }>`
   font-family: 'Gotham Narrow Medium';
@@ -46,7 +44,9 @@ const AuthLink: React.FC = () => {
   const { user, signOut } = useAuthenticator((context) => [context.user]);
   const router = useRouter();
 
-  const handleAuthAction = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleAuthAction = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
     e.preventDefault();
     if (user) {
       signOut();
@@ -59,7 +59,7 @@ const AuthLink: React.FC = () => {
   return (
     <StyledAuthLink
       $currentPage={false}
-      href='/${lng}/authentication'
+      href='/authentication'
       onClick={handleAuthAction}
     >
       {user ? 'Logout' : 'Login'}

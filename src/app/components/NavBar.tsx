@@ -15,6 +15,7 @@ import React, { useEffect, useState } from 'react';
 import { FaBars } from 'react-icons/fa6';
 import styled from 'styled-components';
 import useTranslation from '../i18n/client';
+import AuthLink from './AuthLink';
 
 interface NavBarProps {
   lng: string;
@@ -128,7 +129,7 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
 
   return (
     <StyledFlex as='nav'>
-      <Flex justifyContent='space-between' className='short-container'>
+      <Flex justifyContent='space-between' className='short-container' alignItems='center'>
         <Flex alignItems='center'>
           <Link href='/'>
             <img
@@ -228,6 +229,7 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
             </NavLink>
           </NavigationLinks>
         )}
+        <AuthLink />
       </Flex>
     </StyledFlex>
   );

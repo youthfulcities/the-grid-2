@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { FaArrowRight } from 'react-icons/fa6';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-import Dialogue from './Dialogue';
+// import Dialogue from './Dialogue';
 
 interface InsightCardProps {
   lng: string;
@@ -153,7 +153,7 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng }) => {
           </Flex>
         </StyledCard>
       ))}
-      <Dialogue open={openDialogue} onClose={handleClose} />
+      {/* <Dialogue open={openDialogue} onClose={handleClose} /> */}
     </>
   );
 };

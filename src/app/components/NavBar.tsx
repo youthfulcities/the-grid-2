@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { FaBars } from 'react-icons/fa6';
 import styled from 'styled-components';
 import useTranslation from '../i18n/client';
+import AuthLink from './AuthLink';
 
 const StyledFlex = styled(Flex)`
   display: flex;
@@ -130,7 +131,7 @@ const NavBar = () => {
 
   return (
     <StyledFlex as='nav'>
-      <Flex justifyContent='space-between' className='short-container'>
+      <Flex justifyContent='space-between' className='short-container' alignItems='center'>
         <Flex alignItems='center'>
           <Link href='/'>
             {lng === 'fr' ? (
@@ -241,6 +242,7 @@ const NavBar = () => {
             </NavLink>
           </NavigationLinks>
         )}
+        <AuthLink />
       </Flex>
     </StyledFlex>
   );

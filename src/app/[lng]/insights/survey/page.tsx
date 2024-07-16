@@ -1,201 +1,247 @@
 'use client';
 
 import Container from '@/app/components/Background';
+import Tooltip from '@/app/components/TooltipChart';
 import { useDimensions } from '@/hooks/useDimensions';
+import { Button, Flex, Heading } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 interface DataItem {
   [key: string]: string | number;
 }
 
+const TooltipText = styled.text`
+  font-size: 1rem;
+  fill: black;
+  text-anchor: middle;
+`;
+
+const TooltipTextSmall = styled.text`
+  font-size: 0.75rem;
+  fill: black;
+  text-anchor: middle;
+`;
+
+const TooltipBackground = styled.rect`
+  fill: white;
+  rx: 8; /* Rounded corners */
+  ry: 8; /* Rounded corners */
+`;
+
 const duration = 500;
 
 const BarChart: React.FC = () => {
-  const margin = {
-    top: 60,
-    bottom: 100,
-    left: 80,
-    right: 40,
-  };
+  const margin = { top: 60, bottom: 40, left: 100, right: 40 };
   const containerRef = useRef<HTMLDivElement>(null);
   const chartSize = useDimensions(containerRef);
   const height = 800;
   const { width } = chartSize;
   const ref = useRef<SVGSVGElement>(null);
-  const yAxisTitle = 'Test';
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<Record<string, string>>({});
+  const [rawData, setRawData] = useState<Record<string, string>>({});
   const [parsedData, setParsedData] = useState<Record<string, DataItem[]>>({});
   const [activeFile, setActiveFile] = useState('org-attractive-gender.csv');
-  const [columnToSortBy, setColumnToSortBy] = useState<string>(
-    'percentage_Gender_DEM_Man (SUM)'
-  );
-
-  const fetchData = async (filename: string) => {
-    if (data.hasOwnProperty(filename)) {
-      return;
-    }
-    try {
-      setLoading(true);
-      const downloadResult = await downloadData({
-        path: `public/${filename}`,
-      }).result;
-      const text = await downloadResult.body.text();
-      setLoading(false);
-      setData({ ...data, [filename]: text });
-    } catch (error) {
-      console.log('Error:', error);
-      setLoading(false);
-    }
-  };
-
-  const parseDynamicCSVData = (filename: string, csvString: string) => {
-    if (parsedData[filename]) {
-      return;
-    }
-    const parsed = d3.csvParse(csvString, (d) => {
-      const row: DataItem = {};
-      Object.keys(d).forEach((key) => {
-        row[key] = isNaN(+d[key]) ? d[key] : +d[key]; // Convert numeric values to numbers
-      });
-      return row;
-    });
-    setParsedData({ ...parsedData, [filename]: parsed });
-  };
+  const [tooltipState, setTooltipState] = useState<{
+    position: { x: number; y: number } | null;
+    content: string;
+    group: string;
+  }>({
+    position: null,
+    content: '',
+    group: '',
+  });
 
   useEffect(() => {
-    if (data[activeFile]) {
-      parseDynamicCSVData(activeFile, data[activeFile]);
-    }
-  }, [data, activeFile]);
+    const fetchData = async (filename: string) => {
+      if (rawData.hasOwnProperty(filename)) return;
 
-  const draw = () => {
-    if (!parsedData[activeFile]) {
-      return;
-    }
+      try {
+        setLoading(true);
+        const downloadResult = await downloadData({
+          path: `public/${filename}`,
+        }).result;
+        const text = await downloadResult.body.text();
+        setRawData({ ...rawData, [filename]: text });
+        setLoading(false);
+      } catch (error) {
+        console.log('Error:', error);
+        setLoading(false);
+      }
+    };
 
-    const sortedData = parsedData[activeFile].slice().sort((a, b) => {
-      return (b[columnToSortBy] as number) - (a[columnToSortBy] as number);
-    });
+    const parseDynamicCSVData = (filename: string, csvString: string) => {
+      if (parsedData[filename]) return;
 
-    const xScale = d3
-      .scaleBand()
-      .domain(sortedData.map((d) => Object.keys(d)[0].toString()))
-      .range([0, width - margin.left - margin.right])
+      const parsed = d3.csvParse(csvString, (d) => {
+        const row: DataItem = {};
+        Object.keys(d).forEach((oldKey) => {
+          const parts = oldKey.split(/DEM_|\(SUM\)/);
+          const newKey = parts.length > 1 ? parts[1] : oldKey;
+          row[newKey] = isNaN(+d[oldKey]) ? d[newKey] : +d[oldKey] * 100;
+        });
+        return row;
+      });
+
+      setParsedData({ ...parsedData, [filename]: parsed });
+    };
+
+    fetchData(activeFile);
+    if (rawData[activeFile])
+      parseDynamicCSVData(activeFile, rawData[activeFile]);
+  }, [activeFile, rawData, parsedData]);
+
+  useEffect(() => {
+    if (!width || !height || !parsedData[activeFile]) return;
+
+    // Calculate scales
+    const yScale = d3
+      .scaleBand<string>()
+      .domain(parsedData[activeFile].map((d) => d.option_en))
+      .range([margin.top, height - margin.bottom])
       .padding(0.1);
 
-    const yScale = d3
+    const maxGroupValue = d3.max(parsedData[activeFile], (d) =>
+      d3.max(
+        Object.keys(d).filter((key) => key !== 'option_en'),
+        (key) => +d[key]
+      )
+    ) as number;
+
+    const xScale = d3
       .scaleLinear()
-      .domain([
-        0,
-        d3.max(sortedData, (d) => parseFloat(String(Object.values(d)[1]))) || 0,
-      ])
+      .domain([0, maxGroupValue])
       .nice()
-      .range([height - margin.top - margin.bottom, 0]);
+      .range([margin.left, width - margin.right]);
 
     const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
-    const svg = d3.select(ref.current);
-    const chart = svg.select('g');
+    // SVG element setup
+    const svg = d3
+      .select(ref.current)
+      .attr('width', width)
+      .attr('height', height);
 
-    // Update bars
-    const bars = chart
-      .selectAll<SVGRectElement, DataItem>('.bar')
-      .data(sortedData, (d) => String(Object.keys(d)[0]));
+    // Remove existing elements before redrawing
+    svg.selectAll('*').remove();
 
-    bars.exit().remove();
+    // Draw x-axis
+    svg
+      .append('g')
+      .attr('class', 'x-axis')
+      .attr('transform', `translate(0, ${height - margin.bottom})`)
+      .style('color', 'white')
+      .call(d3.axisBottom(xScale))
+      .selectAll('text')
+      .style('fill', 'white');
 
-    bars
-      .enter()
-      .append('rect')
+    // Draw y-axis
+    svg
+      .append('g')
+      .attr('class', 'y-axis')
+      .attr('transform', `translate(${margin.left}, 0)`)
+      .style('color', 'white')
+      .call(d3.axisLeft(yScale))
+      .selectAll('text')
+      .style('fill', 'white');
+
+    // Draw bars
+    svg
+      .selectAll('.bar-group')
+      .data(parsedData[activeFile])
+      .join('g')
+      .attr('class', 'bar-group')
+      .attr('transform', (d) => `translate(0, ${yScale(d.option_en)})`)
+      .selectAll('.bar')
+      .data((d) =>
+        Object.keys(d)
+          .filter((key) => key !== 'option_en')
+          .map((key) => ({ key, value: +d[key] }))
+      )
+      .join('rect')
       .attr('class', 'bar')
-      .attr('x', (d) => xScale(String(Object.keys(d)[0]))!)
-      .attr('width', xScale.bandwidth())
-      .attr('y', height - margin.top - margin.bottom)
-      .attr('height', 0)
-      .style('fill', (d, i) => colorScale(String(i)))
-      .merge(bars)
+      .attr('x', xScale(0))
+      .attr('y', (d, i, nodes) => {
+        const parent = nodes[i].parentNode as SVGGElement;
+        const bandWidth = yScale.bandwidth() / parent.childElementCount;
+        return yScale.bandwidth() / 22 + i * bandWidth;
+      })
+      .attr('height', (d, i, nodes) => {
+        const parent = nodes[i].parentNode as SVGGElement;
+        const bandWidth = yScale.bandwidth() / parent.childElementCount;
+        return bandWidth / 1;
+      })
+      .attr('width', 0)
+      .style('fill', (d, i) => colorScale(i.toString()))
+      .on('mouseover', (event, d) => {
+        const groupData = d3.select(event.target.parentNode).datum();
+        const xPos = event.offsetX;
+        const yPos = event.offsetY;
+        setTooltipState({
+          position: { x: xPos, y: yPos },
+          content: `${d.key} - ${d.value.toFixed(0)}%`,
+          group: groupData.option_en,
+        });
+      })
+      .on('mousemove', (event) => {
+        const xPos = event.offsetX;
+        const yPos = event.offsetY;
+        setTooltipState((prevTooltipState) => ({
+          ...prevTooltipState,
+          position: { x: xPos, y: yPos },
+        }));
+      })
+      .on('mouseout', () => {
+        setTooltipState({ ...tooltipState, position: null });
+      })
       .transition()
       .duration(duration)
-      .delay((d, i) => (i * duration) / 10)
-      .attr(
-        'height',
-        (d) =>
-          height -
-          margin.top -
-          margin.bottom -
-          yScale(parseFloat(String(Object.values(d)[1])))
-      )
-      .attr('y', (d) => yScale(parseFloat(String(Object.values(d)[1]))));
-
-    // Update bar labels
-    const labels = chart
-      .selectAll<SVGTextElement, DataItem>('.bar-label')
-      .data(sortedData, (d) => String(Object.keys(d)[0]));
-
-    labels.exit().remove();
-
-    labels
-      .enter()
-      .append('text')
-      .attr('class', 'bar-label')
-      .attr('text-anchor', 'middle')
-      .attr('dx', 0)
-      .attr('y', height - margin.top - margin.bottom)
-      .attr('dy', -6)
-      .attr('opacity', 0)
-      .text((d) => parseFloat(String(Object.values(d)[1])).toFixed(2))
-      .merge(labels)
-      .transition()
-      .duration(duration)
-      .delay((d, i) => (i * duration) / 10)
-      .attr('opacity', 1)
-      .attr(
-        'x',
-        (d) => xScale(String(Object.keys(d)[0]))! + xScale.bandwidth() / 2
-      )
-      .attr('y', (d) => yScale(parseFloat(String(Object.values(d)[1]))) - 6);
-
-    const xAxis = d3.axisBottom(xScale);
-    chart
-      .select('.x.axis')
-      .transition()
-      .duration(duration)
-      .call(xAxis as any);
-
-    const yAxis = d3.axisLeft(yScale).ticks(5);
-    chart
-      .select('.y.axis')
-      .transition()
-      .duration(duration)
-      .call(yAxis as any);
-
-    chart.select('.x-axis-title').text('X Axis Title');
-
-    chart.select('.y-axis-title').text('Y Axis Title');
-  };
-
-  useEffect(() => {
-    if (width && height && parsedData[activeFile]) {
-      const svg = d3
-        .select(ref.current)
-        .attr('width', width)
-        .attr('height', height)
-        .append('g')
-        .attr('transform', `translate(${margin.left}, ${margin.top})`);
-
-      draw();
-    }
+      .delay((d, i) => i * (duration / 10))
+      .attr('x', xScale(0))
+      .attr('width', (d) => xScale(d.value) - xScale(0));
   }, [width, height, parsedData, activeFile]);
-
   return (
     <Container>
-      <div className='short-container' ref={containerRef}>
-        <svg ref={ref}></svg>
+      <div className='container padding'>
+        <Heading level={1}>Survey Findings</Heading>
       </div>
-      <button onClick={() => fetchData(activeFile)}>Fetch Data</button>
+
+      <div className='container' ref={containerRef}>
+        <Heading level={5} color='font.inverse' textAlign='center'>
+          What makes an organization/company the most attractive to work for?
+        </Heading>
+        <Flex justifyContent='center'>
+          <Button
+            variation='primary'
+            onClick={() => setActiveFile('org-attractive-gender.csv')}
+          >
+            By Gender
+          </Button>
+          <Button
+            variation='primary'
+            onClick={() => setActiveFile('org-attractive-cluster.csv')}
+          >
+            By Cluster
+          </Button>
+          <Button
+            variation='primary'
+            onClick={() => setActiveFile('org-attractive-city.csv')}
+          >
+            By City
+          </Button>
+        </Flex>
+        <svg ref={ref}></svg>
+        {tooltipState.position && (
+          <Tooltip
+            x={tooltipState.position.x}
+            content={tooltipState.content}
+            y={tooltipState.position.y}
+            group={tooltipState.group}
+          />
+        )}
+      </div>
     </Container>
   );
 };

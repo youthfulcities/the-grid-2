@@ -1,10 +1,10 @@
 import { useTheme } from '@aws-amplify/ui-react';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 
 interface ContainerProps {
   background?: string;
-  children: ReactNode; // Define children prop as ReactNode
+  children: ReactNode;
 }
 
 const Background = styled.main<{ $background: string }>`

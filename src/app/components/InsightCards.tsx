@@ -141,7 +141,7 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng }) => {
             </Text>
           </View>
           <Flex justifyContent='flex-end' alignItems='flex-end'>
-            <Link href={card.link || '/'} passHref target='_blank'>
+            <Link href={card.link || '/'} passHref>
               <StyledButton
                 $background={getColor(index).button}
                 $inverse={getColor(index).buttonInverse}

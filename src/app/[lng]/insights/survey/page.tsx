@@ -2,103 +2,98 @@
 
 import Container from '@/app/components/Background';
 import { useDimensions } from '@/hooks/useDimensions';
-// import fetchFile from './fetchFile';
-import { getUrl } from 'aws-amplify/storage';
+import { downloadData } from 'aws-amplify/storage';
+import * as d3 from 'd3';
 import { useEffect, useRef, useState } from 'react';
 
-// interface DataItem {
-//   year: number;
-//   value: number;
-// }
+interface DataItem {
+  [key: string]: string | number;
+}
 
-function BarChart({ yAxisTitle = 'Test' }: { yAxisTitle?: string }) {
+const duration = 500;
+
+const BarChart: React.FC = () => {
   const margin = {
     top: 60,
     bottom: 100,
     left: 80,
     right: 40,
   };
-
   const containerRef = useRef<HTMLDivElement>(null);
   const chartSize = useDimensions(containerRef);
-  const { width, height } = chartSize;
-
-  const innerWidth = width - margin.left - margin.right;
-  const innerHeight = height - margin.top - margin.bottom;
+  const height = 800;
+  const { width } = chartSize;
   const ref = useRef<SVGSVGElement>(null);
-
-  const [signedUrl, setSignedUrl] = useState<{
-    url: URL;
-    expiresAt: Date;
-  } | null>(null);
+  const yAxisTitle = 'Test';
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<Record<string, string>>({});
+  const [parsedData, setParsedData] = useState<Record<string, DataItem[]>>({});
+  const [activeFile, setActiveFile] = useState('org-attractive-gender.csv');
+  const [columnToSortBy, setColumnToSortBy] = useState<string>(
+    'percentage_Gender_DEM_Man (SUM)'
+  );
 
-  const fetchFile = async (filename: string) => {
+  const fetchData = async (filename: string) => {
+    if (data.hasOwnProperty(filename)) {
+      return;
+    }
     try {
-      const getUrlResult = await getUrl({
+      setLoading(true);
+      const downloadResult = await downloadData({
         path: `public/${filename}`,
-        options: {
-          validateObjectExistence: true,
-          expiresIn: 20,
-          useAccelerateEndpoint: false,
-        },
-      });
-
-      return getUrlResult;
+      }).result;
+      const text = await downloadResult.body.text();
+      setLoading(false);
+      setData({ ...data, [filename]: text });
     } catch (error) {
-      console.error('Error fetching URL:', error);
-      return null;
+      console.log('Error:', error);
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    const fetchUrl = async () => {
-      setLoading(true);
-      const urlResult = await fetchFile('org-attractive-gender.csv');
-      if (urlResult) {
-        setSignedUrl(urlResult);
-      }
-      setLoading(false);
-    };
-
-    fetchUrl();
-  }, []); // Empty dependency array ensures this runs once on mount
-
-  useEffect(() => {
-    if (width && height && signedUrl) {
-      d3.csv(signedUrl.url.toString()).then(
-        (csvData: d3.DSVRowArray<string>) => {
-          const data: DataItem[] = csvData.map((row) => ({
-            year: +row.year,
-            value: +row.value,
-          }));
-
-          const sortedData = data.sort((a, b) => b.value - a.value);
-
-          const svg = d3
-            .select(ref.current)
-            .attr('width', width)
-            .attr('height', height)
-            .append('g')
-            .attr('transform', `translate(${margin.left}, ${margin.top})`);
-          draw(sortedData);
-        }
-      );
+  const parseDynamicCSVData = (filename: string, csvString: string) => {
+    if (parsedData[filename]) {
+      return;
     }
-  }, [width, height]); // eslint-disable-line react-hooks/exhaustive-deps
+    const parsed = d3.csvParse(csvString, (d) => {
+      const row: DataItem = {};
+      Object.keys(d).forEach((key) => {
+        row[key] = isNaN(+d[key]) ? d[key] : +d[key]; // Convert numeric values to numbers
+      });
+      return row;
+    });
+    setParsedData({ ...parsedData, [filename]: parsed });
+  };
 
-  const draw = (data: DataItem[]) => {
+  useEffect(() => {
+    if (data[activeFile]) {
+      parseDynamicCSVData(activeFile, data[activeFile]);
+    }
+  }, [data, activeFile]);
+
+  const draw = () => {
+    if (!parsedData[activeFile]) {
+      return;
+    }
+
+    const sortedData = parsedData[activeFile].slice().sort((a, b) => {
+      return (b[columnToSortBy] as number) - (a[columnToSortBy] as number);
+    });
+
     const xScale = d3
       .scaleBand()
-      .domain(data.map((d) => d.year.toString()))
-      .range([0, innerWidth])
+      .domain(sortedData.map((d) => Object.keys(d)[0].toString()))
+      .range([0, width - margin.left - margin.right])
       .padding(0.1);
 
     const yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(data, (d) => d.value)!])
+      .domain([
+        0,
+        d3.max(sortedData, (d) => parseFloat(String(Object.values(d)[1]))) || 0,
+      ])
       .nice()
-      .range([innerHeight, 0]);
+      .range([height - margin.top - margin.bottom, 0]);
 
     const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -108,7 +103,7 @@ function BarChart({ yAxisTitle = 'Test' }: { yAxisTitle?: string }) {
     // Update bars
     const bars = chart
       .selectAll<SVGRectElement, DataItem>('.bar')
-      .data(data, (d) => d.year.toString());
+      .data(sortedData, (d) => String(Object.keys(d)[0]));
 
     bars.exit().remove();
 
@@ -116,22 +111,29 @@ function BarChart({ yAxisTitle = 'Test' }: { yAxisTitle?: string }) {
       .enter()
       .append('rect')
       .attr('class', 'bar')
-      .attr('x', (d) => xScale(d.year.toString())!)
+      .attr('x', (d) => xScale(String(Object.keys(d)[0]))!)
       .attr('width', xScale.bandwidth())
-      .attr('y', innerHeight)
+      .attr('y', height - margin.top - margin.bottom)
       .attr('height', 0)
-      .style('fill', (d, i) => colorScale(i.toString()))
+      .style('fill', (d, i) => colorScale(String(i)))
       .merge(bars)
       .transition()
-      .duration(500)
-      .delay((d, i) => (i * 500) / 10)
-      .attr('height', (d) => innerHeight - yScale(d.value))
-      .attr('y', (d) => yScale(d.value));
+      .duration(duration)
+      .delay((d, i) => (i * duration) / 10)
+      .attr(
+        'height',
+        (d) =>
+          height -
+          margin.top -
+          margin.bottom -
+          yScale(parseFloat(String(Object.values(d)[1])))
+      )
+      .attr('y', (d) => yScale(parseFloat(String(Object.values(d)[1]))));
 
     // Update bar labels
     const labels = chart
       .selectAll<SVGTextElement, DataItem>('.bar-label')
-      .data(data, (d) => d.year.toString());
+      .data(sortedData, (d) => String(Object.keys(d)[0]));
 
     labels.exit().remove();
 
@@ -141,79 +143,61 @@ function BarChart({ yAxisTitle = 'Test' }: { yAxisTitle?: string }) {
       .attr('class', 'bar-label')
       .attr('text-anchor', 'middle')
       .attr('dx', 0)
-      .attr('y', innerHeight)
+      .attr('y', height - margin.top - margin.bottom)
       .attr('dy', -6)
       .attr('opacity', 0)
-      .text((d) => d.value.toFixed(2))
+      .text((d) => parseFloat(String(Object.values(d)[1])).toFixed(2))
       .merge(labels)
       .transition()
-      .duration(500)
-      .delay((d, i) => (i * 500) / 10)
+      .duration(duration)
+      .delay((d, i) => (i * duration) / 10)
       .attr('opacity', 1)
-      .attr('x', (d) => xScale(d.year.toString())! + xScale.bandwidth() / 2)
-      .attr('y', (d) => yScale(d.value) - 6);
+      .attr(
+        'x',
+        (d) => xScale(String(Object.keys(d)[0]))! + xScale.bandwidth() / 2
+      )
+      .attr('y', (d) => yScale(parseFloat(String(Object.values(d)[1]))) - 6);
 
-    const xAxis = d3.axisBottom<string>(xScale); // Specify axis type here
-
+    const xAxis = d3.axisBottom(xScale);
     chart
-      .selectAll('.x.axis')
-      .data([null])
-      .join('g')
-      .classed('x axis', true)
-      .attr('transform', `translate(0,${innerHeight})`)
+      .select('.x.axis')
       .transition()
-      .duration(500)
+      .duration(duration)
       .call(xAxis as any);
 
     const yAxis = d3.axisLeft(yScale).ticks(5);
-
     chart
-      .selectAll('.y.axis')
-      .data([null])
-      .join('g')
-      .classed('y axis', true)
-      .attr('transform', 'translate(0,0)')
+      .select('.y.axis')
       .transition()
-      .duration(500)
+      .duration(duration)
       .call(yAxis as any);
 
-    chart
-      .selectAll('.x-axis-title')
-      .data(['Year'])
-      .join('text')
-      .classed('x-axis-title', true)
-      .attr('x', innerWidth / 2)
-      .attr('y', innerHeight + 60)
-      .attr('fill', '#000')
-      .style('font-size', '20px')
-      .style('text-anchor', 'middle')
-      .text((d) => d);
+    chart.select('.x-axis-title').text('X Axis Title');
 
-    chart
-      .selectAll('.y-axis-title')
-      .data([yAxisTitle])
-      .join('text')
-      .classed('y-axis-title', true)
-      .attr('x', 0)
-      .attr('y', 0)
-      .attr('transform', `translate(-50, ${innerHeight / 2}) rotate(-90)`)
-      .attr('fill', '#000')
-      .style('font-size', '20px')
-      .style('text-anchor', 'middle')
-      .text((d) => d);
+    chart.select('.y-axis-title').text('Y Axis Title');
   };
+
+  useEffect(() => {
+    if (width && height && parsedData[activeFile]) {
+      const svg = d3
+        .select(ref.current)
+        .attr('width', width)
+        .attr('height', height)
+        .append('g')
+        .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+      draw();
+    }
+  }, [width, height, parsedData, activeFile]);
 
   return (
     <Container>
-      <div
-        style={{ height: '100%' }}
-        className='short-container'
-        ref={containerRef}
-      >
+      <div className='short-container' ref={containerRef}>
         <svg ref={ref}></svg>
       </div>
+      <button onClick={() => fetchData(activeFile)}>Fetch Data</button>
     </Container>
   );
-}
+};
 
 export default BarChart;

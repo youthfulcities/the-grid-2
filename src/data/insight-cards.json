@@ -23,6 +23,14 @@
       "link": "https://bestworkcity.ca/"
     },
     {
+      "title": "Survey Preview",
+      "dataset": "What's up with work lately?",
+      "date": "2024",
+      "type": "",
+      "desc": "Preview initial findings from the What's up with work lately? survey performed by Youthful Cities as part of the DEVlab project.",
+      "link": "/insights/survey"
+    },
+    {
       "title": "Chatbot",
       "titlefr": "Chatbot",
       "dataset": "",

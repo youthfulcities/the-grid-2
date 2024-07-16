@@ -93,6 +93,13 @@ const BarChart: React.FC = () => {
       parseDynamicCSVData(activeFile, rawData[activeFile]);
   }, [activeFile, rawData, parsedData]);
 
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...';
+    }
+    return text;
+  };
+
   useEffect(() => {
     if (!width || !height || !parsedData[activeFile]) return;
 
@@ -137,13 +144,23 @@ const BarChart: React.FC = () => {
       .selectAll('text')
       .style('fill', 'white');
 
+    // Append x-axis title
+    svg
+      .append('text')
+      .attr('class', 'x-axis-title')
+      .attr('x', width / 2)
+      .attr('y', height - 5) // Adjust vertical positioning as needed
+      .attr('text-anchor', 'middle')
+      .attr('fill', 'white') // Adjust color as needed
+      .text('Percent'); // Replace with your desired x-axis title
+
     // Draw y-axis
     svg
       .append('g')
       .attr('class', 'y-axis')
       .attr('transform', `translate(${margin.left}, 0)`)
       .style('color', 'white')
-      .call(d3.axisLeft(yScale))
+      .call(d3.axisLeft(yScale).tickFormat((d) => truncateText(d, 15)))
       .selectAll('text')
       .style('fill', 'white');
 

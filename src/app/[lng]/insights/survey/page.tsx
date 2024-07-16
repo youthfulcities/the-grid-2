@@ -106,7 +106,7 @@ const BarChart: React.FC = () => {
     // Calculate scales
     const yScale = d3
       .scaleBand<string>()
-      .domain(parsedData[activeFile].map((d) => d.option_en))
+      .domain(parsedData[activeFile].map((d) => String(d.option_en)))
       .range([margin.top, height - margin.bottom])
       .padding(0.1);
 
@@ -170,7 +170,7 @@ const BarChart: React.FC = () => {
       .data(parsedData[activeFile])
       .join('g')
       .attr('class', 'bar-group')
-      .attr('transform', (d) => `translate(0, ${yScale(d.option_en)})`)
+      .attr('transform', (d) => `translate(0, ${yScale(String(d.option_en))})`)
       .selectAll('.bar')
       .data((d) =>
         Object.keys(d)
@@ -181,25 +181,36 @@ const BarChart: React.FC = () => {
       .attr('class', 'bar')
       .attr('x', xScale(0))
       .attr('y', (d, i, nodes) => {
-        const parent = nodes[i].parentNode as SVGGElement;
-        const bandWidth = yScale.bandwidth() / parent.childElementCount;
-        return yScale.bandwidth() / 22 + i * bandWidth;
+        const node = nodes[i] as SVGRectElement;
+        const parent = node.parentNode as SVGGElement | null;
+
+        if (parent) {
+          const bandWidth = yScale.bandwidth() / parent.childElementCount;
+          return yScale.bandwidth() / 22 + i * bandWidth;
+        }
+        return '0';
       })
       .attr('height', (d, i, nodes) => {
-        const parent = nodes[i].parentNode as SVGGElement;
-        const bandWidth = yScale.bandwidth() / parent.childElementCount;
-        return bandWidth / 1;
+        const node = nodes[i] as SVGRectElement;
+        const parent = node.parentNode as SVGGElement | null;
+        if (parent) {
+          const bandWidth = yScale.bandwidth() / parent.childElementCount;
+          return bandWidth / 1;
+        }
+        return '0';
       })
       .attr('width', 0)
       .style('fill', (d, i) => colorScale(i.toString()))
       .on('mouseover', (event, d) => {
-        const groupData = d3.select(event.target.parentNode).datum();
+        const groupData = d3
+          .select<SVGGElement, DataItem>(event.target.parentNode as SVGGElement)
+          .datum();
         const xPos = event.offsetX;
         const yPos = event.offsetY;
         setTooltipState({
           position: { x: xPos, y: yPos },
           content: `${d.key} - ${d.value.toFixed(0)}%`,
-          group: groupData.option_en,
+          group: groupData.option_en as string,
         });
       })
       .on('mousemove', (event) => {

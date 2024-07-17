@@ -6,6 +6,7 @@ import {
   Menu,
   MenuButton,
   MenuItem,
+  Text,
   View,
   useTheme,
 } from '@aws-amplify/ui-react';
@@ -101,6 +102,11 @@ const MobileMenuItem = styled(MenuItem)`
   width: 100%;
 `;
 
+const SmallText = styled(Text)`
+  font-size: var(--amplify-font-sizes-xs);
+  margin: 0;
+`;
+
 const NavBar = () => {
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'translation');
@@ -131,7 +137,11 @@ const NavBar = () => {
 
   return (
     <StyledFlex as='nav'>
-      <Flex justifyContent='space-between' className='short-container' alignItems='center'>
+      <Flex
+        justifyContent='space-between'
+        className='short-container'
+        alignItems='center'
+      >
         <Flex alignItems='center'>
           <Link href='/'>
             {lng === 'fr' ? (
@@ -147,6 +157,7 @@ const NavBar = () => {
                 height='60px'
               />
             )}
+            <SmallText>Powered by Youthful Cities</SmallText>
           </Link>
           <View style={{ marginLeft: '20px' }}>
             <Button

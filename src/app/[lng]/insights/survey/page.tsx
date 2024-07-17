@@ -2,35 +2,17 @@
 
 import Container from '@/app/components/Background';
 import Tooltip from '@/app/components/TooltipChart';
+import Clusters from '@/app/components/dataviz/Clusters';
+import Pie from '@/app/components/dataviz/Pie';
 import { useDimensions } from '@/hooks/useDimensions';
 import { Button, Flex, Heading } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
 
 interface DataItem {
   [key: string]: string | number;
 }
-
-const TooltipText = styled.text`
-  font-size: 1rem;
-  fill: black;
-  text-anchor: middle;
-`;
-
-const TooltipTextSmall = styled.text`
-  font-size: 0.75rem;
-  fill: black;
-  text-anchor: middle;
-`;
-
-const TooltipBackground = styled.rect`
-  fill: white;
-  rx: 8; /* Rounded corners */
-  ry: 8; /* Rounded corners */
-`;
-
 const duration = 500;
 
 const BarChart: React.FC = () => {
@@ -165,12 +147,14 @@ const BarChart: React.FC = () => {
       .style('fill', 'white');
 
     // Draw bars
-    svg
+    const barGroups = svg
       .selectAll('.bar-group')
       .data(parsedData[activeFile])
       .join('g')
       .attr('class', 'bar-group')
-      .attr('transform', (d) => `translate(0, ${yScale(String(d.option_en))})`)
+      .attr('transform', (d) => `translate(0, ${yScale(String(d.option_en))})`);
+
+    barGroups
       .selectAll('.bar')
       .data((d) =>
         Object.keys(d)
@@ -200,7 +184,7 @@ const BarChart: React.FC = () => {
         return '0';
       })
       .attr('width', 0)
-      .style('fill', (d, i) => colorScale(i.toString()))
+      .style('fill', (d) => colorScale(d.key))
       .on('mouseover', (event, d) => {
         const groupData = d3
           .select<SVGGElement, DataItem>(event.target.parentNode as SVGGElement)
@@ -229,6 +213,60 @@ const BarChart: React.FC = () => {
       .delay((d, i) => i * (duration / 10))
       .attr('x', xScale(0))
       .attr('width', (d) => xScale(d.value) - xScale(0));
+
+    const legendData = barGroups.data().reduce((acc, d) => {
+      const keys = Object.keys(d).filter((key) => key !== 'option_en');
+      keys.forEach((key) => {
+        if (!acc.includes(key)) {
+          acc.push(key);
+        }
+      });
+      return acc;
+    }, [] as string[]);
+
+    // Create legend
+    const legend = svg
+      .append('g')
+      .attr('class', 'legend')
+      .attr(
+        'transform',
+        `translate(${width - 150 - 20}, ${height - legendData.length * 20 - 50})`
+      );
+
+    // Legend background
+    legend
+      .append('rect')
+      .attr('x', -10)
+      .attr('y', -10)
+      .attr('rx', 8)
+      .attr('ry', 8)
+      .attr('width', 150)
+      .attr('height', legendData.length * 20 + 10)
+      .style('fill', 'white')
+      .attr('opacity', 0.9);
+
+    // Legend items
+    legend
+      .selectAll('rect.legend-item')
+      .data(legendData)
+      .enter()
+      .append('rect')
+      .attr('class', 'legend-item')
+      .attr('x', 0)
+      .attr('y', (d, i) => i * 20)
+      .attr('width', 10)
+      .attr('height', 10)
+      .attr('fill', (d) => colorScale(d));
+
+    legend
+      .selectAll('text.legend-label')
+      .data(legendData)
+      .enter()
+      .append('text')
+      .attr('class', 'legend-label')
+      .attr('x', 20)
+      .attr('y', (d, i) => i * 20 + 9)
+      .text((d) => d);
   }, [width, height, parsedData, activeFile]);
   return (
     <Container>
@@ -251,13 +289,25 @@ const BarChart: React.FC = () => {
             variation='primary'
             onClick={() => setActiveFile('org-attractive-cluster.csv')}
           >
-            By Cluster
+            By Psychographics
           </Button>
           <Button
             variation='primary'
             onClick={() => setActiveFile('org-attractive-city.csv')}
           >
             By City
+          </Button>
+          <Button
+            variation='primary'
+            onClick={() => setActiveFile('org-attractive-citizen.csv')}
+          >
+            By Citizenship Status
+          </Button>
+          <Button
+            variation='primary'
+            onClick={() => setActiveFile('org-attractive-disability.csv')}
+          >
+            By Ability
           </Button>
         </Flex>
         <svg ref={ref}></svg>
@@ -269,6 +319,8 @@ const BarChart: React.FC = () => {
             group={tooltipState.group}
           />
         )}
+        <Clusters width={width} />
+        <Pie width={width} />
       </div>
     </Container>
   );

@@ -26,12 +26,12 @@ const Tooltip: React.FC<{
   x: number;
   y: number;
   content: string;
-  group: string;
+  group?: string;
 }> = ({ x, y, content, group }) => {
   return (
     <TooltipContainer style={{ left: x, top: y + 20 }}>
       {content}
-      <SmallText>{group}</SmallText>
+      {group && <SmallText>{group}</SmallText>}
     </TooltipContainer>
   );
 };

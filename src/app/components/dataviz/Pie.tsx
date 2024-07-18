@@ -41,7 +41,7 @@ const PieChartComponent: React.FC<{
 
   useEffect(() => {
     const fetchData = async (filename: string) => {
-      if (rawData.hasOwnProperty(filename)) return;
+      if (Object.prototype.hasOwnProperty.call(rawData, filename)) return;
 
       try {
         setLoading(true);
@@ -65,7 +65,7 @@ const PieChartComponent: React.FC<{
         Object.keys(d).forEach((oldKey) => {
           const parts = oldKey.split(/DEM_|\(SUM\)/);
           const newKey = parts.length > 1 ? parts[1] : oldKey;
-          row[newKey] = isNaN(+d[oldKey]) ? d[newKey] : +d[oldKey];
+          row[newKey] = Number.isNaN(+d[oldKey]) ? d[newKey] : +d[oldKey];
         });
         return row;
       });
@@ -141,9 +141,9 @@ const PieChartComponent: React.FC<{
       .attr('fill', (d, i) =>
         getColor(d.data[Object.keys(d.data)[0]] as string)
       )
-      .attrTween('d', function (d) {
+      .attrTween('d', (d) => {
         const interpolate = d3.interpolate({ startAngle: 0, endAngle: 0 }, d);
-        return function (t) {
+        return (t) => {
           return arcGenerator(interpolate(t))!;
         };
       });

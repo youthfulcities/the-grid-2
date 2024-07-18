@@ -1,9 +1,8 @@
 'use client';
 
 import Container from '@/app/components/Background';
-import Tooltip from '@/app/components/TooltipChart';
 import Clusters from '@/app/components/dataviz/Clusters';
-import Pie from '@/app/components/dataviz/Pie';
+import Tooltip from '@/app/components/dataviz/TooltipChart';
 import { useDimensions } from '@/hooks/useDimensions';
 import { Button, Flex, Heading } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
@@ -35,7 +34,6 @@ const BarChart: React.FC = () => {
     content: '',
     group: '',
   });
-
   useEffect(() => {
     const fetchData = async (filename: string) => {
       if (rawData.hasOwnProperty(filename)) return;
@@ -224,26 +222,29 @@ const BarChart: React.FC = () => {
       return acc;
     }, [] as string[]);
 
+    const longestTextLength = Math.max(...legendData.map((d) => d.length));
+    const legendItemWidth = longestTextLength * 6 + 60; // Assuming each character width is 8px
+
     // Create legend
     const legend = svg
       .append('g')
       .attr('class', 'legend')
       .attr(
         'transform',
-        `translate(${width - 150 - 20}, ${height - legendData.length * 20 - 50})`
+        `translate(${width - legendItemWidth}, ${height - legendData.length * 20 - 50})`
       );
 
     // Legend background
-    legend
-      .append('rect')
-      .attr('x', -10)
-      .attr('y', -10)
-      .attr('rx', 8)
-      .attr('ry', 8)
-      .attr('width', 150)
-      .attr('height', legendData.length * 20 + 10)
-      .style('fill', 'white')
-      .attr('opacity', 0.9);
+    // legend
+    //   .append('rect')
+    //   .attr('x', -10)
+    //   .attr('y', -10)
+    //   .attr('rx', 8)
+    //   .attr('ry', 8)
+    //   .attr('width', 150)
+    //   .attr('height', legendData.length * 20 + 10)
+    //   .style('fill', 'white')
+    //   .attr('opacity', 0.9);
 
     // Legend items
     legend
@@ -266,6 +267,8 @@ const BarChart: React.FC = () => {
       .attr('class', 'legend-label')
       .attr('x', 20)
       .attr('y', (d, i) => i * 20 + 9)
+      .style('fill', 'white')
+      .attr('font-size', '12px')
       .text((d) => d);
   }, [width, height, parsedData, activeFile]);
   return (
@@ -320,7 +323,6 @@ const BarChart: React.FC = () => {
           />
         )}
         <Clusters width={width} />
-        <Pie width={width} />
       </div>
     </Container>
   );

@@ -76,7 +76,6 @@ export const POST = async (req: Request) => {
   // 6. Send POST request to Mailchimp API
   try {
     const response = await axios.post(url, data, options);
-    console.log(response);
     if (response.status === 200 || response.status === 201) {
       // 7. Add tag to the subscribed member
       const subscriberHash = md5(emailValidation.data.toLowerCase()); // Mailchimp requires a lowercase MD5 hash of the email address

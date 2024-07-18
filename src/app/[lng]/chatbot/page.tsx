@@ -33,7 +33,7 @@ const Chatbot = () => {
         </Text>
       </View>
       <StyledChat
-        src='http://99.231.34.125:8551/'
+        src='https://chat.youthfulcities.com/'
         title='Youthful Cities Chatbot'
         height='100%'
         width='100%'

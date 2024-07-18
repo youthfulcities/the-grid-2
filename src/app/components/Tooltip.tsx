@@ -35,7 +35,7 @@ const SmallText = styled(Text)`
   margin-top: var(--amplify-space-small);
   color: var(--amplify-colors-font-primary);
   font-weight: 400;
-  font-size: var(--amplify-fontsizes-xs);
+  font-size: var(--amplify-fontsize-xs);
 `;
 
 const MyTooltip = ({

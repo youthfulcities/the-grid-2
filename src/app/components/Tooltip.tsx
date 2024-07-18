@@ -7,8 +7,6 @@ interface TooltipProps {
   tooltipMsg: string;
   tooltipDesc?: string;
   children: ReactNode;
-  x?: number;
-  y?: number;
 }
 
 const StyledBadge = styled(Badge)<{

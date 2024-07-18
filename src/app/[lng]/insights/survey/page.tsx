@@ -36,7 +36,7 @@ const BarChart: React.FC = () => {
   });
   useEffect(() => {
     const fetchData = async (filename: string) => {
-      if (rawData.hasOwnProperty(filename)) return;
+      if (Object.prototype.hasOwnProperty.call(rawData, filename)) return;
 
       try {
         setLoading(true);
@@ -60,7 +60,7 @@ const BarChart: React.FC = () => {
         Object.keys(d).forEach((oldKey) => {
           const parts = oldKey.split(/DEM_|\(SUM\)/);
           const newKey = parts.length > 1 ? parts[1] : oldKey;
-          row[newKey] = isNaN(+d[oldKey]) ? d[newKey] : +d[oldKey] * 100;
+          row[newKey] = Number.isNaN(+d[oldKey]) ? d[newKey] : +d[oldKey] * 100;
         });
         return row;
       });

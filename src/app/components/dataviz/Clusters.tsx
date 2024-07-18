@@ -1,12 +1,43 @@
-import { Heading, Text, View } from '@aws-amplify/ui-react';
+import { Flex, Heading, Text, View } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import { useEffect, useState } from 'react';
-import Tooltip from '../TooltipChart';
+import Pie from './Pie';
+import Tooltip from './TooltipChart';
 
 interface DataItem {
   [key: string]: string | number;
 }
+
+const clusterNames = [
+  'Social good focus',
+  'Forming opinions',
+  'Affordability focus',
+];
+
+const clusterMap: {
+  'Social good focus': string;
+  'Forming opinions': string;
+  'Affordability focus': string;
+  All: string;
+  [key: string]: string; // Index signature
+} = {
+  'Social good focus': 'social',
+  'Forming opinions': 'forming',
+  'Affordability focus': 'affordability',
+  All: 'all',
+};
+
+// Function to get key from value
+const getKeyFromValue = (value: string): string | null => {
+  for (const key in clusterMap) {
+    if (clusterMap[key] === value) {
+      return key;
+    }
+  }
+  return null; // Return null if value is not found
+};
+
 const Clusters = ({ width = 800 }) => {
   const height = 600;
   const [loading, setLoading] = useState(false);
@@ -22,6 +53,7 @@ const Clusters = ({ width = 800 }) => {
     content: '',
     group: '',
   });
+  const [currentCluster, setCurrentCluster] = useState('all');
 
   useEffect(() => {
     const fetchData = async (filename: string) => {
@@ -102,7 +134,7 @@ const Clusters = ({ width = 800 }) => {
 
       const colorScale = d3
         .scaleOrdinal<string>()
-        .domain(['Social good focus', 'Neutral', 'Affordability focus'])
+        .domain(clusterNames)
         .range(['steelblue', 'orange', 'green']);
 
       // Create circles for each data point
@@ -115,7 +147,14 @@ const Clusters = ({ width = 800 }) => {
         .attr('cy', (d) => yScale(d.UMAP2 as number))
         .attr('r', 5)
         .attr('fill', (d) => colorScale(String(d.Cluster_Label)))
-        .attr('opacity', 0.9)
+        .attr('opacity', (d) => {
+          if (currentCluster === 'all') {
+            return 0.9;
+          }
+          if (d.Cluster_Label === getKeyFromValue(currentCluster)) {
+            return 0.9;
+          } else return 0.2;
+        })
         .on('mouseover', (event, d) => {
           const xPos = event.layerX;
           const yPos = event.layerY;
@@ -135,7 +174,19 @@ const Clusters = ({ width = 800 }) => {
         })
         .on('mouseout', () => {
           setTooltipState({ ...tooltipState, position: null });
+        })
+        .on('click', (event, d) => {
+          event.stopPropagation();
+          if (currentCluster === clusterMap[d.Cluster_Label]) {
+            setCurrentCluster('all'); // Reset to 'all'
+          } else {
+            setCurrentCluster(clusterMap[d.Cluster_Label]); // Set currentCluster to clicked Cluster_Label
+          }
         });
+
+      svg.on('click', () => {
+        setCurrentCluster('all'); // Reset to 'all' when clicking on SVG background
+      });
 
       const legendData = colorScale.domain();
 
@@ -146,17 +197,18 @@ const Clusters = ({ width = 800 }) => {
           'transform',
           `translate(${width - 150 - 20}, ${height - legendData.length * 20 - 50})`
         );
+
       // Legend background
-      legend
-        .append('rect')
-        .attr('x', -10)
-        .attr('y', -10)
-        .attr('rx', 8)
-        .attr('ry', 8)
-        .attr('width', 170)
-        .attr('height', legendData.length * 20 + 10)
-        .style('fill', 'white')
-        .attr('opacity', 0.9);
+      // legend
+      //   .append('rect')
+      //   .attr('x', -10)
+      //   .attr('y', -10)
+      //   .attr('rx', 8)
+      //   .attr('ry', 8)
+      //   .attr('width', 170)
+      //   .attr('height', legendData.length * 20 + 10)
+      //   .style('fill', 'white')
+      //   .attr('opacity', 0.9);
 
       // Legend items
       legend
@@ -169,6 +221,7 @@ const Clusters = ({ width = 800 }) => {
         .attr('y', (d, i) => i * 20)
         .attr('width', 10)
         .attr('height', 10)
+
         .attr('fill', (d) => colorScale(d));
 
       legend
@@ -179,6 +232,7 @@ const Clusters = ({ width = 800 }) => {
         .attr('class', 'legend-label')
         .attr('x', 20)
         .attr('y', (d, i) => i * 20 + 9)
+        .style('fill', 'white')
         .text((d) => d);
 
       // Add axes (if needed)
@@ -200,12 +254,12 @@ const Clusters = ({ width = 800 }) => {
       //   .style('font-size', '16px')
       //   .text('Scatterplot with UMAP1 and UMAP2');
     }
-  }, [parsedData, activeFile, width]);
+  }, [parsedData, activeFile, width, currentCluster]);
 
   return (
     <View className='padding'>
       <Heading level={1} marginBottom='xl'>
-        Psycographic clusters
+        Psychographic clusters
       </Heading>
       <Text>
         These clusters are based on how participants ranked topics in
@@ -220,6 +274,30 @@ const Clusters = ({ width = 800 }) => {
           y={tooltipState.position.y}
         />
       )}
+      <Text marginBottom='xl'>
+        Click on a data point to see the demographic breakdown of that cluster.
+        Current cluster: {getKeyFromValue(currentCluster)}
+      </Text>
+      <Flex wrap='wrap' justifyContent='space-between'>
+        <Pie
+          width={width >= 700 ? width / 2 - 20 : width}
+          type='gender'
+          title='Gender'
+          cluster={currentCluster}
+        />
+        <Pie
+          width={width >= 700 ? width / 2 - 20 : width}
+          type='status'
+          title='Citizenship Status'
+          cluster={currentCluster}
+        />
+        <Pie
+          width={width >= 700 ? width / 2 - 20 : width}
+          type='disability'
+          cluster={currentCluster}
+          title='Ability'
+        />
+      </Flex>
     </View>
   );
 };

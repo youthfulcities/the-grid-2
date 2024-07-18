@@ -6,19 +6,17 @@ import {
   Menu,
   MenuButton,
   MenuItem,
+  Text,
   View,
   useTheme,
 } from '@aws-amplify/ui-react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { FaBars } from 'react-icons/fa6';
 import styled from 'styled-components';
 import useTranslation from '../i18n/client';
-
-interface NavBarProps {
-  lng: string;
-}
+import AuthLink from './AuthLink';
 
 const StyledFlex = styled(Flex)`
   display: flex;
@@ -96,9 +94,21 @@ const StyledMenuButton = styled(MenuButton)`
   }
 `;
 
-const StyledMenuItem = styled(MenuItem)<{ $currentPage: boolean }>``;
+const MobileLink = styled(Link)`
+  width: 100%;
+`;
 
-const NavBar: React.FC<NavBarProps> = ({ lng }) => {
+const MobileMenuItem = styled(MenuItem)`
+  width: 100%;
+`;
+
+const SmallText = styled(Text)`
+  font-size: var(--amplify-font-sizes-xs);
+  margin: 0;
+`;
+
+const NavBar = () => {
+  const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'translation');
   const pathname = usePathname();
   const pathNoLocale = pathname.substring(3);
@@ -106,7 +116,6 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
   const [isMobile, setIsMobile] = useState(false);
 
   const { tokens } = useTheme();
-  console.log(pathname);
 
   //TODO: Refactor into reusable hook
   useEffect(() => {
@@ -128,14 +137,27 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
 
   return (
     <StyledFlex as='nav'>
-      <Flex justifyContent='space-between' className='short-container'>
+      <Flex
+        justifyContent='space-between'
+        className='short-container'
+        alignItems='center'
+      >
         <Flex alignItems='center'>
           <Link href='/'>
-            <img
-              src='/assets/theme_image/YDL_White.png'
-              alt='Logo'
-              height='60px'
-            />
+            {lng === 'fr' ? (
+              <img
+                src='/assets/theme_image/YDL_white_fr.png'
+                alt='Logo du Labo Data Jeunesse'
+                height='60px'
+              />
+            ) : (
+              <img
+                src='/assets/theme_image/YDL_White.png'
+                alt='Youth Data Lab Logo'
+                height='60px'
+              />
+            )}
+            <SmallText>Powered by Youthful Cities</SmallText>
           </Link>
           <View style={{ marginLeft: '20px' }}>
             <Button
@@ -174,33 +196,31 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
               </StyledMenuButton>
             }
           >
-            <MenuItem isDisabled={pathNoLocale === ''} as='a' href={`/${lng}/`}>
-              {t('home')}
-            </MenuItem>
-            <MenuItem
-              isDisabled={pathNoLocale === 'datasets'}
-              as='a'
-              href={`/${lng}/datasets`}
-            >
-              {t('datasets')}
-            </MenuItem>
-            <MenuItem
-              isDisabled={pathNoLocale === 'insights'}
-              as='a'
-              href={`/${lng}/insights`}
-            >
-              {t('insights')}
-            </MenuItem>
-            {/* <MenuItem as='a' href={`/${lng}/about`}>
-            {t('about')}
-          </MenuItem> */}
-            <MenuItem
-              isDisabled={pathNoLocale === 'contact'}
-              as='a'
-              href={`/${lng}/contact`}
-            >
-              {t('contact')}
-            </MenuItem>
+            <MobileLink href='/'>
+              <MobileMenuItem isDisabled={pathNoLocale === ''}>
+                {t('home')}
+              </MobileMenuItem>
+            </MobileLink>
+            <MobileLink href='/datasets'>
+              <MobileMenuItem isDisabled={pathNoLocale === '/datasets'}>
+                {t('datasets')}
+              </MobileMenuItem>
+            </MobileLink>
+            <MobileLink href='/insights'>
+              <MobileMenuItem isDisabled={pathNoLocale === '/insights'}>
+                {t('insights')}
+              </MobileMenuItem>
+            </MobileLink>
+            <MobileLink href='/about'>
+              <MobileMenuItem isDisabled={pathNoLocale === '/about'}>
+                {t('about')}
+              </MobileMenuItem>
+            </MobileLink>
+            <MobileLink href='/contact'>
+              <MobileMenuItem isDisabled={pathNoLocale === '/contact'}>
+                {t('contact')}
+              </MobileMenuItem>
+            </MobileLink>
           </Menu>
         ) : (
           <NavigationLinks>
@@ -219,7 +239,12 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
             >
               {t('insights')}
             </NavLink>
-            {/* <NavLink href={`/${lng}/about`}>{t('about')}</NavLink> */}
+            <NavLink
+              $currentPage={pathNoLocale === '/about'}
+              href={`/${lng}/about`}
+            >
+              {t('about')}
+            </NavLink>
             <NavLink
               $currentPage={pathNoLocale === '/contact'}
               href={`/${lng}/contact`}
@@ -228,6 +253,7 @@ const NavBar: React.FC<NavBarProps> = ({ lng }) => {
             </NavLink>
           </NavigationLinks>
         )}
+        <AuthLink />
       </Flex>
     </StyledFlex>
   );

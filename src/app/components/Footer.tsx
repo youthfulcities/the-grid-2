@@ -10,7 +10,7 @@ import {
 } from '@aws-amplify/ui-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import { useParams } from 'next/navigation';
 import {
   FaFacebook,
   FaInstagram,
@@ -20,10 +20,6 @@ import {
 import styled from 'styled-components';
 import useTranslation from '../i18n/client';
 import Newsletter from './Newsletter';
-
-interface FooterProps {
-  lng: string;
-}
 
 const FooterBase = styled(View)<{ $background: string }>`
   background-color: ${(props) => props.$background};
@@ -104,7 +100,8 @@ const IconLink = styled.a`
   }
 `;
 
-const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
+const FooterComponent = () => {
+  const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'translation');
   const { tokens } = useTheme();
 
@@ -179,14 +176,6 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
               >
                 {t('home')}
               </HoverLink>
-              {/* <HoverLink
-              href={`${lng}/about`}
-              passHref
-              $hover={tokens.colors.primary[60].value}
-              $color={tokens.colors.font.inverse.value}
-            >
-              {t('about')}
-            </HoverLink> */}
               <HoverLink
                 href='/datasets'
                 passHref
@@ -202,6 +191,14 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
                 $color={tokens.colors.font.inverse.value}
               >
                 {t('insights')}
+              </HoverLink>
+              <HoverLink
+                href='/about'
+                passHref
+                $hover={tokens.colors.primary[60].value}
+                $color={tokens.colors.font.inverse.value}
+              >
+                {t('about')}
               </HoverLink>
               <HoverLink
                 href={`/contact`}
@@ -243,12 +240,21 @@ const FooterComponent: React.FC<FooterProps> = ({ lng }) => {
         <FooterBottomSection>
           <Flex alignItems='center'>
             <Link href={`/${lng}/`}>
-              <Image
-                src='/assets/theme_image/YDL_White.png'
-                alt='Youth Data Lab Logo'
-                width={100}
-                height={46}
-              />
+              {lng === 'fr' ? (
+                <Image
+                  src='/assets/theme_image/YDL_white_fr.png'
+                  alt='Logo du Labo Data Jeunesse'
+                  width={100}
+                  height={46}
+                />
+              ) : (
+                <Image
+                  src='/assets/theme_image/YDL_White.png'
+                  alt='Youth Data Lab Logo'
+                  width={100}
+                  height={46}
+                />
+              )}
             </Link>
             <a href='https://www.youthfulcities.com/' target='_blank'>
               <Image

@@ -105,8 +105,8 @@ html {
 }
 
 main {
-  /* Overrides an existing CSS rule so the banner image can be "edge-to-edge" */
   margin: 0;
+  flex: 1;
 }
 
 h1,

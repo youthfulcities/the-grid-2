@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { FaArrowRight } from 'react-icons/fa6';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-import Dialogue from './Dialogue';
+// import Dialogue from './Dialogue';
 
 interface InsightCardProps {
   lng: string;
@@ -141,30 +141,19 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng }) => {
             </Text>
           </View>
           <Flex justifyContent='flex-end' alignItems='flex-end'>
-            {card.title === 'Chatbot' ? (
+            <Link href={card.link || '/'} passHref>
               <StyledButton
                 $background={getColor(index).button}
                 $inverse={getColor(index).buttonInverse}
                 $color={getColor(index).buttonInverse}
-                onClick={() => handleOpen()}
               >
                 <FaArrowRight size={20} />
               </StyledButton>
-            ) : (
-              <Link href={card.link || '/'} passHref target='_blank'>
-                <StyledButton
-                  $background={getColor(index).button}
-                  $inverse={getColor(index).buttonInverse}
-                  $color={getColor(index).buttonInverse}
-                >
-                  <FaArrowRight size={20} />
-                </StyledButton>
-              </Link>
-            )}
+            </Link>
           </Flex>
         </StyledCard>
       ))}
-      <Dialogue open={openDialogue} onClose={handleClose} />
+      {/* <Dialogue open={openDialogue} onClose={handleClose} /> */}
     </>
   );
 };

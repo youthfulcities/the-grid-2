@@ -1,26 +1,26 @@
 'use client';
 
 import useTranslation from '@/app/i18n/client';
-import
-  {
-    Alert,
-    Button,
-    CheckboxField,
-    Flex,
-    Heading,
-    SelectField,
-    Text,
-    TextAreaField,
-    TextField,
-    View,
-    useTheme,
-  } from '@aws-amplify/ui-react';
+import {
+  Alert,
+  Button,
+  CheckboxField,
+  Flex,
+  Heading,
+  SelectField,
+  Text,
+  TextAreaField,
+  TextField,
+  View,
+  useTheme,
+} from '@aws-amplify/ui-react';
 import { generateClient } from 'aws-amplify/api';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
 import styled from 'styled-components';
+import { z } from 'zod';
 import { createContactSubmission } from '../../../graphql/mutations';
 import Container from '../../components/Background';
 
@@ -77,6 +77,12 @@ const StyledButton = styled(Button)`
   margin-bottom: var(--amplify-space-small);
   width: 100%;
   background-color: var(--amplify-colors-red-60);
+
+  &:disabled {
+    background-color: var(--amplify-colors-neutral-60);
+    color: var(--amplify-colors-neutral-90);
+    cursor: not-allowed;
+  }
 `;
 
 const StyledCheckbox = styled(CheckboxField)`
@@ -108,16 +114,66 @@ const ContactForm = () => {
   >('idle');
   const [responseMsgSubscribe, setResponseMsgSubscribe] = useState<string>('');
   const [subscribe, setSubscribe] = useState(false);
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [formErrors, setFormErrors] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    topic: '',
+    message: '',
+  });
+
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'contact');
   const { t: tsubscribe } = useTranslation(lng, 'newsletter');
   const { tokens } = useTheme();
 
   const { firstName, lastName, email, phoneNumber, topic, message } = formData;
+  const phoneRegex =
+    /^(|([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])*)$/;
+
+  const schema = z.object({
+    firstName: z.string().min(1, t('fname_required')),
+    lastName: z.string().min(1, t('lname_required')),
+    email: z.string().email({ message: t('email_invalid') }),
+    phoneNumber: z
+      .string()
+      .max(10, t('phone_long'))
+      .regex(phoneRegex, t('phone_invalid'))
+      .optional(),
+    topic: z.string().min(1, t('topic_required')),
+    message: z.string().min(1, t('message_required')),
+  });
+
+  const validate = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    // Validate the field using zod.safeParse for that specific field
+    const fieldSchema = schema.pick({ [name]: true } as any);
+    const validation = fieldSchema.safeParse({ [name]: value });
+
+    // Update form errors for the specific field
+    if (!validation.success) {
+      const fieldErrors = validation.error.errors.reduce((acc, curr) => {
+        return { ...acc, [curr.path[0]]: curr.message };
+      }, {});
+      setFormErrors((prevState) => ({
+        ...prevState,
+        ...fieldErrors,
+      }));
+    } else {
+      setFormErrors((prevState) => ({
+        ...prevState,
+        [name]: '',
+      }));
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -125,6 +181,10 @@ const ContactForm = () => {
     >
   ) => {
     const { name, value } = e.target;
+
+    validate(e);
+
+    // Update form data
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
@@ -135,11 +195,22 @@ const ContactForm = () => {
     setSubscribe(e.target.checked);
   };
 
+  useEffect(() => {
+    // automatically clear alert
+    const timer = setTimeout(() => {
+      setError('');
+      setSuccess('');
+      setResponseMsgSubscribe('');
+      setStatusSubscribe('idle');
+    }, 6000);
+
+    // Cleanup function to clear the timeout if the component unmounts
+    return () => clearTimeout(timer);
+  }, [error, success, responseMsgSubscribe]);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
-    setSuccess('');
 
     try {
       const result = await client.graphql({
@@ -157,23 +228,9 @@ const ContactForm = () => {
         },
       });
 
-      console.log(result);
-
       if (result) {
         console.log('Email sent successfully:', result);
         setSuccess(t('success'));
-
-        // Reset form
-        setFormData({
-          firstName: '',
-          lastName: '',
-          email: '',
-          phoneNumber: '',
-          topic: '',
-          message: '',
-        });
-
-        setSubscribe(false);
       } else {
         throw new Error('Failed to send email');
       }
@@ -181,27 +238,45 @@ const ContactForm = () => {
       console.error('Error sending email:', err);
       setError(t('error'));
     } finally {
+      // Reset form
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
+        topic: '',
+        message: '',
+      });
+
+      setSubscribe(false);
       setLoading(false);
     }
 
-    try {
-      const response = await axios.post('/api/newsletter', {
-        fname: firstName,
-        lname: lastName,
-        email,
-        lng,
-      });
-      setStatusSubscribe('success');
-      setStatusCodeSubscribe(response.status);
-      setResponseMsgSubscribe(response.data.message);
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        setStatusSubscribe('error');
-        setStatusCodeSubscribe(err.response?.status);
-        setResponseMsgSubscribe(err.response?.data.error);
+    if (subscribe === true) {
+      try {
+        setStatusSubscribe('loading');
+        const response = await axios.post('/api/newsletter', {
+          fname: firstName,
+          lname: lastName,
+          phone: phoneNumber,
+          email,
+          lng,
+        });
+        setStatusSubscribe('success');
+        setStatusCodeSubscribe(response.status);
+        setResponseMsgSubscribe(response.data.message);
+      } catch (err) {
+        if (axios.isAxiosError(err)) {
+          setStatusSubscribe('error');
+          setStatusCodeSubscribe(err.response?.status);
+          setResponseMsgSubscribe(err.response?.data.error);
+        }
       }
     }
   };
+
+  const validation = schema.safeParse(formData);
+  const isFormValid = validation.success;
 
   return (
     <Container>
@@ -219,12 +294,12 @@ const ContactForm = () => {
               }}
             />
           </SubHeading>
-          {error && statusSubscribe !== 'loading' && (
+          {error.length > 0 && statusSubscribe !== 'loading' && (
             <Alert marginBottom={tokens.space.medium.value} variation='error'>
               {error} {tsubscribe(responseMsgSubscribe)}
             </Alert>
           )}
-          {success && statusSubscribe !== 'loading' && (
+          {success.length > 0 && statusSubscribe !== 'loading' && (
             <Alert marginBottom={tokens.space.medium.value} variation='success'>
               {success} {tsubscribe(responseMsgSubscribe)}
             </Alert>
@@ -236,7 +311,10 @@ const ContactForm = () => {
               name='firstName'
               value={formData.firstName}
               onChange={handleChange}
+              onFocus={(e) => validate(e)}
               isRequired
+              hasError={!!formErrors.firstName}
+              errorMessage={formErrors.firstName}
             />
             <StyledInput
               flex={1}
@@ -244,7 +322,10 @@ const ContactForm = () => {
               name='lastName'
               value={formData.lastName}
               onChange={handleChange}
+              onFocus={(e) => validate(e)}
               isRequired
+              hasError={!!formErrors.lastName}
+              errorMessage={formErrors.lastName}
             />
           </Flex>
           <StyledInput
@@ -253,7 +334,10 @@ const ContactForm = () => {
             name='email'
             value={formData.email}
             onChange={handleChange}
+            onFocus={(e) => validate(e)}
             isRequired
+            hasError={!!formErrors.email}
+            errorMessage={formErrors.email}
           />
           <StyledCheckbox
             label={t('subscribe')}
@@ -268,13 +352,19 @@ const ContactForm = () => {
             name='phoneNumber'
             value={formData.phoneNumber}
             onChange={handleChange}
+            onFocus={(e) => validate(e)}
+            hasError={!!formErrors.phoneNumber}
+            errorMessage={formErrors.phoneNumber}
           />
           <StyledSelect
             label={t('reason')}
             name='topic'
             value={formData.topic}
             onChange={handleChange}
+            onFocus={(e) => validate(e)}
             required
+            hasError={!!formErrors.topic}
+            errorMessage={formErrors.topic}
           >
             <option value=''>{t('select')}</option>
             <option value='Report a technical issue'>{t('technical')}</option>
@@ -287,9 +377,16 @@ const ContactForm = () => {
             name='message'
             value={formData.message}
             onChange={handleChange}
+            onFocus={(e) => validate(e)}
             isRequired
+            hasError={!!formErrors.message}
+            errorMessage={formErrors.message}
           />
-          <StyledButton type='submit' isLoading={loading}>
+          <StyledButton
+            type='submit'
+            isLoading={loading}
+            disabled={!isFormValid || loading}
+          >
             {t('submit')}
           </StyledButton>
         </StyledForm>

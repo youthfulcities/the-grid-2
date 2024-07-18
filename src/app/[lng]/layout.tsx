@@ -1,11 +1,11 @@
-//
+
 
 import '@aws-amplify/ui-react/styles.css';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { Amplify } from 'aws-amplify';
 import { configureAutoTrack } from 'aws-amplify/analytics';
 import { dir } from 'console';
-import type { Metadata } from 'next';
+import type { Metadata, ResolvingMetadata } from 'next';
 import Script from 'next/script';
 import React from 'react';
 import config from '../../amplifyconfiguration.json';
@@ -15,11 +15,15 @@ import NavBar from '../components/NavBar';
 import { languages } from '../i18n/settings';
 import AWSThemeProvider from './aws-theme-provider';
 import './global.css';
+import AutheticatorProvider from '../components/AuthenticatorProvider'
 
 interface RootLayoutProps {
   children: React.ReactNode;
   params: { lng: string };
 }
+
+// Define the possible languages
+type Language = 'en' | 'fr';
 
 //configure Amazon Pinpoint tracking
 configureAutoTrack({
@@ -83,9 +87,27 @@ export async function generateStaticParams() {
   return languages.map((lng) => ({ lng }));
 }
 
-export const metadata: Metadata = {
-  title: 'Youth Data Lab',
-  description: 'Insights driving change',
+// Function to generate metadata dynamically based on language
+const generateMetadata = async (
+  { params }: RootLayoutProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> => {
+  const { lng } = params;
+
+  const titles: { [key in Language]: string } = {
+    en: 'Youth Data Lab',
+    fr: 'Labo Data Jeunesse',
+  };
+
+  const descriptions: { [key in Language]: string } = {
+    en: 'Insights driving change',
+    fr: "L'intelligence au service du changement",
+  };
+
+  return {
+    title: titles[lng as Language] || 'Youth Data Lab',
+    description: descriptions[lng as Language] || 'Insights driving change',
+  };
 };
 
 const RootLayout: React.FC<RootLayoutProps> = ({
@@ -120,18 +142,31 @@ const RootLayout: React.FC<RootLayoutProps> = ({
     })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`}
       </Script>
       <body>
+
         <GoogleAnalytics gaId='G-GEF0PPKZXD' />
         <GoogleTagManager gtmId='GTM-MXZ2WJTV' />
         <StyledComponentsRegistry>
+          <AutheticatorProvider>
           <AWSThemeProvider>
-            <NavBar lng={lng} />
-            {children}
-            <Footer lng={lng} />
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: '100vh',
+                height: '100%',
+              }}
+            >
+              <NavBar />
+              {children}
+              <Footer />
+            </div>
           </AWSThemeProvider>
+          </AutheticatorProvider>
         </StyledComponentsRegistry>
       </body>
     </html>
   );
 };
 
+export { generateMetadata };
 export default RootLayout;

@@ -25,6 +25,8 @@ const BarChart: React.FC = () => {
   const [rawData, setRawData] = useState<Record<string, string>>({});
   const [parsedData, setParsedData] = useState<Record<string, DataItem[]>>({});
   const [activeFile, setActiveFile] = useState('org-attractive-gender.csv');
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+
   const [tooltipState, setTooltipState] = useState<{
     position: { x: number; y: number } | null;
     content: string;
@@ -54,7 +56,7 @@ const BarChart: React.FC = () => {
 
     const parseDynamicCSVData = (filename: string, csvString: string) => {
       if (parsedData[filename]) return;
-
+      setLoading(true);
       const parsed = d3.csvParse(csvString, (d) => {
         const row: DataItem = {};
         Object.keys(d).forEach((oldKey) => {
@@ -66,12 +68,23 @@ const BarChart: React.FC = () => {
       });
 
       setParsedData({ ...parsedData, [filename]: parsed });
+      setLoading(false);
     };
 
     fetchData(activeFile);
     if (rawData[activeFile])
       parseDynamicCSVData(activeFile, rawData[activeFile]);
   }, [activeFile, rawData, parsedData]);
+
+  // useEffect(() => {
+  //   // Select the top 10 options by default when parsedData is updated
+  //   if (parsedData[activeFile]) {
+  //     const defaultOptions = parsedData[activeFile]
+  //       .slice(0, 10)
+  //       .map((d) => d.option_en as string);
+  //     setSelectedOptions(defaultOptions);
+  //   }
+  // }, [parsedData, activeFile, loading]);
 
   const truncateText = (text: string, maxLength: number) => {
     if (text.length > maxLength) {
@@ -83,14 +96,16 @@ const BarChart: React.FC = () => {
   useEffect(() => {
     if (!width || !height || !parsedData[activeFile]) return;
 
+    const dataToDisplay = parsedData[activeFile];
+
     // Calculate scales
     const yScale = d3
       .scaleBand<string>()
-      .domain(parsedData[activeFile].map((d) => String(d.option_en)))
+      .domain(dataToDisplay.map((d) => String(d.option_en)))
       .range([margin.top, height - margin.bottom])
       .padding(0.1);
 
-    const maxGroupValue = d3.max(parsedData[activeFile], (d) =>
+    const maxGroupValue = d3.max(dataToDisplay, (d) =>
       d3.max(
         Object.keys(d).filter((key) => key !== 'option_en'),
         (key) => +d[key]
@@ -147,7 +162,7 @@ const BarChart: React.FC = () => {
     // Draw bars
     const barGroups = svg
       .selectAll('.bar-group')
-      .data(parsedData[activeFile])
+      .data(dataToDisplay)
       .join('g')
       .attr('class', 'bar-group')
       .attr('transform', (d) => `translate(0, ${yScale(String(d.option_en))})`);

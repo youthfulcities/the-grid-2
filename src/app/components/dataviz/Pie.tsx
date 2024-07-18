@@ -2,19 +2,29 @@ import { Heading, View } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import { useEffect, useState } from 'react';
-import Tooltip from '../TooltipChart';
+import Legend from './Legend';
+import Tooltip from './TooltipChart';
 
 interface DataItem {
   [key: string]: string | number;
 }
 
-const PieChartComponent: React.FC<{ width?: number; height?: number }> = ({
-  width = 600,
-  height = 400,
-}) => {
+interface LegendProps {
+  data: Array<{ key: string; color: string }>;
+}
+
+type PieArcDatum<T> = d3.PieArcDatum<T>;
+
+const PieChartComponent: React.FC<{
+  width?: number;
+  height?: number;
+  type: string;
+  cluster?: string;
+  title?: string;
+}> = ({ width = 600, height = 400, type, cluster = 'all', title }) => {
   const [rawData, setRawData] = useState<Record<string, string>>({});
   const [parsedData, setParsedData] = useState<Record<string, DataItem[]>>({});
-  const [activeFile, setActiveFile] = useState('gender-all.csv');
+  const [activeFile, setActiveFile] = useState(`${type}-${cluster}.csv`);
   const [loading, setLoading] = useState(false);
   const [tooltipState, setTooltipState] = useState<{
     position: { x: number; y: number } | null;
@@ -23,6 +33,11 @@ const PieChartComponent: React.FC<{ width?: number; height?: number }> = ({
     position: null,
     content: '',
   });
+  const [legendData, setLegendData] = useState<LegendProps['data']>([]);
+
+  useEffect(() => {
+    setActiveFile(`${type}-${cluster}.csv`);
+  }, [cluster, type]);
 
   useEffect(() => {
     const fetchData = async (filename: string) => {
@@ -67,10 +82,31 @@ const PieChartComponent: React.FC<{ width?: number; height?: number }> = ({
     if (!width || !height || !parsedData[activeFile]) return;
 
     const data = parsedData[activeFile];
-    d3.select('#pie-chart').selectAll('svg').remove();
+    d3.select(`#pie-chart-${type}`).selectAll('svg').remove();
+
+    const getColor = (value: string): string => {
+      // Use d3.scaleOrdinal to create a color scale based on d3.schemeCategory10
+      const colorScale = d3
+        .scaleOrdinal<string>()
+        .domain(data.map((d) => d[Object.keys(d)[0]] as string)) // Use all unique values from data
+        .range(d3.schemeCategory10);
+
+      // Return color based on value
+      return colorScale(value);
+    };
+
+    const sortedData = [...data].sort(
+      (a, b) => (b.Count as number) - (a.Count as number)
+    );
+
+    const newLegendData = sortedData.map((d, index) => ({
+      key: d[Object.keys(d)[0]] as string,
+      color: getColor(d[Object.keys(d)[0]] as string),
+    }));
+    setLegendData(newLegendData);
 
     const svg = d3
-      .select('#pie-chart')
+      .select(`#pie-chart-${type}`)
       .append('svg')
       .attr('width', width)
       .attr('height', height);
@@ -78,10 +114,13 @@ const PieChartComponent: React.FC<{ width?: number; height?: number }> = ({
     const radius = Math.min(width, height) / 2;
     const pie = d3.pie<DataItem>().value((d) => d.Count as number);
 
-    const arc = d3.arc().innerRadius(0).outerRadius(radius);
+    const arcGenerator = d3
+      .arc<PieArcDatum<DataItem>>()
+      .innerRadius(0)
+      .outerRadius(radius);
 
     const arcs = svg
-      .selectAll('arc')
+      .selectAll<SVGGElement, PieArcDatum<DataItem>>('g.arc')
       .data(pie(data))
       .enter()
       .append('g')
@@ -90,14 +129,34 @@ const PieChartComponent: React.FC<{ width?: number; height?: number }> = ({
 
     arcs
       .append('path')
-      .attr('d', arc)
-      .attr('fill', (d, i) => d3.schemeCategory10[i % 10])
+      .attr('d', arcGenerator)
+      .attr('fill', (d, i) =>
+        getColor(d.data[Object.keys(d.data)[0]] as string)
+      );
+
+    arcs
+      .selectAll<SVGPathElement, PieArcDatum<DataItem>>('path')
+      .transition()
+      .duration(1000) // Transition duration in milliseconds
+      .attr('fill', (d, i) =>
+        getColor(d.data[Object.keys(d.data)[0]] as string)
+      )
+      .attrTween('d', function (d) {
+        const interpolate = d3.interpolate({ startAngle: 0, endAngle: 0 }, d);
+        return function (t) {
+          return arcGenerator(interpolate(t))!;
+        };
+      });
+
+    arcs
+      .selectAll<SVGPathElement, PieArcDatum<DataItem>>('path')
       .on('mouseover', (event, d) => {
         const xPos = event.layerX;
         const yPos = event.layerY;
+        const category = Object.keys(d.data)[0];
         setTooltipState({
           position: { x: xPos, y: yPos },
-          content: `${d.data.Gender_DEM}: ${d.data.Count}`,
+          content: `${d.data[category]}: ${d.data.Count}`,
         });
       })
       .on('mousemove', (event) => {
@@ -111,60 +170,20 @@ const PieChartComponent: React.FC<{ width?: number; height?: number }> = ({
       .on('mouseout', () => {
         setTooltipState({ ...tooltipState, position: null });
       });
-
-    const legendData = data.map((d) => d[Object.keys(d)[0]] as string);
-
-    //sort the data without mutating it
-    const longestItem = [...legendData].sort((a, b) => b.length - a.length)[0];
-
-    // Add legend
-    const legend = svg
-      .append('g')
-      .attr('class', 'legend')
-      .attr(
-        'transform',
-        `translate(${longestItem.length * 20 - 50}, ${height - legendData.length * 20 - 50})`
-      );
-
-    //legend background
-    legend
-      .append('rect')
-      .attr('x', -10)
-      .attr('y', -10)
-      .attr('rx', 8)
-      .attr('ry', 8)
-      .attr('width', longestItem.length * 9)
-      .attr('height', legendData.length * 20 + 10)
-      .style('fill', 'white')
-      .attr('opacity', 0.9);
-
-    legend
-      .selectAll('rect')
-      .data(legendData)
-      .enter()
-      .append('rect')
-      .attr('x', 0)
-      .attr('y', (d, i) => i * 20)
-      .attr('width', 10)
-      .attr('height', 10)
-      .attr('fill', (d, i) => d3.schemeCategory10[i % 10]);
-
-    legend
-      .selectAll('text')
-      .data(legendData)
-      .enter()
-      .append('text')
-      .attr('x', 20)
-      .attr('y', (d, i) => i * 20 + 9)
-      .text((d) => d);
-  }, [parsedData, width, height]);
+  }, [parsedData, width, height, activeFile]);
 
   return (
-    <View className='padding'>
-      <Heading level={1} marginBottom='xl'>
-        Gender Distribution
+    <View>
+      <Heading
+        level={4}
+        color='font.inverse'
+        textAlign='center'
+        marginBottom='large'
+      >
+        {title || type}
       </Heading>
-      <div id='pie-chart'></div>
+      <div id={`pie-chart-${type}`}></div>
+      <Legend data={legendData} />
       {tooltipState.position && (
         <Tooltip
           x={tooltipState.position.x - 40}

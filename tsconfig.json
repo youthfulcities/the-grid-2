@@ -27,7 +27,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/components/dataviz/Clusters.js"
+    "src/app/components/dataviz/Clusters.js",
+    "src/app/components/dataviz/Legend"
   ],
   "exclude": ["node_modules"]
 }

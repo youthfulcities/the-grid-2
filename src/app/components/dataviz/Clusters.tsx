@@ -30,12 +30,8 @@ const clusterMap: {
 
 // Function to get key from value
 const getKeyFromValue = (value: string): string | null => {
-  for (const key in clusterMap) {
-    if (clusterMap[key] === value) {
-      return key;
-    }
-  }
-  return null; // Return null if value is not found
+  const entry = Object.entries(clusterMap).find(([key, val]) => val === value);
+  return entry ? entry[0] : null; // Return the key if found, otherwise null
 };
 
 const Clusters = ({ width = 800 }) => {
@@ -57,7 +53,7 @@ const Clusters = ({ width = 800 }) => {
 
   useEffect(() => {
     const fetchData = async (filename: string) => {
-      if (rawData.hasOwnProperty(filename)) return;
+      if (Object.prototype.hasOwnProperty.call(rawData, filename)) return;
 
       try {
         setLoading(true);
@@ -81,7 +77,7 @@ const Clusters = ({ width = 800 }) => {
         Object.keys(d).forEach((oldKey) => {
           const parts = oldKey.split(/DEM_|\(SUM\)/);
           const newKey = parts.length > 1 ? parts[1] : oldKey;
-          row[newKey] = isNaN(+d[oldKey]) ? d[newKey] : +d[oldKey];
+          row[newKey] = Number.isNaN(+d[oldKey]) ? d[newKey] : +d[oldKey];
         });
         return row;
       });
@@ -153,7 +149,8 @@ const Clusters = ({ width = 800 }) => {
           }
           if (d.Cluster_Label === getKeyFromValue(currentCluster)) {
             return 0.9;
-          } else return 0.2;
+          }
+          return 0.2;
         })
         .on('mouseover', (event, d) => {
           const xPos = event.layerX;

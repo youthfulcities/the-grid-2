@@ -36,7 +36,7 @@ const Legend: React.FC<LegendProps> = ({ data }) => {
   return (
     <LegendContainer>
       {data.map((item, index) => (
-        <LegendItem key={index}>
+        <LegendItem key={item.key}>
           <LegendColorBox color={item.color} />
           <LegendLabel>{item.key}</LegendLabel>
         </LegendItem>

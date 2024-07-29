@@ -5,14 +5,18 @@ import Clusters from '@/app/components/dataviz/Clusters';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import { useDimensions } from '@/hooks/useDimensions';
 import { Button, Flex, Heading } from '@aws-amplify/ui-react';
+import { Amplify } from 'aws-amplify';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import { useEffect, useRef, useState } from 'react';
+import config from '../../../../amplifyconfiguration.json';
 
 interface DataItem {
   [key: string]: string | number;
 }
 const duration = 500;
+
+Amplify.configure(config);
 
 const BarChart: React.FC = () => {
   const margin = { top: 60, bottom: 40, left: 100, right: 40 };
@@ -36,6 +40,7 @@ const BarChart: React.FC = () => {
     content: '',
     group: '',
   });
+
   useEffect(() => {
     const fetchData = async (filename: string) => {
       if (Object.prototype.hasOwnProperty.call(rawData, filename)) return;
@@ -296,7 +301,7 @@ const BarChart: React.FC = () => {
         <Heading level={5} color='font.inverse' textAlign='center'>
           What makes an organization/company the most attractive to work for?
         </Heading>
-        <Flex justifyContent='center'>
+        <Flex justifyContent='center' wrap='wrap'>
           <Button
             variation='primary'
             onClick={() => setActiveFile('org-attractive-gender.csv')}

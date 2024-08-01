@@ -47,7 +47,7 @@ const Customize: React.FC<CustomizeProps> = ({
   return (
     <View>
       <View>
-        <View key='accordion-trigger' onClick={() => handleAccordionClick(0)}>
+        <View onClick={() => handleAccordionClick(0)}>
           <Heading level={5} marginBottom='0' color='font.inverse'>
             Customize chart
           </Heading>
@@ -63,9 +63,6 @@ const Customize: React.FC<CustomizeProps> = ({
                 height: { duration: 0.3, ease: 'easeInOut' },
                 opacity: { duration: 0.3, ease: 'easeInOut' },
               }}
-              style={{ display: openIndex === 0 ? 'block' : 'none' }}
-              onAnimationStart={() => console.log('Animation started')}
-              onAnimationComplete={() => console.log('Animation complete')}
             >
               {allOptions.map((option) => (
                 <StyledCheckbox

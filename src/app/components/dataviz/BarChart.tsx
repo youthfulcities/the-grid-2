@@ -110,8 +110,6 @@ const BarChart: React.FC<BarProps> = ({
       selectedOptions.includes(item.option_en)
     );
 
-    console.log(dataToDisplay);
-
     // Calculate scales
     const yScale = d3
       .scaleBand<string>()

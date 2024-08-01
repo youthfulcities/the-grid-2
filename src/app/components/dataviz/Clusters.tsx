@@ -1,12 +1,28 @@
-import { Flex, Heading, Text, View } from '@aws-amplify/ui-react';
+'use client';
+
+import { Heading, Placeholder, Text, View } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import { useEffect, useState } from 'react';
-import Pie from './Pie';
 import Tooltip from './TooltipChart';
 
 interface DataItem {
   [key: string]: string | number;
+}
+
+interface ClusterProps {
+  width: number | undefined;
+  currentCluster: string;
+  getWidth: (width: number) => number | undefined;
+  setCurrentCluster: (cluster: string) => void;
+  getKeyFromValue: (value: string) => string | null;
+  clusterMap: {
+    [key: string]: string;
+    'Social good focus': string;
+    'Forming opinions': string;
+    'Affordability focus': string;
+    All: string;
+  };
 }
 
 const clusterNames = [
@@ -15,28 +31,16 @@ const clusterNames = [
   'Affordability focus',
 ];
 
-const clusterMap: {
-  'Social good focus': string;
-  'Forming opinions': string;
-  'Affordability focus': string;
-  All: string;
-  [key: string]: string; // Index signature
-} = {
-  'Social good focus': 'social',
-  'Forming opinions': 'forming',
-  'Affordability focus': 'affordability',
-  All: 'all',
-};
-
-// Function to get key from value
-const getKeyFromValue = (value: string): string | null => {
-  const entry = Object.entries(clusterMap).find(([key, val]) => val === value);
-  return entry ? entry[0] : null; // Return the key if found, otherwise null
-};
-
-const Clusters = ({ width = 800 }) => {
+const Clusters: React.FC<ClusterProps> = ({
+  width = 800,
+  getWidth,
+  currentCluster,
+  setCurrentCluster,
+  getKeyFromValue,
+  clusterMap,
+}) => {
   const height = 600;
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [rawData, setRawData] = useState<Record<string, string>>({});
   const [parsedData, setParsedData] = useState<Record<string, DataItem[]>>({});
   const [activeFile, setActiveFile] = useState('umap_data.csv');
@@ -49,7 +53,6 @@ const Clusters = ({ width = 800 }) => {
     content: '',
     group: '',
   });
-  const [currentCluster, setCurrentCluster] = useState('all');
 
   useEffect(() => {
     const fetchData = async (filename: string) => {
@@ -132,6 +135,25 @@ const Clusters = ({ width = 800 }) => {
         .scaleOrdinal<string>()
         .domain(clusterNames)
         .range(['steelblue', 'orange', 'green']);
+
+      // Add contour density layer
+      const densityData = d3
+        .contourDensity<DataItem>()
+        .x((d: DataItem) => xScale(d.UMAP1 as number))
+        .y((d: DataItem) => yScale(d.UMAP2 as number))
+        .size([width, height])
+        .bandwidth(35)(filteredData);
+
+      svg
+        .append('g')
+        .selectAll('path')
+        .data(densityData)
+        .enter()
+        .append('path')
+        .attr('d', d3.geoPath())
+        .attr('fill', 'none')
+        .attr('stroke', 'white')
+        .attr('stroke-linejoin', 'round');
 
       // Create circles for each data point
       svg
@@ -251,6 +273,8 @@ const Clusters = ({ width = 800 }) => {
       //   .style('font-size', '16px')
       //   .text('Scatterplot with UMAP1 and UMAP2');
     }
+
+    getWidth(width);
   }, [parsedData, activeFile, width, currentCluster]);
 
   return (
@@ -263,6 +287,7 @@ const Clusters = ({ width = 800 }) => {
         importances versus performance of their city. Clusters are generated
         using the UMAP method.
       </Text>
+      <Placeholder height={height} isLoaded={!loading} />
       <div id='chart'></div>
       {tooltipState.position && (
         <Tooltip
@@ -271,30 +296,6 @@ const Clusters = ({ width = 800 }) => {
           y={tooltipState.position.y}
         />
       )}
-      <Text marginBottom='xl'>
-        Click on a data point to see the demographic breakdown of that cluster.
-        Current cluster: {getKeyFromValue(currentCluster)}
-      </Text>
-      <Flex wrap='wrap' justifyContent='space-between'>
-        <Pie
-          width={width >= 700 ? width / 2 - 20 : width}
-          type='gender'
-          title='Gender'
-          cluster={currentCluster}
-        />
-        <Pie
-          width={width >= 700 ? width / 2 - 20 : width}
-          type='status'
-          title='Citizenship Status'
-          cluster={currentCluster}
-        />
-        <Pie
-          width={width >= 700 ? width / 2 - 20 : width}
-          type='disability'
-          cluster={currentCluster}
-          title='Ability'
-        />
-      </Flex>
     </View>
   );
 };

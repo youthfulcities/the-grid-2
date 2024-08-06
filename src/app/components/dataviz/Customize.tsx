@@ -1,7 +1,8 @@
-import { CheckboxField, Heading, View } from '@aws-amplify/ui-react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { Button, CheckboxField, View } from '@aws-amplify/ui-react';
+import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import Accordion from '../Accordion';
 
 interface CustomizeProps {
   selectedOptions: string[];
@@ -23,6 +24,21 @@ const StyledCheckbox = styled(CheckboxField)`
 const AccordionContent = styled(motion.div)`
   overflow: hidden;
   padding: var(--amplify-space-small);
+  border-width: var(--amplify-border-widths-small);
+  border-color: var(--amplify-colors-brand-primary-60);
+  border-style: solid;
+  border-top: 0;
+`;
+
+const CustomizeButton = styled(Button)`
+  box-sizing: border-box;
+  width: 100%;
+  &:hover {
+    background-color: transparent;
+  }
+  &:focus {
+    background-color: transparent;
+  }
 `;
 
 const Customize: React.FC<CustomizeProps> = ({
@@ -40,43 +56,19 @@ const Customize: React.FC<CustomizeProps> = ({
     );
   };
 
-  const handleAccordionClick = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
-
   return (
     <View>
-      <View>
-        <View onClick={() => handleAccordionClick(0)}>
-          <Heading level={5} marginBottom='0' color='font.inverse'>
-            Customize chart
-          </Heading>
-        </View>
-        <AnimatePresence>
-          {openIndex === 0 && (
-            <AccordionContent
-              key='content'
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{
-                height: { duration: 0.3, ease: 'easeInOut' },
-                opacity: { duration: 0.3, ease: 'easeInOut' },
-              }}
-            >
-              {allOptions.map((option) => (
-                <StyledCheckbox
-                  key={option}
-                  name={option}
-                  label={option}
-                  checked={selectedOptions.includes(option)}
-                  onChange={() => toggleOption(option)}
-                />
-              ))}
-            </AccordionContent>
-          )}
-        </AnimatePresence>
-      </View>
+      <Accordion title='Customize chart'>
+        {allOptions.map((option) => (
+          <StyledCheckbox
+            key={option}
+            name={option}
+            label={option}
+            checked={selectedOptions.includes(option)}
+            onChange={() => toggleOption(option)}
+          />
+        ))}
+      </Accordion>
     </View>
   );
 };

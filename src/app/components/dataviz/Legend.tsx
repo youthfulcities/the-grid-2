@@ -29,19 +29,48 @@ const LegendLabel = styled.span`
 `;
 
 interface LegendProps {
+  position?: string;
   data: Array<{ key: string; color: string }>;
 }
 
-const Legend: React.FC<LegendProps> = ({ data }) => {
+const AbsoluteLegendContainer = styled.div`
+  position: absolute;
+  right: 0;
+  bottom: 80px;
+  z-index: 9999;
+  pointer-events: none;
+  flex-direction: column;
+  padding: var(--amplify-space-xs) var(--amplify-space-small);
+  text-align: left;
+  color: var(--amplify-colors-font-inverse);
+  backdrop-filter: blur(10px);
+  max-width: 300px;
+  border-radius: var(--amplify-space-xs);
+`;
+
+const Legend: React.FC<LegendProps> = ({ data, position = 'below' }) => {
   return (
-    <LegendContainer>
-      {data.map((item, index) => (
-        <LegendItem key={item.key}>
-          <LegendColorBox color={item.color} />
-          <LegendLabel>{item.key}</LegendLabel>
-        </LegendItem>
-      ))}
-    </LegendContainer>
+    <>
+      {position === 'absolute' ? (
+        <AbsoluteLegendContainer>
+          {data.map((item, index) => (
+            <LegendItem key={item.key}>
+              <LegendColorBox color={item.color} />
+              <LegendLabel>{item.key}</LegendLabel>
+            </LegendItem>
+          ))}
+        </AbsoluteLegendContainer>
+      ) : (
+        <LegendContainer>
+          {data.map((item, index) => (
+            <LegendItem key={item.key}>
+              <LegendColorBox color={item.color} />
+              <LegendLabel>{item.key}</LegendLabel>
+            </LegendItem>
+          ))}
+        </LegendContainer>
+      )}
+    </>
   );
 };
 

@@ -4,7 +4,9 @@ import { Placeholder } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 import Customize from './Customize';
+import Legend from './Legend';
 import Tooltip from './TooltipChart';
 
 interface DataItem {
@@ -19,6 +21,26 @@ interface BarProps {
   duration: number;
   activeFile: string;
 }
+
+interface LegendProps {
+  data: Array<{ key: string; color: string }>;
+}
+
+const ChartContainer = styled.div`
+  position: relative;
+`;
+
+const truncateText = (text: string, maxLength: number) => {
+  // Remove anything within parentheses and the parentheses themselves
+  const cleanedText = text.replace(/\(.*?\)/g, '').trim();
+
+  // Truncate the text if it exceeds the maxLength
+  if (cleanedText.length > maxLength) {
+    return cleanedText.slice(0, maxLength) + '...';
+  }
+
+  return cleanedText;
+};
 
 const BarChart: React.FC<BarProps> = ({
   width,
@@ -35,6 +57,7 @@ const BarChart: React.FC<BarProps> = ({
   );
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [allOptions, setAllOptions] = useState<string[]>([]);
+  const [legendData, setLegendData] = useState<LegendProps['data']>([]);
 
   const [tooltipState, setTooltipState] = useState<{
     position: { x: number; y: number } | null;
@@ -94,13 +117,6 @@ const BarChart: React.FC<BarProps> = ({
       setSelectedOptions(options.slice(0, 10));
     }
   }, [parsedData, activeFile]);
-
-  const truncateText = (text: string, maxLength: number) => {
-    if (text.length > maxLength) {
-      return text.slice(0, maxLength) + '...';
-    }
-    return text;
-  };
 
   useEffect(() => {
     if (!width || !height || !parsedData[activeFile]) return;
@@ -167,9 +183,12 @@ const BarChart: React.FC<BarProps> = ({
       .attr('class', 'y-axis')
       .attr('transform', `translate(${margin.left}, 0)`)
       .style('color', 'white')
-      .call(d3.axisLeft(yScale).tickFormat((d) => truncateText(d, 15)))
+      .call(d3.axisLeft(yScale).tickFormat((d) => truncateText(d, 25)))
       .selectAll('text')
-      .style('fill', 'white');
+      .style('fill', 'white')
+      .style('text-anchor', 'end')
+      .attr('dy', '-0.8em')
+      .attr('transform', 'rotate(-45)');
 
     // Draw bars
     const barGroups = svg
@@ -239,7 +258,7 @@ const BarChart: React.FC<BarProps> = ({
       .attr('x', xScale(0))
       .attr('width', (d) => xScale(d.value) - xScale(0));
 
-    const legendData = barGroups.data().reduce((acc, d) => {
+    const customLegendData = barGroups.data().reduce((acc, d) => {
       const keys = Object.keys(d).filter((key) => key !== 'option_en');
       keys.forEach((key) => {
         if (!acc.includes(key)) {
@@ -249,17 +268,20 @@ const BarChart: React.FC<BarProps> = ({
       return acc;
     }, [] as string[]);
 
-    const longestTextLength = Math.max(...legendData.map((d) => d.length));
-    const legendItemWidth = longestTextLength * 6 + 60; // Assuming each character width is 8px
+    const newLegendData = customLegendData.map((item, index) => ({
+      key: item,
+      color: colorScale(item),
+    }));
+    setLegendData(newLegendData);
 
     // Create legend
-    const legend = svg
-      .append('g')
-      .attr('class', 'legend')
-      .attr(
-        'transform',
-        `translate(${width - legendItemWidth}, ${height - legendData.length * 20 - 50})`
-      );
+    // const legend = svg
+    //   .append('g')
+    //   .attr('class', 'legend')
+    //   .attr(
+    //     'transform',
+    //     `translate(${width - legendItemWidth}, ${height - legendData.length * 20 - 50})`
+    //   );
 
     // Legend background
     // legend
@@ -274,43 +296,46 @@ const BarChart: React.FC<BarProps> = ({
     //   .attr('opacity', 0.9);
 
     // Legend items
-    legend
-      .selectAll('rect.legend-item')
-      .data(legendData)
-      .enter()
-      .append('rect')
-      .attr('class', 'legend-item')
-      .attr('x', 0)
-      .attr('y', (d, i) => i * 20)
-      .attr('width', 10)
-      .attr('height', 10)
-      .attr('fill', (d) => colorScale(d));
+    // legend
+    //   .selectAll('rect.legend-item')
+    //   .data(legendData)
+    //   .enter()
+    //   .append('rect')
+    //   .attr('class', 'legend-item')
+    //   .attr('x', 0)
+    //   .attr('y', (d, i) => i * 20)
+    //   .attr('width', 10)
+    //   .attr('height', 10)
+    //   .attr('fill', (d) => colorScale(d));
 
-    legend
-      .selectAll('text.legend-label')
-      .data(legendData)
-      .enter()
-      .append('text')
-      .attr('class', 'legend-label')
-      .attr('x', 20)
-      .attr('y', (d, i) => i * 20 + 9)
-      .style('fill', 'white')
-      .attr('font-size', '12px')
-      .text((d) => d);
+    // legend
+    //   .selectAll('text.legend-label')
+    //   .data(legendData)
+    //   .enter()
+    //   .append('text')
+    //   .attr('class', 'legend-label')
+    //   .attr('x', 20)
+    //   .attr('y', (d, i) => i * 20 + 9)
+    //   .style('fill', 'white')
+    //   .attr('font-size', '12px')
+    //   .text((d) => d);
   }, [width, height, parsedData, activeFile, selectedOptions]);
 
   return (
     <>
       <Placeholder height={height} isLoaded={!loading || false} />
-      <svg ref={ref}></svg>
-      {tooltipState.position && (
-        <Tooltip
-          x={tooltipState.position.x - 130}
-          content={tooltipState.content}
-          y={tooltipState.position.y - 20}
-          group={tooltipState.group}
-        />
-      )}
+      <ChartContainer>
+        <svg ref={ref}></svg>
+        <Legend data={legendData} position='absolute' />
+        {tooltipState.position && (
+          <Tooltip
+            x={tooltipState.position.x - 200}
+            content={tooltipState.content}
+            y={tooltipState.position.y}
+            group={tooltipState.group}
+          />
+        )}
+      </ChartContainer>
       <Customize
         selectedOptions={selectedOptions}
         setSelectedOptions={setSelectedOptions}

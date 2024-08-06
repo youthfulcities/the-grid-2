@@ -4,10 +4,16 @@ import { Heading, Placeholder, Text, View } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import Legend from './Legend';
 import Tooltip from './TooltipChart';
 
 interface DataItem {
   [key: string]: string | number;
+}
+
+interface LegendProps {
+  data: Array<{ key: string; color: string }>;
 }
 
 interface ClusterProps {
@@ -24,6 +30,10 @@ interface ClusterProps {
     All: string;
   };
 }
+
+const ChartContainer = styled.div`
+  position: relative;
+`;
 
 const clusterNames = [
   'Social good focus',
@@ -53,6 +63,7 @@ const Clusters: React.FC<ClusterProps> = ({
     content: '',
     group: '',
   });
+  const [legendData, setLegendData] = useState<LegendProps['data']>([]);
 
   useEffect(() => {
     const fetchData = async (filename: string) => {
@@ -207,71 +218,13 @@ const Clusters: React.FC<ClusterProps> = ({
         setCurrentCluster('all'); // Reset to 'all' when clicking on SVG background
       });
 
-      const legendData = colorScale.domain();
+      const customLegendData = colorScale.domain();
 
-      const legend = svg
-        .append('g')
-        .attr('class', 'legend')
-        .attr(
-          'transform',
-          `translate(${width - 150 - 20}, ${height - legendData.length * 20 - 50})`
-        );
-
-      // Legend background
-      // legend
-      //   .append('rect')
-      //   .attr('x', -10)
-      //   .attr('y', -10)
-      //   .attr('rx', 8)
-      //   .attr('ry', 8)
-      //   .attr('width', 170)
-      //   .attr('height', legendData.length * 20 + 10)
-      //   .style('fill', 'white')
-      //   .attr('opacity', 0.9);
-
-      // Legend items
-      legend
-        .selectAll('rect.legend-item')
-        .data(legendData)
-        .enter()
-        .append('rect')
-        .attr('class', 'legend-item')
-        .attr('x', 0)
-        .attr('y', (d, i) => i * 20)
-        .attr('width', 10)
-        .attr('height', 10)
-
-        .attr('fill', (d) => colorScale(d));
-
-      legend
-        .selectAll('text.legend-label')
-        .data(legendData)
-        .enter()
-        .append('text')
-        .attr('class', 'legend-label')
-        .attr('x', 20)
-        .attr('y', (d, i) => i * 20 + 9)
-        .style('fill', 'white')
-        .text((d) => d);
-
-      // Add axes (if needed)
-      // const xAxis = d3.axisBottom(xScale);
-      // svg
-      //   .append('g')
-      //   .attr('transform', `translate(0, ${height - 50})`)
-      //   .call(xAxis);
-
-      // const yAxis = d3.axisLeft(yScale);
-      // svg.append('g').attr('transform', 'translate(50, 0)').call(yAxis);
-
-      // Add title
-      // svg
-      //   .append('text')
-      //   .attr('x', width / 2)
-      //   .attr('y', 30)
-      //   .attr('text-anchor', 'middle')
-      //   .style('font-size', '16px')
-      //   .text('Scatterplot with UMAP1 and UMAP2');
+      const newLegendData = customLegendData.map((item, index) => ({
+        key: item,
+        color: colorScale(item),
+      }));
+      setLegendData(newLegendData);
     }
 
     getWidth(width);
@@ -287,15 +240,18 @@ const Clusters: React.FC<ClusterProps> = ({
         importances versus performance of their city. Clusters are generated
         using the UMAP method.
       </Text>
-      <Placeholder height={height} isLoaded={!loading} />
-      <div id='chart'></div>
-      {tooltipState.position && (
-        <Tooltip
-          x={tooltipState.position.x - 40}
-          content={tooltipState.content}
-          y={tooltipState.position.y}
-        />
-      )}
+      <ChartContainer>
+        <Placeholder height={height} isLoaded={!loading} />
+        <div id='chart'></div>
+        <Legend data={legendData} position='absolute' />
+        {tooltipState.position && (
+          <Tooltip
+            x={tooltipState.position.x - 200}
+            content={tooltipState.content}
+            y={tooltipState.position.y}
+          />
+        )}
+      </ChartContainer>
     </View>
   );
 };

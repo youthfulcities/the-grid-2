@@ -1,4 +1,4 @@
-import { Heading, View } from '@aws-amplify/ui-react';
+import { Flex, Heading } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import { useEffect, useState } from 'react';
@@ -21,7 +21,15 @@ const PieChartComponent: React.FC<{
   type: string;
   cluster?: string;
   title?: string;
-}> = ({ width = 600, height = 400, type, cluster = 'all', title }) => {
+  margin?: { top: number; right: number; bottom: number; left: number };
+}> = ({
+  width = 600,
+  height = 400,
+  type,
+  cluster = 'all',
+  title,
+  margin = { top: 20, right: 20, bottom: 20, left: 20 },
+}) => {
   const [rawData, setRawData] = useState<Record<string, string>>({});
   const [parsedData, setParsedData] = useState<Record<string, DataItem[]>>({});
   const [activeFile, setActiveFile] = useState(`${type}-${cluster}.csv`);
@@ -111,7 +119,10 @@ const PieChartComponent: React.FC<{
       .attr('width', width)
       .attr('height', height);
 
-    const radius = Math.min(width, height) / 2;
+    const chartWidth = width - margin.left - margin.right;
+    const chartHeight = height - margin.top - margin.bottom;
+
+    const radius = Math.min(chartWidth, chartHeight) / 2;
     const pie = d3.pie<DataItem>().value((d) => d.Count as number);
 
     const arcGenerator = d3
@@ -125,7 +136,7 @@ const PieChartComponent: React.FC<{
       .enter()
       .append('g')
       .attr('class', 'arc')
-      .attr('transform', `translate(${width / 2},${height / 2})`);
+      .attr('transform', `translate(${chartWidth / 2},${chartHeight / 2})`);
 
     arcs
       .append('path')
@@ -173,7 +184,7 @@ const PieChartComponent: React.FC<{
   }, [parsedData, width, height, activeFile]);
 
   return (
-    <View>
+    <Flex direction='column'>
       <Heading
         level={4}
         color='font.inverse'
@@ -191,7 +202,7 @@ const PieChartComponent: React.FC<{
           y={tooltipState.position.y}
         />
       )}
-    </View>
+    </Flex>
   );
 };
 

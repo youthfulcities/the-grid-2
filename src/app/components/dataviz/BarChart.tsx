@@ -273,52 +273,6 @@ const BarChart: React.FC<BarProps> = ({
       color: colorScale(item),
     }));
     setLegendData(newLegendData);
-
-    // Create legend
-    // const legend = svg
-    //   .append('g')
-    //   .attr('class', 'legend')
-    //   .attr(
-    //     'transform',
-    //     `translate(${width - legendItemWidth}, ${height - legendData.length * 20 - 50})`
-    //   );
-
-    // Legend background
-    // legend
-    //   .append('rect')
-    //   .attr('x', -10)
-    //   .attr('y', -10)
-    //   .attr('rx', 8)
-    //   .attr('ry', 8)
-    //   .attr('width', 150)
-    //   .attr('height', legendData.length * 20 + 10)
-    //   .style('fill', 'white')
-    //   .attr('opacity', 0.9);
-
-    // Legend items
-    // legend
-    //   .selectAll('rect.legend-item')
-    //   .data(legendData)
-    //   .enter()
-    //   .append('rect')
-    //   .attr('class', 'legend-item')
-    //   .attr('x', 0)
-    //   .attr('y', (d, i) => i * 20)
-    //   .attr('width', 10)
-    //   .attr('height', 10)
-    //   .attr('fill', (d) => colorScale(d));
-
-    // legend
-    //   .selectAll('text.legend-label')
-    //   .data(legendData)
-    //   .enter()
-    //   .append('text')
-    //   .attr('class', 'legend-label')
-    //   .attr('x', 20)
-    //   .attr('y', (d, i) => i * 20 + 9)
-    //   .style('fill', 'white')
-    //   .attr('font-size', '12px')
-    //   .text((d) => d);
   }, [width, height, parsedData, activeFile, selectedOptions]);
 
   return (

@@ -102,6 +102,7 @@ html {
   font-family: 'Gotham Narrow Book', sans-serif;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
 main {
@@ -202,6 +203,10 @@ ol {
 }
 li {
   color: var(--amplify-colors-font-inverse);
+}
+
+.hover-cursor {
+  cursor: pointer;
 }
 /* Containers
 ========================================================================== */

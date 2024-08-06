@@ -1,5 +1,4 @@
-import { Button, CheckboxField, View } from '@aws-amplify/ui-react';
-import { motion } from 'framer-motion';
+import { CheckboxField, View } from '@aws-amplify/ui-react';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Accordion from '../Accordion';
@@ -18,26 +17,6 @@ const StyledCheckbox = styled(CheckboxField)`
   }
   .amplify-checkbox__button::before {
     border-width: var(--amplify-border-widths-small);
-  }
-`;
-
-const AccordionContent = styled(motion.div)`
-  overflow: hidden;
-  padding: var(--amplify-space-small);
-  border-width: var(--amplify-border-widths-small);
-  border-color: var(--amplify-colors-brand-primary-60);
-  border-style: solid;
-  border-top: 0;
-`;
-
-const CustomizeButton = styled(Button)`
-  box-sizing: border-box;
-  width: 100%;
-  &:hover {
-    background-color: transparent;
-  }
-  &:focus {
-    background-color: transparent;
   }
 `;
 

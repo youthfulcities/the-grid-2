@@ -5,37 +5,36 @@ import React from 'react';
 import Pie from './Pie';
 
 interface DemographicProps {
-  multiWidth: number | undefined;
   currentCluster: string;
   currentClusterName: string | null;
+  drawerWidth: number;
 }
 
 const Demographics: React.FC<DemographicProps> = ({
-  multiWidth,
   currentCluster,
   currentClusterName,
+  drawerWidth,
 }) => {
   return (
     <>
       <Text marginBottom='xl' marginTop='xl'>
-        Click on a data point to see the demographic breakdown of that cluster.
         Current cluster: {currentClusterName}
       </Text>
       <Flex wrap='wrap' justifyContent='space-between' marginBottom='xl'>
         <Pie
-          width={multiWidth}
+          width={drawerWidth}
           type='gender'
           title='Gender'
           cluster={currentCluster}
         />
         <Pie
-          width={multiWidth}
+          width={drawerWidth}
           type='status'
           title='Citizenship Status'
           cluster={currentCluster}
         />
         <Pie
-          width={multiWidth}
+          width={drawerWidth}
           type='disability'
           cluster={currentCluster}
           title='Ability'

@@ -3,7 +3,7 @@
 import { Heading, Placeholder, Text, View } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Legend from './Legend';
 import Tooltip from './TooltipChart';
@@ -29,6 +29,8 @@ interface ClusterProps {
     'Affordability focus': string;
     All: string;
   };
+  isDrawerOpen: boolean;
+  setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 const ChartContainer = styled.div`
@@ -48,6 +50,8 @@ const Clusters: React.FC<ClusterProps> = ({
   setCurrentCluster,
   getKeyFromValue,
   clusterMap,
+  isDrawerOpen,
+  setIsDrawerOpen,
 }) => {
   const height = 600;
   const [loading, setLoading] = useState(true);
@@ -186,6 +190,7 @@ const Clusters: React.FC<ClusterProps> = ({
           return 0.2;
         })
         .on('mouseover', (event, d) => {
+          d3.select(event.currentTarget).classed('hover-cursor', true);
           const xPos = event.layerX;
           const yPos = event.layerY;
           setTooltipState({
@@ -202,15 +207,18 @@ const Clusters: React.FC<ClusterProps> = ({
             position: { x: xPos, y: yPos },
           }));
         })
-        .on('mouseout', () => {
+        .on('mouseout', (event) => {
+          d3.select(event.currentTarget).classed('hover-cursor', false);
           setTooltipState({ ...tooltipState, position: null });
         })
         .on('click', (event, d) => {
           event.stopPropagation();
           if (currentCluster === clusterMap[d.Cluster_Label]) {
             setCurrentCluster('all'); // Reset to 'all'
+            setIsDrawerOpen(!isDrawerOpen);
           } else {
             setCurrentCluster(clusterMap[d.Cluster_Label]); // Set currentCluster to clicked Cluster_Label
+            setIsDrawerOpen(true);
           }
         });
 
@@ -238,7 +246,8 @@ const Clusters: React.FC<ClusterProps> = ({
       <Text>
         These clusters are based on how participants ranked topics in
         importances versus performance of their city. Clusters are generated
-        using the UMAP method.
+        using the UMAP method. Click on a data point to see the demographic
+        breakdown of that cluster.
       </Text>
       <ChartContainer>
         <Placeholder height={height} isLoaded={!loading} />

@@ -2,6 +2,7 @@
 
 import Accordion from '@/app/components/Accordion';
 import Container from '@/app/components/Background';
+import Drawer from '@/app/components/Drawer';
 import BarChart from '@/app/components/dataviz/BarChart';
 import Clusters from '@/app/components/dataviz/Clusters';
 import Demographics from '@/app/components/dataviz/Demographics';
@@ -75,6 +76,7 @@ const Survey: React.FC = () => {
   const [currentCluster, setCurrentCluster] = useState('all');
   const [multiWidth, setMultiWidth] = useState(getWidth(width));
   const [tab, setTab] = useState('1');
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   useEffect(() => {
     setMultiWidth(getWidth(width));
@@ -84,8 +86,6 @@ const Survey: React.FC = () => {
     setActiveFile(defaultFiles[newTab]);
     setTab(newTab);
   };
-
-  console.log(tab);
   return (
     <Container>
       <View className='container padding'>
@@ -186,15 +186,19 @@ const Survey: React.FC = () => {
               currentCluster={currentCluster}
               setCurrentCluster={setCurrentCluster}
               clusterMap={clusterMap}
-            />
-            <Demographics
-              currentCluster={currentCluster}
-              currentClusterName={getKeyFromValue(currentCluster)}
-              multiWidth={multiWidth}
+              isDrawerOpen={isDrawerOpen}
+              setIsDrawerOpen={setIsDrawerOpen}
             />
           </Accordion>
         </div>
       </View>
+      <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
+        <Demographics
+          currentCluster={currentCluster}
+          currentClusterName={getKeyFromValue(currentCluster)}
+          drawerWidth={0}
+        />
+      </Drawer>
     </Container>
   );
 };

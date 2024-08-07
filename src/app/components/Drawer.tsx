@@ -1,4 +1,4 @@
-import useDimensions from '@/hooks/useDimensions';
+import { useDimensions } from '@/hooks/useDimensions';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';

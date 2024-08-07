@@ -1,13 +1,21 @@
 'use client';
 
-import { Heading, Placeholder, Text, View } from '@aws-amplify/ui-react';
+import { useDimensions } from '@/hooks/useDimensions';
+import {
+  Flex,
+  Heading,
+  Placeholder,
+  Text,
+  View,
+  useTheme,
+} from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { FaBrain, FaMoneyBill } from 'react-icons/fa6';
 import styled from 'styled-components';
 import Legend from './Legend';
 import Tooltip from './TooltipChart';
-
 interface DataItem {
   [key: string]: string | number;
 }
@@ -17,9 +25,7 @@ interface LegendProps {
 }
 
 interface ClusterProps {
-  width: number | undefined;
   currentCluster: string;
-  getWidth: (width: number) => number | undefined;
   setCurrentCluster: (cluster: string) => void;
   getKeyFromValue: (value: string) => string | null;
   clusterMap: {
@@ -44,8 +50,6 @@ const clusterNames = [
 ];
 
 const Clusters: React.FC<ClusterProps> = ({
-  width = 800,
-  getWidth,
   currentCluster,
   setCurrentCluster,
   getKeyFromValue,
@@ -68,6 +72,12 @@ const Clusters: React.FC<ClusterProps> = ({
     group: '',
   });
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
+  const { tokens } = useTheme();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { width: containerWidth } = useDimensions(containerRef);
+
+  console.log(tokens.space.xl);
+  const width = containerWidth - 60;
 
   useEffect(() => {
     const fetchData = async (filename: string) => {
@@ -234,23 +244,27 @@ const Clusters: React.FC<ClusterProps> = ({
       }));
       setLegendData(newLegendData);
     }
-
-    getWidth(width);
   }, [parsedData, activeFile, width, currentCluster]);
 
   return (
-    <View className='padding'>
+    <View padding='xl' ref={containerRef}>
       <Heading level={1} marginBottom='xl'>
         Psychographic clusters
       </Heading>
       <Text>
-        These clusters are based on how participants ranked topics in
-        importances versus performance of their city. Clusters are generated
-        using the UMAP method. Click on a data point to see the demographic
-        breakdown of that cluster.
+        Survey participants were asked to rank the topics of affordability,
+        education and skills devopment, equity, diversity and inclusion,
+        Indigenous culture, truth and reconciliation, entrepreneurial spirit,
+        local economic growth, digital transformation, transportation, mental
+        health, and climate change in terms of importance. Then, they were asked
+        to rank how thier cities were performing in each of these categories.
+        Based on the relationships between these importance/performance
+        rankings, three distinct groups emerge. Clusters are generated using the
+        UMAP method. Click on a data point to see the demographic breakdown of
+        that cluster.
       </Text>
       <ChartContainer>
-        <Placeholder height={height} isLoaded={!loading} />
+        <Placeholder height={height} isLoaded={!loading || false} />
         <div id='chart'></div>
         <Legend data={legendData} position='absolute' />
         {tooltipState.position && (
@@ -261,6 +275,25 @@ const Clusters: React.FC<ClusterProps> = ({
           />
         )}
       </ChartContainer>
+      <Heading level={4} color='primary.60'>
+        Key Takeaways
+      </Heading>
+      <Flex alignItems='center' justifyContent='space-between'>
+        <FaMoneyBill size='100px' color={tokens.colors.primary[60].value} />
+        <Text marginBottom='0'>
+          Regardless of cluster, all youth agree that
+          <strong> affordability</strong> is the top priority issue to improve
+          Canadian city performance nationwide.
+        </Text>
+      </Flex>
+      <Flex alignItems='center' justifyContent='space-between'>
+        <FaBrain size='100px' color={tokens.colors.primary[60].value} />
+        <Text>
+          Regardless of cluster, all youth agree that
+          <strong> mental health</strong> is a high priority issue to improve
+          Canadian city performance nationwide.
+        </Text>
+      </Flex>
     </View>
   );
 };

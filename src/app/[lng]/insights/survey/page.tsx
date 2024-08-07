@@ -116,7 +116,7 @@ const Survey: React.FC = () => {
               <Tabs.Item value='3'>Identity</Tabs.Item>
             </Tabs.List>
             <Tabs.Panel value='1'>
-              <Flex justifyContent='center' wrap='wrap'>
+              <Flex justifyContent='center' wrap='wrap' marginTop='xl'>
                 <StyledButton
                   $active={activeFile === 'org-attractive-cluster.csv'}
                   variation='primary'
@@ -127,7 +127,7 @@ const Survey: React.FC = () => {
               </Flex>
             </Tabs.Panel>
             <Tabs.Panel value='2'>
-              <Flex justifyContent='center' wrap='wrap'>
+              <Flex justifyContent='center' wrap='wrap' marginTop='xl'>
                 <StyledButton
                   $active={activeFile === 'org-attractive-city.csv'}
                   variation='primary'
@@ -138,7 +138,7 @@ const Survey: React.FC = () => {
               </Flex>
             </Tabs.Panel>
             <Tabs.Panel value='3'>
-              <Flex justifyContent='center' wrap='wrap'>
+              <Flex justifyContent='center' wrap='wrap' marginTop='xl'>
                 <StyledButton
                   $active={activeFile === 'org-attractive-gender.csv'}
                   variation='primary'
@@ -180,8 +180,6 @@ const Survey: React.FC = () => {
           />
           <Accordion title='Examine clusters'>
             <Clusters
-              width={width - 60}
-              getWidth={getWidth}
               getKeyFromValue={getKeyFromValue}
               currentCluster={currentCluster}
               setCurrentCluster={setCurrentCluster}

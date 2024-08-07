@@ -1,14 +1,15 @@
 'use client';
 
+import { Flex, Heading, Text, View } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import { useParams } from 'next/navigation';
 import React from 'react';
+import { Trans } from 'react-i18next/TransWithoutContext';
 import awsExports from '../../aws-exports';
 import Container from '../components/Background';
 import Banner from '../components/Banner';
 import HomeHeader from '../components/HomeHeader';
 import useTranslation from '../i18n/client';
-import Insights from './insights/page';
 
 Amplify.configure(awsExports);
 
@@ -18,14 +19,28 @@ interface RootLayoutProps {
 
 const App: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
   const params = useParams<{ lng: string }>();
-  const { t } = useTranslation(lng, 'home');
+  const { t } = useTranslation(lng, 'about');
 
   return (
     <Container>
       <HomeHeader />
-      <Banner lng={lng} />
-      <Insights params={params} />
+      {/* <Insights params={params} /> */}
       {/* <GridInfo lng={lng} /> */}
+      <Banner lng={lng} />
+      <Flex className='container section-padding'>
+        <Flex direction='column'>
+          <Heading level={2}>
+            <Trans
+              t={t}
+              i18nKey='title'
+              components={{ span: <span className='highlight' /> }}
+            />
+          </Heading>
+          <View className='inner-container'>
+            <Trans t={t} i18nKey='about' components={{ p: <Text /> }} />
+          </View>
+        </Flex>
+      </Flex>
     </Container>
   );
 };

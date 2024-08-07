@@ -27,9 +27,7 @@ const Insights: React.FC<InsightLayoutProps> = ({ params: { lng } }) => {
           <Trans t={t} i18nKey='description' components={{ p: <Text /> }} />
         </View>
         <Flex className='inner-container'>
-          <Flex className='cards-container'>
-            <InsightCards lng={lng} />
-          </Flex>
+          <InsightCards lng={lng} />
         </Flex>
       </View>
     </Container>

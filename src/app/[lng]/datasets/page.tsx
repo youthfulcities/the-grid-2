@@ -7,14 +7,15 @@ import {
   View,
   useAuthenticator,
 } from '@aws-amplify/ui-react';
+import { Amplify } from 'aws-amplify';
 import { getUrl } from 'aws-amplify/storage';
-import Papa from 'papaparse';
+import { useRouter } from 'next/navigation'; // Import useRouter from next/router
 import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
+import config from '../../../amplifyconfiguration.json';
 import Container from '../../components/Background';
 import DataCard from '../../components/DataCards';
 import useTranslation from '../../i18n/client';
-import { useRouter } from 'next/navigation'; // Import useRouter from next/router
 
 interface RootLayoutProps {
   params: { lng: string };
@@ -23,6 +24,8 @@ interface RootLayoutProps {
 interface CSVRow {
   [key: string]: string | boolean | number;
 }
+
+Amplify.configure(config);
 
 const Datasets: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
   const [signedUrl, setSignedUrl] = useState<{

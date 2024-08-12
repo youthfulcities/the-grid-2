@@ -69,9 +69,8 @@ const defaultFiles: Record<string, string> = {
 const Survey: React.FC = () => {
   const margin = { top: 20, bottom: 60, left: 150, right: 40 };
   const containerRef = useRef<HTMLDivElement>(null);
-  const chartSize = useDimensions(containerRef);
+  const { width } = useDimensions(containerRef);
   const height = 800;
-  const { width } = chartSize;
   const [activeFile, setActiveFile] = useState('org-attractive-cluster.csv');
   const [currentCluster, setCurrentCluster] = useState('all');
   const [multiWidth, setMultiWidth] = useState(getWidth(width));
@@ -190,7 +189,13 @@ const Survey: React.FC = () => {
           </Accordion>
         </div>
       </View>
-      <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
+      <Drawer
+        isOpen={isDrawerOpen}
+        onClose={() => {
+          setIsDrawerOpen(false);
+          setCurrentCluster('all');
+        }}
+      >
         <Demographics
           currentCluster={currentCluster}
           currentClusterName={getKeyFromValue(currentCluster)}

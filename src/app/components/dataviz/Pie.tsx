@@ -120,17 +120,16 @@ const PieChartComponent: React.FC<{
     }));
     setLegendData(newLegendData);
 
+    const chartWidth = width - margin.left - margin.right;
+    const chartHeight = height - margin.top - margin.bottom;
+    const radius = Math.min(chartWidth, chartHeight) / 2;
+    const pie = d3.pie<DataItem>().value((d) => d.Count as number);
+
     const svg = d3
       .select(`#pie-chart-${type}`)
       .append('svg')
       .attr('width', width)
       .attr('height', height);
-
-    const chartWidth = width - margin.left - margin.right;
-    const chartHeight = height - margin.top - margin.bottom;
-
-    const radius = Math.min(chartWidth, chartHeight) / 2;
-    const pie = d3.pie<DataItem>().value((d) => d.Count as number);
 
     const arcGenerator = d3
       .arc<PieArcDatum<DataItem>>()
@@ -209,9 +208,9 @@ const PieChartComponent: React.FC<{
       <Legend data={legendData} />
       {tooltipState.position && (
         <Tooltip
-          x={tooltipState.position.x - 50}
+          x={tooltipState.position.x - 150}
           content={tooltipState.content}
-          y={tooltipState.position.y + 30}
+          y={tooltipState.position.y + 130}
         />
       )}
     </Flex>

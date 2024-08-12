@@ -1,7 +1,8 @@
-import { Heading, View } from '@aws-amplify/ui-react';
+import { Flex, Heading } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import Legend from './Legend';
 import Tooltip from './TooltipChart';
 
@@ -15,13 +16,27 @@ interface LegendProps {
 
 type PieArcDatum<T> = d3.PieArcDatum<T>;
 
+const StyledHeading = styled(Heading)`
+  transform: translateX(-20px);
+`;
+
 const PieChartComponent: React.FC<{
   width?: number;
   height?: number;
   type: string;
   cluster?: string;
   title?: string;
-}> = ({ width = 600, height = 400, type, cluster = 'all', title }) => {
+  margin?: { top: number; right: number; bottom: number; left: number };
+  containerRef: React.RefObject<HTMLDivElement>;
+}> = ({
+  width = 600,
+  height = 400,
+  type,
+  cluster = 'all',
+  title,
+  margin = { top: 20, right: 20, bottom: 20, left: 20 },
+  containerRef,
+}) => {
   const [rawData, setRawData] = useState<Record<string, string>>({});
   const [parsedData, setParsedData] = useState<Record<string, DataItem[]>>({});
   const [activeFile, setActiveFile] = useState(`${type}-${cluster}.csv`);
@@ -111,7 +126,10 @@ const PieChartComponent: React.FC<{
       .attr('width', width)
       .attr('height', height);
 
-    const radius = Math.min(width, height) / 2;
+    const chartWidth = width - margin.left - margin.right;
+    const chartHeight = height - margin.top - margin.bottom;
+
+    const radius = Math.min(chartWidth, chartHeight) / 2;
     const pie = d3.pie<DataItem>().value((d) => d.Count as number);
 
     const arcGenerator = d3
@@ -125,7 +143,10 @@ const PieChartComponent: React.FC<{
       .enter()
       .append('g')
       .attr('class', 'arc')
-      .attr('transform', `translate(${width / 2},${height / 2})`);
+      .attr(
+        'transform',
+        `translate(${chartWidth / 2 - 10},${chartHeight / 2})`
+      );
 
     arcs
       .append('path')
@@ -151,8 +172,9 @@ const PieChartComponent: React.FC<{
     arcs
       .selectAll<SVGPathElement, PieArcDatum<DataItem>>('path')
       .on('mouseover', (event, d) => {
-        const xPos = event.layerX;
-        const yPos = event.layerY;
+        const containerRect = containerRef.current?.getBoundingClientRect();
+        const xPos = event.screenX - (containerRect?.left ?? 0);
+        const yPos = event.screenY - (containerRect?.top ?? 0);
         const category = Object.keys(d.data)[0];
         setTooltipState({
           position: { x: xPos, y: yPos },
@@ -160,8 +182,9 @@ const PieChartComponent: React.FC<{
         });
       })
       .on('mousemove', (event) => {
-        const xPos = event.layerX;
-        const yPos = event.layerY;
+        const containerRect = containerRef.current?.getBoundingClientRect();
+        const xPos = event.screenX - (containerRect?.left ?? 0);
+        const yPos = event.screenY - (containerRect?.top ?? 0);
         setTooltipState((prevTooltipState) => ({
           ...prevTooltipState,
           position: { x: xPos, y: yPos },
@@ -173,25 +196,25 @@ const PieChartComponent: React.FC<{
   }, [parsedData, width, height, activeFile]);
 
   return (
-    <View>
-      <Heading
+    <Flex direction='column' ref={containerRef}>
+      <StyledHeading
         level={4}
         color='font.inverse'
         textAlign='center'
         marginBottom='large'
       >
         {title || type}
-      </Heading>
+      </StyledHeading>
       <div id={`pie-chart-${type}`}></div>
       <Legend data={legendData} />
       {tooltipState.position && (
         <Tooltip
-          x={tooltipState.position.x - 40}
+          x={tooltipState.position.x - 50}
           content={tooltipState.content}
-          y={tooltipState.position.y}
+          y={tooltipState.position.y + 30}
         />
       )}
-    </View>
+    </Flex>
   );
 };
 

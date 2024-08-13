@@ -14,8 +14,10 @@ import * as d3 from 'd3';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { FaBrain, FaMoneyBill } from 'react-icons/fa6';
 import styled from 'styled-components';
+import Heatmap from './Heatmap';
 import Legend from './Legend';
 import Tooltip from './TooltipChart';
+
 interface DataItem {
   [key: string]: string | number;
 }
@@ -41,6 +43,10 @@ interface ClusterProps {
 
 const ChartContainer = styled.div`
   position: relative;
+`;
+
+const OverflowContainer = styled(View)`
+  overflow: visible;
 `;
 
 const clusterNames = [
@@ -75,8 +81,6 @@ const Clusters: React.FC<ClusterProps> = ({
   const { tokens } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const { width: containerWidth } = useDimensions(containerRef);
-
-  console.log(tokens.space.xl);
   const width = containerWidth - 60;
 
   useEffect(() => {
@@ -122,7 +126,6 @@ const Clusters: React.FC<ClusterProps> = ({
     if (!width || !height || !parsedData[activeFile]) return;
 
     if (parsedData[activeFile]) {
-      // Example D3.js manipulation (you can modify this based on your visualization needs)
       const data = parsedData[activeFile];
 
       d3.select('#chart').selectAll('svg').remove();
@@ -247,7 +250,7 @@ const Clusters: React.FC<ClusterProps> = ({
   }, [parsedData, activeFile, width, currentCluster]);
 
   return (
-    <View padding='xl' ref={containerRef}>
+    <OverflowContainer padding='xl' ref={containerRef}>
       <Heading level={1} marginBottom='xl'>
         Psychographic clusters
       </Heading>
@@ -269,16 +272,16 @@ const Clusters: React.FC<ClusterProps> = ({
         <Legend data={legendData} position='absolute' />
         {tooltipState.position && (
           <Tooltip
-            x={tooltipState.position.x - 200}
+            x={tooltipState.position.x - 100}
             content={tooltipState.content}
-            y={tooltipState.position.y}
+            y={tooltipState.position.y + 20}
           />
         )}
       </ChartContainer>
       <Heading level={4} color='primary.60'>
         Key Takeaways
       </Heading>
-      <Flex alignItems='center' justifyContent='space-between'>
+      <Flex alignItems='center' justifyContent='flex-start'>
         <FaMoneyBill size='100px' color={tokens.colors.primary[60].value} />
         <Text marginBottom='0'>
           Regardless of cluster, all youth agree that
@@ -286,15 +289,31 @@ const Clusters: React.FC<ClusterProps> = ({
           Canadian city performance nationwide.
         </Text>
       </Flex>
-      <Flex alignItems='center' justifyContent='space-between'>
+      <Flex alignItems='center' justifyContent='flex-start'>
         <FaBrain size='100px' color={tokens.colors.primary[60].value} />
         <Text>
           Regardless of cluster, all youth agree that
-          <strong> mental health</strong> is a high priority issue to improve
-          Canadian city performance nationwide.
+          <strong> mental health</strong> and <strong> good youth jobs </strong>
+          are high priority issues to improve Canadian city performance
+          nationwide.
         </Text>
       </Flex>
-    </View>
+      <Heatmap
+        activeFile='cluster-heatmap-economic.csv'
+        width={width}
+        height={height}
+      />
+      <Heatmap
+        activeFile='cluster-heatmap-forming.csv'
+        width={width}
+        height={height}
+      />
+      <Heatmap
+        activeFile='cluster-heatmap-social.csv'
+        width={width}
+        height={height}
+      />
+    </OverflowContainer>
   );
 };
 

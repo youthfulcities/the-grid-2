@@ -283,9 +283,9 @@ const BarChart: React.FC<BarProps> = ({
         <Legend data={legendData} position='absolute' />
         {tooltipState.position && (
           <Tooltip
-            x={tooltipState.position.x - 200}
+            x={tooltipState.position.x - 100}
             content={tooltipState.content}
-            y={tooltipState.position.y}
+            y={tooltipState.position.y + 20}
             group={tooltipState.group}
           />
         )}

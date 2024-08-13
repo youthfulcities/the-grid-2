@@ -191,10 +191,12 @@ const Survey: React.FC = () => {
       </View>
       <Drawer
         isOpen={isDrawerOpen}
+        onOpen={() => setIsDrawerOpen(true)}
         onClose={() => {
           setIsDrawerOpen(false);
           setCurrentCluster('all');
         }}
+        tabText='Demographics'
       >
         <Demographics
           currentCluster={currentCluster}

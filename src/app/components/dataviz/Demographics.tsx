@@ -1,6 +1,6 @@
 'use client';
 
-import { Flex, Text } from '@aws-amplify/ui-react';
+import { Flex, Heading, Text } from '@aws-amplify/ui-react';
 import React, { useRef } from 'react';
 import Pie from './Pie';
 
@@ -18,9 +18,10 @@ const Demographics: React.FC<DemographicProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   return (
     <>
-      <Text marginBottom='xl' marginTop='xl'>
-        Current cluster: {currentClusterName}
-      </Text>
+      <Heading marginTop='xl' level={4} color='font.inverse'>
+        Demographic breakdown
+      </Heading>
+      <Text marginBottom='xl'>Current cluster: {currentClusterName}</Text>
       {currentCluster === 'affordability' && (
         <Text fontSize='small' marginBottom='xl'>
           The “Economic focus” cluster represents young people who identify

@@ -1,13 +1,53 @@
-import { Flex, Heading, Text, View } from '@aws-amplify/ui-react';
+'use client';
+
+import { useDimensions } from '@/hooks/useDimensions';
+import {
+  Flex,
+  Heading,
+  Placeholder,
+  Text,
+  View,
+  useTheme,
+} from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
-import { useEffect, useState } from 'react';
-import Pie from './Pie';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { FaBrain, FaMoneyBill } from 'react-icons/fa6';
+import styled from 'styled-components';
+import Heatmap from './Heatmap';
+import Legend from './Legend';
 import Tooltip from './TooltipChart';
 
 interface DataItem {
   [key: string]: string | number;
 }
+
+interface LegendProps {
+  data: Array<{ key: string; color: string }>;
+}
+
+interface ClusterProps {
+  currentCluster: string;
+  setCurrentCluster: (cluster: string) => void;
+  getKeyFromValue: (value: string) => string | null;
+  clusterMap: {
+    [key: string]: string;
+    'Social good focus': string;
+    'Forming opinions': string;
+    'Affordability focus': string;
+    All: string;
+  };
+  isDrawerOpen: boolean;
+  setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const ChartContainer = styled.div`
+  position: relative;
+`;
+
+const OverflowContainer = styled(View)`
+  overflow: visible;
+`;
 
 const clusterNames = [
   'Social good focus',
@@ -15,28 +55,16 @@ const clusterNames = [
   'Affordability focus',
 ];
 
-const clusterMap: {
-  'Social good focus': string;
-  'Forming opinions': string;
-  'Affordability focus': string;
-  All: string;
-  [key: string]: string; // Index signature
-} = {
-  'Social good focus': 'social',
-  'Forming opinions': 'forming',
-  'Affordability focus': 'affordability',
-  All: 'all',
-};
-
-// Function to get key from value
-const getKeyFromValue = (value: string): string | null => {
-  const entry = Object.entries(clusterMap).find(([key, val]) => val === value);
-  return entry ? entry[0] : null; // Return the key if found, otherwise null
-};
-
-const Clusters = ({ width = 800 }) => {
+const Clusters: React.FC<ClusterProps> = ({
+  currentCluster,
+  setCurrentCluster,
+  getKeyFromValue,
+  clusterMap,
+  isDrawerOpen,
+  setIsDrawerOpen,
+}) => {
   const height = 600;
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [rawData, setRawData] = useState<Record<string, string>>({});
   const [parsedData, setParsedData] = useState<Record<string, DataItem[]>>({});
   const [activeFile, setActiveFile] = useState('umap_data.csv');
@@ -49,7 +77,11 @@ const Clusters = ({ width = 800 }) => {
     content: '',
     group: '',
   });
-  const [currentCluster, setCurrentCluster] = useState('all');
+  const [legendData, setLegendData] = useState<LegendProps['data']>([]);
+  const { tokens } = useTheme();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { width: containerWidth } = useDimensions(containerRef);
+  const width = containerWidth - 60;
 
   useEffect(() => {
     const fetchData = async (filename: string) => {
@@ -94,7 +126,6 @@ const Clusters = ({ width = 800 }) => {
     if (!width || !height || !parsedData[activeFile]) return;
 
     if (parsedData[activeFile]) {
-      // Example D3.js manipulation (you can modify this based on your visualization needs)
       const data = parsedData[activeFile];
 
       d3.select('#chart').selectAll('svg').remove();
@@ -133,6 +164,25 @@ const Clusters = ({ width = 800 }) => {
         .domain(clusterNames)
         .range(['steelblue', 'orange', 'green']);
 
+      // Add contour density layer
+      const densityData = d3
+        .contourDensity<DataItem>()
+        .x((d: DataItem) => xScale(d.UMAP1 as number))
+        .y((d: DataItem) => yScale(d.UMAP2 as number))
+        .size([width, height])
+        .bandwidth(35)(filteredData);
+
+      svg
+        .append('g')
+        .selectAll('path')
+        .data(densityData)
+        .enter()
+        .append('path')
+        .attr('d', d3.geoPath())
+        .attr('fill', 'none')
+        .attr('stroke', 'white')
+        .attr('stroke-linejoin', 'round');
+
       // Create circles for each data point
       svg
         .selectAll('circle')
@@ -153,6 +203,7 @@ const Clusters = ({ width = 800 }) => {
           return 0.2;
         })
         .on('mouseover', (event, d) => {
+          d3.select(event.currentTarget).classed('hover-cursor', true);
           const xPos = event.layerX;
           const yPos = event.layerY;
           setTooltipState({
@@ -169,15 +220,18 @@ const Clusters = ({ width = 800 }) => {
             position: { x: xPos, y: yPos },
           }));
         })
-        .on('mouseout', () => {
+        .on('mouseout', (event) => {
+          d3.select(event.currentTarget).classed('hover-cursor', false);
           setTooltipState({ ...tooltipState, position: null });
         })
         .on('click', (event, d) => {
           event.stopPropagation();
           if (currentCluster === clusterMap[d.Cluster_Label]) {
             setCurrentCluster('all'); // Reset to 'all'
+            setIsDrawerOpen(!isDrawerOpen);
           } else {
             setCurrentCluster(clusterMap[d.Cluster_Label]); // Set currentCluster to clicked Cluster_Label
+            setIsDrawerOpen(true);
           }
         });
 
@@ -185,117 +239,81 @@ const Clusters = ({ width = 800 }) => {
         setCurrentCluster('all'); // Reset to 'all' when clicking on SVG background
       });
 
-      const legendData = colorScale.domain();
+      const customLegendData = colorScale.domain();
 
-      const legend = svg
-        .append('g')
-        .attr('class', 'legend')
-        .attr(
-          'transform',
-          `translate(${width - 150 - 20}, ${height - legendData.length * 20 - 50})`
-        );
-
-      // Legend background
-      // legend
-      //   .append('rect')
-      //   .attr('x', -10)
-      //   .attr('y', -10)
-      //   .attr('rx', 8)
-      //   .attr('ry', 8)
-      //   .attr('width', 170)
-      //   .attr('height', legendData.length * 20 + 10)
-      //   .style('fill', 'white')
-      //   .attr('opacity', 0.9);
-
-      // Legend items
-      legend
-        .selectAll('rect.legend-item')
-        .data(legendData)
-        .enter()
-        .append('rect')
-        .attr('class', 'legend-item')
-        .attr('x', 0)
-        .attr('y', (d, i) => i * 20)
-        .attr('width', 10)
-        .attr('height', 10)
-
-        .attr('fill', (d) => colorScale(d));
-
-      legend
-        .selectAll('text.legend-label')
-        .data(legendData)
-        .enter()
-        .append('text')
-        .attr('class', 'legend-label')
-        .attr('x', 20)
-        .attr('y', (d, i) => i * 20 + 9)
-        .style('fill', 'white')
-        .text((d) => d);
-
-      // Add axes (if needed)
-      // const xAxis = d3.axisBottom(xScale);
-      // svg
-      //   .append('g')
-      //   .attr('transform', `translate(0, ${height - 50})`)
-      //   .call(xAxis);
-
-      // const yAxis = d3.axisLeft(yScale);
-      // svg.append('g').attr('transform', 'translate(50, 0)').call(yAxis);
-
-      // Add title
-      // svg
-      //   .append('text')
-      //   .attr('x', width / 2)
-      //   .attr('y', 30)
-      //   .attr('text-anchor', 'middle')
-      //   .style('font-size', '16px')
-      //   .text('Scatterplot with UMAP1 and UMAP2');
+      const newLegendData = customLegendData.map((item, index) => ({
+        key: item,
+        color: colorScale(item),
+      }));
+      setLegendData(newLegendData);
     }
   }, [parsedData, activeFile, width, currentCluster]);
 
   return (
-    <View className='padding'>
+    <OverflowContainer padding='xl' ref={containerRef}>
       <Heading level={1} marginBottom='xl'>
         Psychographic clusters
       </Heading>
       <Text>
-        These clusters are based on how participants ranked topics in
-        importances versus performance of their city. Clusters are generated
-        using the UMAP method.
+        Survey participants were asked to rank the topics of affordability,
+        education and skills devopment, equity, diversity and inclusion,
+        Indigenous culture, truth and reconciliation, entrepreneurial spirit,
+        local economic growth, digital transformation, transportation, mental
+        health, and climate change in terms of importance. Then, they were asked
+        to rank how thier cities were performing in each of these categories.
+        Based on the relationships between these importance/performance
+        rankings, three distinct groups emerge. Clusters are generated using the
+        UMAP method. Click on a data point to see the demographic breakdown of
+        that cluster.
       </Text>
-      <div id='chart'></div>
-      {tooltipState.position && (
-        <Tooltip
-          x={tooltipState.position.x - 40}
-          content={tooltipState.content}
-          y={tooltipState.position.y}
-        />
-      )}
-      <Text marginBottom='xl'>
-        Click on a data point to see the demographic breakdown of that cluster.
-        Current cluster: {getKeyFromValue(currentCluster)}
-      </Text>
-      <Flex wrap='wrap' justifyContent='space-between'>
-        <Pie
-          width={width >= 700 ? width / 2 - 20 : width}
-          type='gender'
-          title='Gender'
-          cluster={currentCluster}
-        />
-        <Pie
-          width={width >= 700 ? width / 2 - 20 : width}
-          type='status'
-          title='Citizenship Status'
-          cluster={currentCluster}
-        />
-        <Pie
-          width={width >= 700 ? width / 2 - 20 : width}
-          type='disability'
-          cluster={currentCluster}
-          title='Ability'
-        />
+      <ChartContainer>
+        <Placeholder height={height} isLoaded={!loading || false} />
+        <div id='chart'></div>
+        <Legend data={legendData} position='absolute' />
+        {tooltipState.position && (
+          <Tooltip
+            x={tooltipState.position.x - 100}
+            content={tooltipState.content}
+            y={tooltipState.position.y + 20}
+          />
+        )}
+      </ChartContainer>
+      <Heading level={4} color='primary.60'>
+        Key Takeaways
+      </Heading>
+      <Flex alignItems='center' justifyContent='flex-start'>
+        <FaMoneyBill size='100px' color={tokens.colors.primary[60].value} />
+        <Text marginBottom='0'>
+          Regardless of cluster, all youth agree that
+          <strong> affordability</strong> is the top priority issue to improve
+          Canadian city performance nationwide.
+        </Text>
       </Flex>
-    </View>
+      <Flex alignItems='center' justifyContent='flex-start'>
+        <FaBrain size='100px' color={tokens.colors.primary[60].value} />
+        <Text>
+          Regardless of cluster, all youth agree that
+          <strong> mental health</strong> and <strong> good youth jobs </strong>
+          are high priority issues to improve Canadian city performance
+          nationwide.
+        </Text>
+      </Flex>
+      <Heatmap
+        activeFile='cluster-heatmap-economic.csv'
+        width={width}
+        height={height}
+      />
+      <Heatmap
+        activeFile='cluster-heatmap-forming.csv'
+        width={width}
+        height={height}
+      />
+      <Heatmap
+        activeFile='cluster-heatmap-social.csv'
+        width={width}
+        height={height}
+      />
+    </OverflowContainer>
   );
 };
 

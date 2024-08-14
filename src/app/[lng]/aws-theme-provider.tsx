@@ -26,6 +26,26 @@ const theme = createTheme(
             color: { value: 'colors.red.90.value' },
           },
         },
+        button: {
+          primary: {
+            _hover: {
+              backgroundColor: { value: '{colors.brand.primary.100.value}' },
+              color: { value: '{colors.font.inverse.value}' },
+            },
+          },
+        },
+        tabs: {
+          item: {
+            color: { value: '{colors.font.inverse.value}' },
+            _active: { color: { value: '{colors.brand.primary.60.value}' } },
+          },
+        },
+        placeholder: {
+          transitionDuration: { value: '1250ms' },
+          borderRadius: { value: '{radii.large}' },
+          startColor: { value: '{colors.neutral.90}' },
+          endColor: { value: '{colors.neutral.80}' },
+        },
       },
       // these colour definitions had to be made because typescript wasn't accepting the colors.brand notation in styled components, and for some reason the default primary and secondary colours weren't matching the brand theme
       colors: {

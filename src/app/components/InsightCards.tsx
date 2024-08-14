@@ -19,6 +19,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 interface InsightCardProps {
   lng: string;
+  maxLength?: number;
 }
 
 const ItalicText = styled(Text)`
@@ -63,9 +64,14 @@ const StyledCard = styled(Card)<{ $background: string }>`
   box-shadow: '0 4px 8px rgba(0,0,0,0.1)';
 `;
 
-const InsightCards: React.FC<InsightCardProps> = ({ lng }) => {
+const InsightCards: React.FC<InsightCardProps> = ({ lng, maxLength }) => {
   const { tokens } = useTheme();
   const sortedInsightCards = _.orderBy(insightCards.cards, 'date', 'desc');
+  const truncatedInsightCards = _.slice(
+    sortedInsightCards,
+    0,
+    maxLength || sortedInsightCards.length
+  );
   const [openDialogue, setOpenDialogue] = useState(false);
 
   const handleOpen = () => {
@@ -114,8 +120,8 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng }) => {
   };
 
   return (
-    <>
-      {sortedInsightCards.map((card, index) => (
+    <Flex className='cards-container'>
+      {truncatedInsightCards.map((card, index) => (
         <StyledCard
           key={uuidv4()}
           variation='elevated'
@@ -123,10 +129,10 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng }) => {
         >
           <View>
             <Heading level={3}>
-              {lng === 'fr' ? card.titlefr : card.title}
+              {lng === 'fr' ? card.titlefr || card.title : card.title}
             </Heading>
             <ItalicText as='em' fontSize='small' color='font.primary'>
-              {lng === 'fr' ? card.datasetfr : card.dataset}
+              {lng === 'fr' ? card.datasetfr || card.dataset : card.dataset}
             </ItalicText>
             <Text
               fontWeight='bold'
@@ -137,24 +143,36 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng }) => {
               {card.date}
             </Text>
             <Text fontSize='small' color='font.primary'>
-              {lng === 'fr' ? card.descfr : card.desc}
+              {lng === 'fr' ? card.descfr || card.desc : card.desc}
             </Text>
           </View>
           <Flex justifyContent='flex-end' alignItems='flex-end'>
-            <Link href={card.link || '/'} passHref>
-              <StyledButton
-                $background={getColor(index).button}
-                $inverse={getColor(index).buttonInverse}
-                $color={getColor(index).buttonInverse}
-              >
-                <FaArrowRight size={20} />
-              </StyledButton>
-            </Link>
+            {card.type === 'external' ? (
+              <a href={card.link || '/'} target='_blank'>
+                <StyledButton
+                  $background={getColor(index).button}
+                  $inverse={getColor(index).buttonInverse}
+                  $color={getColor(index).buttonInverse}
+                >
+                  <FaArrowRight size={20} />
+                </StyledButton>
+              </a>
+            ) : (
+              <Link href={card.link || '/'} passHref>
+                <StyledButton
+                  $background={getColor(index).button}
+                  $inverse={getColor(index).buttonInverse}
+                  $color={getColor(index).buttonInverse}
+                >
+                  <FaArrowRight size={20} />
+                </StyledButton>
+              </Link>
+            )}
           </Flex>
         </StyledCard>
       ))}
       {/* <Dialogue open={openDialogue} onClose={handleClose} /> */}
-    </>
+    </Flex>
   );
 };
 

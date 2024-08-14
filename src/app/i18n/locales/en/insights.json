@@ -3,8 +3,8 @@
   "insights": "Insights",
   "note": "Note",
   "disclaimer": "The Youthful Cities chatbot utilizes the GPT-4 language model. All training data for the model is curated by Youthful Cities. As with any AI, GPT-4 lacks real-time understanding of context and may occasionally produce irrelevant or nonsensical responses. Its responses should be evaluated critically, especially in sensitive or complex situations where human judgment is crucial.",
-  "login": "You can log into the chatbot with the following credentials:",
+  "login": "You can log into the chatbot with your Youth Data Lab credentials or the credentials below:",
   "email": "<strong>Email:</strong> chatbot@youthfulcities.com",
-  "password": "<strong>Password:</strong> demo",
+  "password": "<strong>Password:</strong> Demo@1234",
   "goto": "Go to chatbot"
 }

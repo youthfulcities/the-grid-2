@@ -2,7 +2,7 @@
 
 import Container from '@/app/components/Background';
 import CustomMap from '@/app/components/dataviz/Map';
-import useDimensions from '@/hooks/useDimensions';
+import { useDimensions } from '@/hooks/useDimensions';
 import { Heading, View } from '@aws-amplify/ui-react';
 import { useRef } from 'react';
 

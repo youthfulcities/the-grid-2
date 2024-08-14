@@ -33,6 +33,19 @@ const initialView = {
   duration: 2000,
 };
 
+const CityView = ({ item }) => {
+  return (
+    <CityViewContainer>
+      <Heading level={4} color='font.inverse'>
+        {item.City} | Rank #{item.Rank}
+      </Heading>
+      <Text>{item.Strength_1}</Text>
+      <Text>{item.Strength_2}</Text>
+      <Text>{item['Room for Improvement']}</Text>
+    </CityViewContainer>
+  );
+};
+
 const CustomMap = ({ width }) => {
   const [viewState, setViewState] = useState(initialView);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -87,19 +100,6 @@ const CustomMap = ({ width }) => {
     }
   };
 
-  const CityView = ({ item }) => {
-    return (
-      <CityViewContainer>
-        <Heading level={4} color='font.inverse'>
-          {item.City} | Rank #{item.Rank}
-        </Heading>
-        <Text>{item.Strength_1}</Text>
-        <Text>{item.Strength_2}</Text>
-        <Text>{item['Room for Improvement']}</Text>
-      </CityViewContainer>
-    );
-  };
-
   return (
     <Map
       latitude={viewState.latitude}
@@ -107,10 +107,10 @@ const CustomMap = ({ width }) => {
       zoom={viewState.zoom}
       ref={mapRef}
       initialViewState={initialView}
-      scrollZoom={true}
+      scrollZoom
       onLoad={(e) => onLoad(e)}
       onMove={(e) => setViewState(e.viewState)}
-      style={{ width: width, height: height }}
+      style={{ width, height }}
       mapStyle='mapbox://styles/youthfulcities/clzrhcvrj00hf01pc44in6vrn'
       interactiveLayerIds={['uwi-2023-overall-2']}
       onClick={onClick}
@@ -130,7 +130,7 @@ const CustomMap = ({ width }) => {
       >
         <Flex direction='column'>
           {currentFeature.length > 0 ? (
-            currentFeature.map((item, index) => <CityView item={item} />)
+            currentFeature.map((item) => <CityView key={item} item={item} />)
           ) : (
             <Text>Click on a city to get started!</Text>
           )}

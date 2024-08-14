@@ -7,8 +7,8 @@ import { Heading, View } from '@aws-amplify/ui-react';
 import { useRef } from 'react';
 
 const Index = () => {
-  const containerRef = useRef();
-  const { width, height } = useDimensions(containerRef);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { width } = useDimensions(containerRef);
   return (
     <Container>
       <View className='container padding' ref={containerRef}>

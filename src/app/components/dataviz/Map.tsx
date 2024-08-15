@@ -1,8 +1,8 @@
-import { Button, Flex, Heading, Text, useTheme } from '@aws-amplify/ui-react';
-import { Feature, GeoJsonProperties, Geometry, Point } from 'geojson';
+import { Button, Flex, Heading, Text } from '@aws-amplify/ui-react';
+import { Feature, GeoJsonProperties, Point } from 'geojson';
 import _ from 'lodash';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import Map, {
   MapEvent,
   MapMouseEvent,
@@ -75,8 +75,9 @@ const CityView = forwardRef<HTMLDivElement, CityViewProps>(({ item }, ref) => {
   );
 });
 
+CityView.displayName = 'CityView';
+
 const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
-  const { tokens } = useTheme();
   const [viewState, setViewState] = useState<ViewState>(initialView);
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [completed, setCompleted] = useState(false);
@@ -91,8 +92,10 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
   const cityViewRefs = useRef<HTMLDivElement[]>([]);
   const [override, setOverride] = useState(false);
 
-  const isPoint = (geometry: Geometry): geometry is Point =>
-    geometry.type === 'Point';
+  useEffect(() => {
+    // Clear old refs before setting new ones
+    cityViewRefs.current = [];
+  }, [allFeatures]);
 
   const onClick = (event: MapMouseEvent) => {
     const feature = event.features?.[0] as Feature<Point, GeoJsonProperties>;
@@ -120,7 +123,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
     setOverride(true);
   };
 
-  const onReset = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const onReset = () => {
     mapRef.current?.flyTo({
       center: [initialView.longitude, initialView.latitude],
       zoom: initialView.zoom,
@@ -209,13 +212,17 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
   }, [allFeatures, override]);
 
   useEffect(() => {
-    // Reset the override after a short delay to allow for user interactions
+    // Only run this effect when `override` is true
     if (override) {
       const timer = setTimeout(() => {
-        setOverride(false);
+        setOverride(false); // State update happens here
       }, 4000);
+
+      // Cleanup function to clear the timer
       return () => clearTimeout(timer);
     }
+    // Return null if there's no timer to clear
+    return () => {};
   }, [override]);
 
   return (
@@ -234,7 +241,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
       onClick={onClick}
       mapboxAccessToken={MAPBOX_TOKEN}
     >
-      <ResetButton variation='primary' onClick={(e) => onReset(e)}>
+      <ResetButton variation='primary' onClick={() => onReset()}>
         Reset
       </ResetButton>
       <NavigationControl position='top-left' />
@@ -249,7 +256,6 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
       >
         <>
           {allFeatures.length > 0 &&
-            ((cityViewRefs.current = []), // Clear old refs before setting new ones
             allFeatures.map((item) => (
               <CityView
                 key={item.properties?.City}
@@ -260,7 +266,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
                   }
                 }}
               />
-            )))}
+            ))}
         </>
       </Drawer>
     </Map>

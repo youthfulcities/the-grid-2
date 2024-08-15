@@ -12,9 +12,14 @@ const Index = () => {
   return (
     <Container>
       <View className='container padding' ref={containerRef}>
-        <Heading level={1} marginBottom='xl'>
+        <Heading level={1}>
           Best City to <span className='highlight'>Work in Canada</span>
         </Heading>
+        <div className='inner-container'>
+          <Heading level={3} color='font.inverse' marginBottom='xl'>
+            Urban Work Index 2023
+          </Heading>
+        </div>
         <CustomMap width={width} />
       </View>
     </Container>

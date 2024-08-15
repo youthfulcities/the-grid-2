@@ -48,7 +48,9 @@ const Demographics: React.FC<DemographicProps> = ({
       )}
       <Flex
         wrap='wrap'
-        justifyContent='space-between'
+        direction='column'
+        justifyContent='center'
+        alignItems='center'
         marginBottom='xl'
         ref={containerRef}
       >

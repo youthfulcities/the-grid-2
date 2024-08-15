@@ -250,8 +250,8 @@ const Clusters: React.FC<ClusterProps> = ({
   }, [parsedData, activeFile, width, currentCluster]);
 
   return (
-    <OverflowContainer padding='xl' ref={containerRef}>
-      <Heading level={1} marginBottom='xl'>
+    <OverflowContainer ref={containerRef}>
+      <Heading level={2} marginBottom='xl'>
         Psychographic clusters
       </Heading>
       <Text>

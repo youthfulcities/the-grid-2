@@ -13,6 +13,7 @@ interface DrawerProps {
   onOpen?: () => void;
   tabText?: string;
   noClickOutside?: boolean;
+  id?: string;
 }
 
 const DrawerContainer = styled(motion.div)<{
@@ -22,14 +23,14 @@ const DrawerContainer = styled(motion.div)<{
   position: ${({ $absolute }) => ($absolute ? 'absolute' : 'fixed')};
   top: 0;
   right: 0;
-  max-width: 40%;
   min-width: 300px;
+  max-width: 40%;
   height: 100%;
   color: var(--amplify-colors-font-inverse);
   backdrop-filter: blur(10px);
   z-index: 1000;
   overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-x: visible;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -59,7 +60,8 @@ const Tab = styled(motion.div)<{ $offset: number; $absolute: boolean }>`
   top: 12%;
   right: ${({ $offset }) => `${$offset}px`};
   min-width: 50px;
-  height: 50px;
+  min-height: 50px;
+  height: auto;
   backdrop-filter: blur(10px);
   color: var(--amplify-colors-font-inverse);
   display: flex;
@@ -81,17 +83,17 @@ const Drawer: React.FC<DrawerProps> = ({
   tabText,
   absolute,
   noClickOutside,
+  id = 'drawer-content',
 }) => {
   const drawerRef = useRef<HTMLDivElement>(null);
   const tabRef = useRef<HTMLDivElement>(null);
   const [tabOffset, setTabOffset] = useState<number>(0);
   const { width } = useDimensions(drawerRef, isOpen);
 
-  const handleClickOutside = (event: MouseEvent) =>
-  {
-    if (noClickOutside) {
-      return
-    }
+  // Expose the drawerRef to parent components via ref
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (noClickOutside) return;
     if (
       onClose &&
       drawerRef.current &&
@@ -106,8 +108,10 @@ const Drawer: React.FC<DrawerProps> = ({
   useEffect(() => {
     if (drawerRef.current) {
       const resizeObserver = new ResizeObserver(() => {
-        const drawerRect = drawerRef.current.getBoundingClientRect();
-        setTabOffset(drawerRect.width); // Update tabOffset when drawer's width changes
+        if (drawerRef.current) {
+          const drawerRect = drawerRef.current.getBoundingClientRect();
+          setTabOffset(drawerRect.width); // Update tabOffset when drawer's width changes
+        }
       });
 
       resizeObserver.observe(drawerRef.current);
@@ -138,6 +142,7 @@ const Drawer: React.FC<DrawerProps> = ({
     <>
       {!noOverlay && <Overlay isOpen={isOpen} onClick={onClose} />}
       <DrawerContainer
+        id={id}
         className='soft-shadow'
         ref={drawerRef}
         isOpen={isOpen}
@@ -145,7 +150,7 @@ const Drawer: React.FC<DrawerProps> = ({
       >
         {React.Children.map(children, (child) =>
           React.isValidElement(child)
-            ? React.cloneElement(children as React.ReactElement, {
+            ? React.cloneElement(child as React.ReactElement, {
                 drawerWidth: width,
               })
             : child

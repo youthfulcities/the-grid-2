@@ -70,6 +70,7 @@ const BarChart: React.FC<BarProps> = ({
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [allOptions, setAllOptions] = useState<string[]>([]);
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
+  const [activeLegendItems, setActiveLegendItems] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchData = async (filename: string) => {
@@ -110,23 +111,44 @@ const BarChart: React.FC<BarProps> = ({
       parseDynamicCSVData(activeFile, rawData[activeFile]);
   }, [activeFile, rawData, parsedData]);
 
+  //initialize default customization options
   useEffect(() => {
     // Select the top 10 options by default when parsedData is updated
     if (parsedData[activeFile]) {
       const options = parsedData[activeFile].map((d) => d.option_en as string);
-
       setAllOptions(options);
       setSelectedOptions(options.slice(0, 10));
+
+      const allKeys = Object.keys(parsedData[activeFile][0]).filter(
+        (key) => key !== 'option_en'
+      );
+      setActiveLegendItems(allKeys.slice(0, 3));
     }
   }, [parsedData, activeFile]);
 
+  //draw chart
   useEffect(() => {
     if (!width || !height || !parsedData[activeFile]) return;
 
     const data = parsedData[activeFile];
-    const dataToDisplay = data.filter((item) =>
-      selectedOptions.includes(item.option_en)
+    // Extract all unique subgroup keys from the complete data
+    const allKeys = Object.keys(parsedData[activeFile][0]).filter(
+      (key) => key !== 'option_en'
     );
+
+    // Filter data based on active legend items
+    const dataToDisplay = data
+      .filter((item) => selectedOptions.includes(item.option_en))
+      .map((item) => {
+        // Only include keys that are in the active legend items
+        const filteredItem: Record<string, any> = { option_en: item.option_en };
+        Object.keys(item).forEach((key) => {
+          if (key !== 'option_en' && activeLegendItems.includes(key)) {
+            filteredItem[key] = item[key];
+          }
+        });
+        return filteredItem;
+      });
 
     // Calculate scales
     const yScale = d3
@@ -149,6 +171,13 @@ const BarChart: React.FC<BarProps> = ({
       .range([margin.left, width - margin.right]);
 
     const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const customLegendData = allKeys.map((item) => ({
+      key: item,
+      color: colorScale(item),
+    }));
+
+    setLegendData(customLegendData);
 
     // SVG element setup
     const svg = d3
@@ -278,30 +307,26 @@ const BarChart: React.FC<BarProps> = ({
       .delay((d, i) => i * (duration / 10))
       .attr('x', xScale(0))
       .attr('width', (d) => xScale(d.value) - xScale(0));
-
-    const customLegendData = barGroups.data().reduce((acc, d) => {
-      const keys = Object.keys(d).filter((key) => key !== 'option_en');
-      keys.forEach((key) => {
-        if (!acc.includes(key)) {
-          acc.push(key);
-        }
-      });
-      return acc;
-    }, [] as string[]);
-
-    const newLegendData = customLegendData.map((item, index) => ({
-      key: item,
-      color: colorScale(item),
-    }));
-    setLegendData(newLegendData);
-  }, [width, height, parsedData, activeFile, selectedOptions]);
+  }, [
+    width,
+    height,
+    parsedData,
+    activeFile,
+    selectedOptions,
+    activeLegendItems,
+  ]);
 
   return (
     <>
       <Placeholder height={height} isLoaded={!loading || false} />
       <ChartContainer>
         <svg ref={ref}></svg>
-        <Legend data={legendData} position='absolute' />
+        <Legend
+          data={legendData}
+          activeLegendItems={activeLegendItems}
+          setActiveLegendItems={setActiveLegendItems}
+          position='absolute'
+        />
       </ChartContainer>
       <Customize
         selectedOptions={selectedOptions}

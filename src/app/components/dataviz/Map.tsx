@@ -95,7 +95,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
   useEffect(() => {
     // Clear old refs before setting new ones
     cityViewRefs.current = [];
-  }, [allFeatures]);
+  }, []);
 
   const onClick = (event: MapMouseEvent) => {
     const feature = event.features?.[0] as Feature<Point, GeoJsonProperties>;

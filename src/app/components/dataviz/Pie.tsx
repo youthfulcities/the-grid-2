@@ -1,17 +1,37 @@
 import { Flex, Heading } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Legend from './Legend';
-import Tooltip from './TooltipChart';
 
 interface DataItem {
   [key: string]: string | number;
 }
 
+interface TooltipState {
+  position: { x: number; y: number } | null;
+  value?: number | null;
+  topic?: string;
+  content?: string;
+  group?: string;
+  child?: ReactNode | null;
+}
+
 interface LegendProps {
   data: Array<{ key: string; color: string }>;
+}
+
+interface PieChartProps {
+  width?: number;
+  height?: number;
+  type: string;
+  cluster?: string;
+  title?: string;
+  margin?: { top: number; right: number; bottom: number; left: number };
+  containerRef: React.RefObject<HTMLDivElement>;
+  tooltipState: TooltipState;
+  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
 }
 
 type PieArcDatum<T> = d3.PieArcDatum<T>;
@@ -22,15 +42,7 @@ const ChartContainer = styled(Flex)`
   overflow: visible;
 `;
 
-const PieChartComponent: React.FC<{
-  width?: number;
-  height?: number;
-  type: string;
-  cluster?: string;
-  title?: string;
-  margin?: { top: number; right: number; bottom: number; left: number };
-  containerRef: React.RefObject<HTMLDivElement>;
-}> = ({
+const PieChartComponent: React.FC<PieChartProps> = ({
   width = 600,
   height = 400,
   type,
@@ -38,18 +50,13 @@ const PieChartComponent: React.FC<{
   title,
   margin = { top: 20, right: 40, bottom: 20, left: 40 },
   containerRef,
+  tooltipState,
+  setTooltipState,
 }) => {
   const [rawData, setRawData] = useState<Record<string, string>>({});
   const [parsedData, setParsedData] = useState<Record<string, DataItem[]>>({});
   const [activeFile, setActiveFile] = useState(`${type}-${cluster}.csv`);
   const [loading, setLoading] = useState(false);
-  const [tooltipState, setTooltipState] = useState<{
-    position: { x: number; y: number } | null;
-    content: string;
-  }>({
-    position: null,
-    content: '',
-  });
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
 
   useEffect(() => {
@@ -170,9 +177,9 @@ const PieChartComponent: React.FC<{
     arcs
       .selectAll<SVGPathElement, PieArcDatum<DataItem>>('path')
       .on('mouseover', (event, d) => {
-        const containerRect = containerRef.current?.getBoundingClientRect();
-        const xPos = event.screenX - (containerRect?.left ?? 0);
-        const yPos = event.screenY - (containerRect?.top ?? 0);
+        const xPos = event.clientX;
+        const yPos = event.clientY + window.scrollY;
+        console.log(yPos);
         const category = Object.keys(d.data)[0];
         setTooltipState({
           position: { x: xPos, y: yPos },
@@ -180,9 +187,8 @@ const PieChartComponent: React.FC<{
         });
       })
       .on('mousemove', (event) => {
-        const containerRect = containerRef.current?.getBoundingClientRect();
-        const xPos = event.screenX - (containerRect?.left ?? 0);
-        const yPos = event.screenY - (containerRect?.top ?? 0);
+        const xPos = event.clientX;
+        const yPos = event.clientY + window.scrollY;
         setTooltipState((prevTooltipState) => ({
           ...prevTooltipState,
           position: { x: xPos, y: yPos },
@@ -207,13 +213,6 @@ const PieChartComponent: React.FC<{
         <div id={`pie-chart-${type}`}></div>
         <Legend data={legendData} />
       </Flex>
-      {tooltipState.position && (
-        <Tooltip
-          x={tooltipState.position.x}
-          content={tooltipState.content}
-          y={tooltipState.position.y}
-        />
-      )}
     </>
   );
 };

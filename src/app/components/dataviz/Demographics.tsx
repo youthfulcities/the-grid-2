@@ -1,19 +1,34 @@
 'use client';
 
 import { Flex, Heading, Text } from '@aws-amplify/ui-react';
-import React, { useRef } from 'react';
+import React, { useRef, ReactNode } from 'react';
 import Pie from './Pie';
+
+interface TooltipState {
+  position: { x: number; y: number } | null;
+  value?: number | null;
+  topic?: string;
+  content?: string;
+  group?: string;
+  cluster?: string;
+  child?: ReactNode | null;
+  minWidth?: number;
+}
 
 interface DemographicProps {
   currentCluster: string;
   currentClusterName: string | null;
   drawerWidth: number;
+  tooltipState: TooltipState;
+  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
 }
 
 const Demographics: React.FC<DemographicProps> = ({
   currentCluster,
   currentClusterName,
   drawerWidth,
+  tooltipState,
+  setTooltipState,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   return (
@@ -60,6 +75,8 @@ const Demographics: React.FC<DemographicProps> = ({
           title='Gender'
           cluster={currentCluster}
           containerRef={containerRef}
+          tooltipState={tooltipState}
+          setTooltipState={setTooltipState}
         />
         <Pie
           width={drawerWidth}
@@ -67,6 +84,8 @@ const Demographics: React.FC<DemographicProps> = ({
           title='Citizenship Status'
           cluster={currentCluster}
           containerRef={containerRef}
+          tooltipState={tooltipState}
+          setTooltipState={setTooltipState}
         />
         <Pie
           width={drawerWidth}
@@ -74,6 +93,8 @@ const Demographics: React.FC<DemographicProps> = ({
           cluster={currentCluster}
           title='Ability'
           containerRef={containerRef}
+          tooltipState={tooltipState}
+          setTooltipState={setTooltipState}
         />
       </Flex>
     </>

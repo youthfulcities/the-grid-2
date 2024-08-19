@@ -3,15 +3,23 @@
 import { Placeholder } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
-import { useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Customize from './Customize';
 import Legend from './Legend';
-import Tooltip from './TooltipChart';
 
 interface DataItem {
   option_en: string;
   [key: string]: string | number;
+}
+
+interface TooltipState {
+  position: { x: number; y: number } | null;
+  value?: number | null;
+  topic?: string;
+  content?: string;
+  group?: string;
+  child?: ReactNode | null;
 }
 
 interface BarProps {
@@ -20,6 +28,8 @@ interface BarProps {
   margin: { top: number; bottom: number; left: number; right: number };
   duration: number;
   activeFile: string;
+  tooltipState: TooltipState;
+  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
 }
 
 interface LegendProps {
@@ -48,6 +58,8 @@ const BarChart: React.FC<BarProps> = ({
   margin,
   duration,
   activeFile,
+  tooltipState,
+  setTooltipState,
 }) => {
   const ref = useRef<SVGSVGElement>(null);
   const [loading, setLoading] = useState(true);
@@ -58,16 +70,6 @@ const BarChart: React.FC<BarProps> = ({
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [allOptions, setAllOptions] = useState<string[]>([]);
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
-
-  const [tooltipState, setTooltipState] = useState<{
-    position: { x: number; y: number } | null;
-    content: string;
-    group: string;
-  }>({
-    position: null,
-    content: '',
-    group: '',
-  });
 
   useEffect(() => {
     const fetchData = async (filename: string) => {
@@ -188,7 +190,26 @@ const BarChart: React.FC<BarProps> = ({
       .style('fill', 'white')
       .style('text-anchor', 'end')
       .attr('dy', '-0.8em')
-      .attr('transform', 'rotate(-45)');
+      .attr('transform', 'rotate(-45)')
+      .on('mouseover', (event, d) => {
+        const xPos = event.pageX;
+        const yPos = event.pageY;
+        setTooltipState({
+          position: { x: xPos, y: yPos },
+          group: d as string,
+        });
+      })
+      .on('mousemove', (event) => {
+        const xPos = event.pageX;
+        const yPos = event.pageY;
+        setTooltipState((prevTooltipState) => ({
+          ...prevTooltipState,
+          position: { x: xPos, y: yPos },
+        }));
+      })
+      .on('mouseout', () => {
+        setTooltipState({ ...tooltipState, position: null });
+      });
 
     // Draw bars
     const barGroups = svg
@@ -233,8 +254,8 @@ const BarChart: React.FC<BarProps> = ({
         const groupData = d3
           .select<SVGGElement, DataItem>(event.target.parentNode as SVGGElement)
           .datum();
-        const xPos = event.layerX;
-        const yPos = event.layerY;
+        const xPos = event.pageX;
+        const yPos = event.pageY;
         setTooltipState({
           position: { x: xPos, y: yPos },
           content: `${d.key} - ${d.value.toFixed(0)}%`,
@@ -242,8 +263,8 @@ const BarChart: React.FC<BarProps> = ({
         });
       })
       .on('mousemove', (event) => {
-        const xPos = event.layerX;
-        const yPos = event.layerY;
+        const xPos = event.pageX;
+        const yPos = event.pageY;
         setTooltipState((prevTooltipState) => ({
           ...prevTooltipState,
           position: { x: xPos, y: yPos },
@@ -281,14 +302,6 @@ const BarChart: React.FC<BarProps> = ({
       <ChartContainer>
         <svg ref={ref}></svg>
         <Legend data={legendData} position='absolute' />
-        {tooltipState.position && (
-          <Tooltip
-            x={tooltipState.position.x - 100}
-            content={tooltipState.content}
-            y={tooltipState.position.y + 20}
-            group={tooltipState.group}
-          />
-        )}
       </ChartContainer>
       <Customize
         selectedOptions={selectedOptions}

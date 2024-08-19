@@ -1,5 +1,5 @@
 import { Text } from '@aws-amplify/ui-react';
-import React, { useState } from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
 const SmallText = styled(Text)`
@@ -29,40 +29,14 @@ const Tooltip: React.FC<{
   y: number;
   content?: string;
   group?: string;
-  children?: React.ReactNode;
+  child?: ReactNode;
   minWidth?: number;
-}> = ({ x, y, content, group, children, minWidth }) => {
-  // const tooltipRef = useRef<HTMLDivElement>(null);
-  const [adjusted, setAdjusted] = useState({ x, y });
-
-  // useEffect(() => {
-  //   const tooltipElement = tooltipRef.current;
-
-  //   if (tooltipElement) {
-  //     const { innerWidth, innerHeight } = window;
-  //     const { offsetWidth, offsetHeight } = tooltipElement;
-  //     let newX = x;
-  //     let newY = y + 20;
-
-  //     // Check if the tooltip overflows the right side of the viewport
-  //     if (x + offsetWidth > innerWidth) {
-  //       newX = x - 300;
-  //     }
-
-  //     // Check if the tooltip overflows the bottom of the viewport
-  //     if (newY + offsetHeight > innerHeight) {
-  //       newY = y - offsetHeight - 20; // Position above the element if it goes out of the viewport
-  //     }
-
-  //     setAdjusted({ x: newX, y: newY });
-  //   }
-  // }, [x, y, tooltipRef]);
-
+}> = ({ x, y, content, group, child, minWidth = 0 }) => {
   return (
-    <TooltipContainer style={{ left: x, top: y }} $minWidth={minWidth}>
+    <TooltipContainer style={{ left: x, top: y }} $minWidth={minWidth || 0}>
       {content}
       {group && <SmallText>{group}</SmallText>}
-      {children}
+      {child}
     </TooltipContainer>
   );
 };

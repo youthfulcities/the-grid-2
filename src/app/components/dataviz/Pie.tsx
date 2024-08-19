@@ -16,8 +16,10 @@ interface LegendProps {
 
 type PieArcDatum<T> = d3.PieArcDatum<T>;
 
-const StyledHeading = styled(Heading)`
-  transform: translateX(-20px);
+const StyledHeading = styled(Heading)``;
+
+const ChartContainer = styled(Flex)`
+  overflow: visible;
 `;
 
 const PieChartComponent: React.FC<{
@@ -34,7 +36,7 @@ const PieChartComponent: React.FC<{
   type,
   cluster = 'all',
   title,
-  margin = { top: 20, right: 20, bottom: 20, left: 20 },
+  margin = { top: 20, right: 40, bottom: 20, left: 40 },
   containerRef,
 }) => {
   const [rawData, setRawData] = useState<Record<string, string>>({});
@@ -121,15 +123,15 @@ const PieChartComponent: React.FC<{
     setLegendData(newLegendData);
 
     const chartWidth = width - margin.left - margin.right;
-    const chartHeight = height - margin.top - margin.bottom;
+    const chartHeight = width - margin.left - margin.right;
     const radius = Math.min(chartWidth, chartHeight) / 2;
     const pie = d3.pie<DataItem>().value((d) => d.Count as number);
 
     const svg = d3
       .select(`#pie-chart-${type}`)
       .append('svg')
-      .attr('width', width)
-      .attr('height', height);
+      .attr('width', chartWidth)
+      .attr('height', chartHeight);
 
     const arcGenerator = d3
       .arc<PieArcDatum<DataItem>>()
@@ -142,10 +144,7 @@ const PieChartComponent: React.FC<{
       .enter()
       .append('g')
       .attr('class', 'arc')
-      .attr(
-        'transform',
-        `translate(${chartWidth / 2 - 10},${chartHeight / 2})`
-      );
+      .attr('transform', `translate(${chartWidth / 2},${chartHeight / 2})`);
 
     arcs
       .append('path')
@@ -195,25 +194,27 @@ const PieChartComponent: React.FC<{
   }, [parsedData, width, height, activeFile]);
 
   return (
-    <Flex direction='column' ref={containerRef}>
-      <StyledHeading
-        level={4}
-        color='font.inverse'
-        textAlign='center'
-        marginBottom='large'
-      >
-        {title || type}
-      </StyledHeading>
-      <div id={`pie-chart-${type}`}></div>
-      <Legend data={legendData} />
+    <>
+      <Flex direction='column' ref={containerRef}>
+        <StyledHeading
+          level={4}
+          color='font.inverse'
+          textAlign='center'
+          marginBottom='large'
+        >
+          {title || type}
+        </StyledHeading>
+        <div id={`pie-chart-${type}`}></div>
+        <Legend data={legendData} />
+      </Flex>
       {tooltipState.position && (
         <Tooltip
-          x={tooltipState.position.x - 150}
+          x={tooltipState.position.x}
           content={tooltipState.content}
-          y={tooltipState.position.y + 130}
+          y={tooltipState.position.y}
         />
       )}
-    </Flex>
+    </>
   );
 };
 

@@ -124,6 +124,16 @@ const Survey: React.FC = () => {
                   Importance/performance cluster
                 </StyledButton>
               </Flex>
+              <Accordion title='Examine clusters'>
+                <Clusters
+                  getKeyFromValue={getKeyFromValue}
+                  currentCluster={currentCluster}
+                  setCurrentCluster={setCurrentCluster}
+                  clusterMap={clusterMap}
+                  isDrawerOpen={isDrawerOpen}
+                  setIsDrawerOpen={setIsDrawerOpen}
+                />
+              </Accordion>
             </Tabs.Panel>
             <Tabs.Panel value='2'>
               <Flex justifyContent='center' wrap='wrap' marginTop='xl'>
@@ -177,24 +187,16 @@ const Survey: React.FC = () => {
             duration={duration}
             activeFile={activeFile}
           />
-          <Accordion title='Examine clusters'>
-            <Clusters
-              getKeyFromValue={getKeyFromValue}
-              currentCluster={currentCluster}
-              setCurrentCluster={setCurrentCluster}
-              clusterMap={clusterMap}
-              isDrawerOpen={isDrawerOpen}
-              setIsDrawerOpen={setIsDrawerOpen}
-            />
-          </Accordion>
         </div>
       </View>
       <Drawer
         isOpen={isDrawerOpen}
+        onOpen={() => setIsDrawerOpen(true)}
         onClose={() => {
           setIsDrawerOpen(false);
           setCurrentCluster('all');
         }}
+        tabText='Demographics'
       >
         <Demographics
           currentCluster={currentCluster}

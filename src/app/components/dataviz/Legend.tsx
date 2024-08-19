@@ -10,27 +10,40 @@ const LegendContainer = styled.div`
   margin-top: var(--amplify-space-xs);
 `;
 
-const LegendItem = styled.div`
+const LegendItem = styled.div<{ $clickable: boolean }>`
   display: flex;
   align-items: center;
   margin-bottom: 5px;
+  &:hover {
+    cursor: ${(props) => (props.$clickable ? 'pointer' : 'auto')};
+  }
 `;
 
-const LegendColorBox = styled.div<{ color: string }>`
+const LegendColorBox = styled.div<{
+  color: string;
+  $isActive: boolean;
+  $clickable: boolean;
+}>`
   width: var(--amplify-font-sizes-xs);
   height: var(--amplify-font-sizes-xs);
-  background-color: ${(props) => props.color};
+  background-color: ${(props) =>
+    props.$isActive || !props.$clickable ? props.color : 'grey'};
   margin-right: 10px;
 `;
 
-const LegendLabel = styled.span`
+const LegendLabel = styled.span<{ $isActive: boolean; $clickable: boolean }>`
   font-size: var(--amplify-font-sizes-xs);
-  color: var(--amplify-colors-font-inverse);
+  color: ${(props) =>
+    props.$isActive || !props.$clickable
+      ? 'var(--amplify-colors-font-inverse)'
+      : 'grey'};
 `;
 
 interface LegendProps {
   position?: string;
   data: Array<{ key: string; color: string }>;
+  setActiveLegendItems?: React.Dispatch<React.SetStateAction<string[]>>;
+  activeLegendItems?: string[];
 }
 
 const AbsoluteLegendContainer = styled.div`
@@ -38,7 +51,6 @@ const AbsoluteLegendContainer = styled.div`
   right: 0;
   bottom: 80px;
   z-index: 9999;
-  pointer-events: none;
   flex-direction: column;
   padding: var(--amplify-space-xs) var(--amplify-space-small);
   text-align: left;
@@ -48,26 +60,79 @@ const AbsoluteLegendContainer = styled.div`
   border-radius: var(--amplify-space-xs);
 `;
 
-const Legend: React.FC<LegendProps> = ({ data, position = 'below' }) => {
+const Legend: React.FC<LegendProps> = ({
+  data,
+  activeLegendItems = [],
+  setActiveLegendItems,
+  position = 'below',
+}) => {
+  const handleClick = (key: string) => {
+    console.log(key);
+    if (setActiveLegendItems) {
+      setActiveLegendItems(
+        (prevActiveItems: string[]) =>
+          prevActiveItems.includes(key)
+            ? prevActiveItems.filter((item: string) => item !== key) // Remove if exists
+            : [...prevActiveItems, key] // Add if doesn't exist
+      );
+    }
+  };
+
   return (
     <>
       {position === 'absolute' ? (
         <AbsoluteLegendContainer>
-          {data.map((item, index) => (
-            <LegendItem key={item.key}>
-              <LegendColorBox color={item.color} />
-              <LegendLabel>{item.key}</LegendLabel>
-            </LegendItem>
-          ))}
+          {data.map((item) => {
+            const isActive = activeLegendItems.some(
+              (activeItem) => activeItem === item.key
+            );
+            return (
+              <LegendItem
+                $clickable={setActiveLegendItems !== undefined}
+                key={item.key}
+                onClick={() => handleClick(item.key)}
+              >
+                <LegendColorBox
+                  $clickable={setActiveLegendItems !== undefined}
+                  color={item.color}
+                  $isActive={isActive}
+                />
+                <LegendLabel
+                  $clickable={setActiveLegendItems !== undefined}
+                  $isActive={isActive}
+                >
+                  {item.key}
+                </LegendLabel>
+              </LegendItem>
+            );
+          })}
         </AbsoluteLegendContainer>
       ) : (
         <LegendContainer>
-          {data.map((item, index) => (
-            <LegendItem key={item.key}>
-              <LegendColorBox color={item.color} />
-              <LegendLabel>{item.key}</LegendLabel>
-            </LegendItem>
-          ))}
+          {data.map((item) => {
+            const isActive = activeLegendItems.some(
+              (activeItem) => activeItem === item.key
+            );
+            return (
+              <LegendItem
+                $clickable={setActiveLegendItems !== undefined}
+                key={item.key}
+                onClick={() => handleClick(item.key)}
+              >
+                <LegendColorBox
+                  $clickable={setActiveLegendItems !== undefined}
+                  color={item.color}
+                  $isActive={isActive}
+                />
+                <LegendLabel
+                  $clickable={setActiveLegendItems !== undefined}
+                  $isActive={isActive}
+                >
+                  {item.key}
+                </LegendLabel>
+              </LegendItem>
+            );
+          })}
         </LegendContainer>
       )}
     </>

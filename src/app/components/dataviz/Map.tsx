@@ -95,7 +95,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
   useEffect(() => {
     // Clear old refs before setting new ones
     cityViewRefs.current = [];
-  }, [allFeatures]);
+  }, []);
 
   const onClick = (event: MapMouseEvent) => {
     const feature = event.features?.[0] as Feature<Point, GeoJsonProperties>;
@@ -179,6 +179,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
       threshold: 0.5,
     };
 
+    console.log(cityViewRefs.current);
     const observer = new IntersectionObserver((entries) => {
       if (!override) {
         entries.forEach((entry) => {

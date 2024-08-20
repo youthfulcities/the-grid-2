@@ -1,5 +1,3 @@
-
-
 import '@aws-amplify/ui-react/styles.css';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { Amplify } from 'aws-amplify';
@@ -10,12 +8,12 @@ import Script from 'next/script';
 import React from 'react';
 import config from '../../amplifyconfiguration.json';
 import StyledComponentsRegistry from '../../lib/registry';
+import AutheticatorProvider from '../components/AuthenticatorProvider';
 import Footer from '../components/Footer';
 import NavBar from '../components/NavBar';
 import { languages } from '../i18n/settings';
 import AWSThemeProvider from './aws-theme-provider';
 import './global.css';
-import AutheticatorProvider from '../components/AuthenticatorProvider'
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -129,7 +127,6 @@ const RootLayout: React.FC<RootLayoutProps> = ({
         crossOrigin='anonymous'
       />
       <Script id='hotjar'>
-        {' '}
         {`
           (function (h, o, t, j, a, r)
           {
@@ -142,25 +139,24 @@ const RootLayout: React.FC<RootLayoutProps> = ({
     })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`}
       </Script>
       <body>
-
         <GoogleAnalytics gaId='G-GEF0PPKZXD' />
         <GoogleTagManager gtmId='GTM-MXZ2WJTV' />
         <StyledComponentsRegistry>
           <AutheticatorProvider>
-          <AWSThemeProvider>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                minHeight: '100vh',
-                height: '100%',
-              }}
-            >
-              <NavBar />
-              {children}
-              <Footer />
-            </div>
-          </AWSThemeProvider>
+            <AWSThemeProvider>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  minHeight: '100vh',
+                  height: '100%',
+                }}
+              >
+                <NavBar />
+                {children}
+                <Footer />
+              </div>
+            </AWSThemeProvider>
           </AutheticatorProvider>
         </StyledComponentsRegistry>
       </body>

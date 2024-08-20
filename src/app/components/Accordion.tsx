@@ -9,7 +9,7 @@ interface AccordionProps {
 }
 
 const AccordionContent = styled(motion.div)<{ isAnimating: boolean }>`
-  overflow: ${({ isAnimating }) => (isAnimating ? 'hidden' : 'visible')};
+  overflow: hidden;
   padding: var(--amplify-space-large);
   border-width: var(--amplify-border-widths-small);
   border-color: var(--amplify-colors-brand-primary-60);

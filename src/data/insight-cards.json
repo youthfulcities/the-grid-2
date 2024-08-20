@@ -37,9 +37,20 @@
       "datasetfr": "",
       "date": "2024",
       "type": "",
-      "desc": "Chat with 100+ articles and reports published between 2020 and 2022. This experimental tool provides unique insights into youth perspectives.",
-      "descfr": "Chat avec plus de 100 articles et rapports publiés entre 2020 et 2022. Cet outil expérimental offre un aperçu unique des perspectives des jeunes.",
+      "desc": "This experimental tool provides unique insights into youth perspectives.",
+      "descfr": "Cet outil expérimental offre un aperçu unique des perspectives des jeunes.",
       "link": "/chatbot"
+    },
+    {
+      "title": "Best City to Work in Canada",
+      "titlefr": "",
+      "dataset": "Urban Work Index 2023",
+      "datasetfr": "",
+      "date": "2024",
+      "type": "",
+      "desc": "View the results of the Urban Work Index 2023 on an interactive map.",
+      "descfr": "",
+      "link": "/insights/index"
     }
   ]
 }

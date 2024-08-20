@@ -3,9 +3,9 @@
 import { Placeholder, Text } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
-import { useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import Tooltip from './TooltipChart';
+import HeatmapTooltip from './HeatmapTooltip';
 
 // const topicDesc = {
 //   "Good Jobs": "This means work that is meaningful, successful, relevant to your field of study, that pays you fairly, and is safe in your city.",
@@ -30,6 +30,17 @@ import Tooltip from './TooltipChart';
 
 // }
 
+interface TooltipState {
+  position: { x: number; y: number } | null;
+  value?: number | null;
+  topic?: string;
+  content?: string;
+  group?: string;
+  cluster?: string;
+  child?: ReactNode | null;
+  minWidth?: number | null;
+}
+
 interface DataItem {
   [key: string]: string | number;
 }
@@ -38,6 +49,8 @@ interface HeatmapProps {
   width: number;
   height: number;
   activeFile: string;
+  tooltipState: TooltipState;
+  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
 }
 
 interface LegendProps {
@@ -68,7 +81,12 @@ const truncateText = (text: string, maxLength: number) => {
   return cleanedText;
 };
 
-const Heatmap: React.FC<HeatmapProps> = ({ width, activeFile }) => {
+const Heatmap: React.FC<HeatmapProps> = ({
+  width,
+  activeFile,
+  tooltipState,
+  setTooltipState,
+}) => {
   const height = 400;
   const ref = useRef<SVGSVGElement>(null);
   const [loading, setLoading] = useState(true);
@@ -76,19 +94,6 @@ const Heatmap: React.FC<HeatmapProps> = ({ width, activeFile }) => {
   const [parsedData, setParsedData] = useState<{ [key: string]: DataItem[] }>(
     {}
   );
-  const [legendData, setLegendData] = useState<LegendProps['data']>([]);
-
-  const [tooltipState, setTooltipState] = useState<{
-    position: { x: number; y: number } | null;
-    value: number | null;
-    cluster: string;
-    topic: string;
-  }>({
-    position: null,
-    value: null,
-    cluster: '',
-    topic: '',
-  });
 
   const margin = { top: 50, right: 80, bottom: 0, left: 30 };
   const innerWidth = width - margin.left - margin.right;
@@ -104,10 +109,8 @@ const Heatmap: React.FC<HeatmapProps> = ({ width, activeFile }) => {
         }).result;
         const text = await downloadResult.body.text();
         setRawData({ ...rawData, [filename]: text });
-        setLoading(false);
       } catch (error) {
         console.log('Error:', error);
-        setLoading(false);
       }
     };
 
@@ -124,7 +127,6 @@ const Heatmap: React.FC<HeatmapProps> = ({ width, activeFile }) => {
       });
 
       setParsedData({ ...parsedData, [filename]: parsed });
-      setLoading(false);
     };
 
     fetchData(activeFile);
@@ -247,30 +249,55 @@ const Heatmap: React.FC<HeatmapProps> = ({ width, activeFile }) => {
         .style('fill', 'white');
 
       const mouseover = (event: MouseEvent, d: DataItem) => {
-        const xPos = event.offsetX;
-        const yPos = event.offsetY;
-        setTooltipState({
-          position: { x: xPos, y: yPos },
-          cluster: d.Cluster as string,
-          topic: d.Topic as string,
-          value: d.Value as number,
-        });
-      };
-
-      const mousemove = (event: MouseEvent, d: DataItem) => {
-        const xPos = event.offsetX;
-        const yPos = event.offsetY;
+        const xPos = event.pageX;
+        const yPos = event.pageY;
         setTooltipState((prevTooltipState) => ({
           ...prevTooltipState,
           position: { x: xPos, y: yPos },
           cluster: d.Cluster as string,
           topic: d.Topic as string,
           value: d.Value as number,
+          minWidth: 200,
+          child: (
+            <HeatmapTooltip
+              value={d.Value as number}
+              cluster={d.Cluster as string}
+              topic={d.Topic as string}
+            />
+          ),
+        }));
+      };
+
+      const mousemove = (event: MouseEvent, d: DataItem) => {
+        const xPos = event.pageX;
+        const yPos = event.pageY;
+        setTooltipState((prevTooltipState) => ({
+          ...prevTooltipState,
+          position: { x: xPos, y: yPos },
+          cluster: d.Cluster as string,
+          topic: d.Topic as string,
+          value: d.Value as number,
+          minWidth: 200,
+          child: (
+            <HeatmapTooltip
+              value={d.Value as number}
+              cluster={d.Cluster as string}
+              topic={d.Topic as string}
+            />
+          ),
         }));
       };
 
       const mouseleave = () => {
-        setTooltipState({ ...tooltipState, position: null });
+        setTooltipState({
+          position: null,
+          value: null,
+          content: '',
+          group: '',
+          topic: '',
+          child: null,
+          minWidth: 0,
+        });
       };
 
       g.selectAll()
@@ -317,6 +344,10 @@ const Heatmap: React.FC<HeatmapProps> = ({ width, activeFile }) => {
         .on('mousemove', mousemove)
         .on('mouseout', mouseleave);
     }
+    // Use requestAnimationFrame to ensure rendering is complete before setting loading to false
+    requestAnimationFrame(() => {
+      setLoading(false);
+    });
   }, [width, height, parsedData]);
 
   return (
@@ -324,32 +355,6 @@ const Heatmap: React.FC<HeatmapProps> = ({ width, activeFile }) => {
       <Placeholder height={height} isLoaded={!loading || false} />
       <ChartContainer>
         <svg ref={ref}></svg>
-        {tooltipState.position && (
-          <Tooltip
-            x={tooltipState.position.x - 30}
-            y={tooltipState.position.y + 10}
-            minWidth={200}
-          >
-            {tooltipState.value && (
-              <SmallText>
-                A {tooltipState.value > 0 ? 'positive' : 'negative'} gap (
-                {tooltipState.value}%) between importance and performance
-                indicates that the {tooltipState.cluster} cluster considers{' '}
-                {tooltipState.topic} to be{' '}
-                {tooltipState.value < 0 && tooltipState.value > -10 && ''}
-                {tooltipState.value < 0 && tooltipState.value < -10 && 'very'}
-                {tooltipState.value > 0 && 'less'} important and feels that
-                their city is{' '}
-                {tooltipState.value > 0
-                  ? 'exceeding their expectations'
-                  : 'underperforming'}{' '}
-                in this area. Increasing focus on {tooltipState.topic} is likely
-                to have {tooltipState.value < 0 ? 'a positive' : 'less of an'}{' '}
-                impact on overall city-living experience.
-              </SmallText>
-            )}
-          </Tooltip>
-        )}
       </ChartContainer>
     </>
   );

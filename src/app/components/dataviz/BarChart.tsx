@@ -5,6 +5,7 @@ import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import BarChartTooltip from './BarChartTooltip';
 import Customize from './Customize';
 import Legend from './Legend';
 
@@ -287,8 +288,14 @@ const BarChart: React.FC<BarProps> = ({
         const yPos = event.pageY;
         setTooltipState({
           position: { x: xPos, y: yPos },
-          content: `${d.key} - ${d.value.toFixed(0)}%`,
-          group: groupData.option_en as string,
+          child: (
+            <BarChartTooltip
+              value={d.value.toFixed(0)}
+              group={d.key}
+              topic={groupData.option_en}
+              activeFile={activeFile}
+            />
+          ),
         });
       })
       .on('mousemove', (event) => {

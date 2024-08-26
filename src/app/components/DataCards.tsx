@@ -1,4 +1,4 @@
-import datasetCards from '@/data/dataset-cards.json';
+import datasetCards from "@/data/dataset-cards.json";
 import {
   Card,
   Flex,
@@ -6,13 +6,16 @@ import {
   Text,
   useTheme,
   View,
-} from '@aws-amplify/ui-react';
-import _ from 'lodash';
-import { useParams } from 'next/navigation';
-import styled from 'styled-components';
-import { v4 as uuidv4 } from 'uuid';
-import useTranslation from '../i18n/client';
-import DataCardButton from './DataCardButton';
+} from "@aws-amplify/ui-react";
+import _ from "lodash";
+import { useParams } from "next/navigation";
+import styled from "styled-components";
+import { v4 as uuidv4 } from "uuid";
+import useTranslation from "../i18n/client";
+import DataCardButton from "./DataCardButton";
+import CardAccordion from "./CardAccordion";
+import useDimensions from "@/hooks/useDimensions";
+import { useRef } from "react";
 
 interface Download {
   title: string;
@@ -38,11 +41,13 @@ interface DatasetCard {
 }
 
 const StyledCard = styled(Card)<{ $background: string; $font: string }>`
-  min-height: 300px;
+  width: 350px;
+  height: 550px;
   position: relative;
   display: flex;
   background-color: ${(props) => props.$background};
   color: ${(props) => props.$font};
+ 
 `;
 
 interface AppProps {
@@ -52,12 +57,12 @@ interface AppProps {
 const DataCard = ({ fetchUrl }: AppProps) => {
   const { tokens } = useTheme();
   const { lng } = useParams<{ lng: string }>();
-  const { t } = useTranslation(lng, 'datasets');
+  const { t } = useTranslation(lng, "datasets");
 
   const sortedDatasetCards = _.orderBy(
     datasetCards.datasetCards,
-    'date',
-    'desc'
+    "date",
+    "desc"
   );
 
   const getColor = (i: number) => {
@@ -106,76 +111,83 @@ const DataCard = ({ fetchUrl }: AppProps) => {
     return str.slice(-4);
   };
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { width, height } = useDimensions(containerRef);
+
   return sortedDatasetCards.map((card: DatasetCard, index: number) => (
     <StyledCard
       $background={getColor(index).background}
       $font={getColor(index).font}
       key={uuidv4()}
-      variation='elevated'
+      variation="elevated"
+      ref={containerRef}
     >
       <div
-        className={`card-img clip ${card.className}`}
+        className={`card-img ${card.className}`}
         style={{
-          position: 'absolute',
-          top: '-1px',
+          position: "absolute",
+          top: "-1px",
           transform: `translateX(-${tokens.space.large.value})`,
         }}
       />
-      <Flex direction='column' paddingTop={150} justifyContent='space-between'>
+
+      <Flex paddingTop={150} justifyContent="space-between">
         <View>
-          <Heading level={3} fontSize='xl' color={getColor(index).titleFont}>
-            {lng === 'fr' ? card.titlefr : card.title}
+          <Heading level={3} fontSize="xl" color={getColor(index).titleFont}>
+            {lng === "fr" ? card.titlefr : card.title}
           </Heading>
           <Text
-            fontWeight='bold'
-            fontSize='medium'
+            fontWeight="bold"
+            fontSize="medium"
             color={getColor(index).titleFont}
           >
             {card.date}
           </Text>
-          <Text fontSize='small' color='font.primary'>
-            {lng === 'fr' ? card.descfr : card.desc}
+          <Text fontSize="small" color="font.primary">
+            {lng === "fr" ? card.descfr : card.desc}
           </Text>
         </View>
-        <Flex justifyContent='flex-start' alignItems='flex-end' wrap='wrap'>
-          <DataCardButton
-            getColor={getColor}
-            index={index}
-            file={(lng === 'fr' && card.filefr) || card.file}
-            fetchUrl={fetchUrl}
-            lng={lng}
-            type='download'
-            tooltipMsg={t('download', { type: getFileType(card.file || '') })}
-          />
-          {card.link && (
+      </Flex>
+      <CardAccordion parentHeight={height} parentWidth={width} title="info" background={getColor(index).background} font={getColor(index).font}>
+          <Flex justifyContent="flex-start" alignItems="flex-start" wrap="wrap" direction="column">
             <DataCardButton
               getColor={getColor}
               index={index}
+              file={(lng === "fr" && card.filefr) || card.file}
               fetchUrl={fetchUrl}
               lng={lng}
-              type='link'
-              link={card.link}
-              tooltipMsg={t('link')}
+              type="download"
+              tooltipMsg={t("download", { type: getFileType(card.file || "") })}
             />
-          )}
-          {card.downloads &&
-            card.downloads.map((download) => (
+            {card.link && (
               <DataCardButton
-                key={uuidv4()}
                 getColor={getColor}
                 index={index}
-                file={(lng === 'fr' && download.filefr) || download.file}
                 fetchUrl={fetchUrl}
                 lng={lng}
-                type={download.type}
-                tooltipMsg={
-                  (lng === 'fr' && download.titlefr) || download.title
-                }
-                tooltipDesc={lng === 'fr' ? download.descfr : download.desc}
+                type="link"
+                link={card.link}
+                tooltipMsg={t("link")}
               />
-            ))}
-        </Flex>
-      </Flex>
+            )}
+            {card.downloads &&
+              card.downloads.map((download) => (
+                <DataCardButton
+                  key={uuidv4()}
+                  getColor={getColor}
+                  index={index}
+                  file={(lng === "fr" && download.filefr) || download.file}
+                  fetchUrl={fetchUrl}
+                  lng={lng}
+                  type={download.type}
+                  tooltipMsg={
+                    (lng === "fr" && download.titlefr) || download.title
+                  }
+                  tooltipDesc={lng === "fr" ? download.descfr : download.desc}
+                />
+              ))}
+          </Flex>
+        </CardAccordion>
     </StyledCard>
   ));
 };

@@ -9,20 +9,20 @@ interface TooltipProps {
   children: ReactNode;
 }
 
-const StyledBadge = styled(Badge)<{
+const StyledBadge = styled(Badge) <{
   $show: boolean;
   $height: number;
   $isBig: boolean;
 }>`
   position: absolute;
-  top: ${(props) => (props.$show ? -props.$height - 10 + 'px' : '0')};
-  left: 0;
+  top: 50%;
+  left: ${(props) => (props.$show ? '110%' : '0')};
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   padding: var(--amplify-space-small);
   text-align: left;
   border-radius: var(--amplify-space-xs);
-  transform: translateX(0);
   transition: all 0.3s ease;
   visibility: ${(props) => (props.$show ? 'visible' : 'hidden')};
   opacity: ${(props) => (props.$show ? '1' : '0')};
@@ -30,7 +30,6 @@ const StyledBadge = styled(Badge)<{
   width: ${(props) => (props.$isBig ? '300%' : 'auto')};
   z-index: 1;
 `;
-
 const SmallText = styled(Text)`
   margin-top: var(--amplify-space-small);
   color: var(--amplify-colors-font-primary);

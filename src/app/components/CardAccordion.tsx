@@ -1,22 +1,28 @@
 import { Button, Heading } from "@aws-amplify/ui-react";
+import { getInitColorSchemeScript } from "@mui/material";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { ReactNode, useState } from "react";
 import styled from "styled-components";
+
+interface ColorGetter {
+  (index: number): { button: string; buttonInverse: string };
+}
 
 interface AccordionProps {
   title: string;
   children: ReactNode;
   parentWidth: number;
   parentHeight: number;
-  background: string;
-  font: string;
+
+  index: number;
+  getColor: ColorGetter;
 }
 
-const AccordionContent = styled(motion.div)<{
+const AccordionContent = styled(motion.div) <{
   $width: number;
   $height: number;
   $background: string;
-  $font: string;
+  $inverse: string;
 
 }>`
   position: absolute;
@@ -30,9 +36,9 @@ const AccordionContent = styled(motion.div)<{
   overflow: hidden;
 `;
 
-const CustomizeButton = styled(Button)<{
-    $background: string;
-    $font: string;
+const CustomizeButton = styled(Button) <{
+  $background: string;
+  $inverse: string;
 }>`
   position: absolute;
   bottom: 0;
@@ -45,28 +51,27 @@ const CustomizeButton = styled(Button)<{
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  font-family: var(--amplify-colors.neutral.100.value);
   font-size: 24px;
   line-height: 1;
   transition: width 0.3s ease; /* Smooth transition for width */
+  background-color: ${({ $inverse }) => $inverse};
 
   &:hover {
-    width: 100%; /* Expand to the full width of the card */
-    background-color: ${({ $font }) => $font};
-    color: white;
+    
+    background-color: ${({ $inverse }) => $inverse};
+    color: black;
   }
 
   &:focus {
-    outline: none; /* Remove the focus outline */
-    background-color: ${({ $background }) => $background}; 
-    color: ${({ $font }) => $font}; 
+    outline: none; 
+    box-shadow: none;
+    background-color: ${({ $background }) => $background};
+    color: black;
   }
 
 
-  &:active {
-    border: none; /* Remove any border */
-    background-color: ${({ $background }) => $background}; /* Reset background color */
-    color: ${({ $font }) => $font}; /* Reset text color */
-  }
+  
    
 `;
 
@@ -82,13 +87,29 @@ const PlusSignWrapper = styled.div`
   pointer-events: none; /* Prevent interaction, allowing button clicks */
 `;
 
+// New DetailsText component for the "Details" text on hover
+const DetailsText = styled.span`
+  opacity: 0;
+  transform: translateY(10px); /* Start slightly lower */
+  transition: opacity 1s ease, transform 0.3s ease; /* Smooth transition */
+  color: black;
+  position: absolute;
+  bottom: 5px;
+  right: 100px;
+  font-size: 20px;
+  pointer-events: none; /* Prevent interaction */
+`;
+
+
+
+
+
 const Accordion: React.FC<AccordionProps> = ({
-  
+  getColor,
+  index,
   children,
   parentWidth,
   parentHeight,
-  background,
-  font,
 }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
@@ -97,7 +118,7 @@ const Accordion: React.FC<AccordionProps> = ({
   };
 
   return (
-    <div >
+    <div>
       <AnimatePresence>
         {openIndex === 0 && (
           <AccordionContent
@@ -106,21 +127,23 @@ const Accordion: React.FC<AccordionProps> = ({
             animate={{ height: parentHeight - 150, width: parentWidth, opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ ease: [0.0, 0.0, 0.0, 0.0] }}
-            $width={parentWidth|| 300}
+            $width={parentWidth || 300}
             $height={parentHeight}
-            $background={background}
-            $font={font}
+            $background={getColor(index).button}
+            $inverse={getColor(index).buttonInverse}
           >
             {children}
           </AccordionContent>
         )}
       </AnimatePresence>
 
-      <CustomizeButton onClick={() => handleAccordionClick(0)}
-        $background={background}
-        $font={font}
-        >
+      <CustomizeButton
+        onClick={() => handleAccordionClick(0)}
+        $background={getColor(index).button}
+        $inverse={getColor(index).button}
+      >
         <PlusSignWrapper>+</PlusSignWrapper>
+        <DetailsText>Details</DetailsText>
       </CustomizeButton>
     </div>
   );

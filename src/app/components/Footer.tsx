@@ -24,6 +24,7 @@ import Newsletter from './Newsletter';
 const FooterBase = styled(View)<{ $background: string }>`
   background-color: ${(props) => props.$background};
   padding: 40px 0;
+  z-index: -1;
 `;
 
 const FooterTopSection = styled(Flex)`
@@ -32,6 +33,7 @@ const FooterTopSection = styled(Flex)`
   justify-content: space-between;
   align-items: flex-start;
   flex-wrap: wrap;
+  z-index: 1;
 `;
 
 const LinkAndIconSection = styled(Flex)`
@@ -266,7 +268,7 @@ const FooterComponent = () => {
             </a>
           </Flex>
           <Text fontSize='12px' color='white'>
-            © 2024 Youthful Cities. {t('rights')}
+            © 2024 Youthful Cities. {t('rights')}. Version 1.1.
           </Text>
         </FooterBottomSection>
       </Flex>

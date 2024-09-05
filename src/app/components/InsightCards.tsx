@@ -147,15 +147,27 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng, maxLength }) => {
             </Text>
           </View>
           <Flex justifyContent='flex-end' alignItems='flex-end'>
-            <Link href={card.link || '/'} passHref>
-              <StyledButton
-                $background={getColor(index).button}
-                $inverse={getColor(index).buttonInverse}
-                $color={getColor(index).buttonInverse}
-              >
-                <FaArrowRight size={20} />
-              </StyledButton>
-            </Link>
+            {card.type === 'external' ? (
+              <a href={card.link || '/'} target='_blank'>
+                <StyledButton
+                  $background={getColor(index).button}
+                  $inverse={getColor(index).buttonInverse}
+                  $color={getColor(index).buttonInverse}
+                >
+                  <FaArrowRight size={20} />
+                </StyledButton>
+              </a>
+            ) : (
+              <Link href={card.link || '/'} passHref>
+                <StyledButton
+                  $background={getColor(index).button}
+                  $inverse={getColor(index).buttonInverse}
+                  $color={getColor(index).buttonInverse}
+                >
+                  <FaArrowRight size={20} />
+                </StyledButton>
+              </Link>
+            )}
           </Flex>
         </StyledCard>
       ))}

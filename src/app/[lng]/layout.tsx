@@ -16,6 +16,7 @@ import { languages } from '../i18n/settings';
 import AWSThemeProvider from './aws-theme-provider';
 import './global.css';
 import AutheticatorProvider from '../components/AuthenticatorProvider'
+import BetaBanner from '../components/BetaBanner'
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -147,20 +148,21 @@ const RootLayout: React.FC<RootLayoutProps> = ({
         <GoogleTagManager gtmId='GTM-MXZ2WJTV' />
         <StyledComponentsRegistry>
           <AutheticatorProvider>
-          <AWSThemeProvider>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                minHeight: '100vh',
-                height: '100%',
-              }}
-            >
-              <NavBar />
-              {children}
-              <Footer />
-            </div>
-          </AWSThemeProvider>
+            <AWSThemeProvider>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  minHeight: '100vh',
+                  height: '100%',
+                }}
+              >
+                <BetaBanner />
+                <NavBar />
+                {children}
+                <Footer />
+              </div>
+            </AWSThemeProvider>
           </AutheticatorProvider>
         </StyledComponentsRegistry>
       </body>

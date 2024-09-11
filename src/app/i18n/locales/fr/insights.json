@@ -3,8 +3,8 @@
   "insights": "Perspectives",
   "note": "Remarque",
   "disclaimer": "Le chatbot Youthful Cities utilise le modèle linguistique GPT-4. Toutes les données d'entraînement pour le modèle sont gérées par Youthful Cities. Comme toute IA, GPT-4 ne comprend pas le contexte en temps réel et peut parfois produire des réponses non pertinentes ou absurdes. Ses réponses doivent être évaluées de manière critique, en particulier dans les situations sensibles ou complexes où le jugement humain est crucial.",
-  "login": "Vous pouvez vous connecter au chatbot avec les informations d'identification suivantes :",
+  "login": "Vous pouvez vous connecter au chatbot avec vos identifiants Youth Data Lab ou les identifiants ci-dessous :",
   "email": "<strong>Courriel :</strong> chatbot@youthfulcities.com",
-  "password": "<strong>Mot de passe :</strong> demo",
+  "password": "<strong>Mot de passe :</strong> Demo@1234",
   "goto": "Accéder au chatbot"
 }

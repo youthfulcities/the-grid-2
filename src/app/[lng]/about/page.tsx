@@ -23,7 +23,6 @@ const About = () => {
           </Heading>
           <View className='inner-container'>
             <img
-              className='clip'
               width='100%'
               src='/assets/theme_image/team-photo.jpg'
               alt={t('team_alt')}

@@ -15,6 +15,7 @@ const StyledAlert = styled(Alert)`
 `;
 
 const StyledTextField = styled(TextField)`
+  z-index: 1;
   min-width: 200px;
   max-width: 100%;
   flex-grow: 2;

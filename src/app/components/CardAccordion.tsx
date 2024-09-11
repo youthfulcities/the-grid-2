@@ -9,7 +9,6 @@ interface ColorGetter {
 }
 
 interface AccordionProps {
-  title: string;
   children: ReactNode;
   parentWidth: number;
   parentHeight: number;
@@ -113,8 +112,8 @@ const Accordion: React.FC<AccordionProps> = ({
 }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const handleAccordionClick = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
+  const handleAccordionClick = (num: number) => {
+    setOpenIndex(openIndex === num ? null : num);
   };
 
   return (

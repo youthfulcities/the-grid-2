@@ -14,6 +14,10 @@ import NavBar from '../components/NavBar';
 import { languages } from '../i18n/settings';
 import AWSThemeProvider from './aws-theme-provider';
 import './global.css';
+import AutheticatorProvider from '../components/AuthenticatorProvider'
+import BetaBanner from '../components/BetaBanner'
+=======
+
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -152,6 +156,9 @@ const RootLayout: React.FC<RootLayoutProps> = ({
                   height: '100%',
                 }}
               >
+
+                <BetaBanner />
+
                 <NavBar />
                 {children}
                 <Footer />

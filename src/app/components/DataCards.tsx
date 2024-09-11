@@ -15,7 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 import useTranslation from "../i18n/client";
 import DataCardButton from "./DataCardButton";
 import CardAccordion from "./CardAccordion";
-import useDimensions from "@/hooks/useDimensions";
+import useDimension from "@/hooks/useDimensions";
 import { useRef, useEffect, useState, useCallback } from "react";
 
 interface Download {
@@ -163,7 +163,7 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
   };
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const { width, height } = useDimensions(containerRef);
+  const { width, height } = useDimension(containerRef);
 
   return sortedDatasetCards.map((card: DatasetCard, index: number) => {
     const hasAdditionalButtons = card.link || (card.downloads && card.downloads.length > 0);
@@ -232,7 +232,7 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
 
         {/* Conditionally render CardAccordion */}
         {hasAdditionalButtons && (
-          <CardAccordion parentHeight={height} parentWidth={width} title="info" getColor={getColor} index={index}>
+          <CardAccordion parentHeight={height} parentWidth={width} getColor={getColor} index={index}>
             <Flex
               justifyContent="flex-start"
               alignItems="flex-start"

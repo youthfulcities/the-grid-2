@@ -3,15 +3,24 @@
 import { Placeholder } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
-import { useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import BarChartTooltip from './BarChartTooltip';
 import Customize from './Customize';
 import Legend from './Legend';
-import Tooltip from './TooltipChart';
 
 interface DataItem {
   option_en: string;
   [key: string]: string | number;
+}
+
+interface TooltipState {
+  position: { x: number; y: number } | null;
+  value?: number | null;
+  topic?: string;
+  content?: string;
+  group?: string;
+  child?: ReactNode | null;
 }
 
 interface BarProps {
@@ -20,6 +29,8 @@ interface BarProps {
   margin: { top: number; bottom: number; left: number; right: number };
   duration: number;
   activeFile: string;
+  tooltipState: TooltipState;
+  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
 }
 
 interface LegendProps {
@@ -48,6 +59,8 @@ const BarChart: React.FC<BarProps> = ({
   margin,
   duration,
   activeFile,
+  tooltipState,
+  setTooltipState,
 }) => {
   const ref = useRef<SVGSVGElement>(null);
   const [loading, setLoading] = useState(true);
@@ -58,16 +71,7 @@ const BarChart: React.FC<BarProps> = ({
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [allOptions, setAllOptions] = useState<string[]>([]);
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
-
-  const [tooltipState, setTooltipState] = useState<{
-    position: { x: number; y: number } | null;
-    content: string;
-    group: string;
-  }>({
-    position: null,
-    content: '',
-    group: '',
-  });
+  const [activeLegendItems, setActiveLegendItems] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchData = async (filename: string) => {
@@ -108,23 +112,44 @@ const BarChart: React.FC<BarProps> = ({
       parseDynamicCSVData(activeFile, rawData[activeFile]);
   }, [activeFile, rawData, parsedData]);
 
+  //initialize default customization options
   useEffect(() => {
     // Select the top 10 options by default when parsedData is updated
     if (parsedData[activeFile]) {
       const options = parsedData[activeFile].map((d) => d.option_en as string);
-
       setAllOptions(options);
       setSelectedOptions(options.slice(0, 10));
+
+      const allKeys = Object.keys(parsedData[activeFile][0]).filter(
+        (key) => key !== 'option_en'
+      );
+      setActiveLegendItems(allKeys.slice(0, 3));
     }
   }, [parsedData, activeFile]);
 
+  //draw chart
   useEffect(() => {
     if (!width || !height || !parsedData[activeFile]) return;
 
     const data = parsedData[activeFile];
-    const dataToDisplay = data.filter((item) =>
-      selectedOptions.includes(item.option_en)
+    // Extract all unique subgroup keys from the complete data
+    const allKeys = Object.keys(parsedData[activeFile][0]).filter(
+      (key) => key !== 'option_en'
     );
+
+    // Filter data based on active legend items
+    const dataToDisplay = data
+      .filter((item) => selectedOptions.includes(item.option_en))
+      .map((item) => {
+        // Only include keys that are in the active legend items
+        const filteredItem: Record<string, any> = { option_en: item.option_en };
+        Object.keys(item).forEach((key) => {
+          if (key !== 'option_en' && activeLegendItems.includes(key)) {
+            filteredItem[key] = item[key];
+          }
+        });
+        return filteredItem;
+      });
 
     // Calculate scales
     const yScale = d3
@@ -147,6 +172,13 @@ const BarChart: React.FC<BarProps> = ({
       .range([margin.left, width - margin.right]);
 
     const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const customLegendData = allKeys.map((item) => ({
+      key: item,
+      color: colorScale(item),
+    }));
+
+    setLegendData(customLegendData);
 
     // SVG element setup
     const svg = d3
@@ -188,7 +220,26 @@ const BarChart: React.FC<BarProps> = ({
       .style('fill', 'white')
       .style('text-anchor', 'end')
       .attr('dy', '-0.8em')
-      .attr('transform', 'rotate(-45)');
+      .attr('transform', 'rotate(-45)')
+      .on('mouseover', (event, d) => {
+        const xPos = event.pageX;
+        const yPos = event.pageY;
+        setTooltipState({
+          position: { x: xPos, y: yPos },
+          group: d as string,
+        });
+      })
+      .on('mousemove', (event) => {
+        const xPos = event.pageX;
+        const yPos = event.pageY;
+        setTooltipState((prevTooltipState) => ({
+          ...prevTooltipState,
+          position: { x: xPos, y: yPos },
+        }));
+      })
+      .on('mouseout', () => {
+        setTooltipState({ ...tooltipState, position: null });
+      });
 
     // Draw bars
     const barGroups = svg
@@ -233,17 +284,23 @@ const BarChart: React.FC<BarProps> = ({
         const groupData = d3
           .select<SVGGElement, DataItem>(event.target.parentNode as SVGGElement)
           .datum();
-        const xPos = event.layerX;
-        const yPos = event.layerY;
+        const xPos = event.pageX;
+        const yPos = event.pageY;
         setTooltipState({
           position: { x: xPos, y: yPos },
-          content: `${d.key} - ${d.value.toFixed(0)}%`,
-          group: groupData.option_en as string,
+          child: (
+            <BarChartTooltip
+              value={d.value.toFixed(0)}
+              group={d.key}
+              topic={groupData.option_en}
+              activeFile={activeFile}
+            />
+          ),
         });
       })
       .on('mousemove', (event) => {
-        const xPos = event.layerX;
-        const yPos = event.layerY;
+        const xPos = event.pageX;
+        const yPos = event.pageY;
         setTooltipState((prevTooltipState) => ({
           ...prevTooltipState,
           position: { x: xPos, y: yPos },
@@ -257,38 +314,26 @@ const BarChart: React.FC<BarProps> = ({
       .delay((d, i) => i * (duration / 10))
       .attr('x', xScale(0))
       .attr('width', (d) => xScale(d.value) - xScale(0));
-
-    const customLegendData = barGroups.data().reduce((acc, d) => {
-      const keys = Object.keys(d).filter((key) => key !== 'option_en');
-      keys.forEach((key) => {
-        if (!acc.includes(key)) {
-          acc.push(key);
-        }
-      });
-      return acc;
-    }, [] as string[]);
-
-    const newLegendData = customLegendData.map((item, index) => ({
-      key: item,
-      color: colorScale(item),
-    }));
-    setLegendData(newLegendData);
-  }, [width, height, parsedData, activeFile, selectedOptions]);
+  }, [
+    width,
+    height,
+    parsedData,
+    activeFile,
+    selectedOptions,
+    activeLegendItems,
+  ]);
 
   return (
     <>
       <Placeholder height={height} isLoaded={!loading || false} />
       <ChartContainer>
         <svg ref={ref}></svg>
-        <Legend data={legendData} position='absolute' />
-        {tooltipState.position && (
-          <Tooltip
-            x={tooltipState.position.x - 200}
-            content={tooltipState.content}
-            y={tooltipState.position.y}
-            group={tooltipState.group}
-          />
-        )}
+        <Legend
+          data={legendData}
+          activeLegendItems={activeLegendItems}
+          setActiveLegendItems={setActiveLegendItems}
+          position='absolute'
+        />
       </ChartContainer>
       <Customize
         selectedOptions={selectedOptions}

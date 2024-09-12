@@ -1,26 +1,42 @@
 'use client';
 
-import { Flex, Text } from '@aws-amplify/ui-react';
-import React, { useRef } from 'react';
+import { Flex, Heading, Text } from '@aws-amplify/ui-react';
+import React, { useRef, ReactNode } from 'react';
 import Pie from './Pie';
+
+interface TooltipState {
+  position: { x: number; y: number } | null;
+  value?: number | null;
+  topic?: string;
+  content?: string;
+  group?: string;
+  cluster?: string;
+  child?: ReactNode | null;
+  minWidth?: number;
+}
 
 interface DemographicProps {
   currentCluster: string;
   currentClusterName: string | null;
   drawerWidth: number;
+  tooltipState: TooltipState;
+  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
 }
 
 const Demographics: React.FC<DemographicProps> = ({
   currentCluster,
   currentClusterName,
   drawerWidth,
+  tooltipState,
+  setTooltipState,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   return (
     <>
-      <Text marginBottom='xl' marginTop='xl'>
-        Current cluster: {currentClusterName}
-      </Text>
+      <Heading marginTop='xl' level={4} color='font.inverse'>
+        Demographic breakdown
+      </Heading>
+      <Text marginBottom='xl'>Current cluster: {currentClusterName}</Text>
       {currentCluster === 'affordability' && (
         <Text fontSize='small' marginBottom='xl'>
           The “Economic focus” cluster represents young people who identify
@@ -47,7 +63,9 @@ const Demographics: React.FC<DemographicProps> = ({
       )}
       <Flex
         wrap='wrap'
-        justifyContent='space-between'
+        direction='column'
+        justifyContent='center'
+        alignItems='center'
         marginBottom='xl'
         ref={containerRef}
       >
@@ -57,6 +75,8 @@ const Demographics: React.FC<DemographicProps> = ({
           title='Gender'
           cluster={currentCluster}
           containerRef={containerRef}
+          tooltipState={tooltipState}
+          setTooltipState={setTooltipState}
         />
         <Pie
           width={drawerWidth}
@@ -64,6 +84,8 @@ const Demographics: React.FC<DemographicProps> = ({
           title='Citizenship Status'
           cluster={currentCluster}
           containerRef={containerRef}
+          tooltipState={tooltipState}
+          setTooltipState={setTooltipState}
         />
         <Pie
           width={drawerWidth}
@@ -71,6 +93,8 @@ const Demographics: React.FC<DemographicProps> = ({
           cluster={currentCluster}
           title='Ability'
           containerRef={containerRef}
+          tooltipState={tooltipState}
+          setTooltipState={setTooltipState}
         />
       </Flex>
     </>

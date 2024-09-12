@@ -8,7 +8,7 @@ interface AccordionProps {
   children: ReactNode;
 }
 
-const AccordionContent = styled(motion.div)`
+const AccordionContent = styled(motion.div)<{ isAnimating: boolean }>`
   overflow: hidden;
   padding: var(--amplify-space-large);
   border-width: var(--amplify-border-widths-small);
@@ -30,6 +30,7 @@ const CustomizeButton = styled(Button)`
 
 const Accordion: React.FC<AccordionProps> = ({ title, children }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
   const handleAccordionClick = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -50,9 +51,12 @@ const Accordion: React.FC<AccordionProps> = ({ title, children }) => {
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{
-              height: { duration: 0.3, ease: 'easeInOut' },
-              opacity: { duration: 0.3, ease: 'easeInOut' },
+              height: { duration: 0.5, ease: 'easeInOut' },
+              opacity: { duration: 0.5, ease: 'easeInOut' },
             }}
+            isAnimating={isAnimating}
+            onAnimationStart={() => setIsAnimating(true)}
+            onAnimationComplete={() => setIsAnimating(false)}
           >
             {children}
           </AccordionContent>

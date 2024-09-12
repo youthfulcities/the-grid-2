@@ -6,10 +6,11 @@ import Drawer from '@/app/components/Drawer';
 import BarChart from '@/app/components/dataviz/BarChart';
 import Clusters from '@/app/components/dataviz/Clusters';
 import Demographics from '@/app/components/dataviz/Demographics';
+import Tooltip from '@/app/components/dataviz/TooltipChart';
 import { useDimensions } from '@/hooks/useDimensions';
 import { Button, Flex, Heading, Tabs, View } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
-import { useEffect, useRef, useState } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 import styled from 'styled-components';
 import config from '../../../../amplifyconfiguration.json';
 
@@ -69,18 +70,30 @@ const defaultFiles: Record<string, string> = {
 const Survey: React.FC = () => {
   const margin = { top: 20, bottom: 60, left: 150, right: 40 };
   const containerRef = useRef<HTMLDivElement>(null);
-  const chartSize = useDimensions(containerRef);
+  const { width } = useDimensions(containerRef);
   const height = 800;
-  const { width } = chartSize;
   const [activeFile, setActiveFile] = useState('org-attractive-cluster.csv');
   const [currentCluster, setCurrentCluster] = useState('all');
-  const [multiWidth, setMultiWidth] = useState(getWidth(width));
   const [tab, setTab] = useState('1');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  useEffect(() => {
-    setMultiWidth(getWidth(width));
-  }, [width]);
+  const [tooltipState, setTooltipState] = useState<{
+    position: { x: number; y: number } | null;
+    value?: number | null;
+    topic?: string;
+    content?: string;
+    group?: string;
+    cluster?: string;
+    child?: ReactNode | null;
+    minWidth?: number;
+  }>({
+    position: null,
+    value: null,
+    content: '',
+    group: '',
+    topic: '',
+    child: null,
+    minWidth: 0,
+  });
 
   const changeTab = (newTab: string) => {
     setActiveFile(defaultFiles[newTab]);
@@ -125,6 +138,18 @@ const Survey: React.FC = () => {
                   Importance/performance cluster
                 </StyledButton>
               </Flex>
+              <Accordion title='Examine clusters'>
+                <Clusters
+                  getKeyFromValue={getKeyFromValue}
+                  currentCluster={currentCluster}
+                  setCurrentCluster={setCurrentCluster}
+                  clusterMap={clusterMap}
+                  isDrawerOpen={isDrawerOpen}
+                  setIsDrawerOpen={setIsDrawerOpen}
+                  tooltipState={tooltipState}
+                  setTooltipState={setTooltipState}
+                />
+              </Accordion>
             </Tabs.Panel>
             <Tabs.Panel value='2'>
               <Flex justifyContent='center' wrap='wrap' marginTop='xl'>
@@ -177,26 +202,38 @@ const Survey: React.FC = () => {
             margin={margin}
             duration={duration}
             activeFile={activeFile}
+            tooltipState={tooltipState}
+            setTooltipState={setTooltipState}
           />
-          <Accordion title='Examine clusters'>
-            <Clusters
-              getKeyFromValue={getKeyFromValue}
-              currentCluster={currentCluster}
-              setCurrentCluster={setCurrentCluster}
-              clusterMap={clusterMap}
-              isDrawerOpen={isDrawerOpen}
-              setIsDrawerOpen={setIsDrawerOpen}
-            />
-          </Accordion>
         </div>
       </View>
-      <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
+      <Drawer
+        isOpen={isDrawerOpen}
+        onOpen={() => setIsDrawerOpen(true)}
+        onClose={() => {
+          setIsDrawerOpen(false);
+          setCurrentCluster('all');
+        }}
+        tabText='Demographics'
+      >
         <Demographics
           currentCluster={currentCluster}
           currentClusterName={getKeyFromValue(currentCluster)}
           drawerWidth={0}
+          tooltipState={tooltipState}
+          setTooltipState={setTooltipState}
         />
       </Drawer>
+      {tooltipState.position && (
+        <Tooltip
+          x={tooltipState.position.x}
+          content={tooltipState.content}
+          y={tooltipState.position.y}
+          group={tooltipState.group}
+          child={tooltipState.child}
+          minWidth={tooltipState.minWidth}
+        />
+      )}
     </Container>
   );
 };

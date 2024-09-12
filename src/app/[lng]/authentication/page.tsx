@@ -1,22 +1,14 @@
 "use client";
 
 import {
-  useTheme,
   View,
-  Text,
-  Authenticator,
-  useAuthenticator,
-  Heading,
-  Button,
+  Authenticator
 } from "@aws-amplify/ui-react";
+
 import Container from "../../components/Background";
 import RedirectAfterAuth from "@/app/components/RedirectAfterAuth";
 
 const authenticator = () => {
-
-
-  
-
   return (
     <Authenticator.Provider>
       <Container>

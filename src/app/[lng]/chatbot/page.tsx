@@ -10,7 +10,7 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useEffect } from 'react';
 
 const StyledChat = styled.iframe`
-  min-height: 60vh;
+  min-height: 80vh;
   border: none;
 `;
 
@@ -18,36 +18,23 @@ const Chatbot = () => {
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'insights');
   const { tokens } = useTheme();
-  const { user } = useAuthenticator();  // Get authentication status
+  const { user } = useAuthenticator();
   const router = useRouter();
 
   useEffect(() => {
     if (!user) {
-      // If the user is not authenticated, store the current URL for redirect and navigate to the authenticator page
+
       sessionStorage.setItem("postLoginRedirect", "/chatbot");
       router.push("/authentication");
     }
   }, [user, router]);
 
   if (!user) {
-    return null;  // Optionally, return a loading state while redirecting
+    return null;
   }
 
   return (
     <Container background='#0E1117'>
-      <View className='short-container' marginTop='xl'>
-        <Heading level={3} color={tokens.colors.font.inverse}>
-          {t('note')}{' '}
-        </Heading>
-        <Text>{t('disclaimer')}</Text>
-        <Text>{t('login')}</Text>
-        <Text>
-          <Trans t={t} i18nKey='email' components={{ strong: <strong /> }} />
-        </Text>
-        <Text marginBottom='large'>
-          <Trans t={t} i18nKey='password' components={{ strong: <strong /> }} />
-        </Text>
-      </View>
       <StyledChat
         src='https://chat.youthfulcities.com/'
         title='Youthful Cities Chatbot'

@@ -8,6 +8,7 @@ import Map, {
   MapMouseEvent,
   MapRef,
   NavigationControl,
+  PointLike,
   ViewState,
 } from 'react-map-gl';
 import { scroller } from 'react-scroll';
@@ -139,7 +140,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
   const onLoad = (event: MapEvent) => {
     const map = event.target as mapboxgl.Map;
     // Get the features from the interactive layer
-    const features = map.queryRenderedFeatures(undefined, {
+    const features = map.queryRenderedFeatures(undefined as unknown as PointLike, {
       layers: ['uwi-2023-overall-2'], // Specify the interactive layer ID
     });
 
@@ -223,7 +224,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
       return () => clearTimeout(timer);
     }
     // Return null if there's no timer to clear
-    return () => {};
+    return () => { };
   }, [override]);
 
   return (

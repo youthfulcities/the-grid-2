@@ -16,8 +16,6 @@ const StyledChat = styled.iframe`
 
 const Chatbot = () => {
   const { lng } = useParams<{ lng: string }>();
-  const { t } = useTranslation(lng, 'insights');
-  const { tokens } = useTheme();
   const { user } = useAuthenticator();
   const router = useRouter();
 

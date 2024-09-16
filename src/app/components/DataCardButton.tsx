@@ -19,7 +19,7 @@ import Tooltip from './Tooltip';
 import { useRouter } from 'next/navigation';
 
 
-const StyledButton = styled(Button)<{ $background: string; $inverse: string }>`
+const StyledButton = styled(Button) <{ $background: string; $inverse: string }>`
   justify-content: center;
   width: 50px;
   height: 50px;
@@ -28,13 +28,13 @@ const StyledButton = styled(Button)<{ $background: string; $inverse: string }>`
   padding: 0;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.10000000149011612);
   border-radius: 35px;
-  background-color: ${(props) => props.$background};
+  background-color: ${(props) => props.$inverse};
   margin-top: auto;
-  color: ${(props) => props.$inverse};
+  color: ${(props) => props.$background};
   z-index: 1;
   &:hover {
-    background-color: ${(props) => props.$inverse};
-    color: ${(props) => props.$background};
+    background-color: ${(props) => props.$background};
+    color: ${(props) => props.$inverse};
   }
 `;
 

@@ -8,7 +8,7 @@ import {
   useAuthenticator,
 } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
-import { getUrl } from 'aws-amplify/storage';
+import { getUrl, getProperties } from 'aws-amplify/storage';
 import { useRouter } from 'next/navigation'; // Import useRouter from next/router
 import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
@@ -95,6 +95,29 @@ const Datasets: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
     }
   };
 
+  const getFileProperties = async (filename: string) => {
+    try {
+      const result = await getProperties({
+        key: filename,
+        options: {
+          accessLevel: 'guest',
+        },
+      });
+
+
+      // Extract the relevant metadata
+      const metadata = {
+        size: result.size,
+        lastModified: result.lastModified ? result.lastModified.toISOString() : undefined,
+      };
+
+      return metadata;
+    } catch (error) {
+      console.error('Error getting file properties:', error);
+      return null;
+    }
+  };
+
   // useEffect(() => {
   //   if (signedUrl) {
   //     parseCSV(signedUrl.url);
@@ -131,7 +154,7 @@ const Datasets: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
         </View>
         <Flex className='inner-container'>
           <Flex className='cards-container'>
-            <DataCard fetchUrl={fetchUrl} />
+            <DataCard fetchUrl={fetchUrl} getFileProperties={getFileProperties} />
           </Flex>
         </Flex>
       </View>

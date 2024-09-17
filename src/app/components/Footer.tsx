@@ -24,7 +24,7 @@ import Newsletter from './Newsletter';
 const FooterBase = styled(View) <{ $background: string }>`
   background-color: ${(props) => props.$background};
   padding: 40px 0;
-  z-index: -1;
+  z-index: 10;
 `;
 
 const FooterTopSection = styled(Flex)`

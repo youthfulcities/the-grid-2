@@ -1271,3 +1271,13 @@ a.outline-button:hover {
     transform: translateY(-8px);
   }
 }
+
+
+
+.authenticator-container .amplify-input {
+  color: white !important; /* Only change text color for inputs within the Authenticator */
+}
+
+.authenticator-container .amplify-label {
+  color: white !important; /* Make label text color white */
+}

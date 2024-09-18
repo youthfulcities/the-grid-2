@@ -7,12 +7,15 @@ import {
 
 import Container from "../../components/Background";
 import RedirectAfterAuth from "@/app/components/RedirectAfterAuth";
+import "../global.css"
 
 const authenticator = () => {
+  
+
   return (
     <Authenticator.Provider>
       <Container>
-        <View as="section" className="container section-padding">
+        <View as="section" className="container section-padding authenticator-container">
           <Authenticator>
             {({ signOut }) => <button onClick={signOut}>Sign out</button>}
           </Authenticator>

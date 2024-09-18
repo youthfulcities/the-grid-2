@@ -14,13 +14,22 @@ const DismissButton = styled.button`
   border: none;
   padding: 0.5rem 1rem;
   cursor: pointer;
-  position: relative;
-  overflow: hidden;
+  position: absolute;
+  right: 13.7%; 
+  top: 50%; 
+  transform: translateY(-50%); 
   transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
   text-transform: uppercase;
   display: inline-block;
-  margin-top: 5px;
+  overflow: hidden;
+
   
+  &:hover {
+    background-color: var(--amplify-colors-brand-primary-70);
+    transform: translateY(-55%); 
+  }
+
+  // Hover effect for the underline
   &::before {
     content: '';
     position: absolute;
@@ -34,11 +43,6 @@ const DismissButton = styled.button`
     transition: transform 0.3s ease-in-out;
   }
 
-  &:hover {
-    background-color: var(--amplify-colors-brand-primary-70);
-    transform: translateY(-2px); // Slight lift effect on hover
-  }
-
   &:hover::before {
     transform: scaleX(1);
     transform-origin: left;
@@ -48,10 +52,15 @@ const DismissButton = styled.button`
     outline: none;
   }
 
-  // Responsive styles
+  // Responsive styles for smaller screens
   @media (max-width: 768px) {
+    position: static; 
+    margin-top: 1rem; 
+    transform: none; 
     font-size: 14px;
     padding: 0.4rem 0.8rem;
+
+    text-align: center; 
   }
 
   @media (max-width: 480px) {
@@ -60,33 +69,36 @@ const DismissButton = styled.button`
   }
 `;
 
-const StyledFlex = styled(Flex)`
-  align-items: center;
-  justify-content: space-between;
+// Main Flex container that holds the text and button
+const BannerContainer = styled(Flex)`
   background-color: var(--amplify-colors-brand-primary-60);
   padding: 1rem 2rem;
   color: white;
-  position: relative;
+  position: relative; 
   width: 100%;
-  z-index: 1000; // Ensure the banner is above other elements
+  z-index: 1000;
+  align-items: center; 
+  justify-content: center; 
+  text-align: center;
+  flex-direction: row; 
 
   @media (max-width: 768px) {
-    padding: 1rem;
-  }
-
-  @media (max-width: 480px) {
-    flex-direction: column;
-    padding: 0.8rem;
-    text-align: center;
+    flex-direction: column; 
   }
 `;
 
-const StyledText = styled(Text)`
-  position: relative;
-  font-size: 1rem;
+// Text container to move independently
+const TextContainer = styled(Flex)`
+  flex-grow: 1;
+  justify-content: center; 
   text-align: center;
-  flex: 1;
-  margin-top: 5px;
+`;
+
+// Styled text with responsive adjustments
+const StyledText = styled(Text)`
+  font-size: 1rem;
+  margin: 0 auto; 
+  text-align: center;
 
   @media (max-width: 768px) {
     font-size: 0.9rem;
@@ -94,7 +106,6 @@ const StyledText = styled(Text)`
 
   @media (max-width: 480px) {
     font-size: 0.8rem;
-    margin-bottom: 10px; // Adjust space between text and button on smaller screens
   }
 `;
 
@@ -119,12 +130,25 @@ const Banner: React.FC = () => {
   }
 
   return (
-    <StyledFlex>
-      <StyledText>
-        This is a beta version of the site. Your feedback is appreciated!
-      </StyledText>
+    <BannerContainer>
+      {/* Independent TextContainer */}
+      <TextContainer>
+        <StyledText>
+          This is a beta version of the site.{' '}
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSfHIROUECzTKQ4kNSoAXgh82QhBYM2vIlRngokMlq8QhNdVNA/viewform?pli=1"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'white', textDecoration: 'underline' }}
+          >
+            Your feedback is appreciated!
+          </a>
+        </StyledText>
+      </TextContainer>
+
+      {/* Positioned button */}
       <DismissButton onClick={handleDismiss}>Dismiss</DismissButton>
-    </StyledFlex>
+    </BannerContainer>
   );
 };
 

@@ -22,13 +22,15 @@
       "@/*": ["./src/*"]
     }
   },
+  "types": ["node", "jest", "@testing-library/jest-dom"],
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/components/dataviz/Clusters.js",
-    "src/app/components/dataviz/Legend"
+    "src/app/components/dataviz/Legend",
+    "setupTests.js"
   ],
   "exclude": ["node_modules"]
 }

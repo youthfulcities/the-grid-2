@@ -101,7 +101,7 @@ const config: Config = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@/amplifyconfiguration.json$':
-      '<rootDir>/__mocks__/amplifyconfiguration.json',
+      '<rootDir>/src/__mocks__/amplifyconfiguration.json',
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader

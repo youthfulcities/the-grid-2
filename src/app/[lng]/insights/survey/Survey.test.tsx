@@ -8,7 +8,7 @@ jest.mock('@/hooks/useDimensions', () => ({
 }));
 
 // Mock the config and Amplify
-jest.mock('@/amplifyconfiguration.json', () => ({
+jest.mock('../../../../amplifyconfiguration.json', () => ({
   aws_project_region: 'mock-region',
   aws_cognito_identity_pool_id: 'mock-identity-pool-id',
   aws_cognito_region: 'mock-region',
@@ -18,9 +18,7 @@ jest.mock('@/amplifyconfiguration.json', () => ({
 }));
 
 jest.mock('aws-amplify', () => ({
-  Amplify: {
-    configure: jest.fn(),
-  },
+  configure: jest.fn(),
 }));
 
 // Mock the components that are imported in the Survey component

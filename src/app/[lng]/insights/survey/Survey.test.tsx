@@ -2,15 +2,12 @@ import { useDimensions } from '@/hooks/useDimensions';
 import { fireEvent, render, screen } from '@testing-library/react';
 import Survey from './page';
 
+// Mock AWS Amplify
+jest.mock('aws-amplify');
+
 // Mock the useDimensions hook to return a fixed width
 jest.mock('@/hooks/useDimensions', () => ({
   useDimensions: jest.fn(),
-}));
-
-jest.mock('aws-amplify', () => ({
-  Amplify: {
-    configure: jest.fn(),
-  },
 }));
 
 // Mock the components that are imported in the Survey component

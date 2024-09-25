@@ -102,6 +102,7 @@ const config: Config = {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@/amplifyconfiguration.json$':
       '<rootDir>/src/__mocks__/amplifyconfiguration.json',
+    '^aws-amplify$': '<rootDir>/src/__mocks__/aws-amplify.js',
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader

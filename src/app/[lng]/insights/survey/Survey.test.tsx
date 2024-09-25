@@ -8,7 +8,9 @@ jest.mock('@/hooks/useDimensions', () => ({
 }));
 
 jest.mock('aws-amplify', () => ({
-  configure: jest.fn(),
+  Amplify: {
+    configure: jest.fn(),
+  },
 }));
 
 // Mock the components that are imported in the Survey component

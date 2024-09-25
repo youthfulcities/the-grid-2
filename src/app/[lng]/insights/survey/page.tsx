@@ -1,6 +1,5 @@
 'use client';
 
-import config from '@/amplifyconfiguration.json';
 import Accordion from '@/app/components/Accordion';
 import Container from '@/app/components/Background';
 import Drawer from '@/app/components/Drawer';
@@ -13,6 +12,7 @@ import { Button, Flex, Heading, Tabs, View } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import { ReactNode, useRef, useState } from 'react';
 import styled from 'styled-components';
+import config from '../../../../amplifyconfiguration.json';
 
 interface DataItem {
   [key: string]: string | number;

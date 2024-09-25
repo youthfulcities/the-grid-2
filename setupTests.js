@@ -2,8 +2,5 @@
 import '@testing-library/jest-dom';
 import 'jest-styled-components';
 
-jest.mock('aws-amplify', () => ({
-  Amplify: {
-    configure: jest.fn(),
-  },
-}));
+// Mock AWS Amplify
+jest.mock('aws-amplify');

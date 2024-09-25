@@ -2,8 +2,18 @@ import { useDimensions } from '@/hooks/useDimensions';
 import { fireEvent, render, screen } from '@testing-library/react';
 import Survey from './page';
 
-// Mock AWS Amplify
-jest.mock('aws-amplify');
+jest.mock(
+  '../../../../amplifyconfiguration.json',
+  () => ({
+    aws_project_region: 'mock-region',
+    aws_cognito_identity_pool_id: 'mock-identity-pool-id',
+    aws_cognito_region: 'mock-region',
+    aws_user_pools_id: 'mock-user-pools-id',
+    aws_user_pools_web_client_id: 'mock-client-id',
+    oauth: {},
+  }),
+  { virtual: true }
+);
 
 // Mock the useDimensions hook to return a fixed width
 jest.mock('@/hooks/useDimensions', () => ({

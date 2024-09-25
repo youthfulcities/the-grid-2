@@ -100,8 +100,6 @@ const config: Config = {
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
-    '^@/amplifyconfiguration.json$':
-      '<rootDir>/src/__mocks__/amplifyconfiguration.json',
     '^aws-amplify$': '<rootDir>/src/__mocks__/aws-amplify.js',
   },
 

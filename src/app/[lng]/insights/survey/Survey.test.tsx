@@ -57,6 +57,7 @@ jest.mock('@/app/components/Accordion', () => ({ title, children }) => (
 describe('Survey Component', () => {
   beforeEach(() => {
     (useDimensions as jest.Mock).mockReturnValue({ width: 1000 });
+    jest.clearAllMocks();
   });
 
   test('renders the Survey component correctly', () => {

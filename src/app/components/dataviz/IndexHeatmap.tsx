@@ -4,15 +4,14 @@ import { Placeholder, Text } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import _ from 'lodash';
-import
-  {
-    Dispatch,
-    ReactNode,
-    SetStateAction,
-    useEffect,
-    useRef,
-    useState,
-  } from 'react';
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import styled from 'styled-components';
 
 interface TooltipState {
@@ -51,6 +50,33 @@ const SmallText = styled(Text)`
   font-weight: 400;
   font-size: var(--amplify-font-sizes-small);
 `;
+
+// Define the type for the topic weights
+interface TopicWeights {
+  [key: string]: number;
+}
+
+const topicWeights: TopicWeights = {
+  AFF: 0.88,
+  CEC: 0.81,
+  SUS: 0.8,
+  DAC: 0.77,
+  EDU: 0.83,
+  ENS: 0.73,
+  EDI: 0.82,
+  GYJ: 0.87,
+  HEA: 0.85,
+  TRA: 0.85,
+};
+
+// List of city groups to which the 10% penalty should be applied
+// const penaltyCityGroups = [
+//   'Vancouver',
+//   'Ottawa-Gatineau',
+//   'Victoria',
+//   'Kitchener - Cambridge - Waterloo',
+//   'St. Catharines - Niagara',
+// ];
 
 const truncateText = (text: string, maxLength: number) => {
   // Remove anything within parentheses and the parentheses themselves
@@ -94,48 +120,15 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
   const [parsedData, setParsedData] = useState<{ [key: string]: DataItem[] }>(
     {}
   );
+  const [sortedData, setSortedData] = useState<
+    { cityGroup: string; totalScore: number }[]
+  >([]);
 
   const margin = { top: 50, right: 80, bottom: 100, left: 140 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
-const calculateAndSortCityScores = (data: DataItem[]) => {
-  // Step 1: Use reduce to accumulate the total score for each city and topic combination
-  const cityTopicScores = data.reduce(
-    (acc, curr) => {
-      const score =
-        (curr.normalizedScore as number) * (curr.topicWeight as number);
-
-      // Create a unique key for each city and topic combination
-      const key = `${curr.cityGroup as string}:${curr.topicEN as string}`;
-
-      // Check if the key already exists in the accumulator
-      if (!acc[key]) {
-        acc[key] = {
-          ...curr, // Preserve all original data
-          totalScore: 0, // Initialize totalScore
-        };
-      }
-
-      // Add the score to the existing total score
-      acc[key].totalScore += score;
-
-      return acc;
-    },
-    {} as { [key: string]: DataItem & { totalScore: number } }
-  );
-
-  // Step 2: Convert the accumulated object to an array and sort it by totalScore
-  const sortedCityScores = _.orderBy(
-    Object.values(cityTopicScores),
-    'totalScore',
-    'desc'
-  );
-
-  console.log(sortedCityScores);
-  return sortedCityScores;
-};
-
+  console.log(sortedData);
   useEffect(() => {
     const fetchData = async (filename: string) => {
       if (Object.prototype.hasOwnProperty.call(rawData, filename)) return;
@@ -151,18 +144,36 @@ const calculateAndSortCityScores = (data: DataItem[]) => {
       }
     };
 
-    const parseDynamicCSVData = (filename: string, csvString: string) => {
+    const parseDynamicCSVData = (
+      filename: string,
+      csvString: string,
+      isPivot: boolean = false
+    ) => {
       if (parsedData[filename]) return;
       setLoading(true);
       const parsed = d3.csvParse(csvString, (d) => {
-        const row: DataItem = {
-          topicEN: d['Topic EN'],
-          cityGroup: d['City Group'],
-          normalizedScore: +d['Normalized Score'],
-          rank: +d.Rank,
-          topicWeight: +d['Topic Weight'],
-          weightedNormalizedScore: +d['Weighted Normalized Score'],
-        };
+        const row: DataItem = isPivot
+          ? {
+              cityGroup: d['City Group'],
+              AFF: +d.Affordability_Normalized_Score,
+              CEC: +d['City Economy_Normalized_Score'],
+              SUS: +d['Climate Action_Normalized_Score'],
+              DAC: +d['Digital Access_Normalized_Score'],
+              EDU: +d['Education + Skills_Normalized_Score'],
+              ENS: +d['Entrepreneurial Spirit_Normalized_Score'],
+              EDI: +d['Equity, diversity, and Inclusion_Normalized_Score'],
+              GYJ: +d['Good Youth Jobs_Normalized_Score'],
+              HEA: +d.Health_Normalized_Score,
+              TRA: +d.Transportation_Normalized_Score,
+            }
+          : {
+              topicEN: d['Topic EN'],
+              cityGroup: d['City Group'],
+              normalizedScore: +d['Normalized Score'],
+              rank: +d.Rank,
+              topicWeight: +d['Topic Weight'],
+              weightedNormalizedScore: +d['Proportional Weighted Score'],
+            };
         return row;
       });
 
@@ -170,15 +181,87 @@ const calculateAndSortCityScores = (data: DataItem[]) => {
     };
 
     fetchData(activeFile);
+    fetchData('heatmap_pivot.csv');
     if (rawData[activeFile])
-      parseDynamicCSVData(activeFile, rawData[activeFile]);
+      parseDynamicCSVData(activeFile, rawData[activeFile], false);
+
+    if (rawData['heatmap_pivot.csv']) {
+      parseDynamicCSVData(
+        'heatmap_pivot.csv',
+        rawData['heatmap_pivot.csv'],
+        true
+      );
+    }
   }, [activeFile, rawData, parsedData]);
 
   useEffect(() => {
-    if (!width || !height || !parsedData[activeFile]) return;
+    const calcScores = () => {
+      const data = parsedData['heatmap_pivot.csv'];
+      if (!data) return;
 
-    if (parsedData[activeFile]) {
-      const data = calculateAndSortCityScores(parsedData[activeFile]);
+      const keys = Object.keys(topicWeights);
+
+      // Initialize an accumulator for total scores
+      const totalScores = data.reduce(
+        (acc, row) => {
+          // Calculate weighted scores and initialize total score for the cityGroup
+          const cityGroup = row.cityGroup as string;
+
+          // Calculate weighted scores for the current row
+          const weightedScore = keys.reduce((sum, key) => {
+            const value = row[key] as number;
+            const weight = topicWeights[key];
+
+            if (value !== undefined && weight !== undefined) {
+              // Accumulate weighted score
+              return sum + value * weight;
+            }
+            return sum; // If no value or weight, return the sum as is
+          }, 0);
+
+          // If cityGroup doesn't exist, initialize it
+          if (!acc[cityGroup]) {
+            acc[cityGroup] = { cityGroup, totalScore: 0 };
+          }
+
+          // Apply penalty if cityGroup is in penaltyCityGroups
+          // if (penaltyCityGroups.includes(cityGroup)) {
+          //   acc[cityGroup].totalScore += weightedScore * 0.9; // Reduce score by 10%
+          // } else {
+          //   acc[cityGroup].totalScore += weightedScore;
+          // }
+
+          acc[cityGroup].totalScore += weightedScore;
+
+          return acc; // Return the accumulator for the next iteration
+        },
+        {} as Record<string, { cityGroup: string; totalScore: number }>
+      );
+
+      const sorted = _.orderBy(totalScores, ['totalScore'], ['desc']);
+      setSortedData(sorted);
+    };
+    if (parsedData['heatmap_pivot.csv']) {
+      calcScores();
+    }
+  }, [topicWeights, parsedData]);
+
+  useEffect(() => {
+    if (!width || !height || !parsedData[activeFile] || !sortedData) return;
+
+    if (parsedData[activeFile] && sortedData) {
+      const scoreMap = Object.fromEntries(
+        sortedData.map(({ cityGroup, totalScore }) => [cityGroup, totalScore])
+      );
+
+      // Sort the data based on the totalScore using d3.sort
+      const sortedParsedData = d3.sort(parsedData[activeFile], (a, b) => {
+        const scoreA = scoreMap[a.cityGroup] || 0; // Fallback to 0 if cityGroup not found
+        const scoreB = scoreMap[b.cityGroup] || 0; // Fallback to 0 if cityGroup not found
+        return d3.descending(scoreB, scoreA); // Sort in ascending order
+      });
+
+      const data = sortedParsedData || parsedData[activeFile];
 
       const topics: string[] = [
         ...new Set(data.map((d) => d.topicEN.toString())),
@@ -187,13 +270,13 @@ const calculateAndSortCityScores = (data: DataItem[]) => {
         ...new Set(data.map((d) => d.cityGroup.toString())),
       ];
 
+      // Clear previous content before drawing the new chart
+      d3.select(ref.current).selectAll('*').remove();
+
       const svg = d3
         .select(ref.current)
         .attr('width', width)
         .attr('height', height);
-
-      // Remove existing elements before redrawing
-      svg.selectAll('*').remove();
 
       const g = svg
         .append('g')
@@ -214,7 +297,7 @@ const calculateAndSortCityScores = (data: DataItem[]) => {
         .style('font-size', '12px') // Optional: Adjust font size
         .attr('transform', 'rotate(-45)') // Rotate if labels are long
         .style('text-anchor', 'end') // Align the text at the end for readability
-        .text((d) => truncateText(d, 20)); // Truncate city labels
+        .text((d) => truncateText(d as string, 20)); // Truncate city labels
 
       // Y axis (City)
       const y = d3
@@ -229,26 +312,39 @@ const calculateAndSortCityScores = (data: DataItem[]) => {
         .style('fill', 'white') // Set text color
         .style('font-size', '12px') // Optional: Adjust font size
         .style('text-anchor', 'end') // Align the text at the end
-        .text((d) => truncateText(d, 20)); // Truncate city labels;
+        .text((d) => truncateText(d as string, 20)); // Truncate city labels;
 
       // Set the axis lines and ticks to white
       g.selectAll('.domain').style('stroke', 'white');
       g.selectAll('.tick line').style('stroke', 'white');
 
+      const currentMinValue =
+        d3.min(data, (d) => d.normalizedScore as number) || 0;
+      const currentMaxValue =
+        d3.max(data, (d) => d.normalizedScore as number) || 100;
+
       const colorScale = d3
         .scaleSequential()
-        .interpolator(d3.interpolateRainbow)
-        .domain([0, 100]);
+        .domain([currentMinValue, currentMaxValue])
+        .interpolator(
+          d3.piecewise(d3.interpolateHsl, [
+            '#F2695D',
+            '#FBD166',
+            '#B8D98D',
+            '#253D88',
+          ])
+        );
 
       // Add vertical legend on the right side
       const legendWidth = 20;
       const legendPadding = 10;
       const legendHeight = innerHeight - 2 * legendPadding;
       const chunks = 10; // Number of chunks/segments
-      const currentMinValue =
-        d3.min(data, (d) => d.weightedNormalizedScore as number) || 0;
-      const currentMaxValue =
-        d3.max(data, (d) => d.weightedNormalizedScore as number) || 100;
+
+      const quantizedValues = d3.quantize(
+        d3.interpolate(currentMaxValue, currentMinValue),
+        chunks
+      );
 
       const legend = svg
         .append('g')
@@ -256,11 +352,6 @@ const calculateAndSortCityScores = (data: DataItem[]) => {
           'transform',
           `translate(${width - margin.right + 20}, ${margin.top})`
         );
-
-      const quantizedValues = d3.quantize(
-        d3.interpolate(currentMaxValue, currentMinValue),
-        chunks
-      );
 
       const legendScale = d3
         .scaleLinear()
@@ -318,10 +409,7 @@ const calculateAndSortCityScores = (data: DataItem[]) => {
         setTooltipState((prevTooltipState) => ({
           ...prevTooltipState,
           position: { x: xPos, y: yPos },
-          cluster: d.cityGroup as string,
-          topic: d.topicEN as string,
-          value: d.rank as number,
-          minWidth: 200,
+          content: `${d.cityGroup} is #${d.rank} in ${d.topicEN} with a score of ${Number(d.normalizedScore).toFixed(1)}.`,
         }));
       };
 
@@ -337,27 +425,52 @@ const calculateAndSortCityScores = (data: DataItem[]) => {
         });
       };
 
-      g.selectAll()
-        .data(data, (d) =>
-          d ? `${d.cityGroup as string}:${d.topicEN as string}` : ''
-        )
-        .join('rect')
-        .attr('x', (d) => x(d.topicEN as string) ?? '')
-        .attr('y', (d) => y(d.cityGroup as string) ?? '')
-        .attr('width', x.bandwidth())
-        .attr('height', y.bandwidth())
-        .style('fill', (d) => colorScale(d.weightedNormalizedScore as number))
-        .style('stroke-width', 4)
-        .style('stroke', 'none')
-        .on('mouseover', mouseover)
-        .on('mousemove', mousemove)
-        .on('mouseout', mouseleave);
+      g.selectAll<SVGRectElement, DataItem>('rect')
+        .data(data, (d) => `${d.cityGroup as string}:${d.topicEN as string}`)
+        .join(
+          (enter) => {
+            // Enter selection: create new rectangles
+            const rect = enter
+              .append('rect')
+              .attr('x', (d) => x(d.topicEN as string) ?? '')
+              .attr('y', (d) => y(d.cityGroup as string) ?? '')
+              .attr('width', x.bandwidth())
+              .attr('height', y.bandwidth())
+              .style('fill', (d) => colorScale(d.normalizedScore as number))
+              .style('stroke-width', 4)
+              .style('stroke', 'none')
+              .on('mouseover', mouseover)
+              .on('mousemove', mousemove)
+              .on('mouseout', mouseleave);
+
+            return rect; // Return the new rectangles
+          },
+          (update) => {
+            // Update selection: update existing rectangles
+            update
+              .attr('x', (d) => x(d.topicEN as string) ?? '')
+              .attr('y', (d) => y(d.cityGroup as string) ?? '')
+              .attr('width', x.bandwidth())
+              .attr('height', y.bandwidth())
+              .style('fill', (d) => colorScale(d.normalizedScore as number));
+
+            return update; // Return the updated rectangles
+          },
+          (exit) => {
+            // Exit selection: remove rectangles that no longer have data
+            exit
+              .transition()
+              .duration(200) // Optional: add a transition effect
+              .style('opacity', 0) // Fade out before removing
+              .remove(); // Remove the element from the DOM
+          }
+        );
     }
     // Use requestAnimationFrame to ensure rendering is complete before setting loading to false
     requestAnimationFrame(() => {
       setLoading(false);
     });
-  }, [width, height, parsedData]);
+  }, [width, height, parsedData, sortedData]);
 
   return (
     <>

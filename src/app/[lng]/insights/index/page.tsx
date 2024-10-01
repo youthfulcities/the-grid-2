@@ -20,7 +20,11 @@ const Index = () => {
             Urban Work Index 2023
           </Heading>
         </div>
-        <CustomMap width={width} />
+        <CustomMap
+          width={width}
+          mapStyle='mapbox://styles/youthfulcities/clzrhcvrj00hf01pc44in6vrn'
+          dataset='uwi-2023-overall-2'
+        />
       </View>
     </Container>
   );

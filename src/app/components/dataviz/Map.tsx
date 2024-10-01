@@ -20,6 +20,8 @@ const height = 600;
 
 interface CustomMapProps {
   width: number;
+  mapStyle: string;
+  dataset: string;
 }
 
 interface CityViewProps {
@@ -78,7 +80,7 @@ const CityView = forwardRef<HTMLDivElement, CityViewProps>(({ item }, ref) => {
 
 CityView.displayName = 'CityView';
 
-const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
+const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
   const [viewState, setViewState] = useState<ViewState>(initialView);
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [completed, setCompleted] = useState(false);
@@ -140,9 +142,12 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
   const onLoad = (event: MapEvent) => {
     const map = event.target as mapboxgl.Map;
     // Get the features from the interactive layer
-    const features = map.queryRenderedFeatures(undefined as unknown as PointLike, {
-      layers: ['uwi-2023-overall-2'], // Specify the interactive layer ID
-    });
+    const features = map.queryRenderedFeatures(
+      undefined as unknown as PointLike,
+      {
+        layers: [dataset], // Specify the interactive layer ID
+      }
+    );
 
     if (features.length > 0) {
       const propertiesArray = features.map((item) => item);
@@ -162,13 +167,20 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
         number,
         number,
       ];
+      console.log(currentFeature);
+      const [lat, long] = coordinates;
       mapRef.current.flyTo({
         center: coordinates,
-        zoom: 16,
+        zoom: 15.5,
         pitch: 54,
         bearing: 0,
         duration: 4000,
-        padding: { top: 0, bottom: 0, left: 0, right: 300 },
+        padding: {
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+        },
       });
     }
   }, [currentFeature, drawerOpen]);
@@ -180,7 +192,6 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
       threshold: 0.5,
     };
 
-    console.log(cityViewRefs.current);
     const observer = new IntersectionObserver((entries) => {
       if (!override) {
         entries.forEach((entry) => {
@@ -224,7 +235,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
       return () => clearTimeout(timer);
     }
     // Return null if there's no timer to clear
-    return () => { };
+    return () => {};
   }, [override]);
 
   return (
@@ -238,8 +249,8 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
       onLoad={(e) => onLoad(e)}
       onMove={(e) => setViewState(e.viewState)}
       style={{ width, height }}
-      mapStyle='mapbox://styles/youthfulcities/clzrhcvrj00hf01pc44in6vrn'
-      interactiveLayerIds={['uwi-2023-overall-2']}
+      mapStyle={mapStyle}
+      interactiveLayerIds={[dataset]}
       onClick={onClick}
       mapboxAccessToken={MAPBOX_TOKEN}
     >

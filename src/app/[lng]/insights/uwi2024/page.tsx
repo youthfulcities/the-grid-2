@@ -46,9 +46,13 @@ const Index = () => {
             Urban Work Index 2024
           </Heading>
         </div>
-        <CustomMap width={width} />
+        <CustomMap
+          width={width}
+          mapStyle='mapbox://styles/youthfulcities/cm1qlm8y0006o01pb18e49tf9'
+          dataset='uwi-2024'
+        />
         <IndexHeatmap
-          activeFile='heatmapoutput.csv'
+          activeFile='heatmap_unpivot.csv'
           width={width}
           setTooltipState={setTooltipState}
         />

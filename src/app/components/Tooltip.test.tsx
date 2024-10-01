@@ -14,7 +14,7 @@ describe('MyTooltip Component', () => {
 
   it('should show tooltip when showTooltip is true', () => {
     render(
-      <MyTooltip showTooltip={true} tooltipMsg='Tooltip message'>
+      <MyTooltip showTooltip tooltipMsg='Tooltip message'>
         <button>Hover me</button>
       </MyTooltip>
     );
@@ -26,7 +26,7 @@ describe('MyTooltip Component', () => {
   it('should show tooltip description when provided', () => {
     render(
       <MyTooltip
-        showTooltip={true}
+        showTooltip
         tooltipMsg='Tooltip message'
         tooltipDesc='Tooltip description'
       >
@@ -42,7 +42,7 @@ describe('MyTooltip Component', () => {
     const longMessage =
       'This is a long tooltip message that exceeds fifty characters and should trigger the big tooltip style.';
     render(
-      <MyTooltip showTooltip={true} tooltipMsg={longMessage}>
+      <MyTooltip showTooltip tooltipMsg={longMessage}>
         <button>Hover me</button>
       </MyTooltip>
     );

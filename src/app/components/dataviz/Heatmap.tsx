@@ -92,7 +92,6 @@ const calculateLuminance = (r: number, g: number, b: number) => {
   return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
 };
 
-
 // Function to determine if white text is better based on contrast
 const shouldUseWhiteText = (color: string) => {
   const rgb = d3.rgb(color);

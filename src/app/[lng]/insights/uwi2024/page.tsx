@@ -5,7 +5,7 @@ import IndexHeatmap from '@/app/components/dataviz/IndexHeatmap';
 import CustomMap from '@/app/components/dataviz/Map';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import { useDimensions } from '@/hooks/useDimensions';
-import { Heading, View } from '@aws-amplify/ui-react';
+import { Heading, Text, View } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import { ReactNode, useRef, useState } from 'react';
 import config from '../../../../amplifyconfiguration.json';
@@ -45,6 +45,15 @@ const Index = () => {
           <Heading level={3} color='font.inverse' marginBottom='xl'>
             Urban Work Index 2024
           </Heading>
+          <Text marginBottom='xl'>
+            Youthful Cities is thrilled to announce the launch of “Urban Work
+            Index 2024: The best city for youth to work in Canada”, a crucial
+            index designed to provide the data urgently necessary to reshape the
+            workforce into one that is dynamic, engaged, and vital. The index is
+            the culmination of a year of Youthful Cities investigation into what
+            youth need to succeed. It’s all part of DEVlab, a project funded by
+            the Government of Canada and in partnership with Tamarack Institute.
+          </Text>
         </div>
         <CustomMap
           width={width}

@@ -88,17 +88,35 @@ const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
     Point,
     GeoJsonProperties
   > | null>(null);
+  const [prevCurrentFeature, setPrevCurrentFeature] = useState<Feature<
+    Point,
+    GeoJsonProperties
+  > | null>(null);
   const [allFeatures, setAllFeatures] = useState<
     Feature<Point, GeoJsonProperties>[]
   >([]);
   const mapRef = useRef<MapRef>(null);
   const cityViewRefs = useRef<HTMLDivElement[]>([]);
   const [override, setOverride] = useState(false);
+  const [center, setCenter] = useState<{ lng: number; lat: number }>({
+    lng: 0,
+    lat: 0,
+  });
+  const previousFeatureRef = useRef<Feature<Point, GeoJsonProperties> | null>(
+    null
+  );
 
   useEffect(() => {
     // Clear old refs before setting new ones
     cityViewRefs.current = [];
   }, []);
+
+  // Effect to resize the map when width or height changes
+  useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.resize();
+    }
+  }, [width, height]);
 
   const onClick = (event: MapMouseEvent) => {
     const feature = event.features?.[0] as Feature<Point, GeoJsonProperties>;
@@ -111,7 +129,6 @@ const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
       });
       setDrawerOpen(true);
 
-      // Use react-scroll to scroll the corresponding CityView item into view within the Drawer
       const currentCityName = feature.properties?.City;
       if (currentCityName) {
         scroller.scrollTo(currentCityName, {
@@ -119,7 +136,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
           delay: 0,
           offset: -20,
           smooth: 'easeInOutQuart',
-          containerId: 'drawer-content', // This is the ID of the container in Drawer
+          containerId: 'drawer-content',
         });
       }
     }
@@ -141,12 +158,9 @@ const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
 
   const onLoad = (event: MapEvent) => {
     const map = event.target as mapboxgl.Map;
-    // Get the features from the interactive layer
     const features = map.queryRenderedFeatures(
       undefined as unknown as PointLike,
-      {
-        layers: [dataset], // Specify the interactive layer ID
-      }
+      { layers: [dataset] }
     );
 
     if (features.length > 0) {
@@ -159,30 +173,88 @@ const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
       setAllFeatures(sortedArray as Feature<Point, GeoJsonProperties>[]);
       setCurrentFeature(sortedArray[0] as Feature<Point, GeoJsonProperties>);
     }
+
+    const mapCenter = map.getCenter();
+    setCenter(mapCenter);
   };
 
   useEffect(() => {
+    //check if city has actually changed on rerender to prevent bouncing
+    if (
+      previousFeatureRef?.current?.properties?.City ===
+      currentFeature?.properties?.City
+    ) {
+      return;
+    }
     if (currentFeature && mapRef.current && drawerOpen) {
       const coordinates = currentFeature.geometry.coordinates as [
         number,
         number,
       ];
-      console.log(currentFeature);
-      const [lat, long] = coordinates;
+
       mapRef.current.flyTo({
         center: coordinates,
-        zoom: 15.5,
-        pitch: 54,
+        offset: [-100, 0],
+        zoom: 10,
+        pitch: 50,
         bearing: 0,
-        duration: 4000,
+        duration: 2000,
         padding: {
           top: 0,
           bottom: 0,
           left: 0,
           right: 0,
         },
+        easing: (t) => t * (2 - t),
       });
+
+      const handleMoveEnd = () => {
+        if (mapRef.current) {
+          const features =
+            mapRef?.current.queryRenderedFeatures(
+              undefined as unknown as PointLike,
+              {
+                layers: [dataset], // Specify the interactive layer ID
+              }
+            ) || [];
+
+          // Filter for features that are of type Point
+          const matchedFeatures = features.filter(
+            (feature) =>
+              feature.geometry.type === 'Point' &&
+              feature.properties?.City === currentFeature?.properties?.City
+          ) as Feature<Point, GeoJsonProperties>[]; // Assert the type after filtering
+
+          const updatedCoordinates = matchedFeatures[0]?.geometry
+            ?.coordinates as [number, number];
+
+          // Adjust flyTo based on the updated coordinates
+          mapRef.current.flyTo({
+            center: updatedCoordinates, // Recenter on the original feature coordinates
+            zoom: 15.5,
+            offset: [-100, 0],
+            pitch: 50,
+            bearing: 0,
+            duration: 2000,
+            padding: {
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+            },
+            easing: (t) => t * t,
+          });
+
+          // Cleanup the event listener after it runs
+          mapRef.current.off('moveend', handleMoveEnd);
+        }
+      };
+
+      // Attach the moveend event listener to trigger the second flyTo
+      mapRef.current.once('moveend', handleMoveEnd);
     }
+    // Update the previous feature ref after the logic runs
+    previousFeatureRef.current = currentFeature;
   }, [currentFeature, drawerOpen]);
 
   useEffect(() => {
@@ -259,7 +331,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
       </ResetButton>
       <NavigationControl position='top-left' />
       <Drawer
-        isOpen={drawerOpen}
+        isopen={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         onOpen={() => setDrawerOpen(true)}
         noOverlay

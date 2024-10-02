@@ -5,7 +5,7 @@ import { FaAngleRight, FaX } from 'react-icons/fa6';
 import styled from 'styled-components';
 
 interface DrawerProps {
-  isOpen: boolean;
+  isopen: boolean;
   onClose?: () => void;
   children: React.ReactNode;
   noOverlay?: boolean;
@@ -17,7 +17,7 @@ interface DrawerProps {
 }
 
 const DrawerContainer = styled(motion.div)<{
-  isOpen: boolean;
+  isopen: boolean;
   $absolute: boolean;
 }>`
   position: ${({ $absolute }) => ($absolute ? 'absolute' : 'fixed')};
@@ -36,12 +36,12 @@ const DrawerContainer = styled(motion.div)<{
   justify-content: flex-start;
   align-items: flex-start;
   padding: var(--amplify-space-large);
-  transform: ${({ isOpen }) => (isOpen ? 'translateX(0)' : 'translateX(100%)')};
+  transform: ${({ isopen }) => (isopen ? 'translateX(0)' : 'translateX(100%)')};
   transition: transform 0.3s ease-in-out;
 `;
 
-const Overlay = styled(motion.div)<{ isOpen: boolean }>`
-  display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
+const Overlay = styled(motion.div)<{ isopen: boolean }>`
+  display: ${({ isopen }) => (isopen ? 'block' : 'none')};
   position: fixed;
   top: 0;
   left: 0;
@@ -50,7 +50,7 @@ const Overlay = styled(motion.div)<{ isOpen: boolean }>`
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 998;
   transition: opacity 0.3s ease-in-out;
-  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+  opacity: ${({ isopen }) => (isopen ? 1 : 0)};
 `;
 
 const Tab = styled(motion.div)<{ $offset: number; $absolute: boolean }>`
@@ -75,7 +75,7 @@ const Tab = styled(motion.div)<{ $offset: number; $absolute: boolean }>`
 `;
 
 const Drawer: React.FC<DrawerProps> = ({
-  isOpen,
+  isopen,
   onClose,
   onOpen,
   children,
@@ -88,7 +88,7 @@ const Drawer: React.FC<DrawerProps> = ({
   const drawerRef = useRef<HTMLDivElement>(null);
   const tabRef = useRef<HTMLDivElement>(null);
   const [tabOffset, setTabOffset] = useState<number>(0);
-  const { width } = useDimensions(drawerRef, isOpen);
+  const { width } = useDimensions(drawerRef, isopen);
 
   // Expose the drawerRef to parent components via ref
 
@@ -123,7 +123,7 @@ const Drawer: React.FC<DrawerProps> = ({
   }, []);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isopen) {
       document.addEventListener('mousedown', handleClickOutside);
       // Calculate tab position based on drawer's position
       if (drawerRef.current) {
@@ -136,16 +136,16 @@ const Drawer: React.FC<DrawerProps> = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isopen]);
 
   return (
     <>
-      {!noOverlay && <Overlay isOpen={isOpen} onClick={onClose} />}
+      {!noOverlay && <Overlay isopen={isopen} onClick={onClose} />}
       <DrawerContainer
         id={id}
         className='soft-shadow'
         ref={drawerRef}
-        isOpen={isOpen}
+        isopen={isopen}
         $absolute={absolute || false}
       >
         {React.Children.map(children, (child) =>
@@ -159,10 +159,10 @@ const Drawer: React.FC<DrawerProps> = ({
       <Tab
         $absolute={absolute || false}
         ref={tabRef}
-        $offset={isOpen ? tabOffset : 0}
-        onClick={isOpen ? onClose : onOpen}
+        $offset={isopen ? tabOffset : 0}
+        onClick={isopen ? onClose : onOpen}
       >
-        {isOpen ? <FaX /> : tabText || <FaAngleRight />}
+        {isopen ? <FaX /> : tabText || <FaAngleRight />}
       </Tab>
     </>
   );

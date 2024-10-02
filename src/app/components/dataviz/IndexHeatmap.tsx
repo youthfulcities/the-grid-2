@@ -1,6 +1,6 @@
 'use client';
 
-import { Placeholder, Text } from '@aws-amplify/ui-react';
+import { Placeholder, SliderField, Text } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import _ from 'lodash';
@@ -128,7 +128,6 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
-  console.log(sortedData);
   useEffect(() => {
     const fetchData = async (filename: string) => {
       if (Object.prototype.hasOwnProperty.call(rawData, filename)) return;
@@ -474,6 +473,7 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
 
   return (
     <>
+      <SliderField label='Affordability' max={100} />
       <Placeholder height={height} isLoaded={!loading || false} />
       <ChartContainer>
         <svg ref={ref}></svg>

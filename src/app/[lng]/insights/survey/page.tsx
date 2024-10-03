@@ -208,7 +208,7 @@ const Survey: React.FC = () => {
         </div>
       </View>
       <Drawer
-        isOpen={isDrawerOpen}
+        isopen={isDrawerOpen}
         onOpen={() => setIsDrawerOpen(true)}
         onClose={() => {
           setIsDrawerOpen(false);

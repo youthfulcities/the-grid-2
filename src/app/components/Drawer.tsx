@@ -164,7 +164,7 @@ const Drawer: React.FC<DrawerProps> = ({
         {React.Children.map(children, (child) =>
           React.isValidElement(child)
             ? React.cloneElement(child as React.ReactElement, {
-                drawerWidth: width,
+                drawerwidth: width,
               })
             : child
         )}

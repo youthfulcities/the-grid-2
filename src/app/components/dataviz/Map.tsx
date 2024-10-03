@@ -3,6 +3,7 @@ import { Feature, GeoJsonProperties, Point } from 'geojson';
 import _ from 'lodash';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa6';
 import Map, {
   MapEvent,
   MapMouseEvent,
@@ -71,9 +72,16 @@ const CityView = forwardRef<HTMLDivElement, CityViewProps>(({ item }, ref) => {
       <Heading level={4} color='font.inverse'>
         {item.City} | Rank #{item.Rank}
       </Heading>
-      <Text>{item.Strength_1}</Text>
-      <Text>{item.Strength_2}</Text>
-      <Text>{item['Room for Improvement']}</Text>
+
+      <Text>
+        <FaThumbsUp fontSize='large' /> {item.Strength_1}
+      </Text>
+      <Text>
+        <FaThumbsUp fontSize='large' /> {item.Strength_2}
+      </Text>
+      <Text>
+        <FaThumbsDown fontSize='large' /> {item['Room for Improvement']}
+      </Text>
     </CityViewContainer>
   );
 });

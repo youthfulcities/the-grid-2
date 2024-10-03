@@ -111,7 +111,7 @@ const Index = () => {
           <Heading level={3} color='brand.primary.60'>
             {t('stories_heading')}
           </Heading>
-          <Text>{t('stories-blurb')}</Text>
+          <Text>{t('stories_blurb')}</Text>
           <a
             href='https://www.youthfulcities.com/blog/tag/devlab/'
             target='_blank'

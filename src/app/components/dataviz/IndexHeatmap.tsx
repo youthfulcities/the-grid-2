@@ -1,5 +1,6 @@
 'use client';
 
+import useTranslation from '@/app/i18n/client';
 import {
   Button,
   Flex,
@@ -10,6 +11,7 @@ import {
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import _ from 'lodash';
+import { useParams } from 'next/navigation';
 import {
   Dispatch,
   ReactNode,
@@ -19,6 +21,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { Trans } from 'react-i18next/TransWithoutContext';
 import styled from 'styled-components';
 import Drawer from '../Drawer';
 
@@ -63,52 +66,68 @@ const CustomSliderField = styled(SliderField)`
   width: 100%;
 `;
 
+const customLabel = (value: number) => {
+  const children = (value * 100).toFixed(0);
+  return <Text marginBottom='0'>{children}</Text>;
+};
+
 // Define the type for the topic weights
 interface TopicWeights {
   [key: string]: {
     title: string;
+    titlefr: string;
     weight: number;
   };
 }
 const topicWeights: TopicWeights = {
   AFF: {
     title: 'Affordability',
+    titlefr: 'Abordabilité',
     weight: 0.88,
   },
   CEC: {
     title: 'City Economy',
+    titlefr: 'Économie municipale',
     weight: 0.81,
   },
   SUS: {
     title: 'Climate Action',
+    titlefr: 'Action climatique',
     weight: 0.8,
   },
   DAC: {
     title: 'Digital Access',
+    titlefr: 'Accès numérique',
     weight: 0.77,
   },
   EDU: {
     title: 'Education + Skills',
+    titlefr: 'Études + Formation',
     weight: 0.83,
   },
   ENS: {
     title: 'Entrepreneurial Spirit',
+    titlefr: 'Esprit entrepreneurial',
     weight: 0.73,
   },
   EDI: {
     title: 'Equity, Diversity, and Inclusion',
+    titlefr: 'Équité, diversité et inclusion',
     weight: 0.82,
   },
   GYJ: {
     title: 'Good Youth Jobs',
+    titlefr: 'Bons emplois pour les jeunes',
     weight: 0.87,
   },
   HEA: {
     title: 'Health',
+    titlefr: 'Santé',
     weight: 0.85,
   },
   TRA: {
     title: 'Transportation',
+    titlefr: 'Transports',
     weight: 0.85,
   },
 };
@@ -163,6 +182,8 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
   activeFile,
   setTooltipState,
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'uwi2024');
   const height = 900;
   const containerRef = useRef<HTMLDivElement>(null);
   const ref = useRef<SVGSVGElement>(null);
@@ -179,7 +200,7 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [distanceFromRight, setDistanceFromRight] = useState<number>(0);
 
-  const margin = { top: 50, right: 80, bottom: 100, left: 140 };
+  const margin = { top: 50, right: 80, bottom: 100, left: 110 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
@@ -279,7 +300,9 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
           // Calculate weighted scores for the current row
           const weightedScore = keys.reduce((sum, key) => {
             const value = row[key] as number;
-            const weight = customWeights[key].weight;
+            const {
+              [key]: { weight },
+            } = customWeights;
 
             if (value !== undefined && weight !== undefined) {
               // Accumulate weighted score
@@ -381,13 +404,16 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
         .attr('transform', `translate(0, ${innerHeight})`) // Place the x-axis at the bottom
         .call(d3.axisBottom(x)) // Draw the bottom x-axis
         .selectAll('text')
+        .data(data)
         .style('fill', 'white') // Set text color
         .style('font-size', '12px') // Optional: Adjust font size
         .attr('transform', 'rotate(-45)') // Rotate if labels are long
         .style('text-anchor', 'end') // Align the text at the end for readability
-        .html(
-          (d) =>
-            `<i class="fa fa-star">Hello</i> ${truncateText(d as string, 20)}`
+        .text((d: DataItem) =>
+          truncateText(
+            lng === 'fr' ? topicWeights[d.code].titlefr : (d.topicEN as string),
+            20
+          )
         );
 
       // Y axis (City)
@@ -403,7 +429,7 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
         .style('fill', 'white') // Set text color
         .style('font-size', '12px') // Optional: Adjust font size
         .style('text-anchor', 'end') // Align the text at the end
-        .text((d) => truncateText(d as string, 20)); // Truncate city labels;
+        .text((d) => truncateText(d as string, 15)); // Truncate city labels;
 
       // Set the axis lines and ticks to white
       g.selectAll('.domain').style('stroke', 'white');
@@ -481,16 +507,20 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
         .selectAll('text')
         .style('fill', 'white');
 
+      const getTooltipContent = (d: DataItem) => {
+        if (lng === 'fr') {
+          return `${d.cityGroup} est #${d.rank} dans ${topicWeights[d.code].titlefr} avec un score de ${Number(d.normalizedScore).toFixed(1)}.`;
+        }
+        return `${d.cityGroup} is #${d.rank} in ${d.topicEN} with a score of ${Number(d.normalizedScore).toFixed(1)}.`;
+      };
+
       const mouseover = (event: MouseEvent, d: DataItem) => {
         const xPos = event.pageX;
         const yPos = event.pageY;
         setTooltipState((prevTooltipState) => ({
           ...prevTooltipState,
           position: { x: xPos, y: yPos },
-          cluster: d.cityGroup as string,
-          topic: d.topicEN as string,
-          value: d.rank as number,
-          minWidth: 200,
+          content: getTooltipContent(d),
         }));
       };
 
@@ -500,7 +530,7 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
         setTooltipState((prevTooltipState) => ({
           ...prevTooltipState,
           position: { x: xPos, y: yPos },
-          content: `${d.cityGroup} is #${d.rank} in ${d.topicEN} with a score of ${Number(d.normalizedScore).toFixed(1)}.`,
+          content: getTooltipContent(d),
         }));
       };
 
@@ -597,41 +627,33 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
           onClose={() => {
             setIsDrawerOpen(false);
           }}
-          tabText={
-            <Text marginTop='medium' marginLeft='xs'>
-              Customize the results
-            </Text>
-          }
+          tabText={<Text marginTop='medium'>{t('customize_tab')}</Text>}
         >
           <Flex direction='column'>
             <Text>
-              Adjust the weights of each topic depending on how important each
-              one is to you and watch the ranking change on the heatmap. A
-              weight of 100 represents "extremely important" and a 0 represents
-              "not a priority". Currently your best city is{' '}
-              <strong>{sortedData[0]?.cityGroup}</strong>.
+              <Trans
+                t={t}
+                i18nKey='customize_blurb'
+                values={{ city: sortedData[0]?.cityGroup }}
+                components={{
+                  strong: <strong />,
+                }}
+              />
             </Text>
-            <SmallText marginBottom='xl'>
-              The default weights are based on average importance ratings
-              assigned to each topic based on over 1500 respondents to the
-              "What's up with work, lately" survey 2024. These weights influence
-              the proportional contribution of each topic to the final score in
-              determining the Best Work City.
-            </SmallText>
+            <SmallText marginBottom='xl'>{t('cutomize_blurb2')}</SmallText>
             {topicWeightsArray.map((topic) => (
               <CustomSliderField
+                key={topic.code}
                 label={topic.title}
                 value={customWeights[topic.code].weight * 100}
                 onChange={(value) => handleChange(value, topic.code)}
-                formatValue={() => (
-                  <Text marginBottom='0'>
-                    {(customWeights[topic.code].weight * 100).toFixed(0)}
-                  </Text>
-                )}
+                formatValue={() =>
+                  customLabel(customWeights[topic.code].weight)
+                }
               />
             ))}
             <Button onClick={handleReset} variation='primary' marginTop='xl'>
-              Reset
+              {t('reset')}
             </Button>
           </Flex>
         </Drawer>

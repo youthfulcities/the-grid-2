@@ -6,7 +6,6 @@ import styled from 'styled-components';
 
 interface DrawerProps {
   isopen: boolean;
-  distanceFromLeft?: number;
   onClose?: () => void;
   children: React.ReactNode;
   noOverlay?: boolean;

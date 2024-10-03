@@ -1,6 +1,12 @@
 'use client';
 
-import { Placeholder, Text } from '@aws-amplify/ui-react';
+import {
+  Button,
+  Flex,
+  Placeholder,
+  SliderField,
+  Text,
+} from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import _ from 'lodash';
@@ -9,10 +15,12 @@ import {
   ReactNode,
   SetStateAction,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
 import styled from 'styled-components';
+import Drawer from '../Drawer';
 
 interface TooltipState {
   position: { x: number; y: number } | null;
@@ -51,23 +59,65 @@ const SmallText = styled(Text)`
   font-size: var(--amplify-font-sizes-small);
 `;
 
+const CustomSliderField = styled(SliderField)`
+  width: 100%;
+`;
+
 // Define the type for the topic weights
 interface TopicWeights {
-  [key: string]: number;
+  [key: string]: {
+    title: string;
+    weight: number;
+  };
 }
-
 const topicWeights: TopicWeights = {
-  AFF: 0.88,
-  CEC: 0.81,
-  SUS: 0.8,
-  DAC: 0.77,
-  EDU: 0.83,
-  ENS: 0.73,
-  EDI: 0.82,
-  GYJ: 0.87,
-  HEA: 0.85,
-  TRA: 0.85,
+  AFF: {
+    title: 'Affordability',
+    weight: 0.88,
+  },
+  CEC: {
+    title: 'City Economy',
+    weight: 0.81,
+  },
+  SUS: {
+    title: 'Climate Action',
+    weight: 0.8,
+  },
+  DAC: {
+    title: 'Digital Access',
+    weight: 0.77,
+  },
+  EDU: {
+    title: 'Education + Skills',
+    weight: 0.83,
+  },
+  ENS: {
+    title: 'Entrepreneurial Spirit',
+    weight: 0.73,
+  },
+  EDI: {
+    title: 'Equity, Diversity, and Inclusion',
+    weight: 0.82,
+  },
+  GYJ: {
+    title: 'Good Youth Jobs',
+    weight: 0.87,
+  },
+  HEA: {
+    title: 'Health',
+    weight: 0.85,
+  },
+  TRA: {
+    title: 'Transportation',
+    weight: 0.85,
+  },
 };
+
+const topicWeightsArray = Object.entries(topicWeights).map(([key, value]) => ({
+  code: key,
+  title: value.title,
+  weight: value.weight,
+}));
 
 // List of city groups to which the 10% penalty should be applied
 // const penaltyCityGroups = [
@@ -114,6 +164,7 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
   setTooltipState,
 }) => {
   const height = 900;
+  const containerRef = useRef<HTMLDivElement>(null);
   const ref = useRef<SVGSVGElement>(null);
   const [loading, setLoading] = useState(true);
   const [rawData, setRawData] = useState<Record<string, string>>({});
@@ -123,10 +174,28 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
   const [sortedData, setSortedData] = useState<
     { cityGroup: string; totalScore: number }[]
   >([]);
+  const [customWeights, setCustomWeights] =
+    useState<TopicWeights>(topicWeights);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [distanceFromRight, setDistanceFromRight] = useState<number>(0);
 
   const margin = { top: 50, right: 80, bottom: 100, left: 140 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
+
+  // Memoize distanceFromRight calculation to avoid unnecessary re-renders
+  const memoizedDistanceFromRight = useMemo(() => {
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      return window.innerWidth - rect.right;
+    }
+    return 0;
+  }, [width]); // Only recalculate when width changes
+
+  // Sync the memoized distanceFromRight with the state
+  useEffect(() => {
+    setDistanceFromRight(memoizedDistanceFromRight);
+  }, [memoizedDistanceFromRight]);
 
   useEffect(() => {
     const fetchData = async (filename: string) => {
@@ -167,6 +236,7 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
             }
           : {
               topicEN: d['Topic EN'],
+              code: d.Topic_Short,
               cityGroup: d['City Group'],
               normalizedScore: +d['Normalized Score'],
               rank: +d.Rank,
@@ -198,7 +268,7 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
       const data = parsedData['heatmap_pivot.csv'];
       if (!data) return;
 
-      const keys = Object.keys(topicWeights);
+      const keys = Object.keys(customWeights);
 
       // Initialize an accumulator for total scores
       const totalScores = data.reduce(
@@ -209,7 +279,7 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
           // Calculate weighted scores for the current row
           const weightedScore = keys.reduce((sum, key) => {
             const value = row[key] as number;
-            const weight = topicWeights[key];
+            const weight = customWeights[key].weight;
 
             if (value !== undefined && weight !== undefined) {
               // Accumulate weighted score
@@ -243,7 +313,26 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
     if (parsedData['heatmap_pivot.csv']) {
       calcScores();
     }
-  }, [topicWeights, parsedData]);
+  }, [parsedData, customWeights]);
+
+  const selectTopic = (code: string) => {
+    setCustomWeights((prevWeights) => {
+      // Create a new weights object with all weights set to 0
+      const updatedWeights: TopicWeights = Object.fromEntries(
+        Object.keys(prevWeights).map((currCode) => [
+          currCode,
+          { ...prevWeights[currCode], weight: 0 }, // Set all weights to 0
+        ])
+      );
+
+      // Set the weight for the selected code to 1
+      if (updatedWeights[code]) {
+        updatedWeights[code].weight = 1; // Set weight to 1 for the selected code
+      }
+
+      return updatedWeights; // Return the updated weights object
+    });
+  };
 
   useEffect(() => {
     if (!width || !height || !parsedData[activeFile] || !sortedData) return;
@@ -296,7 +385,10 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
         .style('font-size', '12px') // Optional: Adjust font size
         .attr('transform', 'rotate(-45)') // Rotate if labels are long
         .style('text-anchor', 'end') // Align the text at the end for readability
-        .text((d) => truncateText(d as string, 20)); // Truncate city labels
+        .html(
+          (d) =>
+            `<i class="fa fa-star">Hello</i> ${truncateText(d as string, 20)}`
+        );
 
       // Y axis (City)
       const y = d3
@@ -330,7 +422,7 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
             '#F2695D',
             '#FBD166',
             '#B8D98D',
-            '#253D88',
+            '#178749',
           ])
         );
 
@@ -338,7 +430,7 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
       const legendWidth = 20;
       const legendPadding = 10;
       const legendHeight = innerHeight - 2 * legendPadding;
-      const chunks = 10; // Number of chunks/segments
+      const chunks = 11; // Number of chunks/segments
 
       const quantizedValues = d3.quantize(
         d3.interpolate(currentMaxValue, currentMinValue),
@@ -438,9 +530,11 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
               .style('fill', (d) => colorScale(d.normalizedScore as number))
               .style('stroke-width', 4)
               .style('stroke', 'none')
+              .style('cursor', 'pointer')
               .on('mouseover', mouseover)
               .on('mousemove', mousemove)
-              .on('mouseout', mouseleave);
+              .on('mouseout', mouseleave)
+              .on('click', (event, d) => selectTopic(d.code as string));
 
             return rect; // Return the new rectangles
           },
@@ -451,7 +545,11 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
               .attr('y', (d) => y(d.cityGroup as string) ?? '')
               .attr('width', x.bandwidth())
               .attr('height', y.bandwidth())
-              .style('fill', (d) => colorScale(d.normalizedScore as number));
+              .style('fill', (d) => colorScale(d.normalizedScore as number))
+              .style('cursor', 'pointer')
+              .on('click', (event, d) => {
+                selectTopic(d.code as string);
+              });
 
             return update; // Return the updated rectangles
           },
@@ -471,11 +569,72 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
     });
   }, [width, height, parsedData, sortedData]);
 
+  const handleChange = (value: number, code: string) => {
+    setCustomWeights({
+      ...customWeights,
+      [code]: {
+        ...customWeights[code],
+        weight: value / 100,
+      },
+    });
+  };
+
+  const handleReset = () => {
+    setCustomWeights(topicWeights);
+  };
+
   return (
     <>
       <Placeholder height={height} isLoaded={!loading || false} />
-      <ChartContainer>
+      <ChartContainer ref={containerRef}>
         <svg ref={ref}></svg>
+        <Drawer
+          noOverlay
+          absolute
+          translate={distanceFromRight}
+          isopen={isDrawerOpen}
+          onOpen={() => setIsDrawerOpen(true)}
+          onClose={() => {
+            setIsDrawerOpen(false);
+          }}
+          tabText={
+            <Text marginTop='medium' marginLeft='xs'>
+              Customize the results
+            </Text>
+          }
+        >
+          <Flex direction='column'>
+            <Text>
+              Adjust the weights of each topic depending on how important each
+              one is to you and watch the ranking change on the heatmap. A
+              weight of 100 represents "extremely important" and a 0 represents
+              "not a priority". Currently your best city is{' '}
+              <strong>{sortedData[0]?.cityGroup}</strong>.
+            </Text>
+            <SmallText marginBottom='xl'>
+              The default weights are based on average importance ratings
+              assigned to each topic based on over 1500 respondents to the
+              "What's up with work, lately" survey 2024. These weights influence
+              the proportional contribution of each topic to the final score in
+              determining the Best Work City.
+            </SmallText>
+            {topicWeightsArray.map((topic) => (
+              <CustomSliderField
+                label={topic.title}
+                value={customWeights[topic.code].weight * 100}
+                onChange={(value) => handleChange(value, topic.code)}
+                formatValue={() => (
+                  <Text marginBottom='0'>
+                    {(customWeights[topic.code].weight * 100).toFixed(0)}
+                  </Text>
+                )}
+              />
+            ))}
+            <Button onClick={handleReset} variation='primary' marginTop='xl'>
+              Reset
+            </Button>
+          </Flex>
+        </Drawer>
       </ChartContainer>
     </>
   );

@@ -35,6 +35,7 @@ const Index = () => {
     topic: '',
     child: null,
   });
+
   return (
     <Container>
       <View className='container padding' ref={containerRef}>
@@ -73,8 +74,7 @@ const Index = () => {
           </Heading>
           <Text marginBottom='xl'>
             Hover over any cell to see the ranking and score for the selected
-            city and topic. A higher score means the city is performing better
-            in this area and a lower score means it is performing poorly.
+            city and topic. Click on a column to sort the ranking by that topic.
           </Text>
           <Heading level={5} color='brand.primary.60'>
             A note on scoring
@@ -140,7 +140,7 @@ const Index = () => {
             our findings from the DEVlab research project.
           </Text>
           <a
-            href='/chttps://www.youthfulcities.com/blog/tag/devlab/'
+            href='https://www.youthfulcities.com/blog/tag/devlab/'
             target='_blank'
           >
             <Button variation='primary' marginTop='small'>

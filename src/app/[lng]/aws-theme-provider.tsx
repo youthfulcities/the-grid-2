@@ -14,6 +14,10 @@ const theme = createTheme(
         },
       },
       components: {
+        field: {
+          gap: { value: '{space.xxxxs.value}' },
+          label: { color: { value: '{colors.font.inverse.value}' } },
+        },
         card: {
           backgroundColor: { value: '{colors.brand.primary.60.value}' },
           padding: { value: '{space.large.value}' },

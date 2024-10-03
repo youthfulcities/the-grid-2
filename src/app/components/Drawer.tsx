@@ -6,19 +6,22 @@ import styled from 'styled-components';
 
 interface DrawerProps {
   isopen: boolean;
+  distanceFromLeft?: number;
   onClose?: () => void;
   children: React.ReactNode;
   noOverlay?: boolean;
   absolute?: boolean;
   onOpen?: () => void;
-  tabText?: string;
+  tabText?: React.ReactNode;
   noClickOutside?: boolean;
+  translate?: number;
   id?: string;
 }
 
 const DrawerContainer = styled(motion.div)<{
   isopen: boolean;
   $absolute: boolean;
+  $translate: number;
 }>`
   position: ${({ $absolute }) => ($absolute ? 'absolute' : 'fixed')};
   top: 0;
@@ -27,6 +30,7 @@ const DrawerContainer = styled(motion.div)<{
   max-width: 40%;
   height: 100%;
   color: var(--amplify-colors-font-inverse);
+  background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
   z-index: 1000;
   overflow-y: scroll;
@@ -36,7 +40,10 @@ const DrawerContainer = styled(motion.div)<{
   justify-content: flex-start;
   align-items: flex-start;
   padding: var(--amplify-space-large);
-  transform: ${({ isopen }) => (isopen ? 'translateX(0)' : 'translateX(100%)')};
+  transform: ${({ isopen, $translate }) =>
+    isopen
+      ? `translateX(calc(0px + ${$translate}px))`
+      : `translateX(calc(100% + ${$translate}px))`};
   transition: transform 0.3s ease-in-out;
 `;
 
@@ -53,12 +60,17 @@ const Overlay = styled(motion.div)<{ isopen: boolean }>`
   opacity: ${({ isopen }) => (isopen ? 1 : 0)};
 `;
 
-const Tab = styled(motion.div)<{ $offset: number; $absolute: boolean }>`
+const Tab = styled(motion.div)<{
+  $offset: number;
+  $absolute: boolean;
+  $translate: number;
+}>`
   position: ${({ $absolute }) => ($absolute ? 'absolute' : 'fixed')};
   writing-mode: vertical-lr;
+  background-color: rgba(0, 0, 0, 0.8);
   transform: scale(-1); /* flips to face scroll bar */
   top: 12%;
-  right: ${({ $offset }) => `${$offset}px`};
+  right: ${({ $offset, $translate }) => `calc(${$offset}px - ${$translate}px)`};
   min-width: 50px;
   min-height: 50px;
   height: auto;
@@ -83,6 +95,7 @@ const Drawer: React.FC<DrawerProps> = ({
   tabText,
   absolute,
   noClickOutside,
+  translate = 0,
   id = 'drawer-content',
 }) => {
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -142,6 +155,7 @@ const Drawer: React.FC<DrawerProps> = ({
     <>
       {!noOverlay && <Overlay isopen={isopen} onClick={onClose} />}
       <DrawerContainer
+        $translate={translate}
         id={id}
         className='soft-shadow'
         ref={drawerRef}
@@ -157,6 +171,7 @@ const Drawer: React.FC<DrawerProps> = ({
         )}
       </DrawerContainer>
       <Tab
+        $translate={translate}
         $absolute={absolute || false}
         ref={tabRef}
         $offset={isopen ? tabOffset : 0}

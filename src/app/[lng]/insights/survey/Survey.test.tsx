@@ -45,9 +45,9 @@ jest.mock('@/app/components/dataviz/TooltipChart', () => () => (
   <div>Mocked Tooltip</div>
 ));
 jest.mock('@/app/components/Drawer', () => {
-  return ({ isOpen, onOpen, onClose, children }) => (
+  return ({ isopen, onOpen, onClose, children }) => (
     <div>
-      <div>{isOpen ? 'Drawer Open' : 'Drawer Closed'}</div>
+      <div>{isopen ? 'Drawer Open' : 'Drawer Closed'}</div>
       <div>
         <button onClick={onOpen}>Open Drawer</button>
         <button onClick={onClose}>Close Drawer</button>

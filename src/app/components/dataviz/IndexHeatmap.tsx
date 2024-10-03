@@ -1,6 +1,6 @@
 'use client';
 
-import { Placeholder, SliderField, Text } from '@aws-amplify/ui-react';
+import { Placeholder, Text } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import _ from 'lodash';
@@ -473,7 +473,6 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
 
   return (
     <>
-      <SliderField label='Affordability' max={100} />
       <Placeholder height={height} isLoaded={!loading || false} />
       <ChartContainer>
         <svg ref={ref}></svg>

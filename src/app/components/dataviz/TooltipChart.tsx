@@ -11,7 +11,7 @@ const SmallText = styled(Text)`
 
 const TooltipContainer = styled.div<{ $minWidth?: number }>`
   position: absolute;
-  z-index: 2000;
+  z-index: 997;
   pointer-events: none;
   flex-direction: column;
   padding: var(--amplify-space-xs) var(--amplify-space-small);

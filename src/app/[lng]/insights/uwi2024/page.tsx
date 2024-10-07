@@ -56,7 +56,20 @@ const Index = () => {
           <Heading level={3} color='font.inverse' marginBottom='xl'>
             {t('subtitle')}
           </Heading>
-          <Text marginBottom='xl'>{t('blurb')}</Text>
+          <Text marginBottom='xl'>
+            <Trans
+              t={t}
+              i18nKey='blurb'
+              components={{
+                a: (
+                  <a
+                    href='https://www.youthfulcities.com/devlab/'
+                    target='_blank'
+                  />
+                ),
+              }}
+            />
+          </Text>
           <Heading level={2} color='brand.primary.60'>
             {t('map_heading')}
           </Heading>
@@ -100,6 +113,11 @@ const Index = () => {
             <li>
               <Text>
                 <em>{t('chatbot_prompt3')}</em>
+              </Text>
+            </li>
+            <li>
+              <Text>
+                <em>{t('chatbot_prompt4')}</em>
               </Text>
             </li>
           </ul>

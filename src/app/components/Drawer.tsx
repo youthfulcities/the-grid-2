@@ -1,4 +1,5 @@
 import { useDimensions } from '@/hooks/useDimensions';
+import { Text } from '@aws-amplify/ui-react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 import { FaAngleRight, FaX } from 'react-icons/fa6';
@@ -176,7 +177,7 @@ const Drawer: React.FC<DrawerProps> = ({
         $offset={isopen ? tabOffset : 0}
         onClick={isopen ? onClose : onOpen}
       >
-        {isopen ? <FaX /> : tabText || <FaAngleRight />}
+        <Text margin='0'>{isopen ? <FaX /> : tabText || <FaAngleRight />}</Text>
       </Tab>
     </>
   );

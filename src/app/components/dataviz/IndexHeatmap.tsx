@@ -208,7 +208,9 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
   const memoizedDistanceFromRight = useMemo(() => {
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
-      return window.innerWidth - rect.right;
+      const scrollbarWidth =
+        window.innerWidth - document.documentElement.clientWidth;
+      return window.innerWidth - scrollbarWidth - rect.right;
     }
     return 0;
   }, [width]); // Only recalculate when width changes
@@ -217,6 +219,30 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
   useEffect(() => {
     setDistanceFromRight(memoizedDistanceFromRight);
   }, [memoizedDistanceFromRight]);
+
+  // UseEffect to handle global click for hiding the tooltip
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setTooltipState({
+          position: null,
+          value: null,
+          content: '',
+          group: '',
+          topic: '',
+          child: null,
+          minWidth: 0,
+        });
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    // Cleanup event listener when component unmounts
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchData = async (filename: string) => {
@@ -627,7 +653,7 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
           onClose={() => {
             setIsDrawerOpen(false);
           }}
-          tabText={<Text marginTop='medium'>{t('customize_tab')}</Text>}
+          tabText={t('customize_tab')}
         >
           <Flex direction='column'>
             <Text>
@@ -644,7 +670,9 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
             {topicWeightsArray.map((topic) => (
               <CustomSliderField
                 key={topic.code}
-                label={topic.title}
+                label={
+                  lng === 'fr' ? topicWeights[topic.code].titlefr : topic.title
+                }
                 value={customWeights[topic.code].weight * 100}
                 onChange={(value) => handleChange(value, topic.code)}
                 formatValue={() =>
@@ -652,7 +680,17 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
                 }
               />
             ))}
-            <Button onClick={handleReset} variation='primary' marginTop='xl'>
+            <Text marginTop='xl'>
+              <Trans
+                t={t}
+                i18nKey='best_city'
+                values={{ city: sortedData[0]?.cityGroup }}
+                components={{
+                  strong: <strong />,
+                }}
+              />
+            </Text>
+            <Button onClick={handleReset} variation='primary'>
               {t('reset')}
             </Button>
           </Flex>

@@ -1,11 +1,12 @@
-import { Button, Flex, Heading, Text } from '@aws-amplify/ui-react';
+import geoJSON from '@/data/uwi-2024.json';
+import { Button, Flex, Heading, Text, useTheme } from '@aws-amplify/ui-react';
 import { Feature, GeoJsonProperties, Point } from 'geojson';
 import _ from 'lodash';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { useParams } from 'next/navigation';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa6';
 import Map, {
-  MapEvent,
   MapMouseEvent,
   MapRef,
   NavigationControl,
@@ -28,10 +29,14 @@ interface CustomMapProps {
 interface CityViewProps {
   item: {
     City: string;
+    Score: number;
     Rank: number;
     Strength_1: string;
     Strength_2: string;
     'Room for Improvement': string;
+    Force_1: string;
+    Force_2: string;
+    'Point à améliorer': string;
   };
 }
 
@@ -64,23 +69,42 @@ const initialView: ViewState = {
 };
 
 const CityView = forwardRef<HTMLDivElement, CityViewProps>(({ item }, ref) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { tokens } = useTheme();
   return (
-    <CityViewContainer
-      ref={ref}
-      id={item.City} // Ensure this matches the feature ID
-    >
-      <Heading level={4} color='font.inverse'>
-        {item.City} | Rank #{item.Rank}
+    <CityViewContainer ref={ref} id={item.City}>
+      <Heading level={4} color='brand.primary.60'>
+        {item.City} |{' '}
+        <span className='highlight'>
+          {lng === 'fr' ? 'Rang' : 'Rank'} #{item.Rank}
+        </span>
+      </Heading>
+      <Heading level={5} color='font.inverse'>
+        Score: {item.Score} / 821
       </Heading>
 
       <Text>
-        <FaThumbsUp fontSize='large' /> {item.Strength_1}
+        <FaThumbsUp
+          fontSize='large'
+          color={tokens.colors.green[60].toString()}
+        />{' '}
+        {lng === 'fr' ? item.Force_1 : item.Strength_1}
       </Text>
       <Text>
-        <FaThumbsUp fontSize='large' /> {item.Strength_2}
+        <FaThumbsUp
+          fontSize='large'
+          color={tokens.colors.green[60].toString()}
+        />{' '}
+        {lng === 'fr' ? item.Force_2 : item.Strength_2}
       </Text>
       <Text>
-        <FaThumbsDown fontSize='large' /> {item['Room for Improvement']}
+        <FaThumbsDown
+          color={tokens.colors.red[60].toString()}
+          fontSize='large'
+        />{' '}
+        {lng === 'fr'
+          ? item['Point à améliorer']
+          : item['Room for Improvement']}
       </Text>
     </CityViewContainer>
   );
@@ -89,6 +113,7 @@ const CityView = forwardRef<HTMLDivElement, CityViewProps>(({ item }, ref) => {
 CityView.displayName = 'CityView';
 
 const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
+  const { lng } = useParams<{ lng: string }>();
   const [viewState, setViewState] = useState<ViewState>(initialView);
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [completed, setCompleted] = useState(false);
@@ -162,14 +187,11 @@ const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
     });
     setDrawerOpen(false);
     setCompleted(true);
+    setCurrentFeature(null);
   };
 
-  const onLoad = (event: MapEvent) => {
-    const map = event.target as mapboxgl.Map;
-    const features = map.queryRenderedFeatures(
-      undefined as unknown as PointLike,
-      { layers: [dataset] }
-    );
+  const onLoad = () => {
+    const { features } = geoJSON;
 
     if (features.length > 0) {
       const propertiesArray = features.map((item) => item);
@@ -181,13 +203,10 @@ const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
       setAllFeatures(sortedArray as Feature<Point, GeoJsonProperties>[]);
       setCurrentFeature(sortedArray[0] as Feature<Point, GeoJsonProperties>);
     }
-
-    const mapCenter = map.getCenter();
-    setCenter(mapCenter);
   };
 
   useEffect(() => {
-    //check if city has actually changed on rerender to prevent bouncing
+    // check if city has actually changed on rerender to prevent bouncing
     if (
       previousFeatureRef?.current?.properties?.City ===
       currentFeature?.properties?.City
@@ -326,7 +345,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
       ref={mapRef}
       initialViewState={initialView}
       scrollZoom
-      onLoad={(e) => onLoad(e)}
+      onLoad={(e) => onLoad()}
       onMove={(e) => setViewState(e.viewState)}
       style={{ width, height }}
       mapStyle={mapStyle}

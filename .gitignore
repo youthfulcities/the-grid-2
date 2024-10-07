@@ -25,4 +25,5 @@ amplify-gradle-config.json
 amplifytools.xcconfig
 .secret-*
 **.sample
+!src/__mocks__/**
 #amplify-do-not-edit-end

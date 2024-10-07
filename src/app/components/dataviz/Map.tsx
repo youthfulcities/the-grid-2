@@ -191,7 +191,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
   };
 
   const onLoad = () => {
-    const features = geoJSON.features;
+    const { features } = geoJSON;
 
     if (features.length > 0) {
       const propertiesArray = features.map((item) => item);

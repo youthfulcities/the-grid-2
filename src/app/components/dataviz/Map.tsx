@@ -1,10 +1,12 @@
-import { Button, Flex, Heading, Text } from '@aws-amplify/ui-react';
+import geoJSON from '@/data/uwi-2024.json';
+import { Button, Flex, Heading, Text, useTheme } from '@aws-amplify/ui-react';
 import { Feature, GeoJsonProperties, Point } from 'geojson';
 import _ from 'lodash';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { useParams } from 'next/navigation';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa6';
 import Map, {
-  MapEvent,
   MapMouseEvent,
   MapRef,
   NavigationControl,
@@ -20,15 +22,21 @@ const height = 600;
 
 interface CustomMapProps {
   width: number;
+  mapStyle: string;
+  dataset: string;
 }
 
 interface CityViewProps {
   item: {
     City: string;
+    Score: number;
     Rank: number;
     Strength_1: string;
     Strength_2: string;
     'Room for Improvement': string;
+    Force_1: string;
+    Force_2: string;
+    'Point à améliorer': string;
   };
 }
 
@@ -61,28 +69,59 @@ const initialView: ViewState = {
 };
 
 const CityView = forwardRef<HTMLDivElement, CityViewProps>(({ item }, ref) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { tokens } = useTheme();
   return (
-    <CityViewContainer
-      ref={ref}
-      id={item.City} // Ensure this matches the feature ID
-    >
-      <Heading level={4} color='font.inverse'>
-        {item.City} | Rank #{item.Rank}
+    <CityViewContainer ref={ref} id={item.City}>
+      <Heading level={4} color='brand.primary.60'>
+        {item.City} |{' '}
+        <span className='highlight'>
+          {lng === 'fr' ? 'Rang' : 'Rank'} #{item.Rank}
+        </span>
       </Heading>
-      <Text>{item.Strength_1}</Text>
-      <Text>{item.Strength_2}</Text>
-      <Text>{item['Room for Improvement']}</Text>
+      <Heading level={5} color='font.inverse'>
+        Score: {item.Score} / 821
+      </Heading>
+
+      <Text>
+        <FaThumbsUp
+          fontSize='large'
+          color={tokens.colors.green[60].toString()}
+        />{' '}
+        {lng === 'fr' ? item.Force_1 : item.Strength_1}
+      </Text>
+      <Text>
+        <FaThumbsUp
+          fontSize='large'
+          color={tokens.colors.green[60].toString()}
+        />{' '}
+        {lng === 'fr' ? item.Force_2 : item.Strength_2}
+      </Text>
+      <Text>
+        <FaThumbsDown
+          color={tokens.colors.red[60].toString()}
+          fontSize='large'
+        />{' '}
+        {lng === 'fr'
+          ? item['Point à améliorer']
+          : item['Room for Improvement']}
+      </Text>
     </CityViewContainer>
   );
 });
 
 CityView.displayName = 'CityView';
 
-const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
+const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
+  const { lng } = useParams<{ lng: string }>();
   const [viewState, setViewState] = useState<ViewState>(initialView);
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [completed, setCompleted] = useState(false);
   const [currentFeature, setCurrentFeature] = useState<Feature<
+    Point,
+    GeoJsonProperties
+  > | null>(null);
+  const [prevCurrentFeature, setPrevCurrentFeature] = useState<Feature<
     Point,
     GeoJsonProperties
   > | null>(null);
@@ -92,11 +131,25 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
   const mapRef = useRef<MapRef>(null);
   const cityViewRefs = useRef<HTMLDivElement[]>([]);
   const [override, setOverride] = useState(false);
+  const [center, setCenter] = useState<{ lng: number; lat: number }>({
+    lng: 0,
+    lat: 0,
+  });
+  const previousFeatureRef = useRef<Feature<Point, GeoJsonProperties> | null>(
+    null
+  );
 
   useEffect(() => {
     // Clear old refs before setting new ones
     cityViewRefs.current = [];
   }, []);
+
+  // Effect to resize the map when width or height changes
+  useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.resize();
+    }
+  }, [width, height]);
 
   const onClick = (event: MapMouseEvent) => {
     const feature = event.features?.[0] as Feature<Point, GeoJsonProperties>;
@@ -109,7 +162,6 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
       });
       setDrawerOpen(true);
 
-      // Use react-scroll to scroll the corresponding CityView item into view within the Drawer
       const currentCityName = feature.properties?.City;
       if (currentCityName) {
         scroller.scrollTo(currentCityName, {
@@ -117,7 +169,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
           delay: 0,
           offset: -20,
           smooth: 'easeInOutQuart',
-          containerId: 'drawer-content', // This is the ID of the container in Drawer
+          containerId: 'drawer-content',
         });
       }
     }
@@ -135,14 +187,11 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
     });
     setDrawerOpen(false);
     setCompleted(true);
+    setCurrentFeature(null);
   };
 
-  const onLoad = (event: MapEvent) => {
-    const map = event.target as mapboxgl.Map;
-    // Get the features from the interactive layer
-    const features = map.queryRenderedFeatures(undefined as unknown as PointLike, {
-      layers: ['uwi-2023-overall-2'], // Specify the interactive layer ID
-    });
+  const onLoad = () => {
+    const { features } = geoJSON;
 
     if (features.length > 0) {
       const propertiesArray = features.map((item) => item);
@@ -157,20 +206,82 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
   };
 
   useEffect(() => {
+    // check if city has actually changed on rerender to prevent bouncing
+    if (
+      previousFeatureRef?.current?.properties?.City ===
+      currentFeature?.properties?.City
+    ) {
+      return;
+    }
     if (currentFeature && mapRef.current && drawerOpen) {
       const coordinates = currentFeature.geometry.coordinates as [
         number,
         number,
       ];
+
       mapRef.current.flyTo({
         center: coordinates,
-        zoom: 16,
-        pitch: 54,
+        offset: [-100, 0],
+        zoom: 10,
+        pitch: 50,
         bearing: 0,
-        duration: 4000,
-        padding: { top: 0, bottom: 0, left: 0, right: 300 },
+        duration: 2000,
+        padding: {
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+        },
+        easing: (t) => t * (2 - t),
       });
+
+      const handleMoveEnd = () => {
+        if (mapRef.current) {
+          const features =
+            mapRef?.current.queryRenderedFeatures(
+              undefined as unknown as PointLike,
+              {
+                layers: [dataset], // Specify the interactive layer ID
+              }
+            ) || [];
+
+          // Filter for features that are of type Point
+          const matchedFeatures = features.filter(
+            (feature) =>
+              feature.geometry.type === 'Point' &&
+              feature.properties?.City === currentFeature?.properties?.City
+          ) as Feature<Point, GeoJsonProperties>[]; // Assert the type after filtering
+
+          const updatedCoordinates = matchedFeatures[0]?.geometry
+            ?.coordinates as [number, number];
+
+          // Adjust flyTo based on the updated coordinates
+          mapRef.current.flyTo({
+            center: updatedCoordinates, // Recenter on the original feature coordinates
+            zoom: 15.5,
+            offset: [-100, 0],
+            pitch: 50,
+            bearing: 0,
+            duration: 2000,
+            padding: {
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+            },
+            easing: (t) => t * t,
+          });
+
+          // Cleanup the event listener after it runs
+          mapRef.current.off('moveend', handleMoveEnd);
+        }
+      };
+
+      // Attach the moveend event listener to trigger the second flyTo
+      mapRef.current.once('moveend', handleMoveEnd);
     }
+    // Update the previous feature ref after the logic runs
+    previousFeatureRef.current = currentFeature;
   }, [currentFeature, drawerOpen]);
 
   useEffect(() => {
@@ -180,7 +291,6 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
       threshold: 0.5,
     };
 
-    console.log(cityViewRefs.current);
     const observer = new IntersectionObserver((entries) => {
       if (!override) {
         entries.forEach((entry) => {
@@ -224,7 +334,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
       return () => clearTimeout(timer);
     }
     // Return null if there's no timer to clear
-    return () => { };
+    return () => {};
   }, [override]);
 
   return (
@@ -235,11 +345,11 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
       ref={mapRef}
       initialViewState={initialView}
       scrollZoom
-      onLoad={(e) => onLoad(e)}
+      onLoad={(e) => onLoad()}
       onMove={(e) => setViewState(e.viewState)}
       style={{ width, height }}
-      mapStyle='mapbox://styles/youthfulcities/clzrhcvrj00hf01pc44in6vrn'
-      interactiveLayerIds={['uwi-2023-overall-2']}
+      mapStyle={mapStyle}
+      interactiveLayerIds={[dataset]}
       onClick={onClick}
       mapboxAccessToken={MAPBOX_TOKEN}
     >
@@ -248,7 +358,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width }) => {
       </ResetButton>
       <NavigationControl position='top-left' />
       <Drawer
-        isOpen={drawerOpen}
+        isopen={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         onOpen={() => setDrawerOpen(true)}
         noOverlay

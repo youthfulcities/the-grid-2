@@ -1,24 +1,27 @@
 import { useDimensions } from '@/hooks/useDimensions';
+import { Text } from '@aws-amplify/ui-react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 import { FaAngleRight, FaX } from 'react-icons/fa6';
 import styled from 'styled-components';
 
 interface DrawerProps {
-  isOpen: boolean;
+  isopen: boolean;
   onClose?: () => void;
   children: React.ReactNode;
   noOverlay?: boolean;
   absolute?: boolean;
   onOpen?: () => void;
-  tabText?: string;
+  tabText?: React.ReactNode;
   noClickOutside?: boolean;
+  translate?: number;
   id?: string;
 }
 
 const DrawerContainer = styled(motion.div)<{
-  isOpen: boolean;
+  isopen: boolean;
   $absolute: boolean;
+  $translate: number;
 }>`
   position: ${({ $absolute }) => ($absolute ? 'absolute' : 'fixed')};
   top: 0;
@@ -27,6 +30,7 @@ const DrawerContainer = styled(motion.div)<{
   max-width: 40%;
   height: 100%;
   color: var(--amplify-colors-font-inverse);
+  background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
   z-index: 1000;
   overflow-y: scroll;
@@ -36,12 +40,15 @@ const DrawerContainer = styled(motion.div)<{
   justify-content: flex-start;
   align-items: flex-start;
   padding: var(--amplify-space-large);
-  transform: ${({ isOpen }) => (isOpen ? 'translateX(0)' : 'translateX(100%)')};
+  transform: ${({ isopen, $translate }) =>
+    isopen
+      ? `translateX(calc(0px + ${$translate}px))`
+      : `translateX(calc(100% + ${$translate}px))`};
   transition: transform 0.3s ease-in-out;
 `;
 
-const Overlay = styled(motion.div)<{ isOpen: boolean }>`
-  display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
+const Overlay = styled(motion.div)<{ isopen: boolean }>`
+  display: ${({ isopen }) => (isopen ? 'block' : 'none')};
   position: fixed;
   top: 0;
   left: 0;
@@ -50,15 +57,20 @@ const Overlay = styled(motion.div)<{ isOpen: boolean }>`
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 998;
   transition: opacity 0.3s ease-in-out;
-  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+  opacity: ${({ isopen }) => (isopen ? 1 : 0)};
 `;
 
-const Tab = styled(motion.div)<{ $offset: number; $absolute: boolean }>`
+const Tab = styled(motion.div)<{
+  $offset: number;
+  $absolute: boolean;
+  $translate: number;
+}>`
   position: ${({ $absolute }) => ($absolute ? 'absolute' : 'fixed')};
   writing-mode: vertical-lr;
+  background-color: rgba(0, 0, 0, 0.8);
   transform: scale(-1); /* flips to face scroll bar */
   top: 12%;
-  right: ${({ $offset }) => `${$offset}px`};
+  right: ${({ $offset, $translate }) => `calc(${$offset}px - ${$translate}px)`};
   min-width: 50px;
   min-height: 50px;
   height: auto;
@@ -75,7 +87,7 @@ const Tab = styled(motion.div)<{ $offset: number; $absolute: boolean }>`
 `;
 
 const Drawer: React.FC<DrawerProps> = ({
-  isOpen,
+  isopen,
   onClose,
   onOpen,
   children,
@@ -83,12 +95,13 @@ const Drawer: React.FC<DrawerProps> = ({
   tabText,
   absolute,
   noClickOutside,
+  translate = 0,
   id = 'drawer-content',
 }) => {
   const drawerRef = useRef<HTMLDivElement>(null);
   const tabRef = useRef<HTMLDivElement>(null);
   const [tabOffset, setTabOffset] = useState<number>(0);
-  const { width } = useDimensions(drawerRef, isOpen);
+  const { width } = useDimensions(drawerRef, isopen);
 
   // Expose the drawerRef to parent components via ref
 
@@ -123,7 +136,7 @@ const Drawer: React.FC<DrawerProps> = ({
   }, []);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isopen) {
       document.addEventListener('mousedown', handleClickOutside);
       // Calculate tab position based on drawer's position
       if (drawerRef.current) {
@@ -136,33 +149,35 @@ const Drawer: React.FC<DrawerProps> = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isopen]);
 
   return (
     <>
-      {!noOverlay && <Overlay isOpen={isOpen} onClick={onClose} />}
+      {!noOverlay && <Overlay isopen={isopen} onClick={onClose} />}
       <DrawerContainer
+        $translate={translate}
         id={id}
         className='soft-shadow'
         ref={drawerRef}
-        isOpen={isOpen}
+        isopen={isopen}
         $absolute={absolute || false}
       >
         {React.Children.map(children, (child) =>
           React.isValidElement(child)
             ? React.cloneElement(child as React.ReactElement, {
-                drawerWidth: width,
+                drawerwidth: width,
               })
             : child
         )}
       </DrawerContainer>
       <Tab
+        $translate={translate}
         $absolute={absolute || false}
         ref={tabRef}
-        $offset={isOpen ? tabOffset : 0}
-        onClick={isOpen ? onClose : onOpen}
+        $offset={isopen ? tabOffset : 0}
+        onClick={isopen ? onClose : onOpen}
       >
-        {isOpen ? <FaX /> : tabText || <FaAngleRight />}
+        <Text margin='0'>{isopen ? <FaX /> : tabText || <FaAngleRight />}</Text>
       </Tab>
     </>
   );

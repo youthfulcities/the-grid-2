@@ -24,6 +24,7 @@ import { z } from 'zod';
 import { createContactSubmission } from '../../../graphql/mutations';
 import Container from '../../components/Background';
 
+
 const StyledForm = styled(Flex)`
   margin: 0 auto;
   flex-direction: column;
@@ -130,6 +131,7 @@ const ContactForm = () => {
   const { t } = useTranslation(lng, 'contact');
   const { t: tsubscribe } = useTranslation(lng, 'newsletter');
   const { tokens } = useTheme();
+
 
   const { firstName, lastName, email, phoneNumber, topic, message } = formData;
   const phoneRegex =
@@ -274,7 +276,6 @@ const ContactForm = () => {
       }
     }
   };
-
   const validation = schema.safeParse(formData);
   const isFormValid = validation.success;
 
@@ -369,6 +370,7 @@ const ContactForm = () => {
             <option value=''>{t('select')}</option>
             <option value='Report a technical issue'>{t('technical')}</option>
             <option value='Collaborate with us'>{t('collaborate')}</option>
+            <option value='Request more data'>{t('data')}</option>
             <option value='Other inquiry'>{t('other')}</option>
           </StyledSelect>
           <StyledTextArea

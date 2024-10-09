@@ -7,16 +7,18 @@
         "City": "Regina",
         "Rank": 13,
         "Score": 430.3,
-        "Strength_1": "Ranked 1st for post secondary career services.",
-        "Region": "Prairies",
-        "Strength_2": "Second lowest youth unemployment rate at 6.9% (March 2023).",
-        "Room for Improvement": "Ranked last in Entrepreneurial Spirit with low number of startups, investors, accelerators, and coworking spaces.",
-        "Point à améliorer": "Dernière ville au classement de l’esprit entrepreneurial en raison d’un faible nombre de jeunes entreprises, d’investisseur‧se‧s, d’accélérateurs et d’espaces communautaires de travail.",
-        "Force_1": "En tête du classement en ce qui concerne les services d’orientation professionnelle au niveau postsecondaire.",
-        "Force_2": "Deuxième taux de chômage des jeunes le plus bas, à 6,9 % (en date de mars 2023)."
+        "Strength_1": "Regina has the 2nd most affordable benchmark home price relative to median income at $318,100.",
+        "Strength_2": "University of Regina is one of the few universities in Canada that offers immersive Indigenous language learning.",
+        "Room for Improvement": "Regina has a low number of guidance counsellors employed per capita (150 total).",
+        "Point à améliorer": "Regina a un faible nombre de conseillers d'orientation employés par habitant (150 au total).",
+        "Force_1": "Regina a le deuxième prix de référence le plus abordable par rapport au revenu médian, soit 318 100 $.",
+        "Force_2": "L'Université de Regina est l'une des rares universités au Canada à proposer un apprentissage immersif des langues indigènes. "
       },
       "geometry": {
-        "coordinates": [-104.618938, 50.448612],
+        "coordinates": [
+          -104.618938,
+          50.448612
+        ],
         "type": "Point"
       },
       "id": "06e89d9557f8daf3bd72cb76d63c6970"
@@ -28,16 +30,18 @@
         "City": "Laval",
         "Rank": 18,
         "Score": 386.1,
-        "Strength_1": "Best city for young people to own a home (comparing after tax income of 25-34 year olds to benchmark home price).",
-        "Region": "Quebec",
-        "Strength_2": "Second lowest core housing need among the 30 cities.",
-        "Room for Improvement": "Ranked lowest for number of mental health professionals per capita.",
-        "Point à améliorer": "Dernière ville en ce qui concerne le nombre de professionnel‧le‧s de la santé par habitant‧e.",
-        "Force_1": "Ville offrant aux jeunes le meilleur accès à la propriété (rapport entre le revenu net des jeunes de 25 à 34 ans et le prix de référence des logements).",
-        "Force_2": "Avant-dernière des 30 villes en ce qui concerne les besoins impérieux en matière de logement."
+        "Strength_1": "Laval has the highest percentage of students passing standardized math tests (77.4%) out of cities that do standardized testing.",
+        "Strength_2": "Our team found 21 polytechnic or vocational schools in Laval, the highest per capita.",
+        "Room for Improvement": "Lethbridge has the lowest number of businesses with less than 100 employees per capita. (13,060 at time of collection).",
+        "Point à améliorer": "Lethbridge a le plus petit nombre d'entreprises de moins de 100 employés par habitant. (13 060 au moment de la collecte).",
+        "Force_1": "Laval a le pourcentage le plus élevé d'étudiants réussissant les tests standardisés de mathématiques (77,4%) parmi les villes qui font des tests standardisés.",
+        "Force_2": "Notre équipe a trouvé 21 écoles polytechniques ou professionnelles à Laval, le plus grand nombre par habitant."
       },
       "geometry": {
-        "coordinates": [-73.752722, 45.575299],
+        "coordinates": [
+          -73.752722,
+          45.575299
+        ],
         "type": "Point"
       },
       "id": "1de86cee65a071b13f2221bafaac1e73"
@@ -49,16 +53,18 @@
         "City": "Whitehorse",
         "Rank": 25,
         "Score": 283.6,
-        "Strength_1": "Ranked 3rd for number of mental health professionals per capita.",
-        "Region": "West",
-        "Strength_2": "Smallest gender gap in labour force participation.",
-        "Room for Improvement": "Ranked last in Digital Access with limited access to broadband internet and slow internet speeds of 29 Mbps.",
-        "Point à améliorer": "Dernière au classement de l’accès numérique avec un accès limité à Internet à haut débit et des débits faibles de 29 Mbit/s.",
-        "Force_1": "3e au classement en ce qui concerne le nombre de professionnel‧le‧s de la santé mentale par habitant‧e.",
-        "Force_2": "Écart entre les genres le plus faible en ce qui concerne la participation au marché du travail."
+        "Strength_1": "Whitehorse has the lowest difference in the labour participation rate of individuals identifying as men and women with only a 1% difference favouring men.",
+        "Strength_2": "Whitehorse has the highest per capita bed capacity in domestic violence shelters within the city at 80 beds.",
+        "Room for Improvement": "Whitehorse has the most expensive high speed internet plan relative to income at $110.95.",
+        "Point à améliorer": "Whitehorse a le forfait Internet haute vitesse le plus cher par rapport au revenu, soit 110,95 $.",
+        "Force_1": "Whitehorse a la plus faible différence dans le taux de participation au marché du travail des personnes s'identifiant comme des hommes et des femmes, avec une différence de seulement 1 % en faveur des hommes.",
+        "Force_2": "Whitehorse a le plus grand nombre de lits par habitant dans les refuges pour victimes de violence familiale de la ville, soit 80 lits."
       },
       "geometry": {
-        "coordinates": [-135.054829, 60.721589],
+        "coordinates": [
+          -135.054829,
+          60.721589
+        ],
         "type": "Point"
       },
       "id": "21b137da10bb6112a4b93fec2216ecf8"
@@ -70,16 +76,18 @@
         "City": "Victoria",
         "Rank": 7,
         "Score": 511.6,
-        "Strength_1": "Ranked 1st for number of mental health professionals per capita with 133 total.",
-        "Region": "West",
-        "Strength_2": "Ranked in the top 5 for urban health resources per capita with 5 hospitals, 651 doctors, and 2 community health clinics.",
-        "Room for Improvement": "Ranked in the bottom 10 for home ownership opportunity (comparing annual after tax income of 25-34 year olds to benchmark prices).",
-        "Point à améliorer": "Parmi les dix dernières villes en ce qui concerne l’accès à la propriété (rapport entre le revenu net des jeunes de 25 à 34 ans et le prix de référence des logements).",
-        "Force_1": "En tête en ce qui concerne le nombre de professionnel‧le‧s de la santé mentale par habitant‧e (133 en tout).",
-        "Force_2": "Parmi les cinq premières villes en ce qui concerne les ressources de santé urbaine par habitant‧e avec 5 hôpitaux, 651 médecins et 2 cliniques de santé communautaire."
+        "Strength_1": "Victoria and Saanich have a high number of people with a highschool degree or GED equivalent relative to total population at over 160,000.",
+        "Strength_2": "University of Victoria has a high number of international students enrolled part time relative to total population (645 students in 2021/2022).",
+        "Room for Improvement": "Victoria is the oldest city in the index with an average population age of 44.5.",
+        "Point à améliorer": "Victoria est la ville la plus âgée de l'indice avec une moyenne d'âge de 44,5 ans.",
+        "Force_1": "Victoria et Saanich ont un nombre élevé de personnes ayant un diplôme d'études secondaires ou l'équivalent GED par rapport à la population totale, soit plus de 160 000.",
+        "Force_2": "L'Université de Victoria a un nombre élevé d'étudiants internationaux inscrits à temps partiel par rapport à la population totale (645 étudiants en 2021/2022)."
       },
       "geometry": {
-        "coordinates": [-123.365228, 48.428189],
+        "coordinates": [
+          -123.365228,
+          48.428189
+        ],
         "type": "Point"
       },
       "id": "262bd8ba289ebf71e3890f02b90d95e2"
@@ -91,16 +99,18 @@
         "City": "Moncton",
         "Rank": 29,
         "Score": 239.1,
-        "Strength_1": "Ranked 3rd for most affordable tuition fees for international students.",
-        "Region": "East",
-        "Strength_2": "Lowest average mortgage debt at $114,000.",
-        "Room for Improvement": "Ranked last in Education + Training with only 1 out of 6 points received for BIPOC scholarships.",
-        "Point à améliorer": "Dernière au classement de l’éducation et de la formation avec un seul point sur six reçus pour les bourses d’études aux PANDC.",
-        "Force_1": "3e au classement en ce qui concerne les frais de scolarité les plus abordables pour les étudiant‧e‧s internationaux.",
-        "Force_2": "Dette hypothécaire moyenne la plus basse (114 000 $)."
+        "Strength_1": "Moncton ranked highest in terms of net interprovincial migration of youth per capita, gaining 1593 youths in 2021/2022.",
+        "Strength_2": "University of Moncton has the 2nd lowest average class size of any post-secondary institution.",
+        "Room for Improvement": "Moncton has a high relative unemployment rate 9.8% within the trades sector.",
+        "Point à améliorer": "Moncton a un taux de chômage relatif élevé de 9,8 % dans le secteur des métiers.",
+        "Force_1": "Moncton se classe au premier rang pour ce qui est de la migration interprovinciale nette de jeunes par habitant, avec un gain de 1 593 jeunes en 2021/2022.",
+        "Force_2": "L'Université de Moncton est le deuxième établissement d'enseignement postsecondaire où le nombre moyen d'étudiants par classe est le plus bas."
       },
       "geometry": {
-        "coordinates": [-64.798811, 46.098051],
+        "coordinates": [
+          -64.798811,
+          46.098051
+        ],
         "type": "Point"
       },
       "id": "328f75f9c8b148eb86a8b05896aa12f2"
@@ -112,16 +122,18 @@
         "City": "Québec",
         "Rank": 8,
         "Score": 499.1,
-        "Strength_1": "Ranked 3rd overall for Digital Access with some of the cheapest broadband internet ($42.99) compared to other cities (average $51.30).",
-        "Region": "Quebec",
-        "Strength_2": "Ranked 2nd overall for Affordability with 96.6% of housing being adequate, affordable and suitable compared to a national average of 90.74%.",
-        "Room for Improvement": "The lowest ranking city for Health, Québec has one of the lowest per capita food banks overall (5 in the city).",
-        "Point à améliorer": "Dernière ville au classement de la santé, Québec a l’un des nombres de banques alimentaires par habitant‧e les plus faibles globalement (5 dans la ville).",
-        "Force_1": "3e au classement de l’accès numérique avec l’un des accès haut débit les moins chers (42,99 $) par rapport aux autres villes (moyenne : 51,30 $).",
-        "Force_2": "2e au classement de l’abordabilité avec 96,6 % de logements adéquats, abordables et convenables par rapport à la moyenne nationale, qui est de 90,74 %."
+        "Strength_1": "Québec has the highest number of public colleges per capita with 9 schools total.",
+        "Strength_2": "Utilities in Québec are affordable compared to median income with one kWh of electricity costing 6.5 cents at the time of collection.",
+        "Room for Improvement": "Only 6.1% of the population in Québec speaks a non-official mother tongue, the lowest percentage out of all cities in our index.",
+        "Point à améliorer": "Seulement 6,1 % de la population de Québec parle une langue maternelle non officielle, le pourcentage le plus bas de toutes les villes de notre indice.",
+        "Force_1": "Le Québec a le plus grand nombre de collèges publics par habitant avec 9 écoles au total.",
+        "Force_2": "Les services publics au Québec sont abordables par rapport au revenu médian, un kWh d'électricité coûtant 6,5 cents au moment de la collecte."
       },
       "geometry": {
-        "coordinates": [-71.208676, 46.813552],
+        "coordinates": [
+          -71.208676,
+          46.813552
+        ],
         "type": "Point"
       },
       "id": "368ef5f26c9300a042e8310ab2b5d1e0"
@@ -133,16 +145,18 @@
         "City": "Hamilton",
         "Rank": 11,
         "Score": 437.7,
-        "Strength_1": "Ranked 4th in Education with scholarships available for students identifying as BIPOC and a better than average gender enrollment gap.",
-        "Region": "Ontario",
-        "Strength_2": "Ranked in the top 10 for internet download speed at 73.06 mbps.",
-        "Room for Improvement": "Ranked in the bottom 10 out of 30 cities for domestic tuition fees, costing $8170 annual at the largest post secondary institution.",
-        "Point à améliorer": "Parmi les dix dernières villes en ce qui concerne les frais de scolarité nationaux, qui sont de 8 170 $ par an dans l’établissement d’enseignement postsecondaire le plus important.",
-        "Force_1": "4e ville au classement de l’éducation avec des bourses d’études offertes aux PANDC et un écart d’inscription entre les genres inférieur à la moyenne.",
-        "Force_2": "Parmi les dix premières villes en ce qui concerne la vitesse de téléchargement (73,06 Mbit/s)."
+        "Strength_1": "McMaster University has a high graduate degree graduation rate at 83.5%.",
+        "Strength_2": "Hamilton has a high number of businesses with less than 100 employees relative to population (24,369).",
+        "Room for Improvement": "Hamilton has a high rate of unemployment in the art, culture, and sport sector relative to general unemployment at 17%.",
+        "Point à améliorer": "Hamilton a un taux de chômage élevé dans le secteur de l'art, de la culture et du sport par rapport au taux de chômage général (17 %).",
+        "Force_1": "L'Université McMaster a un taux élevé d'obtention d'un diplôme d'études supérieures (83,5 %).",
+        "Force_2": "Hamilton compte un nombre élevé d'entreprises de moins de 100 employés par rapport à la population (24 369)."
       },
       "geometry": {
-        "coordinates": [-79.871691, 43.255766],
+        "coordinates": [
+          -79.871691,
+          43.255766
+        ],
         "type": "Point"
       },
       "id": "373f07db0902c1750141c9c9dca34b08"
@@ -154,16 +168,18 @@
         "City": "St. Catharines - Niagara",
         "Rank": 10,
         "Score": 442.7,
-        "Strength_1": "Ranked 7th for Affordability with a monthly surplus for youth of $332.88 (youth income minus cost of living)",
-        "Region": "Ontario",
-        "Strength_2": "Ranked 5th for post secondary career services to support students and graduates in gaining experience and transitioning to employment.",
-        "Room for Improvement": "Ranked 29th in city economy, losing more youth than they gained over the last five years to interprovincial migration.",
-        "Point à améliorer": "29e ville au classement de l’économie municipale, la ville perdant plus de jeunes qu’elle en a gagné au cours des cinq dernières années en raison de la migration interprovinciale.",
-        "Force_1": "7e au classement de l’abordabilité avec un surplus mensuel pour les jeunes de 332,88 $ (salaire des jeunes moins coût de la vie).",
-        "Force_2": "5e au classement des services d’orientation professionnelle dans les établissements d’enseignement postsecondaire pour aider les étudiant‧e‧s et les jeunes diplômé‧e‧s à acquérir de l’expérience et passer des études à la vie professionnelle."
+        "Strength_1": "St. Catharines - Niagara has a low relative unemployment rate in trades (10.9%). ",
+        "Strength_2": "St. Catharines - Niagara has the 2nd highest pass rate for high school literacy tests (86%) out of the cities in this index.",
+        "Room for Improvement": "St. Catharines - Niagara has lost a high number of young people to interprovincial migration per capita, losing 872 in 2021/2022.",
+        "Point à améliorer": "Catharines - Niagara a perdu un grand nombre de jeunes en raison de la migration interprovinciale par habitant, soit 872 en 2021/2022.",
+        "Force_1": "Catharines - Niagara a un faible taux de chômage relatif dans les métiers (10,9 %).",
+        "Force_2": "Catharines - Niagara a le deuxième plus haut taux de réussite aux tests d'alphabétisation au secondaire (86 %) parmi les villes de cet indice."
       },
       "geometry": {
-        "coordinates": [-79.242082, 43.158222],
+        "coordinates": [
+          -79.242082,
+          43.158222
+        ],
         "type": "Point"
       },
       "id": "3a6d11d0b76809d4cd9f58cb422a8733"
@@ -176,15 +192,17 @@
         "Rank": 17,
         "Score": 403.8,
         "Strength_1": "Halifax has the most people with a highschool degree or GED equivalent relative to population.",
-        "Region": "East",
-        "Strength_2": "Halifax has a high number of 15-29 moving in from other provinces relative to population.",
+        "Strength_2": "Halifax has a high number of 15-29-year-olds moving in from other provinces relative to population (3182).",
         "Room for Improvement": "Halifax has a high rate of youth unemployment, especially in the sales and service industry.",
-        "Point à améliorer": "",
-        "Force_1": "",
-        "Force_2": ""
+        "Point à améliorer": "Halifax a un taux élevé de chômage chez les jeunes, en particulier dans le secteur de la vente et des services.",
+        "Force_1": "C'est à Halifax que l'on trouve le plus grand nombre de personnes ayant un diplôme d'études secondaires ou l'équivalent GED par rapport à la population.",
+        "Force_2": "Halifax présente un nombre élevé de personnes de 15 à 29 ans arrivant d'autres provinces par rapport à la population."
       },
       "geometry": {
-        "coordinates": [-63.588428, 44.649347],
+        "coordinates": [
+          -63.588428,
+          44.649347
+        ],
         "type": "Point"
       },
       "id": "3d96561abc89a50ea414ee790f33036f"
@@ -196,16 +214,18 @@
         "City": "London",
         "Rank": 16,
         "Score": 404,
-        "Strength_1": "Tied for 10th for commute by public transit with an average time of 34.3 minutes.",
-        "Region": "Ontario",
-        "Strength_2": "Third smallest gender wage gap for median employment income.",
-        "Room for Improvement": "Ranked below 20th in Entrepreneurial Spirit with only 1 accelerator identified.",
-        "Point à améliorer": "Parmi les dix dernières villes au classement de l’esprit entrepreneurial avec un seul accélérateur identifié.",
-        "Force_1": "10e ville à égalité avec une autre en ce qui concerne le temps de déplacement moyen en transport en commun (34,3 minutes).",
-        "Force_2": "3e plus petit écart salarial entre les genres pour le revenu médian de l’emploi."
+        "Strength_1": "Western University has the highest undergraduate degree graduation rate out of the cities in this index at 86.4%.",
+        "Strength_2": "Western University has the 3rd highest pool of scholarship money per capita. Our team found scholarships totalling $2,225,415 in value.",
+        "Room for Improvement": "London has the 3rd highest number of people experiencing homelessness per capita with an average of 1900 people without shelter.",
+        "Point à améliorer": "London a le 3e plus grand nombre de personnes sans domicile fixe par habitant, avec une moyenne de 1900 personnes sans abri.",
+        "Force_1": "Western University a le taux d'obtention d'un diplôme de premier cycle le plus élevé de toutes les villes de cet indice, soit 86,4 %.",
+        "Force_2": "Western University est la troisième ville la plus riche en bourses d'études par habitant. Notre équipe a trouvé des bourses d'une valeur totale de 2 225 415 $."
       },
       "geometry": {
-        "coordinates": [-81.244182, 42.983272],
+        "coordinates": [
+          -81.244182,
+          42.983272
+        ],
         "type": "Point"
       },
       "id": "511475a9cc85eec8668600543489b3ec"
@@ -217,16 +237,18 @@
         "City": "Oshawa",
         "Rank": 23,
         "Score": 321,
-        "Strength_1": "Ranked 7th for population change over the last 5 years, adding over 48,000 people.",
-        "Region": "Ontario",
-        "Strength_2": "Ranked 6th for number of food banks per capita with 7 total.",
-        "Room for Improvement": "Ranked last for Transportation with a 56.1 minute average commute by public transit vs a national average of 38 minutes.",
-        "Point à améliorer": "Dernière au classement des transports avec un temps de trajet moyen de 56,1 minutes en transport en commun par rapport à la moyenne nationale de 38 minutes.",
-        "Force_1": "7e au classement en ce qui concerne les variations de la population au cours des cinq dernières années, avec plus de 48 000 personnes.",
-        "Force_2": "6e au classement du nombre de banques alimentaires par habitant‧e avec un total de 7."
+        "Strength_1": "Oshawa has a low relative unemployment rate in the natural and applied sciences sector. ",
+        "Strength_2": "Oshawa has a low relative unemployment rate in the health sector (3.5%). ",
+        "Room for Improvement": "Oshawa has the longest commute times nationally with an average commute time by public transit of 57 minutes.",
+        "Point à améliorer": "Oshawa a les temps de déplacement les plus longs à l'échelle nationale, avec un temps moyen de déplacement en transport en commun de 57 minutes.",
+        "Force_1": "Oshawa a un faible taux de chômage relatif dans le secteur des sciences naturelles et appliquées. ",
+        "Force_2": "Oshawa a un faible taux de chômage relatif dans le secteur de la santé (3,5 %). "
       },
       "geometry": {
-        "coordinates": [-78.863894, 43.897537],
+        "coordinates": [
+          -78.863894,
+          43.897537
+        ],
         "type": "Point"
       },
       "id": "58665354c420e9d627d9f02bd87a0484"
@@ -238,16 +260,18 @@
         "City": "Charlottetown",
         "Rank": 24,
         "Score": 306.2,
-        "Strength_1": "Charlottetown has the most affordable monthly transit pass relative to income. ",
-        "Region": "East",
+        "Strength_1": "Charlottetown has the most affordable monthly transit pass relative to median income. It was $20 at the time of data collection.",
         "Strength_2": "University of PEI has the most affordable average international undergraduate tuition per semester in an arts and humanities program.",
-        "Room for Improvement": "Charlottetown has the most uneven representation of men and women in trades",
-        "Point à améliorer": "",
-        "Force_1": "",
-        "Force_2": ""
+        "Room for Improvement": "Charlottetown has the most uneven representation of men and women in trades.",
+        "Point à améliorer": "C'est à Charlottetown que la représentation des hommes et des femmes dans les métiers est la plus inégale.",
+        "Force_1": "C'est à Charlottetown que l'abonnement mensuel au transport en commun est le plus abordable par rapport au revenu médian. Il était de 20 $ au moment de la collecte des données.",
+        "Force_2": "L'Université de l'Î.-P.-É. a les frais de scolarité internationaux moyens de premier cycle les plus abordables par semestre dans un programme d'arts et de sciences humaines, soit 7 419 $."
       },
       "geometry": {
-        "coordinates": [-63.13263, 46.235606],
+        "coordinates": [
+          -63.13263,
+          46.235606
+        ],
         "type": "Point"
       },
       "id": "5b58fefef1706f122d3c4b2e40cc5f8f"
@@ -259,16 +283,18 @@
         "City": "Brampton",
         "Rank": 20,
         "Score": 359.4,
-        "Strength_1": "Ranked 1st for diversity with over 50% of the population speaking a mother tongue other than English or French.",
-        "Region": "Ontario",
-        "Strength_2": "Ranked 6th for most affordable tuition for international students.",
-        "Room for Improvement": "Third lowest opportunity for home ownership (based on annual after tax income of 25-34 year olds to benchmark home price).",
-        "Point à améliorer": "3e avant-dernière ville en ce qui concerne l’accès à la propriété (rapport entre le revenu net des jeunes de 25 à 34 ans et le prix de référence des logements).",
-        "Force_1": "En tête du classement de la diversité avec plus de 50 % de la population parlant une langue maternelle autre que l’anglais ou le français.",
-        "Force_2": "6e au classement avec les frais de scolarité les plus abordables pour les étudiant‧e‧s internationaux."
+        "Strength_1": "Brampton ranks high in diversity with 52.9% of the population being immigrants.",
+        "Strength_2": "Brampton has a high number of positions per capita posted on Canada Job Bank. Our team found 2097 positions at the time of collection.",
+        "Room for Improvement": "Median income in Brampton is low at $36,000.",
+        "Point à améliorer": "Le revenu médian à Brampton est faible, soit 36 000 $.",
+        "Force_1": "Brampton se classe parmi les villes les plus diversifiées, 52,9 % de sa population étant composée d'immigrants.",
+        "Force_2": "Brampton a un nombre élevé de postes par habitant affichés sur le Guichet emplois Canada. Notre équipe a trouvé 2097 postes au moment de la collecte."
       },
       "geometry": {
-        "coordinates": [-79.762196, 43.685222],
+        "coordinates": [
+          -79.762196,
+          43.685222
+        ],
         "type": "Point"
       },
       "id": "5e92d0399279b004293daedb581e1e6d"
@@ -280,16 +306,18 @@
         "City": "Ottawa-Gatineau",
         "Rank": 4,
         "Score": 571.8,
-        "Strength_1": "Ranked 3rd overall for affordability with high annual after tax income for 25-34 year olds versus the benchmark price of a house.",
-        "Region": "OntarioQuebec",
-        "Strength_2": "Ottawa-Gatineau provides both scooter and bike rentals and has one of the highest bike scores at 64.",
-        "Room for Improvement": "Ranked low for Entrepreneurial Spirit with no known municipal microgrants available for youth.",
-        "Point à améliorer": "Parmi les dernières villes au classement de l’esprit entrepreneurial, la ville ne semblant pas offrir de microsubventions municipales aux jeunes.",
-        "Force_1": "3e au classement de l’abordabilité avec un revenu annuel net élevé pour les jeunes de 25 à 34 ans par rapport au prix de référence d’un logement.",
-        "Force_2": "Ottawa-Gatineau propose des locations de trottinettes électriques et de vélos et a l’un des meilleurs scores de vélo (64)."
+        "Strength_1": "Ottawa-Gatineau has the highest number of art galleries and museums per capita; our team found 180.",
+        "Strength_2": "Ottawa-Gatineau has a low relative unemployment rate  in the business, finance, and administration sector (4.1%).",
+        "Room for Improvement": "University of Ottawa has one of the least affordable domestic tutions for an arts and humanities program relative to median income averaging $6168 per semester. ",
+        "Point à améliorer": "L'Université d'Ottawa a l'une des institutions nationales les moins abordables pour un programme d'arts et de sciences humaines par rapport au revenu médian, avec une moyenne de 6168 $ par semestre.",
+        "Force_1": "Ottawa-Gatineau a le plus grand nombre de galeries d'art et de musées par habitant ; notre équipe en a trouvé 180.",
+        "Force_2": "Ottawa-Gatineau a un faible nombre de chômeurs dans le secteur des affaires, de la finance et de l'administration (4,1 %)."
       },
       "geometry": {
-        "coordinates": [-75.690233, 45.420802],
+        "coordinates": [
+          -75.690233,
+          45.420802
+        ],
         "type": "Point"
       },
       "id": "6b2317777f488b1742c78837bda23075"
@@ -301,16 +329,18 @@
         "City": "Kitchener - Cambridge - Waterloo",
         "Rank": 9,
         "Score": 453.6,
-        "Strength_1": "Smallest difference between the number of men and women in professional occupations (0.21%). Gender enrollment gap for post-secondaries is also low.",
-        "Region": "Ontario",
-        "Strength_2": "Ranked 6th overall for Equity, Diversity and Inclusion with the presence of both anti-discrimination work and inclusive municipal policies.",
-        "Room for Improvement": "Ranked low for affordability with an average debt per person of $166,000.",
-        "Point à améliorer": "Parmi les dernières villes au classement de l’abordabilité avec une dette moyenne de 166 000 $ par personne.",
-        "Force_1": "Écart le moins important entre le nombre d’hommes et de femmes occupant des professions libérales (0,21 %). L’écart d’inscription entre les genres dans les établissements d’enseignement postsecondaire est également faible.",
-        "Force_2": "6e au classement en ce qui concerne l’équité, la diversité et l’inclusion avec la présence de mesures de lutte contre les discriminations et de politiques municipales inclusives."
+        "Strength_1": "Kitchener - Cambridge - Waterloo has the 2nd highest number of polytechnic or trade schools per capita out of the cities we measured. Our team found 31 at the time of collection.",
+        "Strength_2": "Kitchener - Cambridge - Waterloo has the highest number of people employed in the manufacturing and utilities sector relative to overall population (24,445).",
+        "Room for Improvement": "Kitchener - Cambridge - Waterloo has one of the most expensive direct transit tickets relative to median income at $3.75.",
+        "Point à améliorer": "Kitchener - Cambridge - Waterloo a l'un des billets de transport en commun direct les plus chers par rapport au revenu médian (3,75 $).",
+        "Force_1": "Kitchener - Cambridge - Waterloo a le 2e plus grand nombre d'écoles polytechniques ou d'écoles de métiers par habitant parmi les villes que nous avons mesurées. Notre équipe en a trouvé 31 au moment de la collecte.",
+        "Force_2": "Kitchener - Cambridge - Waterloo a le plus grand nombre de personnes employées dans le secteur de la fabrication et des services publics par rapport à la population totale (24 445)."
       },
       "geometry": {
-        "coordinates": [-80.494213, 43.451287],
+        "coordinates": [
+          -80.494213,
+          43.451287
+        ],
         "type": "Point"
       },
       "id": "7466f63add613445909df134444d21f0"
@@ -322,16 +352,18 @@
         "City": "Mississauga",
         "Rank": 15,
         "Score": 407.6,
-        "Strength_1": "53.2% of the population are immigrants vs a national average of 26.7%.",
-        "Region": "Ontario",
-        "Strength_2": "53.9% of the population speak a mother tongue other than English or French vs a national average of 29%.",
-        "Room for Improvement": "Youth in Mississauga have an average deficit of $-534.56 per month, compared to an average national surplus of $148.89 per month after expenses and incomes are taken into account.",
-        "Point à améliorer": "Les jeunes à Mississauga ont un déficit moyen de -534,56 $ par mois par rapport à un surplus national moyen de 148,89 $ par mois après avoir pris en compte les dépenses et les revenus.",
-        "Force_1": "53,2 % de la population est composée d’immigré‧e‧s par rapport à la moyenne nationale, qui est de 26,7 %.",
-        "Force_2": "53,9 % de la population parle une langue maternelle autre que l’anglais ou le français par rapport à la moyenne nationale, qui est de 29 %."
+        "Strength_1": "In Mississauga, immigrants make up 52.9% of the population.",
+        "Strength_2": "Mississauga has low youth unemployment in the legislative and senior management occupation sector (2.5%) compared to its overall youth unemployment rate.",
+        "Room for Improvement": "Mississauga has the highest youth unemployment rate at 27.3%.",
+        "Point à améliorer": "",
+        "Force_1": "",
+        "Force_2": ""
       },
       "geometry": {
-        "coordinates": [-79.644339, 43.589487],
+        "coordinates": [
+          -79.644339,
+          43.589487
+        ],
         "type": "Point"
       },
       "id": "8cf42d5b1f7610ca3b2252363dafccf4"
@@ -343,16 +375,18 @@
         "City": "Calgary",
         "Rank": 6,
         "Score": 512.2,
-        "Strength_1": "Ranked 6th most population diverse city with 1 in 3 people identifying as immigrants.",
-        "Region": "Alberta",
-        "Strength_2": "Ranked 4th for amount of total startup funding provided in 2022.",
-        "Room for Improvement": "Tied for lowest youth minimum wage in Canada at $13 per hour.",
-        "Point à améliorer": "À égalité avec une autre ville en ce qui concerne le salaire minimum le plus bas offert aux jeunes au Canada (13 $ de l’heure).",
-        "Force_1": "6e ville comptant la population la plus diverse : une personne sur trois s’identifie comme immigrée.",
-        "Force_2": "4e ville en ce qui concerne le montant total du financement fourni aux jeunes entreprises en 2022."
+        "Strength_1": "Calgary ranks high in diversity, with 63% of Calgarians having a non-official language as their first language.",
+        "Strength_2": "Calgary is leading the way in accessible medical care with the highest amount of family doctors per capita nationally at 5088 doctors.",
+        "Room for Improvement": "Calgary has the 2nd highest cost of a kWh of energy relative to median income at 3.18 cents.",
+        "Point à améliorer": "Calgary se classe au deuxième rang pour le coût du kWh d'énergie par rapport au revenu médian, avec 3,18 cents.",
+        "Force_1": "Calgary se classe parmi les villes les plus diversifiées, 63 % des Calgariens ayant une langue non officielle comme première langue.",
+        "Force_2": "Calgary est à l'avant-garde en matière d'accessibilité aux soins médicaux, avec le plus grand nombre de médecins de famille par habitant à l'échelle nationale, soit 5088 médecins."
       },
       "geometry": {
-        "coordinates": [-114.059286, 51.045389],
+        "coordinates": [
+          -114.059286,
+          51.045389
+        ],
         "type": "Point"
       },
       "id": "952816a25eea77aaca3acd8846df6e12"
@@ -364,16 +398,18 @@
         "City": "Vancouver",
         "Rank": 2,
         "Score": 642.8,
-        "Strength_1": "Highest number of walking trails with a total of 262.",
-        "Region": "West",
-        "Strength_2": "Ranked 3rd for Entrepreneurial Spirit with the 2nd highest number of startups at 5291.",
-        "Room for Improvement": "Only 49% of young people in full time employment compared to the national average of 69.8%.",
-        "Point à améliorer": "Seulement 49 % des jeunes ont un emploi à temps plein par rapport à la moyenne nationale de 69,8 %.",
-        "Force_1": "Plus grand nombre de sentiers pédestres (262 en tout).",
-        "Force_2": "3e au classement de l’esprit entrepreneurial avec le deuxième plus grand nombre de jeunes entreprises (5 291)."
+        "Strength_1": "Vancouver is ranked first nationally in number of Indigenous-serving community organizations per capita with 59 registered organizations.",
+        "Strength_2": "Vancouver is ranked first nationally in number of highschools per capita with 213 high schools.",
+        "Room for Improvement": "Vancouver has one of the highest percentages of people who spend more than 30% of their income on shelter at 28.2%.",
+        "Point à améliorer": "Vancouver a l'un des pourcentages les plus élevés de personnes qui dépensent plus de 30 % de leur revenu pour se loger (28,2 %).",
+        "Force_1": "Vancouver se classe au premier rang national pour le nombre d'organisations communautaires autochtones par habitant, avec 59 organisations enregistrées.",
+        "Force_2": "Vancouver se classe au premier rang national pour le nombre d'écoles secondaires par habitant, avec 213 écoles secondaires."
       },
       "geometry": {
-        "coordinates": [-123.113823, 49.260439],
+        "coordinates": [
+          -123.113823,
+          49.260439
+        ],
         "type": "Point"
       },
       "id": "ac96658c4d9f41eee50eaab8975acfd7"
@@ -385,16 +421,18 @@
         "City": "Greater Sudbury / Grand Sudbury",
         "Rank": 22,
         "Score": 332.6,
-        "Strength_1": "Ranked 4th for Affordability with a positive monthly surplus (youth income minus youth expenses) of $342.11.",
-        "Region": "Ontario",
-        "Strength_2": "Third lowest core housing need at 5.5% compared to the highest at 15.80%.",
-        "Room for Improvement": "Ranked 29th for number of urban health resources per capita (family doctors, hospitals and community health clinics).",
-        "Point à améliorer": "29e au classement en ce qui concerne le nombre de ressources de santé urbaine par habitant‧e (médecins de famille, hôpitaux et cliniques de santé communautaire).",
-        "Force_1": "4e au classement de l’abordabilité avec un surplus mensuel positif (revenus des jeunes moins dépenses des jeunes) de 342,11 $.",
-        "Force_2": "3e au classement des besoins impérieux les plus bas en matière de logement (5,5 %) par rapport au taux le plus élevé (15,80 %)."
+        "Strength_1": "Sudbury has the lowest unemployment rate in the art, culture, and sport sector.",
+        "Strength_2": "Cambrian College enrolls a high number of international students per capita with 2680 international students enrolled full time.",
+        "Room for Improvement": "Only 6% of the population in Sudbury are immigrants.",
+        "Point à améliorer": "Seulement 6 % de la population de Sudbury est composée d'immigrants.",
+        "Force_1": "Sudbury a le taux de chômage le plus bas dans le secteur de l'art, de la culture et du sport.",
+        "Force_2": "Le Cambrian College compte un nombre élevé d'étudiants étrangers par habitant, soit 2 680 étudiants étrangers inscrits à temps plein."
       },
       "geometry": {
-        "coordinates": [-80.990808, 46.492876],
+        "coordinates": [
+          -80.990808,
+          46.492876
+        ],
         "type": "Point"
       },
       "id": "afef603c67022cbb8c01dc0034dd0bba"
@@ -406,16 +444,18 @@
         "City": "Windsor",
         "Rank": 19,
         "Score": 386,
-        "Strength_1": "Widsor has the lowest relative unemployment in the city's business, finance, and administration sector nationally at 7.69%.",
-        "Region": "Ontario",
-        "Strength_2": "",
-        "Room for Improvement": "",
-        "Point à améliorer": "",
-        "Force_1": "",
-        "Force_2": ""
+        "Strength_1": "Windsor has the lowest relative unemployment in the city's business, finance, and administration sector nationally at 7.69%.",
+        "Strength_2": "University of Windsor has the highest percentage of international students that are graduate students at 74.1%.",
+        "Room for Improvement": "University of Windsor has the highest percentage of international students that are graduate students at 74.1%.",
+        "Point à améliorer": "Windsor a le taux de chômage le plus élevé à l'échelle nationale, soit 18,9 %.",
+        "Force_1": "Windsor a le taux de chômage relatif le plus bas au niveau national dans le secteur des affaires, de la finance et de l'administration, soit 7,69 %.",
+        "Force_2": "L'Université de Windsor a le pourcentage le plus élevé d'étudiants internationaux qui sont des étudiants diplômés, soit 74,1 %."
       },
       "geometry": {
-        "coordinates": [-83.037298, 42.316803],
+        "coordinates": [
+          -83.037298,
+          42.316803
+        ],
         "type": "Point"
       },
       "id": "b6948e1e7a535a8ef4b3103b967ae3a0"
@@ -427,16 +467,18 @@
         "City": "Fredericton",
         "Rank": 27,
         "Score": 282.1,
-        "Strength_1": "Ranked 2nd for Good Youth Jobs with 76.8% of youth 15-29 employed full time.",
-        "Region": "East",
-        "Strength_2": "Ranked 5th for number of mental health professionals per capita.",
-        "Room for Improvement": "Ranked in the lowest 5 cities for Equity, Diversity, and Inclusion for lack of population diversity with only 12.6% population identifying as immigrants.",
-        "Point à améliorer": "Parmi les cinq dernières villes en ce qui concerne l’équité, la diversité et l’inclusion en raison d’un manque de diversité, seulement 12,6 % de la population s’identifiant comme immigré‧e‧s.",
-        "Force_1": "2e au classement des bons emplois pour les jeunes avec 76,8 % de jeunes de 15 à 29 ans ayant un emploi à temps plein.",
-        "Force_2": "5e au classement en ce qui concerne le nombre de professionnel‧le‧s de la santé mentale par habitant‧e."
+        "Strength_1": "University of New Brunswick had the largest pool of scholarship funding available per capita. Our team found $1,799,845 worth of funding at the time of collection.",
+        "Strength_2": "Fredericton has the 3rd lowest benchmark home price relative to median income at $308,200.",
+        "Room for Improvement": "Fredericton has 3 high schools in the city, which is low relative to the city's population.",
+        "Point à améliorer": "Fredericton compte trois écoles secondaires, ce qui est peu par rapport à la population de la ville.",
+        "Force_1": "L'Université du Nouveau-Brunswick avait le plus grand nombre de bourses d'études disponibles par habitant. Notre équipe a trouvé des fonds d'une valeur de 1 799 845 $ au moment de la collecte",
+        "Force_2": "Fredericton a le 3e prix de référence le plus bas par rapport au revenu médian, soit 308 200 $."
       },
       "geometry": {
-        "coordinates": [-66.643531, 45.963036],
+        "coordinates": [
+          -66.64353,
+          45.963036
+        ],
         "type": "Point"
       },
       "id": "ba9729aaacc6f7c0f3a3f0ffc7a263f4"
@@ -449,15 +491,17 @@
         "Rank": 28,
         "Score": 247,
         "Strength_1": "St. John's has a short average commute time by car of only 16 minutes.",
-        "Region": "East",
-        "Strength_2": "St. John's has a low number of people experiencing homelessness compared to the general population.",
-        "Room for Improvement": "St. John's has a high percentage of people experiencing food insecurity. ",
-        "Point à améliorer": "",
-        "Force_1": "",
-        "Force_2": ""
+        "Strength_2": "St. John's has a low number of people experiencing homelessness compared to the general population (183 people).",
+        "Room for Improvement": "St. John's has a high percentage of people experiencing food insecurity (23%). ",
+        "Point à améliorer": "St John's compte un pourcentage élevé de personnes en situation d'insécurité alimentaire (23 %).",
+        "Force_1": "St John's a un temps moyen de déplacement en voiture de seulement 16 minutes.",
+        "Force_2": "St John's compte un faible nombre de personnes sans domicile fixe par rapport à la population générale (183 personnes)."
       },
       "geometry": {
-        "coordinates": [-52.714204, 47.561503],
+        "coordinates": [
+          -52.714204,
+          47.561503
+        ],
         "type": "Point"
       },
       "id": "bb4b0f82d5a72927cbb881d171f329d2"
@@ -469,16 +513,18 @@
         "City": "Saskatoon",
         "Rank": 12,
         "Score": 432.6,
-        "Strength_1": "Centrally located post secondary campus within 2 km of city centre.",
-        "Region": "Prairies",
-        "Strength_2": "Ranked 3rd for lowest unemployment rate across Canada at 4% (male and female average).",
-        "Room for Improvement": "Ranked 27th in Digital Access with the second slowest internet speeds at 25.59 Mbps vs national average of 56.82 Mbps.",
-        "Point à améliorer": "27e au classement de l’accès numérique avec les vitesses Internet les plus basses à 25,59 Mbit/s par rapport à la moyenne nationale de 56,82 Mbit/s.",
-        "Force_1": "Emplacement central du campus d’enseignement postsecondaire (situé à moins de deux kilomètres du centre-ville).",
-        "Force_2": "3e au classement avec le taux de chômage le plus bas au Canada, qui est de 4 % (moyenne entre les hommes et les femmes)."
+        "Strength_1": "Saskatoon has a low  relative youth unemployment rate in the sales and services sector (10.1%). ",
+        "Strength_2": "There are 3 Indigenous post-secondary institutions in Saskatoon, the 3rd-highest amount nationally.",
+        "Room for Improvement": "Saskatoon is a car-dependent city with a low bike score of only 32.",
+        "Point à améliorer": "Saskatoon est une ville qui dépend de la voiture et qui a un faible taux de cyclisme (32).",
+        "Force_1": "Saskatoon a un faible taux de chômage relatif des jeunes dans le secteur de la vente et des services (10,1 %). ",
+        "Force_2": "Saskatoon compte trois établissements d'enseignement postsecondaire autochtones, soit le troisième plus grand nombre à l'échelle nationale."
       },
       "geometry": {
-        "coordinates": [-106.665918, 52.131043],
+        "coordinates": [
+          -106.665918,
+          52.131043
+        ],
         "type": "Point"
       },
       "id": "c0e6274f4eb06189e164ab6a188055ff"
@@ -491,15 +537,17 @@
         "Rank": 14,
         "Score": 426.9,
         "Strength_1": "Winnipeg has 4 Indigenous post-secondary institutions, the most of any city in this index.",
-        "Region": "Prairies",
-        "Strength_2": "Winnipeg has a low percentage of people unemployed in the art, culture, and sport sector at 7.38%.",
-        "Room for Improvement": "Winnipeg has relatively few youth employed in the health sector (2200) compared to population.",
-        "Point à améliorer": "",
-        "Force_1": "",
-        "Force_2": ""
+        "Strength_2": "Winnipeg has a low relative unemployment rate  in the art, culture, and sport sector at 7.38%.",
+        "Room for Improvement": "Winnipeg has a low percentage of people unemployed in the art, culture, and sport sector at 7.38%.",
+        "Point à améliorer": "Winnipeg compte relativement peu de jeunes employés dans le secteur de la santé (2 200) par rapport à sa population.",
+        "Force_1": "Winnipeg compte quatre établissements d'enseignement postsecondaire autochtones, soit le plus grand nombre de villes dans cet indice.",
+        "Force_2": "Winnipeg a un faible taux de chômage relatif dans le secteur de l'art, de la culture et du sport, soit 7,38 %."
       },
       "geometry": {
-        "coordinates": [-97.137109, 49.895461],
+        "coordinates": [
+          -97.137109,
+          49.895461
+        ],
         "type": "Point"
       },
       "id": "cce4926c25d6ac54ec0239759f331cfc"
@@ -511,16 +559,18 @@
         "City": "Yellowknife",
         "Rank": 30,
         "Score": 133.7,
-        "Strength_1": "Yellowknife had the lowest benchmark home price relative to median income nationally at $460,008.",
-        "Region": "Alberta",
+        "Strength_1": "Yellowknife has the lowest benchmark home price, nationally, relative to median income at $460,008.",
         "Strength_2": "Yellowknife has the highest median income nationally at $72,000.",
         "Room for Improvement": "Yellowknife has a low minimum wage compared to median income. It is currently $16.70 per hour.",
-        "Point à améliorer": "",
-        "Force_1": "",
-        "Force_2": ""
+        "Point à améliorer": "Le salaire minimum à Yellowknife est faible par rapport au revenu médian. Il est actuellement de 16,70 $ l'heure.",
+        "Force_1": "Yellowknife a le prix de référence le plus bas, à l'échelle nationale, par rapport au revenu médian, soit 460 008 $.",
+        "Force_2": "Yellowknife a le revenu médian le plus élevé à l'échelle nationale, soit 72 000 $."
       },
       "geometry": {
-        "coordinates": [-114.371826, 62.454145],
+        "coordinates": [
+          -114.371826,
+          62.454145
+        ],
         "type": "Point"
       },
       "id": "d143cc5f35c1b588f71b028662aaffc2"
@@ -532,16 +582,18 @@
         "City": "Montréal",
         "Rank": 3,
         "Score": 602,
-        "Strength_1": "Ranked 3rd to commute by public transit with 168 hours a week of transit operations.",
-        "Region": "Quebec",
-        "Strength_2": "Main post secondary campus is approximately 1 km from the city centre, compared to a national average of 4 km.",
-        "Room for Improvement": "Fourth lowest number of mental health professionals per capita.",
-        "Point à améliorer": "Quatrième plus faible nombre de professionnel‧le‧s de la santé mentale par habitant‧e.",
-        "Force_1": "3e au classement en ce qui concerne les déplacements en transport en commun avec 168 heures de transit par semaine.",
-        "Force_2": "Le campus de l’établissement d’enseignement postsecondaire principal se trouve à environ un kilomètre du centre-ville, la moyenne nationale étant de quatre kilomètres."
+        "Strength_1": "Montréal is leading the way with the highest number of hospitals per capita at 39 hospitals.",
+        "Strength_2": "Montreal has the lowest relative youth unemployment in the social, community and government services sector nationally at 5.53% unemployment compared to an overall unemploymnet rate of 10.2%.",
+        "Room for Improvement": "Montréal had the lowest median income in 2020 out of the cities in this index at $36,800 before taxes. ",
+        "Point à améliorer": "Montréal avait le revenu médian le plus bas en 2020 parmi les villes de cet indice, soit 36 800 $ avant impôts.",
+        "Force_1": "Montréal est en tête de liste avec le plus grand nombre d'hôpitaux par habitant, soit 39 hôpitaux.",
+        "Force_2": "Montréal a le plus faible taux de chômage relatif des jeunes dans le secteur des services sociaux, communautaires et gouvernementaux à l'échelle nationale, soit 5,53 %."
       },
       "geometry": {
-        "coordinates": [-73.568615, 45.502357],
+        "coordinates": [
+          -73.568615,
+          45.502357
+        ],
         "type": "Point"
       },
       "id": "d47f51ef9f98ce3858724016544bfdf1"
@@ -553,16 +605,18 @@
         "City": "Edmonton",
         "Rank": 5,
         "Score": 538.1,
-        "Strength_1": "Ranked 6th for affordability with a monthly surplus for youth of $454.94 (youth income minus expenses).",
-        "Region": "Alberta",
-        "Strength_2": "Ranked in the top 10 for commuting by public transit with transit operating for 147 hours per week.",
-        "Room for Improvement": "Tied for lowest youth minimum wage in Canada at $13 per hour.",
-        "Point à améliorer": "À égalité avec une autre ville en ce qui concerne le salaire minimum le plus bas offert aux jeunes au Canada (13 $ de l’heure).",
-        "Force_1": "6e au classement de l’abordabilité avec un surplus mensuel de 454,94 $ pour les jeunes (salaire des jeunes moins les dépenses).",
-        "Force_2": "Parmi les dix premières villes en ce qui concerne les déplacements en transport en commun avec 147 heures de transit par semaine."
+        "Strength_1": "Edmonton has the 2nd highest amount of businesses with over 100 employees per capita (1224).",
+        "Strength_2": "Edmonton has the 2nd lowest average population age at 38.",
+        "Room for Improvement": "The youth unemployment rate in Edmonton is 25.1%, the third highest in our index. ",
+        "Point à améliorer": "Le taux de chômage des jeunes à Edmonton est de 25,1 %, le troisième plus élevé de notre indice. ",
+        "Force_1": "Edmonton a le 2e plus grand nombre d'entreprises de plus de 100 employés par habitant (1224).",
+        "Force_2": "Edmonton a le 2e âge moyen de la population le plus bas, soit 38 ans."
       },
       "geometry": {
-        "coordinates": [-113.489192, 53.548954],
+        "coordinates": [
+          -113.489192,
+          53.548954
+        ],
         "type": "Point"
       },
       "id": "dec62bd3618c0245b538e73089166582"
@@ -574,16 +628,18 @@
         "City": "Lethbridge",
         "Rank": 26,
         "Score": 282.6,
-        "Strength_1": "Lowest cost of living on a monthly basis based on youth income, providing youth a $753.79 surplus per month.",
-        "Region": "Alberta",
-        "Strength_2": "Ranked 6th for home ownership opportunity (ratio of 25-34 year old after tax annual income to benchmark home price).",
-        "Room for Improvement": "Ranked 27th in Education + Training with the lowest enrollment in post secondary education at the largest institution.",
-        "Point à améliorer": "27e au classement de l’éducation et de la formation avec le taux d’inscription dans les établissements d’enseignement postsecondaire le plus faible (dans l’établissement le plus important).",
-        "Force_1": "Coût de la vie le plus bas sur une base mensuelle en fonction du revenu des jeunes, leur laissant un surplus de 753,79 $ par mois.",
-        "Force_2": "6e au classement en ce qui concerne l’accès la propriété (proportion du revenu annuel net des jeunes de 25 à 34 ans par rapport au prix de référence d’un logement)."
+        "Strength_1": "Lethbridge College has the 3rd highest per capita number of domestic students enrolled in full-time diploma-seeking programs (3504 students total).",
+        "Strength_2": "Lethbridge has a short average commute time by car of only 16 minutes.",
+        "Room for Improvement": "Lethbridge has only 40 youths aged 15-29 employed in government, the lowest per capita.",
+        "Point à améliorer": "Lethbridge ne compte que 40 jeunes âgés de 15 à 29 ans employés par le gouvernement, soit le plus faible nombre par habitant.",
+        "Force_1": "Le Lethbridge College se classe au troisième rang pour ce qui est du nombre d'étudiants canadiens inscrits à temps plein dans des programmes menant à l'obtention d'un diplôme (3504 étudiants au total).",
+        "Force_2": "La durée moyenne des trajets en voiture à Lethbridge est de seulement 16 minutes."
       },
       "geometry": {
-        "coordinates": [-112.831953, 49.694377],
+        "coordinates": [
+          -112.831953,
+          49.694377
+        ],
         "type": "Point"
       },
       "id": "efd5b2c55695a445c0ed76f633990320"
@@ -595,16 +651,18 @@
         "City": "Toronto",
         "Rank": 1,
         "Score": 670.9,
-        "Strength_1": "Overall highest ranking city for Education, with 100 library branches and the opportunity to have international post secondary exchanges in 40 countries.",
-        "Region": "Ontario",
-        "Strength_2": "Ranked 1st for entrepreneurial spirit, with most amount of startups, investors, and accelerators.",
-        "Room for Improvement": "Ranked last for affordability with high cost of living out of all of the cities with an average deficit of -$453 per month for young people (living cost to income per month).",
-        "Point à améliorer": "Dernière au classement de l’abordabilité avec le coût de la vie le plus élevé des trente villes et un déficit moyen de -453 $ par mois pour les jeunes (coût de la vie comparé au revenu mensuel).",
-        "Force_1": "En tête du classement de l’éducation, avec 100 bibliothèques et des possibilités d’échanges internationaux dans 40 pays au niveau postsecondaire.",
-        "Force_2": "En tête du classement de l’esprit entrepreneurial, avec le plus grand nombre de jeunes entreprises, d’investisseur‧se‧s et d’accélérateurs."
+        "Strength_1": "Toronto has the closest balance of men and women in the trades industry nationally with 41.4% women and 58.6% men.",
+        "Strength_2": "Toronto is ranked first nationally in number of newcomer-serving community organizations per capita with 162 registered organizations.",
+        "Room for Improvement": "Toronto is one of the least affordable cities nationally with 32.5% of people spending more than 30% of their income on shelter each month.",
+        "Point à améliorer": "Toronto se classe au premier rang national pour le nombre d'organisations communautaires d'aide aux nouveaux arrivants par habitant, avec 162 organisations enregistrées.",
+        "Force_1": "Toronto présente l'équilibre le plus étroit entre les hommes et les femmes dans l'industrie des métiers à l'échelle nationale, avec 41,4 % de femmes et 58,6 % d'hommes.",
+        "Force_2": "Toronto se classe au premier rang national pour le nombre d'organisations communautaires au service des nouveaux arrivants, avec 162 organisations enregistrées."
       },
       "geometry": {
-        "coordinates": [-79.382295, 43.652772],
+        "coordinates": [
+          -79.382295,
+          43.652772
+        ],
         "type": "Point"
       },
       "id": "f44e90327445c300afff93dcf06f9591"
@@ -616,16 +674,18 @@
         "City": "Kelowna",
         "Rank": 21,
         "Score": 354.1,
-        "Strength_1": "Ranked 7th most affordable youth transit pass at $55 per month.",
-        "Region": "West",
-        "Strength_2": "Ranked in the top 10 for number of mental health professionals per capita.",
-        "Room for Improvement": "Ranked low in education with a main university institution far from the city centre and lack of gender equality in enrollment numbers.",
-        "Point à améliorer": "Faibles résultats en ce qui concerne l’éducation avec un établissement d’enseignement supérieur principal éloigné du centre-ville et une absence d’égalité des genres dans les taux d’inscription.",
-        "Force_1": "7e en ce qui concerne la passe de transit la plus abordable pour les jeunes (55 $ par mois).",
-        "Force_2": "Parmi les dix premières villes en ce qui concerne le nombre de professionnel‧le‧s de la santé mentale par habitant‧e."
+        "Strength_1": "Kelowna has had a +13.5% change in population from 2015 to 2021.",
+        "Strength_2": "Kelowna has a relatively low average commute time by public transit at 30 minutes.",
+        "Room for Improvement": "Kelowna has a low amount of immigration of 15-29-year-olds per capita with 296 youths immigrating in 2020/2021.",
+        "Point à améliorer": "Kelowna a un faible taux d'immigration des 15-29 ans par habitant avec 296 jeunes qui immigreront en 2020/2021.",
+        "Force_1": "La population de Kelowna a augmenté de 13,5 % entre 2015 et 2021.",
+        "Force_2": "Kelowna a un temps moyen de déplacement en transport en commun relativement bas, soit 30 minutes."
       },
       "geometry": {
-        "coordinates": [-119.495881, 49.887689],
+        "coordinates": [
+          -119.495881,
+          49.887689
+        ],
         "type": "Point"
       },
       "id": "f6aec68f4cad1e2e188d62ebc2c18ce2"

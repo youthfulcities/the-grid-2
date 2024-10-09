@@ -314,6 +314,7 @@ const Clusters: React.FC<ClusterProps> = ({
         height={height}
         tooltipState={tooltipState}
         setTooltipState={setTooltipState}
+        title='Economic Focus'
       />
       <Heatmap
         activeFile='cluster-heatmap-forming.csv'
@@ -321,6 +322,7 @@ const Clusters: React.FC<ClusterProps> = ({
         height={height}
         tooltipState={tooltipState}
         setTooltipState={setTooltipState}
+        title='Forming Opinions'
       />
       <Heatmap
         activeFile='cluster-heatmap-social.csv'
@@ -328,6 +330,7 @@ const Clusters: React.FC<ClusterProps> = ({
         height={height}
         tooltipState={tooltipState}
         setTooltipState={setTooltipState}
+        title='Social Good'
       />
     </OverflowContainer>
   );

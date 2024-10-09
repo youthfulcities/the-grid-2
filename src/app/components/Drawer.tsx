@@ -162,13 +162,13 @@ const Drawer: React.FC<DrawerProps> = ({
         isopen={isopen}
         $absolute={absolute || false}
       >
-        {React.Children.map(children, (child) =>
-          React.isValidElement(child)
-            ? React.cloneElement(child as React.ReactElement, {
-                drawerwidth: width,
-              })
-            : child
-        )}
+{width !== undefined && React.Children.map(children, (child) =>
+  React.isValidElement(child)
+    ? React.cloneElement(child as React.ReactElement, {
+        drawerWidth: width,  // Pass drawer width as a prop
+      })
+    : child
+)}
       </DrawerContainer>
       <Tab
         $translate={translate}

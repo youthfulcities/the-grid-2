@@ -6,7 +6,6 @@
 
 import * as React from "react";
 import { ButtonProps, FlexProps, TextFieldProps, TextProps } from "@aws-amplify/ui-react";
-import { CircleButtonProps } from "./CircleButton";
 import { LogoProps } from "./Logo";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
@@ -21,29 +20,23 @@ export declare type Variant = {
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MarketingFooterBrandOverridesProps = {
     MarketingFooterBrand?: PrimitiveOverrideProps<FlexProps>;
-    "Frame 440"?: PrimitiveOverrideProps<FlexProps>;
-    "Column 1"?: PrimitiveOverrideProps<FlexProps>;
+    "Frame 313"?: PrimitiveOverrideProps<FlexProps>;
     "Frame 434"?: PrimitiveOverrideProps<FlexProps>;
     "Sign up for our newsletter"?: PrimitiveOverrideProps<TextProps>;
     "Stay connected and up to date on new data, insights, or job postings!"?: PrimitiveOverrideProps<TextProps>;
-    "Site Map"?: PrimitiveOverrideProps<FlexProps>;
+    "Frame 435"?: PrimitiveOverrideProps<FlexProps>;
+    TextField?: PrimitiveOverrideProps<TextFieldProps>;
+    Button?: PrimitiveOverrideProps<ButtonProps>;
+    "Frame 405"?: PrimitiveOverrideProps<FlexProps>;
     "Frame 403"?: PrimitiveOverrideProps<FlexProps>;
     Home?: PrimitiveOverrideProps<TextProps>;
     About?: PrimitiveOverrideProps<TextProps>;
     Datasets?: PrimitiveOverrideProps<TextProps>;
-    Insights?: PrimitiveOverrideProps<TextProps>;
+    "Data Playground"?: PrimitiveOverrideProps<TextProps>;
     "Frame 404"?: PrimitiveOverrideProps<FlexProps>;
     FAQ?: PrimitiveOverrideProps<TextProps>;
+    Tutorials?: PrimitiveOverrideProps<TextProps>;
     "Contact Us"?: PrimitiveOverrideProps<TextProps>;
-    "Column 2"?: PrimitiveOverrideProps<FlexProps>;
-    "Email Signup"?: PrimitiveOverrideProps<FlexProps>;
-    TextField?: PrimitiveOverrideProps<TextFieldProps>;
-    Button?: PrimitiveOverrideProps<ButtonProps>;
-    "Social Media Links"?: PrimitiveOverrideProps<FlexProps>;
-    "Circle Button63856842"?: CircleButtonProps;
-    "Circle Button63857963"?: CircleButtonProps;
-    "Circle Button63858245"?: CircleButtonProps;
-    "Circle Button63858593"?: CircleButtonProps;
     "Frame 433"?: PrimitiveOverrideProps<FlexProps>;
     Logo?: LogoProps;
     "\u00A9 2023 The Grid. All rights reserved."?: PrimitiveOverrideProps<TextProps>;

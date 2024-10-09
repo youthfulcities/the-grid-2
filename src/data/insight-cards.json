@@ -1,6 +1,17 @@
 {
   "cards": [
     {
+      "title": "Best City to Work in Canada",
+      "titlefr": "Meilleure ville où travailler au Canada",
+      "dataset": "Urban Work Index 2024",
+      "datasetfr": "Indice du travail urbain 2024",
+      "date": "2024",
+      "type": "",
+      "desc": "View the results of the Urban Work Index 2024 on an interactive map.",
+      "descfr": "Consultez les résultats de l'indice de travail urbain 2024 sur une carte interactive.",
+      "link": "/insights/uwi2024"
+    },
+    {
       "title": "A Day in the Life",
       "titlefr": "Une journée dans la vie",
       "dataset": "Real Affordability Index",
@@ -12,7 +23,7 @@
       "link": "https://raiscrollytelling2022.youthfulcities.com/"
     },
     {
-      "title": "Best Work City",
+      "title": "Best Work City Quiz",
       "titlefr": "Trouver ma meilleure ville où travailler",
       "dataset": "Urban Work Index",
       "datasetfr": "Indice du travail urbain 2023",
@@ -46,7 +57,7 @@
       "titlefr": "",
       "dataset": "Urban Work Index 2023",
       "datasetfr": "",
-      "date": "2024",
+      "date": "2023",
       "type": "",
       "desc": "View the results of the Urban Work Index 2023 on an interactive map.",
       "descfr": "",

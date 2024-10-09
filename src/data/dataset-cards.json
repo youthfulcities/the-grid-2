@@ -1,6 +1,18 @@
 {
   "datasetCards": [
     {
+      "title": "Urban Work Index 2024",
+      "titlefr": "Indice du travail urbain 2024",
+      "date": "2024",
+      "type": "index",
+      "desc": "Urban Work Index 2024 is a crucial index designed to provide the data urgently necessary to reshape the workforce into one that is dynamic, engaged, and vital.",
+      "descfr": "L'indice du travail urbain 2024 est un indice essentiel conçu pour fournir les données urgentes nécessaires à la transformation de la main-d'œuvre en une une force de travail dynamique, engagée et vitale.",
+      "className": "image-card-uwi-2024",
+      "file": "heatmap_pivot.csv",
+      "link": "https://youthdatalab.youthfulcities.com/en/insights/uwi2024",
+      "keywords": ["cost of living"]
+    },
+    {
       "title": "CBYF Index",
       "titlefr": "Répertoire, CBAJ",
       "organizationName": "Tamarack - CBYF",

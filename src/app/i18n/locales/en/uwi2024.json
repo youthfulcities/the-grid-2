@@ -1,9 +1,9 @@
 {
   "title": "Urban Work Index <span>2024</span>",
   "subtitle": "Best City for Youth to Work in Canada",
-  "blurb": "Urban Work Index 2024 is a crucial index designed to provide the data urgently necessary to reshape the workforce into one that is dynamic, engaged, and vital.  The index is the culmination of the <a>DEVlab project</a>, an investigation into what youth need to succeed.",
+  "blurb": "Urban Work Index 2024 ranks 30 cities based on youth priorities for ideal living and working. It is the culmination of <a>DEVlab</a>, an investigation to help build dynamic, engaged, and vital workforces in Canada.",
   "map_heading": "Overall Results",
-  "map_blurb": "Scroll through the list of cities to view the ranking. Learn areas of strength and improvement for each city. Click on any dot on the map to jump to that city.",
+  "map_blurb": "Scroll through the list of cities to view the ranking. Discover areas of strength and improvement for each city. Click on any dot on the map to jump to that city.",
   "topic_heading": "Results by Topic",
   "topic_blurb": "Hover over any cell to see the ranking and score for the selected city and topic. Click on a column to sort the ranking by that topic.",
   "scoring_heading": "A note on scoring",
@@ -22,7 +22,7 @@
   "chatbot_prompt4": "What are youth saying about the hiring process in Calgary?",
   "chatbot_button": "Go to chatbot",
   "stories_heading": "Data Stories",
-  "stories_blurb": "The 'Skills and Ladders' series on the Youthful Cities blog explores our findings from the DEVlab project.",
+  "stories_blurb": "The 'Skills and Ladders' series on the Youthful Cities blog explores a few of the most surprising and salient findings from the DEVlab project.",
   "stories_button": "Go to Youthful Cities blog",
   "reset": "Reset"
 }

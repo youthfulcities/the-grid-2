@@ -24,6 +24,7 @@ interface LegendProps {
 
 interface PieChartProps {
   width?: number;
+  drawerwidth?: number;
   height?: number;
   type: string;
   cluster?: string;
@@ -107,18 +108,17 @@ const PieChartComponent: React.FC<PieChartProps> = ({
 
     const data = parsedData[activeFile];
     d3.select(`#pie-chart-${type}`).selectAll('svg').remove();
-
+    
     const getColor = (value: string): string => {
       // Use d3.scaleOrdinal to create a color scale based on d3.schemeCategory10
       const colorScale = d3
-        .scaleOrdinal<string>()
-        .domain(data.map((d) => d[Object.keys(d)[0]] as string)) // Use all unique values from data
-        .range(d3.schemeCategory10);
-
+      .scaleOrdinal<string>()
+      .domain(data.map((d) => d[Object.keys(d)[0]] as string)) // Use all unique values from data
+      .range(d3.schemeCategory10);
       // Return color based on value
       return colorScale(value);
     };
-
+    
     const sortedData = [...data].sort(
       (a, b) => (b.Count as number) - (a.Count as number)
     );
@@ -179,7 +179,6 @@ const PieChartComponent: React.FC<PieChartProps> = ({
       .on('mouseover', (event, d) => {
         const xPos = event.clientX;
         const yPos = event.clientY + window.scrollY;
-        console.log(yPos);
         const category = Object.keys(d.data)[0];
         setTooltipState({
           position: { x: xPos, y: yPos },

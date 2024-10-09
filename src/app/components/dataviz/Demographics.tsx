@@ -18,7 +18,7 @@ interface TooltipState {
 interface DemographicProps {
   currentCluster: string;
   currentClusterName: string | null;
-  drawerWidth: number;
+  drawerWidth?: number;
   tooltipState: TooltipState;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
 }

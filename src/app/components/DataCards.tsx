@@ -17,6 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 import useTranslation from '../i18n/client';
 import CardAccordion from './CardAccordion';
 import DataCardButton from './DataCardButton';
+import { useRouter } from 'next/navigation';
 
 interface Download {
   title: string;
@@ -41,7 +42,7 @@ interface DatasetCard {
   downloads?: Download[];
 }
 
-const StyledCard = styled(Card)<{ $background: string; $font: string }>`
+const StyledCard = styled(Card) <{ $background: string; $font: string }>`
   width: 350px;
   height: 550px;
   position: relative;
@@ -52,13 +53,28 @@ const StyledCard = styled(Card)<{ $background: string; $font: string }>`
 
 const MetadataContainer = styled(View)`
   position: absolute;
-  bottom: 10px; /* Adjust as needed for padding */
+  bottom: 10px; 
   left: 15px;
   right: 0;
-  padding: 10px; /* Optional padding */
+  padding: 10px; 
 `;
 
-const DownloadButton = styled(Button)<{
+
+const ClickableText = styled(Text) <{
+  $color: string;
+  $inverse: string;
+}>`
+  color: ${(props) => props.$color}; 
+  cursor: pointer; 
+  text-decoration: underline; 
+  &:hover {
+    color: ${(props) => props.$inverse};
+  }
+  position: absolute;
+  bottom: 90px;
+`;
+
+const DownloadButton = styled(Button) <{
   $background: string;
   $font: string;
   $inverse: string;
@@ -94,6 +110,7 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
   const { tokens } = useTheme();
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'datasets');
+  const router = useRouter();
 
   const sortedDatasetCards = _.orderBy(
     datasetCards.datasetCards,
@@ -174,6 +191,10 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
     }
   };
 
+  const handleRequestMoreData = () => {
+    router.push(`/contact`);
+  };
+
   const containerRef = useRef<HTMLDivElement>(null);
   const { width, height } = useDimension(containerRef);
 
@@ -220,6 +241,14 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
               {lng === 'fr' ? card.descfr : card.desc}
             </Text>
           </View>
+
+          <ClickableText
+            onClick={handleRequestMoreData}
+            $color={getColor(index).titleFont}
+            $inverse={getColor(index).button}
+          >
+            Request more data
+          </ClickableText>
 
           {cardMetadata && (
             <MetadataContainer>

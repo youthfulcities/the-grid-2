@@ -123,12 +123,6 @@ const RootLayout: React.FC<RootLayoutProps> = ({
         type='text/javascript'
         src='https://cdn-cookieyes.com/client_data/36b079cad9fec46bd01a04bc/script.js'
       />
-      <Script
-        id='adsense'
-        async
-        src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6052560776293450'
-        crossOrigin='anonymous'
-      />
       <Script id='hotjar'>
         {`
           (function (h, o, t, j, a, r)

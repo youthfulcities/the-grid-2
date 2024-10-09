@@ -26,5 +26,6 @@
   "phone_invalid": "Please make sure your phone number is valid.",
   "phone_long": "Phone number can be a maximum of 10 characters.",
   "topic_required": "Please select a topic.",
-  "message_required": "Please include a message."
+  "message_required": "Please include a message.",
+  "data": "Request more data"
 }

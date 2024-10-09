@@ -219,7 +219,6 @@ const Survey: React.FC = () => {
         <Demographics
           currentCluster={currentCluster}
           currentClusterName={getKeyFromValue(currentCluster)}
-          drawerWidth={0}
           tooltipState={tooltipState}
           setTooltipState={setTooltipState}
         />

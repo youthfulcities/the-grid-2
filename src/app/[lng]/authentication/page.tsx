@@ -10,10 +10,7 @@ import RedirectAfterAuth from "@/app/components/RedirectAfterAuth";
 import "../global.css"
 
 const authenticator = () => {
-  
-
   return (
-    <Authenticator.Provider>
       <Container>
         <View as="section" className="container section-padding authenticator-container">
           <Authenticator>
@@ -23,7 +20,6 @@ const authenticator = () => {
           {/* This will handle the redirect after login */}
         </View>
       </Container>
-    </Authenticator.Provider>
   );
 };
 

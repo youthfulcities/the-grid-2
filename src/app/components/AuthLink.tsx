@@ -6,6 +6,10 @@ import { useParams, useRouter } from 'next/navigation';
 import React from 'react';
 import styled from 'styled-components';
 import useTranslation from '../i18n/client';
+import config from '@/amplifyconfiguration.json'
+import { Amplify } from 'aws-amplify';
+
+Amplify.configure(config)
 
 const StyledAuthLink = styled(Link)<{
   $currentPage: boolean;

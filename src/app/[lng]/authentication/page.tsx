@@ -1,17 +1,21 @@
 'use client';
 
-import { Authenticator, Text, View } from '@aws-amplify/ui-react';
+import {
+  Authenticator,
+  Text,
+  View,
+  useAuthenticator,
+} from '@aws-amplify/ui-react';
 
 import config from '@/amplifyconfiguration.json';
 import RedirectAfterAuth from '@/app/components/RedirectAfterAuth';
-import { useAuthenticator } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import Container from '../../components/Background';
 import '../global.css';
 Amplify.configure(config);
 
-const authenticator = () => {
-  const { user, signOut } = useAuthenticator((context) => [context.user]);
+const Auth = () => {
+  const { user } = useAuthenticator((context) => [context.user]);
   const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   console.log(authStatus, user);
   return (
@@ -34,4 +38,4 @@ const authenticator = () => {
   );
 };
 
-export default authenticator;
+export default Auth;

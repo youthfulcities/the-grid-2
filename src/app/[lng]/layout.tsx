@@ -133,7 +133,8 @@ const RootLayout: React.FC<RootLayoutProps> = ({
         a.appendChild(r);
     })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`}
       </Script>
-      <body>
+      {/* override layout shift when opening nav bar */}
+      <body style={{ margin: '0px !important' }}>
         <GoogleAnalytics gaId='G-GEF0PPKZXD' />
         <GoogleTagManager gtmId='GTM-MXZ2WJTV' />
         <StyledComponentsRegistry>

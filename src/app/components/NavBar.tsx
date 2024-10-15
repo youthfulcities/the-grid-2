@@ -229,7 +229,7 @@ const NavBar = () => {
               </MobileMenuItem>
             </MobileLink>
             <MobileMenuItem>
-              <AuthLink authStatus={authStatus} mobile={true} />
+              <AuthLink authStatus={authStatus} mobile />
             </MobileMenuItem>
           </Menu>
         ) : (

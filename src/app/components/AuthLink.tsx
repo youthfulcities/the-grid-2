@@ -2,15 +2,19 @@
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React from 'react';
 import styled from 'styled-components';
+import useTranslation from '../i18n/client';
 
-const StyledAuthLink = styled(Link)<{ $currentPage: boolean }>`
+const StyledAuthLink = styled(Link)<{
+  $currentPage: boolean;
+  $mobile: boolean;
+}>`
   font-family: 'Gotham Narrow Medium';
   font-size: 16px;
   font-weight: 450;
-  color: var(--amplify-colors-font-inverse);
+  color: inherit;
   text-transform: uppercase;
   line-height: 24px;
   text-align: left;
@@ -20,7 +24,9 @@ const StyledAuthLink = styled(Link)<{ $currentPage: boolean }>`
   position: relative;
   overflow: hidden;
 
-  &::before {
+  ${(props) =>
+    !props.$mobile
+      ? `&::before {
     content: '';
     position: absolute;
     width: 100%;
@@ -28,7 +34,7 @@ const StyledAuthLink = styled(Link)<{ $currentPage: boolean }>`
     bottom: 0;
     left: 0;
     background-color: white;
-    transform: ${(props) => (props.$currentPage ? 'scaleX(1)' : 'scaleX(0)')};
+    transform: ${props.$currentPage ? 'scaleX(1)' : 'scaleX(0)'};
     transform-origin: right;
     transition: transform 0.3s ease-in-out;
     border-radius: 5px;
@@ -37,10 +43,18 @@ const StyledAuthLink = styled(Link)<{ $currentPage: boolean }>`
   &:hover::before {
     transform: scaleX(1);
     transform-origin: left;
-  }
+}`
+      : `&:hover {
+    color: var(--amplify-font-inverse);
+}`}
 `;
 
-const AuthLink: React.FC = () => {
+const AuthLink: React.FC<{ authStatus: string; mobile?: boolean }> = ({
+  authStatus,
+  mobile = false,
+}) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'translation');
   const { user, signOut } = useAuthenticator((context) => [context.user]);
   const router = useRouter();
 
@@ -48,7 +62,7 @@ const AuthLink: React.FC = () => {
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   ) => {
     e.preventDefault();
-    if (user) {
+    if (authStatus === 'authenticated') {
       signOut();
     } else {
       sessionStorage.setItem('postLoginRedirect', '/');
@@ -57,13 +71,22 @@ const AuthLink: React.FC = () => {
   };
 
   return (
-    <StyledAuthLink
-      $currentPage={false}
-      href='/authentication'
-      onClick={handleAuthAction}
-    >
-      {user ? 'Logout' : 'Login'}
-    </StyledAuthLink>
+    <>
+      {authStatus === 'configuring' ? (
+        <StyledAuthLink $currentPage={false} $mobile={mobile} href='/'>
+          {t('loading')}
+        </StyledAuthLink>
+      ) : (
+        <StyledAuthLink
+          $mobile={mobile}
+          $currentPage={false}
+          href='/authentication'
+          onClick={handleAuthAction}
+        >
+          {authStatus === 'authenticated' ? t('logout') : t('login')}
+        </StyledAuthLink>
+      )}
+    </>
   );
 };
 

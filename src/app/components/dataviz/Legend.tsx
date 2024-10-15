@@ -67,7 +67,6 @@ const Legend: React.FC<LegendProps> = ({
   position = 'below',
 }) => {
   const handleClick = (key: string) => {
-    console.log(key);
     if (setActiveLegendItems) {
       setActiveLegendItems(
         (prevActiveItems: string[]) =>

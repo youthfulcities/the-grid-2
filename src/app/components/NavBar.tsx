@@ -1,5 +1,6 @@
 'use client';
 
+import config from '@/amplifyconfiguration.json';
 import {
   Button,
   Flex,
@@ -8,20 +9,23 @@ import {
   MenuItem,
   Text,
   View,
+  useAuthenticator,
+  useBreakpointValue,
   useTheme,
 } from '@aws-amplify/ui-react';
+import { Amplify } from 'aws-amplify';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { FaBars } from 'react-icons/fa6';
 import styled from 'styled-components';
 import useTranslation from '../i18n/client';
 import AuthLink from './AuthLink';
 
+Amplify.configure(config);
+
 const StyledFlex = styled(Flex)`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
   align-items: center;
   gap: 10px;
   color: var(--amplify-colors-font-inverse);
@@ -39,22 +43,23 @@ const StyledFlex = styled(Flex)`
 `;
 
 const NavigationLinks = styled(Flex)`
-  gap: 48px;
+  gap: var(--amplify-space-xl);
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   position: relative;
 `;
 
 const NavLink = styled(Link)<{ $currentPage: boolean }>`
   font-family: 'Gotham Narrow Medium';
+  text-align: center;
   font-size: 16px;
   font-weight: 450;
+  max-width: 110px;
   color: var(--amplify-colors-font-inverse);
   text-transform: uppercase;
   line-height: 24px;
-  text-align: left;
   display: inline-block;
   cursor: pointer;
   text-decoration: none;
@@ -99,7 +104,13 @@ const MobileLink = styled(Link)`
 `;
 
 const MobileMenuItem = styled(MenuItem)`
+  font-family: 'Gotham Narrow Medium';
+  font-size: 16px;
+  font-weight: 450;
+  text-transform: uppercase;
+  line-height: 24px;
   width: 100%;
+  text-transform: uppercase;
 `;
 
 const SmallText = styled(Text)`
@@ -113,21 +124,17 @@ const NavBar = () => {
   const pathname = usePathname();
   const pathNoLocale = pathname.substring(3);
   const router = useRouter();
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useBreakpointValue({
+    base: true,
+    small: true,
+    medium: true,
+    large: true,
+    xl: false,
+  });
 
   const { tokens } = useTheme();
 
-  //TODO: Refactor into reusable hook
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1280);
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
 
   function handleLanguageChange(locale: string) {
     const newPath = `/${locale}${pathNoLocale}`;
@@ -221,39 +228,44 @@ const NavBar = () => {
                 {t('contact')}
               </MobileMenuItem>
             </MobileLink>
+            <MobileMenuItem>
+              <AuthLink authStatus={authStatus} mobile={true} />
+            </MobileMenuItem>
           </Menu>
         ) : (
-          <NavigationLinks>
-            <NavLink $currentPage={pathNoLocale === ''} href={`/${lng}/`}>
-              {t('home')}
-            </NavLink>
-            <NavLink
-              $currentPage={pathNoLocale === '/datasets'}
-              href={`/${lng}/datasets`}
-            >
-              {t('datasets')}
-            </NavLink>
-            <NavLink
-              $currentPage={pathNoLocale === '/insights'}
-              href={`/${lng}/insights`}
-            >
-              {t('insights')}
-            </NavLink>
-            <NavLink
-              $currentPage={pathNoLocale === '/about'}
-              href={`/${lng}/about`}
-            >
-              {t('about')}
-            </NavLink>
-            <NavLink
-              $currentPage={pathNoLocale === '/contact'}
-              href={`/${lng}/contact`}
-            >
-              {t('contact')}
-            </NavLink>
-          </NavigationLinks>
+          <>
+            <NavigationLinks>
+              <NavLink $currentPage={pathNoLocale === ''} href={`/${lng}/`}>
+                {t('home')}
+              </NavLink>
+              <NavLink
+                $currentPage={pathNoLocale === '/datasets'}
+                href={`/${lng}/datasets`}
+              >
+                {t('datasets')}
+              </NavLink>
+              <NavLink
+                $currentPage={pathNoLocale === '/insights'}
+                href={`/${lng}/insights`}
+              >
+                {t('insights')}
+              </NavLink>
+              <NavLink
+                $currentPage={pathNoLocale === '/about'}
+                href={`/${lng}/about`}
+              >
+                {t('about')}
+              </NavLink>
+              <NavLink
+                $currentPage={pathNoLocale === '/contact'}
+                href={`/${lng}/contact`}
+              >
+                {t('contact')}
+              </NavLink>
+            </NavigationLinks>
+            <AuthLink authStatus={authStatus} />
+          </>
         )}
-        <AuthLink />
       </Flex>
     </StyledFlex>
   );

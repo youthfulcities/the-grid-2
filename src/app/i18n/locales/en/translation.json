@@ -14,5 +14,8 @@
   "rights": "All rights reserved",
   "cookie": "Manage cookies",
   "terms": "Terms and conditions",
-  "privacy": "Privacy policy"
+  "privacy": "Privacy policy",
+  "loading": "Loading...",
+  "logout": "Logout",
+  "login": "Login"
 }

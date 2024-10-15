@@ -15,5 +15,8 @@
   "newsletter-email": "Courriel de la lettre d'information",
   "cookie": "Gestion des cookies",
   "terms": "Conditions d'utilisation",
-  "privacy": "Politique de confidentialité"
+  "privacy": "Politique de confidentialité",
+  "loading": "Chargement...",
+  "logout": "Déconnexion",
+  "login": "Connexion"
 }

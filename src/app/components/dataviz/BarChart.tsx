@@ -73,6 +73,10 @@ const BarChart: React.FC<BarProps> = ({
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
   const [activeLegendItems, setActiveLegendItems] = useState<string[]>([]);
 
+  const dataString = JSON.stringify(parsedData);
+  const testData = d3.hierarchy(dataString);
+  console.log(testData.data);
+
   useEffect(() => {
     const fetchData = async (filename: string) => {
       if (Object.prototype.hasOwnProperty.call(rawData, filename)) return;

@@ -1,15 +1,15 @@
 'use client';
 
+import config from '@/amplifyconfiguration.json';
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import { Amplify } from 'aws-amplify';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import React from 'react';
 import styled from 'styled-components';
 import useTranslation from '../i18n/client';
-import config from '@/amplifyconfiguration.json'
-import { Amplify } from 'aws-amplify';
 
-Amplify.configure(config)
+Amplify.configure(config);
 
 const StyledAuthLink = styled(Link)<{
   $currentPage: boolean;
@@ -26,6 +26,7 @@ const StyledAuthLink = styled(Link)<{
   cursor: pointer;
   text-decoration: none;
   position: relative;
+  width: 100%;
   overflow: hidden;
 
   ${(props) =>

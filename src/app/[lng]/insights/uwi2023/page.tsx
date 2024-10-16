@@ -5,6 +5,8 @@ import CustomMap from '@/app/components/dataviz/Map';
 import { useDimensions } from '@/hooks/useDimensions';
 import { Heading, View } from '@aws-amplify/ui-react';
 import { useRef } from 'react';
+import uwi2023 from '@/data/uwi-2023.json';
+import { FeatureCollection } from 'geojson';
 
 const Index = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -21,6 +23,7 @@ const Index = () => {
           </Heading>
         </div>
         <CustomMap
+          geoJSON={uwi2023 as FeatureCollection}
           width={width}
           mapStyle='mapbox://styles/youthfulcities/clzrhcvrj00hf01pc44in6vrn'
           dataset='uwi-2023-overall-2'

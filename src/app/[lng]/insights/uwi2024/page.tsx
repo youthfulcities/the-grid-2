@@ -13,6 +13,8 @@ import { useParams } from 'next/navigation';
 import { ReactNode, useRef, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
 import config from '../../../../amplifyconfiguration.json';
+import uwi2024 from '@/data/uwi-2024.json';
+import { FeatureCollection } from 'geojson';
 
 interface TooltipState {
   position: { x: number; y: number } | null;
@@ -75,6 +77,7 @@ const Index = () => {
           </Heading>
           <Text marginBottom='xl'>{t('map_blurb')}</Text>
           <CustomMap
+            geoJSON={uwi2024 as FeatureCollection}
             width={width}
             mapStyle='mapbox://styles/youthfulcities/cm1qlm8y0006o01pb18e49tf9'
             dataset='uwi-2024'

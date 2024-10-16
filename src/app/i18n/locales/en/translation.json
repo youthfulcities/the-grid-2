@@ -17,5 +17,6 @@
   "privacy": "Privacy policy",
   "loading": "Loading...",
   "logout": "Logout",
-  "login": "Login"
+  "login": "Login",
+  "login_info": "Access the chatbot and download datasets with a free account. Creating an account helps us improve the tool and keep Youth Data Lab free for everyone. By creating an account, you agree to the <a>terms and conditions.</a>"
 }

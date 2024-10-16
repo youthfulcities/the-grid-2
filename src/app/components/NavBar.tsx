@@ -208,14 +208,14 @@ const NavBar = () => {
                 {t('home')}
               </MobileMenuItem>
             </MobileLink>
-            <MobileLink href='/datasets'>
-              <MobileMenuItem isDisabled={pathNoLocale === '/datasets'}>
-                {t('datasets')}
-              </MobileMenuItem>
-            </MobileLink>
             <MobileLink href='/insights'>
               <MobileMenuItem isDisabled={pathNoLocale === '/insights'}>
                 {t('insights')}
+              </MobileMenuItem>
+            </MobileLink>
+            <MobileLink href='/datasets'>
+              <MobileMenuItem isDisabled={pathNoLocale === '/datasets'}>
+                {t('datasets')}
               </MobileMenuItem>
             </MobileLink>
             <MobileLink href='/about'>
@@ -239,16 +239,16 @@ const NavBar = () => {
                 {t('home')}
               </NavLink>
               <NavLink
-                $currentPage={pathNoLocale === '/datasets'}
-                href={`/${lng}/datasets`}
-              >
-                {t('datasets')}
-              </NavLink>
-              <NavLink
                 $currentPage={pathNoLocale === '/insights'}
                 href={`/${lng}/insights`}
               >
                 {t('insights')}
+              </NavLink>
+              <NavLink
+                $currentPage={pathNoLocale === '/datasets'}
+                href={`/${lng}/datasets`}
+              >
+                {t('datasets')}
               </NavLink>
               <NavLink
                 $currentPage={pathNoLocale === '/about'}

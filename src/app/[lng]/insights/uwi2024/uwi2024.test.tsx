@@ -11,9 +11,8 @@ interface IndexHeatmapProps {
   }) => void;
 }
 
-// Mock the amplify configuration
 jest.mock(
-  '../../../../../../amplifyconfiguration.json',
+  '../../../../amplifyconfiguration.json',
   () => ({
     aws_project_region: 'mock-region',
     aws_cognito_identity_pool_id: 'mock-identity-pool-id',

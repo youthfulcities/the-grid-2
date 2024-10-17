@@ -7,8 +7,8 @@
       "datasetfr": "Indice du travail urbain 2024",
       "date": "2024",
       "type": "",
-      "desc": "View the results of the Urban Work Index 2024 on an interactive map.",
-      "descfr": "Consultez les résultats de l'indice de travail urbain 2024 sur une carte interactive.",
+      "desc": "Urban Work Index 2024 ranks 30 cities based on youth priorities for ideal living and working. It is the culmination of DEVlab, an investigation to help build dynamic, engaged, and vital workforces in Canada.",
+      "descfr": "L'Indice du travail urbain 2024 classe 30 villes en fonction des priorités des jeunes en matière de vie et de travail idéaux. Il fait partie de laboDEV, une enquête visant à créer une main-d'œuvre dynamique, engagée et vitale au Canada.",
       "link": "/insights/uwi2024"
     },
     {
@@ -61,7 +61,7 @@
       "type": "",
       "desc": "View the results of the Urban Work Index 2023 on an interactive map.",
       "descfr": "",
-      "link": "/insights/index"
+      "link": "/insights/uwi2023"
     }
   ]
 }

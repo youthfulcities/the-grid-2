@@ -7,20 +7,6 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import HeatmapTooltip from './HeatmapTooltip';
 
-// const topicDesc = {
-//   "Good Jobs": "This means work that is meaningful, successful, relevant to your field of study, that pays you fairly, and is safe in your city.",
-//   "Affordability": "This means higher income and lower cost of living in your city."
-//   "Education and skills development": "This means access to post-secondary institutions and training opportunities, as well as affordable education support (such as tutors) in your city.",
-//   "Local Economic Growth": "This means positive economic growth for the stability and security of people in your city.
-//   "Entrepreneurial Spirit": "This means the city is innovative, creative, adaptable, and resourceful and supports entrepreneurship.",
-//   "Climate Change": "This means the city addresses issues related to the environment, pollution, and sustainability."
-//   "Digital Transformation": "This means the city provides access to reliable technology (e.g., computers), digital infrastructure (e.g. free public wifi), platforms (e.g. free, open data apps), etc.",
-//   "Mental Health": "This means the city provides access to mental health information, as well as, reliable and affordable mental health services."
-//   "Transportation": "This means the city provides accessible, reliable, and affordable buses, trains, bicycle paths, and alternative transportation methods."
-//   "Equity Diversity and Inclusion": "This means the city is welcoming, safe, and representative of the diversity of cultures who live there, with public services that include the needs of different people."
-//   "Indigenous peoples, world views, Truth & Reconciliation": "This means the city meaningfully integrates the knowledge, practices, experiences, and perspectives of Indigenous peoples and highlights the importance of building renewed relationships based on the recognition of rights, respect, and reciprocity."
-// }
-
 interface TooltipState {
   position: { x: number; y: number } | null;
   value?: number | null;
@@ -50,17 +36,11 @@ const ChartContainer = styled.div`
   position: relative;
 `;
 
-const SmallText = styled(Text)`  
-  margin: 0; 
-  color: var(--amplify-colors-font-inverse);  
-  font-weight: 400;  
-  font-size: var(--amplify-font-sizes-small);
-`;
 
 const truncateText = (text: string, maxLength: number) => {
   const cleanedText = text.replace(/\(.*?\)/g, '').trim();
   if (cleanedText.length > maxLength) {
-    return cleanedText.slice(0, maxLength) + '...';
+    return `${cleanedText.slice(0, maxLength)}...`;
   }
   return cleanedText;
 };
@@ -84,7 +64,6 @@ const shouldUseWhiteText = (color: string) => {
 const Heatmap: React.FC<HeatmapProps> = ({
   width,
   activeFile,
-  tooltipState,
   setTooltipState,
   title
 }) => {
@@ -275,13 +254,13 @@ const Heatmap: React.FC<HeatmapProps> = ({
         .on('mouseout', mouseleave);
     }
     requestAnimationFrame(() => { setLoading(false); });
-  }, [width, height, parsedData]);
+  }, [width, height, parsedData, activeFile, innerHeight, innerWidth, margin, title]);
 
   return (
     <>
       <Placeholder height={height} isLoaded={!loading || false} />
       <ChartContainer>
-        <svg ref={ref}></svg>
+        <svg ref={ref} />
       </ChartContainer>
     </>
   );

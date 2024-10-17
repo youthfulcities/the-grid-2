@@ -1,19 +1,10 @@
-const withTM = require('next-transpile-modules')([
-  '@mui/material',
-  '@mui/system',
-]);
-
-module.exports = withTM({
+module.exports = {
   webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@mui/styled-engine': '@mui/styled-engine-sc',
-    };
+    // Clean up any MUI-related aliasing if necessary
+    delete config.resolve.alias['@mui/styled-engine'];
+
     return config;
   },
-});
-
-module.exports = {
   compiler: {
     styledComponents: true,
   },

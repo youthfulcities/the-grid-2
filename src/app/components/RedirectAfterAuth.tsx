@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuthenticator } from "@aws-amplify/ui-react";
+import { useAuthenticator } from '@aws-amplify/ui-react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const RedirectAfterAuth = () => {
   const router = useRouter();
-  const { user } = useAuthenticator();
+  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
 
   useEffect(() => {
     // Check if there is a user object, which indicates a successful login
-    if (user) {
+    if (authStatus === 'authenticated') {
       // Retrieve the redirect URL from session storage or set a default
-      const redirectUrl = sessionStorage.getItem("postLoginRedirect") || "/";
-      sessionStorage.removeItem("postLoginRedirect"); // Clear the stored URL
+      const redirectUrl = sessionStorage.getItem('postLoginRedirect') || '/';
+      sessionStorage.removeItem('postLoginRedirect'); // Clear the stored URL
       router.push(redirectUrl); // Redirect to the intended URL or home
     }
-  }, [user, router]);
+  }, [authStatus, router]);
 
   return null;
 };

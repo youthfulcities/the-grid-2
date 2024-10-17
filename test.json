@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Chart 1 Title",
+    "q_code": "code",
+    "data": [
+      {
+        "option_en": "Option 1",
+        "option_code":"code",
+        "segment_1": 1,
+        "segment_2": 2,
+        "segment_3": 3
+      },
+      {
+        "option_en": "Option 2",
+        "option_code": "code",
+        "segment_1": 4,
+        "segment_2": 5,
+        "segment_3": 6
+      }
+    ]
+  },
+  {
+    "title": "Chart 2 Title",
+    "q_code": "code",
+    "data": [
+      {
+        "option_en": "Option 3",
+        "option_code": "code",
+        "segment_1": 7,
+        "segment_2": 8,
+        "segment_3": 9
+      },
+      {
+        "option_en": "Option 4",
+        "option_code": "code",
+        "segment_1": 10,
+        "segment_2": 11,
+        "segment_3": 12
+      }
+    ]
+  }
+]

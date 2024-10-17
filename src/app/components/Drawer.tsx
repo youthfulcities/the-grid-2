@@ -32,7 +32,7 @@ const DrawerContainer = styled(motion.div)<{
   color: var(--amplify-colors-font-inverse);
   background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
-  z-index: 1000;
+  z-index: 998;
   overflow-y: scroll;
   overflow-x: visible;
   display: flex;
@@ -105,19 +105,6 @@ const Drawer: React.FC<DrawerProps> = ({
 
   // Expose the drawerRef to parent components via ref
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (noClickOutside) return;
-    if (
-      onClose &&
-      drawerRef.current &&
-      tabRef.current &&
-      !drawerRef.current.contains(event.target as Node) &&
-      !tabRef.current.contains(event.target as Node) // Ignore clicks on the tab
-    ) {
-      onClose();
-    }
-  };
-
   useEffect(() => {
     if (drawerRef.current) {
       const resizeObserver = new ResizeObserver(() => {
@@ -136,6 +123,19 @@ const Drawer: React.FC<DrawerProps> = ({
   }, []);
 
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (noClickOutside) return;
+      if (
+        onClose &&
+        drawerRef.current &&
+        tabRef.current &&
+        !drawerRef.current.contains(event.target as Node) &&
+        !tabRef.current.contains(event.target as Node) // Ignore clicks on the tab
+      ) {
+        onClose();
+      }
+    };
+
     if (isopen) {
       document.addEventListener('mousedown', handleClickOutside);
       // Calculate tab position based on drawer's position
@@ -162,13 +162,14 @@ const Drawer: React.FC<DrawerProps> = ({
         isopen={isopen}
         $absolute={absolute || false}
       >
-{width !== undefined && React.Children.map(children, (child) =>
-  React.isValidElement(child)
-    ? React.cloneElement(child as React.ReactElement, {
-        drawerWidth: width,  // Pass drawer width as a prop
-      })
-    : child
-)}
+        {width !== undefined &&
+          React.Children.map(children, (child) =>
+            React.isValidElement(child)
+              ? React.cloneElement(child as React.ReactElement, {
+                  drawerWidth: width, // Pass drawer width as a prop
+                })
+              : child
+          )}
       </DrawerContainer>
       <Tab
         $translate={translate}

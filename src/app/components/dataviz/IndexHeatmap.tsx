@@ -45,11 +45,6 @@ interface HeatmapProps {
   activeFile: string;
   setTooltipState: Dispatch<SetStateAction<TooltipState>>;
 }
-
-interface LegendProps {
-  data: Array<{ key: string; color: string }>;
-}
-
 const ChartContainer = styled.div`
   overflow: visible;
   position: relative;
@@ -153,29 +148,29 @@ const truncateText = (text: string, maxLength: number) => {
 
   // Truncate the text if it exceeds the maxLength
   if (cleanedText.length > maxLength) {
-    return cleanedText.slice(0, maxLength) + '...';
+    return `${cleanedText.slice(0, maxLength)}...`;
   }
 
   return cleanedText;
 };
 
 // Function to calculate luminance of a color
-const calculateLuminance = (r: number, g: number, b: number) => {
-  const a = [r, g, b].map((value) => {
-    const normalized = value / 255;
-    return normalized <= 0.03928
-      ? normalized / 12.92
-      : ((normalized + 0.055) / 1.055) ** 2.4;
-  });
-  return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
-};
+// const calculateLuminance = (r: number, g: number, b: number) => {
+//   const a = [r, g, b].map((value) => {
+//     const normalized = value / 255;
+//     return normalized <= 0.03928
+//       ? normalized / 12.92
+//       : ((normalized + 0.055) / 1.055) ** 2.4;
+//   });
+//   return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+// };
 
-// Function to determine if white text is better based on contrast
-const shouldUseWhiteText = (color: string) => {
-  const rgb = d3.rgb(color);
-  const luminance = calculateLuminance(rgb.r, rgb.g, rgb.b);
-  return luminance < 0.3;
-};
+// // Function to determine if white text is better based on contrast
+// const shouldUseWhiteText = (color: string) => {
+//   const rgb = d3.rgb(color);
+//   const luminance = calculateLuminance(rgb.r, rgb.g, rgb.b);
+//   return luminance < 0.3;
+// };
 
 const IndexHeatmap: React.FC<HeatmapProps> = ({
   width,
@@ -623,7 +618,18 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
     requestAnimationFrame(() => {
       setLoading(false);
     });
-  }, [width, height, parsedData, sortedData]);
+  }, [
+    width,
+    height,
+    parsedData,
+    sortedData,
+    activeFile,
+    innerHeight,
+    innerHeight,
+    innerWidth,
+    lng,
+    margin,
+  ]);
 
   const handleChange = (value: number, code: string) => {
     setCustomWeights({
@@ -643,7 +649,7 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
     <>
       <Placeholder height={height} isLoaded={!loading || false} />
       <ChartContainer ref={containerRef}>
-        <svg ref={ref}></svg>
+        <svg ref={ref} />
         <Drawer
           noOverlay
           absolute

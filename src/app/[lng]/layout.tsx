@@ -3,20 +3,18 @@ import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { Amplify } from 'aws-amplify';
 import { configureAutoTrack } from 'aws-amplify/analytics';
 import { dir } from 'console';
-import type { Metadata, ResolvingMetadata } from 'next';
+import type { Metadata } from 'next';
 import Script from 'next/script';
 import React from 'react';
 import config from '../../amplifyconfiguration.json';
 import StyledComponentsRegistry from '../../lib/registry';
 import AutheticatorProvider from '../components/AuthenticatorProvider';
+import BetaBanner from '../components/BetaBanner';
 import Footer from '../components/Footer';
 import NavBar from '../components/NavBar';
 import { languages } from '../i18n/settings';
 import AWSThemeProvider from './aws-theme-provider';
 import './global.css';
-import BetaBanner from '../components/BetaBanner'
-
-
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -89,10 +87,9 @@ export async function generateStaticParams() {
 }
 
 // Function to generate metadata dynamically based on language
-const generateMetadata = async (
-  { params }: RootLayoutProps,
-  parent: ResolvingMetadata
-): Promise<Metadata> => {
+const generateMetadata = async ({
+  params,
+}: RootLayoutProps): Promise<Metadata> => {
   const { lng } = params;
 
   const titles: { [key in Language]: string } = {
@@ -135,7 +132,8 @@ const RootLayout: React.FC<RootLayoutProps> = ({
         a.appendChild(r);
     })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`}
       </Script>
-      <body>
+      {/* override layout shift when opening nav bar */}
+      <body style={{ margin: '0px !important' }}>
         <GoogleAnalytics gaId='G-GEF0PPKZXD' />
         <GoogleTagManager gtmId='GTM-MXZ2WJTV' />
         <StyledComponentsRegistry>
@@ -149,9 +147,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({
                   height: '100%',
                 }}
               >
-
                 <BetaBanner />
-
                 <NavBar />
                 {children}
                 <Footer />

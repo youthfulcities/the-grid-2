@@ -2,8 +2,8 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateContactSubmissionInput = {
-  id?: string | null,
+export type UpdateContactSubmissionInput = {
+  id: string,
   firstName?: string | null,
   lastName?: string | null,
   email?: string | null,
@@ -89,8 +89,12 @@ export type ContactSubmission = {
   updatedAt: string,
 };
 
-export type UpdateContactSubmissionInput = {
+export type DeleteContactSubmissionInput = {
   id: string,
+};
+
+export type CreateContactSubmissionInput = {
+  id?: string | null,
   firstName?: string | null,
   lastName?: string | null,
   email?: string | null,
@@ -98,10 +102,6 @@ export type UpdateContactSubmissionInput = {
   topic?: string | null,
   message?: string | null,
   subscribed?: boolean | null,
-};
-
-export type DeleteContactSubmissionInput = {
-  id: string,
 };
 
 export type ModelContactSubmissionFilterInput = {
@@ -192,27 +192,6 @@ export type ModelSubscriptionBooleanInput = {
   eq?: boolean | null,
 };
 
-export type CreateContactSubmissionMutationVariables = {
-  input: CreateContactSubmissionInput,
-  condition?: ModelContactSubmissionConditionInput | null,
-};
-
-export type CreateContactSubmissionMutation = {
-  createContactSubmission?:  {
-    __typename: "ContactSubmission",
-    id: string,
-    firstName?: string | null,
-    lastName?: string | null,
-    email?: string | null,
-    phoneNumber?: string | null,
-    topic?: string | null,
-    message?: string | null,
-    subscribed?: boolean | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
 export type UpdateContactSubmissionMutationVariables = {
   input: UpdateContactSubmissionInput,
   condition?: ModelContactSubmissionConditionInput | null,
@@ -241,6 +220,27 @@ export type DeleteContactSubmissionMutationVariables = {
 
 export type DeleteContactSubmissionMutation = {
   deleteContactSubmission?:  {
+    __typename: "ContactSubmission",
+    id: string,
+    firstName?: string | null,
+    lastName?: string | null,
+    email?: string | null,
+    phoneNumber?: string | null,
+    topic?: string | null,
+    message?: string | null,
+    subscribed?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateContactSubmissionMutationVariables = {
+  input: CreateContactSubmissionInput,
+  condition?: ModelContactSubmissionConditionInput | null,
+};
+
+export type CreateContactSubmissionMutation = {
+  createContactSubmission?:  {
     __typename: "ContactSubmission",
     id: string,
     firstName?: string | null,

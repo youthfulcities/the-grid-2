@@ -1,13 +1,10 @@
 'use client';
 
 import Container from '@/app/components/Background';
-import { Heading, Text, View, useTheme } from '@aws-amplify/ui-react';
-import { useParams, useRouter } from 'next/navigation';
-import { Trans } from 'react-i18next/TransWithoutContext';
-import styled from 'styled-components';
-import useTranslation from '../../i18n/client';
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import styled from 'styled-components';
 
 const StyledChat = styled.iframe`
   min-height: 80vh;
@@ -15,19 +12,17 @@ const StyledChat = styled.iframe`
 `;
 
 const Chatbot = () => {
-  const { lng } = useParams<{ lng: string }>();
-  const { user } = useAuthenticator();
+  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   const router = useRouter();
 
   useEffect(() => {
-    if (!user) {
-
-      sessionStorage.setItem("postLoginRedirect", "/chatbot");
-      router.push("/authentication");
+    if (authStatus !== 'authenticated') {
+      sessionStorage.setItem('postLoginRedirect', '/chatbot');
+      router.push('/authentication');
     }
-  }, [user, router]);
+  }, [authStatus, router]);
 
-  if (!user) {
+  if (authStatus !== 'authenticated') {
     return null;
   }
 
@@ -38,7 +33,7 @@ const Chatbot = () => {
         title='Youthful Cities Chatbot'
         height='100%'
         width='100%'
-      ></StyledChat>
+      />
     </Container>
   );
 };

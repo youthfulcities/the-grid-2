@@ -24,7 +24,6 @@ import { z } from 'zod';
 import { createContactSubmission } from '../../../graphql/mutations';
 import Container from '../../components/Background';
 
-
 const StyledForm = styled(Flex)`
   margin: 0 auto;
   flex-direction: column;
@@ -97,10 +96,19 @@ const StyledCheckbox = styled(CheckboxField)`
   }
 `;
 
+interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  topic: string;
+  message: string;
+}
+
 const client = generateClient();
 
 const ContactForm = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
     email: '',
@@ -109,7 +117,6 @@ const ContactForm = () => {
     message: '',
   });
 
-  const [statusCodeSubscribe, setStatusCodeSubscribe] = useState<number>();
   const [statusSubscribe, setStatusSubscribe] = useState<
     'success' | 'error' | 'loading' | 'idle'
   >('idle');
@@ -131,7 +138,6 @@ const ContactForm = () => {
   const { t } = useTranslation(lng, 'contact');
   const { t: tsubscribe } = useTranslation(lng, 'newsletter');
   const { tokens } = useTheme();
-
 
   const { firstName, lastName, email, phoneNumber, topic, message } = formData;
   const phoneRegex =
@@ -162,16 +168,25 @@ const ContactForm = () => {
 
     // Update form errors for the specific field
     if (!validation.success) {
-      const fieldErrors = validation.error.errors.reduce((acc, curr) => {
-        return { ...acc, [curr.path[0]]: curr.message };
-      }, {});
-      setFormErrors((prevState) => ({
-        ...prevState,
+      const fieldErrors = validation.error.errors.reduce<
+        Record<string, string>
+      >(
+        (acc, curr) => ({
+          ...acc,
+          [curr.path[0]]: curr.message,
+        }),
+        {}
+      );
+
+      // Update form errors state
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
         ...fieldErrors,
       }));
     } else {
-      setFormErrors((prevState) => ({
-        ...prevState,
+      // Clear errors for this field
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
         [name]: '',
       }));
     }
@@ -265,12 +280,10 @@ const ContactForm = () => {
           lng,
         });
         setStatusSubscribe('success');
-        setStatusCodeSubscribe(response.status);
         setResponseMsgSubscribe(response.data.message);
       } catch (err) {
         if (axios.isAxiosError(err)) {
           setStatusSubscribe('error');
-          setStatusCodeSubscribe(err.response?.status);
           setResponseMsgSubscribe(err.response?.data.error);
         }
       }

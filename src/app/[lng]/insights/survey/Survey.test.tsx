@@ -2,6 +2,25 @@ import { useDimensions } from '@/hooks/useDimensions';
 import { fireEvent, render, screen } from '@testing-library/react';
 import Survey from './page';
 
+interface AccordionProps {
+  title: string; // The title prop, expected to be a string
+  children: React.ReactNode; // Children can be any valid React nodes
+}
+
+interface BarChartProps {
+  setTooltipState: (state: {
+    position: { x: number; y: number };
+    content: string;
+  }) => void;
+}
+
+interface DrawerProps {
+  isopen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+  children: React.ReactNode; // or JSX.Element if you want a more specific type
+}
+
 jest.mock(
   '../../../../amplifyconfiguration.json',
   () => ({
@@ -22,7 +41,7 @@ jest.mock('@/hooks/useDimensions', () => ({
 
 // Mock the components that are imported in the Survey component
 jest.mock('@/app/components/dataviz/BarChart', () => {
-  return ({ setTooltipState }) => (
+  return ({ setTooltipState }: BarChartProps) => (
     <div
       onMouseEnter={() =>
         setTooltipState({
@@ -44,8 +63,9 @@ jest.mock('@/app/components/dataviz/Demographics', () => () => (
 jest.mock('@/app/components/dataviz/TooltipChart', () => () => (
   <div>Mocked Tooltip</div>
 ));
+
 jest.mock('@/app/components/Drawer', () => {
-  return ({ isopen, onOpen, onClose, children }) => (
+  return ({ isopen, onOpen, onClose, children }: DrawerProps) => (
     <div>
       <div>{isopen ? 'Drawer Open' : 'Drawer Closed'}</div>
       <div>
@@ -57,12 +77,17 @@ jest.mock('@/app/components/Drawer', () => {
     </div>
   );
 });
-jest.mock('@/app/components/Accordion', () => ({ title, children }) => (
-  <div>
-    {`Accordion: ${title}`}
-    {children}
-  </div>
-));
+
+jest.mock(
+  '@/app/components/Accordion',
+  () =>
+    ({ title, children }: AccordionProps) => (
+      <div>
+        {`Accordion: ${title}`}
+        {children}
+      </div>
+    )
+);
 
 describe('Survey Component', () => {
   beforeEach(() => {

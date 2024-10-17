@@ -2,5 +2,11 @@
   "AppSyncApiName": "thegrid2",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
-  "AuthModeLastUpdated": "2024-06-11T17:06:02.766Z"
+  "AuthModeLastUpdated": "2024-10-17T17:41:32.048Z",
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "auththegrid2fafc44b3",
+      "Outputs.UserPoolId"
+    ]
+  }
 }

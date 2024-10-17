@@ -37,9 +37,9 @@ export default function HorizontalFilter(props) {
         {...getOverrideProps(overrides, "Container")}
       >
         <Text
-          fontFamily="Inter"
+          fontFamily="Gotham Narrow"
           fontSize="20px"
-          fontWeight="700"
+          fontWeight="400"
           color="rgba(0,0,0,1)"
           lineHeight="25px"
           textAlign="left"

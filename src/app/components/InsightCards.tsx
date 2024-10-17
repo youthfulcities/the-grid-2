@@ -11,7 +11,6 @@ import {
 
 import _ from 'lodash';
 import Link from 'next/link';
-import { useState } from 'react';
 import { FaArrowRight } from 'react-icons/fa6';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
@@ -72,15 +71,6 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng, maxLength }) => {
     0,
     maxLength || sortedInsightCards.length
   );
-  const [openDialogue, setOpenDialogue] = useState(false);
-
-  const handleOpen = () => {
-    setOpenDialogue(true);
-  };
-
-  const handleClose = () => {
-    setOpenDialogue(false);
-  };
 
   const getColor = (i: number) => {
     //array of all the different card color patterns

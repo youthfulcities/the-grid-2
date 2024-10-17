@@ -11,7 +11,7 @@ const SmallText = styled(Text)`
 
 const TooltipContainer = styled.div<{ $minWidth?: number }>`
   position: absolute;
-  z-index: 997;
+  z-index: 999;
   pointer-events: none;
   flex-direction: column;
   padding: var(--amplify-space-xs) var(--amplify-space-small);
@@ -31,14 +31,12 @@ const Tooltip: React.FC<{
   group?: string;
   child?: ReactNode;
   minWidth?: number;
-}> = ({ x, y, content, group, child, minWidth = 0 }) => {
-  return (
-    <TooltipContainer style={{ left: x, top: y }} $minWidth={minWidth || 0}>
-      {content}
-      {group && <SmallText>{group}</SmallText>}
-      {child}
-    </TooltipContainer>
-  );
-};
+}> = ({ x, y, content, group, child, minWidth = 0 }) => (
+  <TooltipContainer style={{ left: x, top: y }} $minWidth={minWidth || 0}>
+    {content}
+    {group && <SmallText>{group}</SmallText>}
+    {child}
+  </TooltipContainer>
+);
 
 export default Tooltip;

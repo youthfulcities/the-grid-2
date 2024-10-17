@@ -27,7 +27,6 @@ const StyledTextField = styled(TextField)`
 
 const Newsletter: React.FC<NewsletterProps> = ({ lng }) => {
   const [formEmail, setEmail] = useState('');
-  const [statusCode, setStatusCode] = useState<number>();
   const [status, setStatus] = useState<
     'success' | 'error' | 'loading' | 'idle'
   >('idle');
@@ -47,13 +46,11 @@ const Newsletter: React.FC<NewsletterProps> = ({ lng }) => {
         lng,
       });
       setStatus('success');
-      setStatusCode(response.status);
       setEmail('');
       setResponseMsg(response.data.message);
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setStatus('error');
-        setStatusCode(err.response?.status);
         setResponseMsg(err.response?.data.error);
       }
     }

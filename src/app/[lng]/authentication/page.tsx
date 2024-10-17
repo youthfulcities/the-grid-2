@@ -31,7 +31,11 @@ const Auth = () => {
             />
           </Text>
           <Authenticator>
-            {({ signOut }) => <button onClick={signOut}>Sign out</button>}
+            {({ signOut }) => (
+              <button type='submit' onClick={signOut}>
+                Sign out
+              </button>
+            )}
           </Authenticator>
           <RedirectAfterAuth />
           {/* This will handle the redirect after login */}

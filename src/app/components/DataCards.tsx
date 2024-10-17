@@ -10,14 +10,13 @@ import {
   useTheme,
 } from '@aws-amplify/ui-react';
 import _ from 'lodash';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import useTranslation from '../i18n/client';
 import CardAccordion from './CardAccordion';
 import DataCardButton from './DataCardButton';
-import { useRouter } from 'next/navigation';
 
 interface Download {
   title: string;
@@ -42,7 +41,7 @@ interface DatasetCard {
   downloads?: Download[];
 }
 
-const StyledCard = styled(Card) <{ $background: string; $font: string }>`
+const StyledCard = styled(Card)<{ $background: string; $font: string }>`
   width: 350px;
   height: 550px;
   position: relative;
@@ -53,20 +52,19 @@ const StyledCard = styled(Card) <{ $background: string; $font: string }>`
 
 const MetadataContainer = styled(View)`
   position: absolute;
-  bottom: 10px; 
+  bottom: 10px;
   left: 15px;
   right: 0;
-  padding: 10px; 
+  padding: 10px;
 `;
 
-
-const ClickableText = styled(Text) <{
+const ClickableText = styled(Text)<{
   $color: string;
   $inverse: string;
 }>`
-  color: ${(props) => props.$color}; 
-  cursor: pointer; 
-  text-decoration: underline; 
+  color: ${(props) => props.$color};
+  cursor: pointer;
+  text-decoration: underline;
   &:hover {
     color: ${(props) => props.$inverse};
   }
@@ -74,7 +72,7 @@ const ClickableText = styled(Text) <{
   bottom: 90px;
 `;
 
-const DownloadButton = styled(Button) <{
+const DownloadButton = styled(Button)<{
   $background: string;
   $font: string;
   $inverse: string;
@@ -303,7 +301,6 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
                   getColor={getColor}
                   index={index}
                   fetchUrl={fetchUrl}
-                  lng={lng}
                   type='link'
                   link={card.link}
                   tooltipMsg={t('link')}
@@ -317,7 +314,6 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
                     index={index}
                     file={(lng === 'fr' && download.filefr) || download.file}
                     fetchUrl={fetchUrl}
-                    lng={lng}
                     type={download.type}
                     tooltipMsg={
                       (lng === 'fr' && download.titlefr) || download.title

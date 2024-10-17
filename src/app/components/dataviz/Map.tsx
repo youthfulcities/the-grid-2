@@ -39,12 +39,6 @@ interface CityViewProps {
     'Point à améliorer': string;
   };
 }
-
-const DrawerContent = styled(Flex)`
-  max-height: 100%;
-  flex-direction: column;
-`;
-
 const ResetButton = styled(Button)`
   z-index: 2;
   top: 10px;
@@ -118,15 +112,9 @@ const CustomMap: React.FC<CustomMapProps> = ({
   dataset,
   geoJSON,
 }) => {
-  const { lng } = useParams<{ lng: string }>();
   const [viewState, setViewState] = useState<ViewState>(initialView);
   const [drawerOpen, setDrawerOpen] = useState(true);
-  const [completed, setCompleted] = useState(false);
   const [currentFeature, setCurrentFeature] = useState<Feature<
-    Point,
-    GeoJsonProperties
-  > | null>(null);
-  const [prevCurrentFeature, setPrevCurrentFeature] = useState<Feature<
     Point,
     GeoJsonProperties
   > | null>(null);
@@ -136,10 +124,6 @@ const CustomMap: React.FC<CustomMapProps> = ({
   const mapRef = useRef<MapRef>(null);
   const cityViewRefs = useRef<HTMLDivElement[]>([]);
   const [override, setOverride] = useState(false);
-  const [center, setCenter] = useState<{ lng: number; lat: number }>({
-    lng: 0,
-    lat: 0,
-  });
   const previousFeatureRef = useRef<Feature<Point, GeoJsonProperties> | null>(
     null
   );
@@ -154,7 +138,7 @@ const CustomMap: React.FC<CustomMapProps> = ({
     if (mapRef.current) {
       mapRef.current.resize();
     }
-  }, [width, height]);
+  }, [width]);
 
   const onClick = (event: MapMouseEvent) => {
     const feature = event.features?.[0] as Feature<Point, GeoJsonProperties>;
@@ -191,7 +175,6 @@ const CustomMap: React.FC<CustomMapProps> = ({
       padding: { top: 0, bottom: 0, left: 0, right: 0 },
     });
     setDrawerOpen(false);
-    setCompleted(true);
     setCurrentFeature(null);
   };
 
@@ -287,7 +270,7 @@ const CustomMap: React.FC<CustomMapProps> = ({
     }
     // Update the previous feature ref after the logic runs
     previousFeatureRef.current = currentFeature;
-  }, [currentFeature, drawerOpen]);
+  }, [currentFeature, drawerOpen, dataset]);
 
   useEffect(() => {
     const options = {
@@ -350,7 +333,7 @@ const CustomMap: React.FC<CustomMapProps> = ({
       ref={mapRef}
       initialViewState={initialView}
       scrollZoom
-      onLoad={(e) => onLoad()}
+      onLoad={() => onLoad()}
       onMove={(e) => setViewState(e.viewState)}
       style={{ width, height }}
       mapStyle={mapStyle}
@@ -371,20 +354,18 @@ const CustomMap: React.FC<CustomMapProps> = ({
         absolute
         id='drawer-content'
       >
-        <>
-          {allFeatures.length > 0 &&
-            allFeatures.map((item) => (
-              <CityView
-                key={item.properties?.City}
-                item={item.properties as CityViewProps['item']}
-                ref={(el) => {
-                  if (el) {
-                    cityViewRefs.current.push(el);
-                  }
-                }}
-              />
-            ))}
-        </>
+        {allFeatures.length > 0 &&
+          allFeatures.map((item) => (
+            <CityView
+              key={item.properties?.City}
+              item={item.properties as CityViewProps['item']}
+              ref={(el) => {
+                if (el) {
+                  cityViewRefs.current.push(el);
+                }
+              }}
+            />
+          ))}
       </Drawer>
     </Map>
   );

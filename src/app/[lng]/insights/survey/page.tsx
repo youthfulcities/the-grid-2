@@ -8,7 +8,7 @@ import Clusters from '@/app/components/dataviz/Clusters';
 import Demographics from '@/app/components/dataviz/Demographics';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import { useDimensions } from '@/hooks/useDimensions';
-import { Button, Flex, Heading, Tabs, View } from '@aws-amplify/ui-react';
+import { Button, Flex, Heading, Tabs, Text, View } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import { ReactNode, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -103,12 +103,17 @@ const Survey: React.FC = () => {
     <Container>
       <View className='container padding'>
         <Heading level={1}>
-          Skills <span className='highlight'>Mismatch</span>
+          Skills <span className='highlight'>Development</span>
         </Heading>
         <div className='inner-container' ref={containerRef}>
           <Heading level={3} color='font.inverse'>
             What’s up with work lately? Survey 2024
           </Heading>
+          <Text>
+            Discover how young people view their work-life dynamics, their
+            employability, the resources provided by their cities, and the
+            skills needed to succeed in the current and future job markets.
+          </Text>
           <Heading
             className='padding'
             level={5}
@@ -116,7 +121,7 @@ const Survey: React.FC = () => {
             textAlign='center'
             marginTop='xl'
           >
-            Select a segment
+            Select a data segment
           </Heading>
           <Tabs.Container
             defaultValue='1'
@@ -124,11 +129,36 @@ const Survey: React.FC = () => {
             onValueChange={(newTab) => changeTab(newTab)}
           >
             <Tabs.List>
-              <Tabs.Item value='1'>Psychographic</Tabs.Item>
-              <Tabs.Item value='2'>City</Tabs.Item>
-              <Tabs.Item value='3'>Identity</Tabs.Item>
+              <Tabs.Item value='1'>Identity</Tabs.Item>
+              <Tabs.Item value='2'>Psychographic</Tabs.Item>
+              <Tabs.Item value='3'>City</Tabs.Item>
             </Tabs.List>
             <Tabs.Panel value='1'>
+              <Flex justifyContent='center' wrap='wrap' marginTop='xl'>
+                <StyledButton
+                  $active={activeFile === 'org-attractive-city.csv'}
+                  variation='primary'
+                  onClick={() => setActiveFile('org-attractive-city.csv')}
+                >
+                  Age group
+                </StyledButton>
+                <StyledButton
+                  $active={activeFile === 'org-attractive-disability.csv'}
+                  variation='primary'
+                  onClick={() => setActiveFile('org-attractive-disability.csv')}
+                >
+                  [Dis]Ability
+                </StyledButton>
+                <StyledButton
+                  $active={activeFile === 'org-attractive-city.csv'}
+                  variation='primary'
+                  onClick={() => setActiveFile('org-attractive-city.csv')}
+                >
+                  Ethnicity
+                </StyledButton>
+              </Flex>
+            </Tabs.Panel>
+            <Tabs.Panel value='2'>
               <Flex justifyContent='center' wrap='wrap' marginTop='xl'>
                 <StyledButton
                   $active={activeFile === 'org-attractive-cluster.csv'}
@@ -151,17 +181,6 @@ const Survey: React.FC = () => {
                 />
               </Accordion>
             </Tabs.Panel>
-            <Tabs.Panel value='2'>
-              <Flex justifyContent='center' wrap='wrap' marginTop='xl'>
-                <StyledButton
-                  $active={activeFile === 'org-attractive-city.csv'}
-                  variation='primary'
-                  onClick={() => setActiveFile('org-attractive-city.csv')}
-                >
-                  City
-                </StyledButton>
-              </Flex>
-            </Tabs.Panel>
             <Tabs.Panel value='3'>
               <Flex justifyContent='center' wrap='wrap' marginTop='xl'>
                 <StyledButton
@@ -177,13 +196,6 @@ const Survey: React.FC = () => {
                   onClick={() => setActiveFile('org-attractive-citizen.csv')}
                 >
                   Citizenship Status
-                </StyledButton>
-                <StyledButton
-                  $active={activeFile === 'org-attractive-disability.csv'}
-                  variation='primary'
-                  onClick={() => setActiveFile('org-attractive-disability.csv')}
-                >
-                  Ability
                 </StyledButton>
               </Flex>
             </Tabs.Panel>

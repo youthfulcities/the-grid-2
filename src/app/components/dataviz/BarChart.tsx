@@ -75,7 +75,6 @@ const BarChart: React.FC<BarProps> = ({
 
   const dataString = JSON.stringify(parsedData);
   const testData = d3.hierarchy(dataString);
-  console.log(testData.data);
 
   useEffect(() => {
     const fetchData = async (filename: string) => {

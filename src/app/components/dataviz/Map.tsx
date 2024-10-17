@@ -1,6 +1,5 @@
-import geoJSON from '@/data/uwi-2024.json';
 import { Button, Flex, Heading, Text, useTheme } from '@aws-amplify/ui-react';
-import { Feature, GeoJsonProperties, Point } from 'geojson';
+import { Feature, FeatureCollection, GeoJsonProperties, Point } from 'geojson';
 import _ from 'lodash';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useParams } from 'next/navigation';
@@ -24,6 +23,7 @@ interface CustomMapProps {
   width: number;
   mapStyle: string;
   dataset: string;
+  geoJSON: FeatureCollection;
 }
 
 interface CityViewProps {
@@ -112,7 +112,12 @@ const CityView = forwardRef<HTMLDivElement, CityViewProps>(({ item }, ref) => {
 
 CityView.displayName = 'CityView';
 
-const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
+const CustomMap: React.FC<CustomMapProps> = ({
+  width,
+  mapStyle,
+  dataset,
+  geoJSON,
+}) => {
   const { lng } = useParams<{ lng: string }>();
   const [viewState, setViewState] = useState<ViewState>(initialView);
   const [drawerOpen, setDrawerOpen] = useState(true);

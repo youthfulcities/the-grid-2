@@ -2,7 +2,7 @@
 
 import Container from '@/app/components/Background';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import styled from 'styled-components';
 
@@ -12,7 +12,6 @@ const StyledChat = styled.iframe`
 `;
 
 const Chatbot = () => {
-  const { lng } = useParams<{ lng: string }>();
   const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   const router = useRouter();
 
@@ -34,7 +33,7 @@ const Chatbot = () => {
         title='Youthful Cities Chatbot'
         height='100%'
         width='100%'
-      ></StyledChat>
+      />
     </Container>
   );
 };

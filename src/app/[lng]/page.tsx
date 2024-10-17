@@ -17,15 +17,13 @@ interface RootLayoutProps {
   params: { lng: string };
 }
 
-const App: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
-  const params = useParams<{ lng: string }>();
+const App: React.FC<RootLayoutProps> = () => {
+  const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'about');
 
   return (
     <Container>
       <HomeHeader />
-      {/* <Insights params={params} /> */}
-      {/* <GridInfo lng={lng} /> */}
       <Banner lng={lng} />
       <Flex className='container section-padding'>
         <Flex direction='column'>

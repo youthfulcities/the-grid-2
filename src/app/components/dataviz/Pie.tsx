@@ -39,10 +39,6 @@ type PieArcDatum<T> = d3.PieArcDatum<T>;
 
 const StyledHeading = styled(Heading)``;
 
-const ChartContainer = styled(Flex)`
-  overflow: visible;
-`;
-
 const PieChartComponent: React.FC<PieChartProps> = ({
   width = 600,
   height = 400,
@@ -57,7 +53,6 @@ const PieChartComponent: React.FC<PieChartProps> = ({
   const [rawData, setRawData] = useState<Record<string, string>>({});
   const [parsedData, setParsedData] = useState<Record<string, DataItem[]>>({});
   const [activeFile, setActiveFile] = useState(`${type}-${cluster}.csv`);
-  const [loading, setLoading] = useState(false);
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
 
   useEffect(() => {
@@ -69,16 +64,13 @@ const PieChartComponent: React.FC<PieChartProps> = ({
       if (Object.prototype.hasOwnProperty.call(rawData, filename)) return;
 
       try {
-        setLoading(true);
         const downloadResult = await downloadData({
           path: `public/${filename}`,
         }).result;
         const text = await downloadResult.body.text();
         setRawData({ ...rawData, [filename]: text });
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
-        setLoading(false);
       }
     };
 
@@ -108,22 +100,22 @@ const PieChartComponent: React.FC<PieChartProps> = ({
 
     const data = parsedData[activeFile];
     d3.select(`#pie-chart-${type}`).selectAll('svg').remove();
-    
+
     const getColor = (value: string): string => {
       // Use d3.scaleOrdinal to create a color scale based on d3.schemeCategory10
       const colorScale = d3
-      .scaleOrdinal<string>()
-      .domain(data.map((d) => d[Object.keys(d)[0]] as string)) // Use all unique values from data
-      .range(d3.schemeCategory10);
+        .scaleOrdinal<string>()
+        .domain(data.map((d) => d[Object.keys(d)[0]] as string)) // Use all unique values from data
+        .range(d3.schemeCategory10);
       // Return color based on value
       return colorScale(value);
     };
-    
+
     const sortedData = [...data].sort(
       (a, b) => (b.Count as number) - (a.Count as number)
     );
 
-    const newLegendData = sortedData.map((d, index) => ({
+    const newLegendData = sortedData.map((d) => ({
       key: d[Object.keys(d)[0]] as string,
       color: getColor(d[Object.keys(d)[0]] as string),
     }));
@@ -164,14 +156,10 @@ const PieChartComponent: React.FC<PieChartProps> = ({
       .selectAll<SVGPathElement, PieArcDatum<DataItem>>('path')
       .transition()
       .duration(1000) // Transition duration in milliseconds
-      .attr('fill', (d, i) =>
-        getColor(d.data[Object.keys(d.data)[0]] as string)
-      )
+      .attr('fill', (d) => getColor(d.data[Object.keys(d.data)[0]] as string))
       .attrTween('d', (d) => {
         const interpolate = d3.interpolate({ startAngle: 0, endAngle: 0 }, d);
-        return (t) => {
-          return arcGenerator(interpolate(t))!;
-        };
+        return (t) => arcGenerator(interpolate(t))!;
       });
 
     arcs
@@ -199,20 +187,18 @@ const PieChartComponent: React.FC<PieChartProps> = ({
   }, [parsedData, width, height, activeFile]);
 
   return (
-    <>
-      <Flex direction='column' ref={containerRef}>
-        <StyledHeading
-          level={4}
-          color='font.inverse'
-          textAlign='center'
-          marginBottom='large'
-        >
-          {title || type}
-        </StyledHeading>
-        <div id={`pie-chart-${type}`}></div>
-        <Legend data={legendData} />
-      </Flex>
-    </>
+    <Flex direction='column' ref={containerRef}>
+      <StyledHeading
+        level={4}
+        color='font.inverse'
+        textAlign='center'
+        marginBottom='large'
+      >
+        {title || type}
+      </StyledHeading>
+      <div id={`pie-chart-${type}`} />
+      <Legend data={legendData} />
+    </Flex>
   );
 };
 

@@ -6,7 +6,6 @@
 
 export { default as ActionCard } from "./ActionCard";
 export { default as Ampligram } from "./Ampligram";
-export { default as Button2 } from "./Button2";
 export { default as CTASection } from "./CTASection";
 export { default as CheckoutPayment } from "./CheckoutPayment";
 export { default as CircleButton } from "./CircleButton";
@@ -27,7 +26,6 @@ export { default as HorizontalFilter } from "./HorizontalFilter";
 export { default as ItemCard } from "./ItemCard";
 export { default as Logo } from "./Logo";
 export { default as LogoWithText } from "./LogoWithText";
-export { default as MarketingFooter } from "./MarketingFooter";
 export { default as MarketingFooterBrand } from "./MarketingFooterBrand";
 export { default as MarketingPricing } from "./MarketingPricing";
 export { default as MyIcon } from "./MyIcon";

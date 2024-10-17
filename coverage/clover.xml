@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1729115906436" clover="3.2.0">
-  <project timestamp="1729115906436" name="All files">
-    <metrics statements="399" coveredstatements="386" conditionals="13" coveredconditionals="12" methods="14" coveredmethods="6" elements="426" coveredelements="404" complexity="0" loc="399" ncloc="399" packages="2" files="2" classes="2"/>
-    <package name="survey">
+<coverage generated="1729177048796" clover="3.2.0">
+  <project timestamp="1729177048796" name="All files">
+    <metrics statements="516" coveredstatements="503" conditionals="34" coveredconditionals="33" methods="20" coveredmethods="12" elements="570" coveredelements="548" complexity="0" loc="516" ncloc="516" packages="3" files="4" classes="4"/>
+    <package name="[lng].insights.survey">
       <metrics statements="240" coveredstatements="227" conditionals="12" coveredconditionals="11" methods="13" coveredmethods="5"/>
       <file name="page.tsx" path="/home/genna/yc/the-grid-2/src/app/[lng]/insights/survey/page.tsx">
         <metrics statements="240" coveredstatements="227" conditionals="12" coveredconditionals="11" methods="13" coveredmethods="5"/>
@@ -248,7 +248,7 @@
         <line num="240" count="1" type="stmt"/>
       </file>
     </package>
-    <package name="uwi2024">
+    <package name="[lng].insights.uwi2024">
       <metrics statements="159" coveredstatements="159" conditionals="1" coveredconditionals="1" methods="1" coveredmethods="1"/>
       <file name="page.tsx" path="/home/genna/yc/the-grid-2/src/app/[lng]/insights/uwi2024/page.tsx">
         <metrics statements="159" coveredstatements="159" conditionals="1" coveredconditionals="1" methods="1" coveredmethods="1"/>
@@ -411,6 +411,132 @@
         <line num="157" count="6" type="stmt"/>
         <line num="158" count="1" type="stmt"/>
         <line num="159" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="components">
+      <metrics statements="117" coveredstatements="117" conditionals="21" coveredconditionals="21" methods="6" coveredmethods="6"/>
+      <file name="Background.tsx" path="/home/genna/yc/the-grid-2/src/app/components/Background.tsx">
+        <metrics statements="26" coveredstatements="26" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="16" count="14" type="stmt"/>
+        <line num="17" count="14" type="stmt"/>
+        <line num="18" count="14" type="stmt"/>
+        <line num="19" count="14" type="stmt"/>
+        <line num="20" count="14" type="stmt"/>
+        <line num="21" count="14" type="stmt"/>
+        <line num="22" count="14" type="stmt"/>
+        <line num="23" count="14" type="stmt"/>
+        <line num="24" count="14" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+      </file>
+      <file name="Tooltip.tsx" path="/home/genna/yc/the-grid-2/src/app/components/Tooltip.tsx">
+        <metrics statements="91" coveredstatements="91" conditionals="19" coveredconditionals="19" methods="5" coveredmethods="5"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="cond" truecount="3" falsecount="0"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="cond" truecount="3" falsecount="0"/>
+        <line num="28" count="1" type="cond" truecount="3" falsecount="0"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="30" count="1" type="cond" truecount="3" falsecount="0"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="40" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="41" count="4" type="stmt"/>
+        <line num="42" count="4" type="stmt"/>
+        <line num="43" count="4" type="stmt"/>
+        <line num="44" count="4" type="stmt"/>
+        <line num="45" count="4" type="stmt"/>
+        <line num="46" count="4" type="stmt"/>
+        <line num="47" count="4" type="stmt"/>
+        <line num="48" count="4" type="stmt"/>
+        <line num="49" count="4" type="cond" truecount="1" falsecount="0"/>
+        <line num="50" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="51" count="2" type="stmt"/>
+        <line num="52" count="2" type="stmt"/>
+        <line num="53" count="2" type="stmt"/>
+        <line num="54" count="2" type="stmt"/>
+        <line num="55" count="4" type="stmt"/>
+        <line num="56" count="4" type="cond" truecount="1" falsecount="0"/>
+        <line num="57" count="4" type="cond" truecount="1" falsecount="0"/>
+        <line num="58" count="4" type="stmt"/>
+        <line num="59" count="4" type="stmt"/>
+        <line num="60" count="4" type="stmt"/>
+        <line num="61" count="4" type="stmt"/>
+        <line num="62" count="4" type="stmt"/>
+        <line num="63" count="4" type="stmt"/>
+        <line num="64" count="4" type="stmt"/>
+        <line num="65" count="4" type="stmt"/>
+        <line num="66" count="4" type="stmt"/>
+        <line num="67" count="4" type="stmt"/>
+        <line num="68" count="4" type="stmt"/>
+        <line num="69" count="4" type="stmt"/>
+        <line num="70" count="4" type="cond" truecount="1" falsecount="0"/>
+        <line num="71" count="4" type="stmt"/>
+        <line num="72" count="4" type="stmt"/>
+        <line num="73" count="4" type="stmt"/>
+        <line num="74" count="4" type="stmt"/>
+        <line num="75" count="4" type="stmt"/>
+        <line num="76" count="4" type="stmt"/>
+        <line num="77" count="4" type="stmt"/>
+        <line num="78" count="4" type="stmt"/>
+        <line num="79" count="4" type="stmt"/>
+        <line num="80" count="4" type="stmt"/>
+        <line num="81" count="4" type="stmt"/>
+        <line num="82" count="4" type="stmt"/>
+        <line num="83" count="4" type="stmt"/>
+        <line num="84" count="4" type="stmt"/>
+        <line num="85" count="4" type="stmt"/>
+        <line num="86" count="4" type="stmt"/>
+        <line num="87" count="4" type="stmt"/>
+        <line num="88" count="4" type="stmt"/>
+        <line num="89" count="4" type="stmt"/>
+        <line num="90" count="1" type="stmt"/>
+        <line num="91" count="1" type="stmt"/>
       </file>
     </package>
   </project>

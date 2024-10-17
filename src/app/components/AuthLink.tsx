@@ -26,7 +26,7 @@ const StyledAuthLink = styled(Link)<{
   cursor: pointer;
   text-decoration: none;
   position: relative;
-  width: 100%;
+  width: ${(props) => (props.$mobile ? '100%' : 'auto')};
   overflow: hidden;
 
   ${(props) =>
@@ -60,7 +60,7 @@ const AuthLink: React.FC<{ authStatus: string; mobile?: boolean }> = ({
 }) => {
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'translation');
-  const { user, signOut } = useAuthenticator((context) => [context.user]);
+  const { signOut } = useAuthenticator((context) => [context.user]);
   const router = useRouter();
 
   const handleAuthAction = (

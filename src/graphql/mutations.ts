@@ -8,28 +8,6 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
-export const createContactSubmission = /* GraphQL */ `mutation CreateContactSubmission(
-  $input: CreateContactSubmissionInput!
-  $condition: ModelContactSubmissionConditionInput
-) {
-  createContactSubmission(input: $input, condition: $condition) {
-    id
-    firstName
-    lastName
-    email
-    phoneNumber
-    topic
-    message
-    subscribed
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.CreateContactSubmissionMutationVariables,
-  APITypes.CreateContactSubmissionMutation
->;
 export const updateContactSubmission = /* GraphQL */ `mutation UpdateContactSubmission(
   $input: UpdateContactSubmissionInput!
   $condition: ModelContactSubmissionConditionInput
@@ -73,4 +51,26 @@ export const deleteContactSubmission = /* GraphQL */ `mutation DeleteContactSubm
 ` as GeneratedMutation<
   APITypes.DeleteContactSubmissionMutationVariables,
   APITypes.DeleteContactSubmissionMutation
+>;
+export const createContactSubmission = /* GraphQL */ `mutation CreateContactSubmission(
+  $input: CreateContactSubmissionInput!
+  $condition: ModelContactSubmissionConditionInput
+) {
+  createContactSubmission(input: $input, condition: $condition) {
+    id
+    firstName
+    lastName
+    email
+    phoneNumber
+    topic
+    message
+    subscribed
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateContactSubmissionMutationVariables,
+  APITypes.CreateContactSubmissionMutation
 >;

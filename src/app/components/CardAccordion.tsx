@@ -1,8 +1,7 @@
-import { Button, Heading } from "@aws-amplify/ui-react";
-import { getInitColorSchemeScript } from "@mui/material";
-import { AnimatePresence, motion } from "framer-motion";
-import React, { ReactNode, useState } from "react";
-import styled from "styled-components";
+import { Button } from '@aws-amplify/ui-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { ReactNode, useState } from 'react';
+import styled from 'styled-components';
 
 interface ColorGetter {
   (index: number): { button: string; buttonInverse: string };
@@ -17,12 +16,11 @@ interface AccordionProps {
   getColor: ColorGetter;
 }
 
-const AccordionContent = styled(motion.div) <{
+const AccordionContent = styled(motion.div)<{
   $width: number;
   $height: number;
   $background: string;
   $inverse: string;
-
 }>`
   position: absolute;
   bottom: 0;
@@ -35,7 +33,7 @@ const AccordionContent = styled(motion.div) <{
   overflow: hidden;
 `;
 
-const CustomizeButton = styled(Button) <{
+const CustomizeButton = styled(Button)<{
   $background: string;
   $inverse: string;
 }>`
@@ -57,21 +55,16 @@ const CustomizeButton = styled(Button) <{
   background-color: ${({ $inverse }) => $inverse};
 
   &:hover {
-    
     background-color: ${({ $inverse }) => $inverse};
     color: black;
   }
 
   &:focus {
-    outline: none; 
+    outline: none;
     box-shadow: none;
     background-color: ${({ $background }) => $background};
     color: black;
   }
-
-
-  
-   
 `;
 
 const PlusSignWrapper = styled.div`
@@ -90,7 +83,9 @@ const PlusSignWrapper = styled.div`
 const DetailsText = styled.span`
   opacity: 0;
   transform: translateY(10px); /* Start slightly lower */
-  transition: opacity 1s ease, transform 0.3s ease; /* Smooth transition */
+  transition:
+    opacity 1s ease,
+    transform 0.3s ease; /* Smooth transition */
   color: black;
   position: absolute;
   bottom: 5px;
@@ -98,10 +93,6 @@ const DetailsText = styled.span`
   font-size: 20px;
   pointer-events: none; /* Prevent interaction */
 `;
-
-
-
-
 
 const Accordion: React.FC<AccordionProps> = ({
   getColor,
@@ -121,9 +112,13 @@ const Accordion: React.FC<AccordionProps> = ({
       <AnimatePresence>
         {openIndex === 0 && (
           <AccordionContent
-            key="content"
+            key='content'
             initial={{ height: 0, opacity: 0 }}
-            animate={{ height: parentHeight - 150, width: parentWidth, opacity: 1 }}
+            animate={{
+              height: parentHeight - 150,
+              width: parentWidth,
+              opacity: 1,
+            }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ ease: [0.0, 0.0, 0.0, 0.0] }}
             $width={parentWidth || 300}

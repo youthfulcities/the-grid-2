@@ -14,9 +14,6 @@ import { ReactNode, useRef, useState } from 'react';
 import styled from 'styled-components';
 import config from '../../../../amplifyconfiguration.json';
 
-interface DataItem {
-  [key: string]: string | number;
-}
 const duration = 500;
 
 Amplify.configure(config, {
@@ -45,20 +42,8 @@ const clusterMap: {
 
 // Function to get key from value
 const getKeyFromValue = (value: string): string | null => {
-  const entry = Object.entries(clusterMap).find(([key, val]) => val === value);
+  const entry = Object.values(clusterMap).find((val) => val === value);
   return entry ? entry[0] : null; // Return the key if found, otherwise null
-};
-
-const getWidth = (width: number) => {
-  if (width >= 1000) {
-    return width / 3 - 60;
-  }
-  if (width >= 700 && width < 1000) {
-    return width / 2 - 40;
-  }
-  if (width < 700) {
-    return width;
-  }
 };
 
 const defaultFiles: Record<string, string> = {

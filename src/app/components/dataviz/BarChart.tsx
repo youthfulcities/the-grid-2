@@ -47,7 +47,7 @@ const truncateText = (text: string, maxLength: number) => {
 
   // Truncate the text if it exceeds the maxLength
   if (cleanedText.length > maxLength) {
-    return cleanedText.slice(0, maxLength) + '...';
+    return `${cleanedText.slice(0, maxLength)}...`;
   }
 
   return cleanedText;
@@ -72,9 +72,6 @@ const BarChart: React.FC<BarProps> = ({
   const [allOptions, setAllOptions] = useState<string[]>([]);
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
   const [activeLegendItems, setActiveLegendItems] = useState<string[]>([]);
-
-  const dataString = JSON.stringify(parsedData);
-  const testData = d3.hierarchy(dataString);
 
   useEffect(() => {
     const fetchData = async (filename: string) => {
@@ -142,15 +139,18 @@ const BarChart: React.FC<BarProps> = ({
 
     // Filter data based on active legend items
     const dataToDisplay = data
-      .filter((item) => selectedOptions.includes(item.option_en))
-      .map((item) => {
-        // Only include keys that are in the active legend items
-        const filteredItem: Record<string, any> = { option_en: item.option_en };
-        Object.keys(item).forEach((key) => {
-          if (key !== 'option_en' && activeLegendItems.includes(key)) {
-            filteredItem[key] = item[key];
+      .filter((item: DataItem) => selectedOptions.includes(item.option_en))
+      .map((item: DataItem) => {
+        // Create a filtered object with only the required keys
+        const filteredItem: Partial<DataItem> = { option_en: item.option_en };
+
+        // Add keys only if they're in the active legend items
+        activeLegendItems.forEach((key) => {
+          if (key in item) {
+            filteredItem[key] = item[key]; // TypeScript now knows that item[key] is a valid property
           }
         });
+
         return filteredItem;
       });
 
@@ -161,12 +161,16 @@ const BarChart: React.FC<BarProps> = ({
       .range([margin.top, height - margin.bottom])
       .padding(0.1);
 
-    const maxGroupValue = d3.max(dataToDisplay, (d) =>
-      d3.max(
-        Object.keys(d).filter((key) => key !== 'option_en'),
-        (key) => +d[key]
-      )
-    ) as number;
+    const maxGroupValue =
+      d3.max(dataToDisplay, (d) =>
+        d3.max(
+          Object.keys(d).filter((key) => key !== 'option_en'),
+          (key) => {
+            const value = d[key]; // Access the value
+            return value !== undefined ? +value : 0; // Convert to number if defined, otherwise return 0
+          }
+        )
+      ) ?? 0;
 
     const xScale = d3
       .scaleLinear()
@@ -257,7 +261,10 @@ const BarChart: React.FC<BarProps> = ({
       .data((d) =>
         Object.keys(d)
           .filter((key) => key !== 'option_en')
-          .map((key) => ({ key, value: +d[key] }))
+          .map((key) => ({
+            key,
+            value: d[key] != null ? +d[key] : 0, // Check for null or undefined
+          }))
       )
       .join('rect')
       .attr('class', 'bar')
@@ -317,20 +324,13 @@ const BarChart: React.FC<BarProps> = ({
       .delay((d, i) => i * (duration / 10))
       .attr('x', xScale(0))
       .attr('width', (d) => xScale(d.value) - xScale(0));
-  }, [
-    width,
-    height,
-    parsedData,
-    activeFile,
-    selectedOptions,
-    activeLegendItems,
-  ]);
+  }, [width, height, parsedData, activeFile, selectedOptions]);
 
   return (
     <>
       <Placeholder height={height} isLoaded={!loading || false} />
       <ChartContainer>
-        <svg ref={ref}></svg>
+        <svg ref={ref} />
         <Legend
           data={legendData}
           activeLegendItems={activeLegendItems}

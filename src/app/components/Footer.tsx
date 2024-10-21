@@ -21,7 +21,7 @@ import styled from 'styled-components';
 import useTranslation from '../i18n/client';
 import Newsletter from './Newsletter';
 
-const FooterBase = styled(View) <{ $background: string }>`
+const FooterBase = styled(View)<{ $background: string }>`
   background-color: ${(props) => props.$background};
   padding: 40px 0;
   z-index: 10;
@@ -40,7 +40,7 @@ const LinkAndIconSection = styled(Flex)`
   margin: var(--amplify-space-xl) 0;
 `;
 
-const LinkSection = styled(Flex) <{
+const LinkSection = styled(Flex)<{
   $breakpoint: { small: number; medium: number; large: number };
 }>`
   display: flex;
@@ -71,7 +71,7 @@ const FooterBottomSection = styled(Flex)`
   align-items: center;
 `;
 
-const HoverLink = styled(Link) <{ $hover: string; $color: string }>`
+const HoverLink = styled(Link)<{ $hover: string; $color: string }>`
   text-decoration: none;
   color: var(--amplify-colors-font-inverse);
   &:hover {
@@ -203,7 +203,7 @@ const FooterComponent = () => {
                 {t('about')}
               </HoverLink>
               <HoverLink
-                href={`/contact`}
+                href='/contact'
                 passHref
                 $hover={tokens.colors.primary[60].value}
                 $color={tokens.colors.font.inverse.value}
@@ -268,7 +268,7 @@ const FooterComponent = () => {
             </a>
           </Flex>
           <Text fontSize='12px' color='white'>
-            © 2024 Youthful Cities. {t('rights')}. Version 1.1.
+            © 2024 Youthful Cities. {t('rights')}. Version 1.1.2
           </Text>
         </FooterBottomSection>
       </Flex>

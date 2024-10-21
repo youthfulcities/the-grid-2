@@ -1,5 +1,5 @@
 import { CheckboxField, View } from '@aws-amplify/ui-react';
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Accordion from '../Accordion';
 
@@ -14,6 +14,7 @@ const StyledCheckbox = styled(CheckboxField)`
   color: var(--amplify-colors-font-inverse);
   .amplify-text {
     margin-bottom: 0;
+    margin-left: 10px;
   }
   .amplify-checkbox__button::before {
     border-width: var(--amplify-border-widths-small);
@@ -25,8 +26,6 @@ const Customize: React.FC<CustomizeProps> = ({
   setSelectedOptions,
   allOptions,
 }) => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
   const toggleOption = (option: string) => {
     setSelectedOptions((prevSelected) =>
       prevSelected.includes(option)

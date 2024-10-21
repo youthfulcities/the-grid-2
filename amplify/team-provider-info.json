@@ -1,4 +1,47 @@
 {
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-thegrid2-prod-f85ee-authRole",
+      "UnauthRoleArn": "arn:aws:iam::730335589682:role/amplify-thegrid2-prod-f85ee-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::730335589682:role/amplify-thegrid2-prod-f85ee-authRole",
+      "Region": "ca-central-1",
+      "DeploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
+      "UnauthRoleName": "amplify-thegrid2-prod-f85ee-unauthRole",
+      "StackName": "amplify-thegrid2-prod-f85ee",
+      "StackId": "arn:aws:cloudformation:ca-central-1:730335589682:stack/amplify-thegrid2-prod-f85ee/0c5641c0-3304-11ef-9d62-06d76b7ee45d",
+      "AmplifyAppId": "dlnca7rtkq5g9"
+    },
+    "categories": {
+      "function": {
+        "contactFormUploader": {
+          "sesEmail": "info@youthfulcities.com",
+          "sesEmailDev": "genna.weber@youthfulcities.com",
+          "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
+          "s3Key": "amplify-builds/contactFormUploader-354e304f5a5835386b45-build.zip"
+        },
+        "dataapi": {
+          "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
+          "s3Key": "amplify-builds/dataapi-6d334f74495235396a78-build.zip"
+        }
+      },
+      "storage": {
+        "thegrid23ee127f9": {
+          "bucketName": "ycthegrid",
+          "region": "ca-central-1"
+        }
+      },
+      "auth": {
+        "thegrid2fafc44b3": {}
+      },
+      "analytics": {
+        "thegrid2": {}
+      },
+      "api": {
+        "s3": {},
+        "thegrid2": {}
+      }
+    }
+  },
   "staging": {
     "awscloudformation": {
       "AuthRoleName": "amplify-thegrid2-staging-214411-authRole",

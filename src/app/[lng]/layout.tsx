@@ -3,7 +3,7 @@ import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { Amplify } from 'aws-amplify';
 import { configureAutoTrack } from 'aws-amplify/analytics';
 import { dir } from 'console';
-import type { Metadata, ResolvingMetadata } from 'next';
+import type { Metadata } from 'next';
 import Script from 'next/script';
 import React from 'react';
 import config from '../../amplifyconfiguration.json';
@@ -87,10 +87,9 @@ export async function generateStaticParams() {
 }
 
 // Function to generate metadata dynamically based on language
-const generateMetadata = async (
-  { params }: RootLayoutProps,
-  parent: ResolvingMetadata
-): Promise<Metadata> => {
+const generateMetadata = async ({
+  params,
+}: RootLayoutProps): Promise<Metadata> => {
   const { lng } = params;
 
   const titles: { [key in Language]: string } = {

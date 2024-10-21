@@ -14,7 +14,6 @@ interface BarGraphProps {
 }
 
 const BarGraph = ({ labels, values }: BarGraphProps) => {
-  // console.log(labels);
   const options = {
     datasets: {
       bar: {},

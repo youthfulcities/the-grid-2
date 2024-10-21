@@ -9,7 +9,7 @@ interface TooltipProps {
   children: ReactNode;
 }
 
-const StyledBadge = styled(Badge) <{
+const StyledBadge = styled(Badge)<{
   $show: boolean;
   $height: number;
   $isBig: boolean;

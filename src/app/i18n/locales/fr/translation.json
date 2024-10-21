@@ -15,5 +15,9 @@
   "newsletter-email": "Courriel de la lettre d'information",
   "cookie": "Gestion des cookies",
   "terms": "Conditions d'utilisation",
-  "privacy": "Politique de confidentialité"
+  "privacy": "Politique de confidentialité",
+  "loading": "Chargement...",
+  "logout": "Déconnexion",
+  "login": "Connexion",
+  "login_info": "Accédez au chatbot et téléchargez des ensembles de données avec un compte gratuit. La création d'un compte nous aide à améliorer l'outil et à faire en sorte que le Labo Data Jeunesse reste gratuit pour tous. En créant un compte, vous acceptez nos <a>conditions générales</a>."
 }

@@ -1,4 +1,10 @@
-import { Button, useTheme, View, useAuthenticator } from '@aws-amplify/ui-react';
+import {
+  Button,
+  useAuthenticator,
+  useTheme,
+  View,
+} from '@aws-amplify/ui-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { IconType } from 'react-icons';
 import {
@@ -16,10 +22,8 @@ import {
 } from 'react-icons/fa6';
 import styled from 'styled-components';
 import Tooltip from './Tooltip';
-import { useRouter } from 'next/navigation';
 
-
-const StyledButton = styled(Button) <{ $background: string; $inverse: string }>`
+const StyledButton = styled(Button)<{ $background: string; $inverse: string }>`
   justify-content: center;
   width: 50px;
   height: 50px;
@@ -53,7 +57,6 @@ interface AppProps {
   index: number;
   getColor: ColorGetter;
   file?: string;
-  lng: string;
   link?: string;
   type?: string;
   tooltipMsg: string;
@@ -65,7 +68,6 @@ const DataCardButton = ({
   index,
   fetchUrl,
   file,
-  lng,
   link,
   tooltipMsg,
   tooltipDesc,
@@ -77,7 +79,6 @@ const DataCardButton = ({
   const { user } = useAuthenticator((context) => [context.user]);
 
   const download = async (currentFile: string) => {
-
     if (!user) {
       sessionStorage.setItem('postLoginRedirect', '/datasets');
       sessionStorage.setItem('fileToDownload', currentFile);

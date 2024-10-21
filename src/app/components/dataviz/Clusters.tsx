@@ -87,7 +87,7 @@ const Clusters: React.FC<ClusterProps> = ({
   const [loading, setLoading] = useState(true);
   const [rawData, setRawData] = useState<Record<string, string>>({});
   const [parsedData, setParsedData] = useState<Record<string, DataItem[]>>({});
-  const [activeFile, setActiveFile] = useState('umap_data.csv');
+  const [activeFile] = useState('umap_data.csv');
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
   const { tokens } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -253,7 +253,7 @@ const Clusters: React.FC<ClusterProps> = ({
 
         const customLegendData = colorScale.domain();
 
-        const newLegendData = customLegendData.map((item, index) => ({
+        const newLegendData = customLegendData.map((item) => ({
           key: item,
           color: colorScale(item),
         }));
@@ -285,7 +285,7 @@ const Clusters: React.FC<ClusterProps> = ({
       </Text>
       <ChartContainer>
         <Placeholder height={height} isLoaded={!loading || false} />
-        <div id='chart'></div>
+        <div id='chart' />
         <Legend data={legendData} position='absolute' />
       </ChartContainer>
       <Heading level={4} color='primary.60' marginTop='xl'>

@@ -1096,7 +1096,7 @@ a.outline-button:hover {
   background-size: cover;
 }
 
-.image-card-uwi-2024{
+.image-card-uwi-2024 {
   background-image: url('/assets/theme_image/uwi-2024.png');
   background-position: bottom;
   background-size: cover;
@@ -1277,8 +1277,6 @@ a.outline-button:hover {
     transform: translateY(-8px);
   }
 }
-
-
 
 .authenticator-container .amplify-input {
   color: white !important; /* Only change text color for inputs within the Authenticator */

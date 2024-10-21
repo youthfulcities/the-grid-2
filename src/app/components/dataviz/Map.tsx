@@ -1,6 +1,5 @@
-import geoJSON from '@/data/uwi-2024.json';
 import { Button, Flex, Heading, Text, useTheme } from '@aws-amplify/ui-react';
-import { Feature, GeoJsonProperties, Point } from 'geojson';
+import { Feature, FeatureCollection, GeoJsonProperties, Point } from 'geojson';
 import _ from 'lodash';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useParams } from 'next/navigation';
@@ -24,6 +23,7 @@ interface CustomMapProps {
   width: number;
   mapStyle: string;
   dataset: string;
+  geoJSON: FeatureCollection;
 }
 
 interface CityViewProps {
@@ -39,12 +39,6 @@ interface CityViewProps {
     'Point à améliorer': string;
   };
 }
-
-const DrawerContent = styled(Flex)`
-  max-height: 100%;
-  flex-direction: column;
-`;
-
 const ResetButton = styled(Button)`
   z-index: 2;
   top: 10px;
@@ -112,16 +106,15 @@ const CityView = forwardRef<HTMLDivElement, CityViewProps>(({ item }, ref) => {
 
 CityView.displayName = 'CityView';
 
-const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
-  const { lng } = useParams<{ lng: string }>();
+const CustomMap: React.FC<CustomMapProps> = ({
+  width,
+  mapStyle,
+  dataset,
+  geoJSON,
+}) => {
   const [viewState, setViewState] = useState<ViewState>(initialView);
   const [drawerOpen, setDrawerOpen] = useState(true);
-  const [completed, setCompleted] = useState(false);
   const [currentFeature, setCurrentFeature] = useState<Feature<
-    Point,
-    GeoJsonProperties
-  > | null>(null);
-  const [prevCurrentFeature, setPrevCurrentFeature] = useState<Feature<
     Point,
     GeoJsonProperties
   > | null>(null);
@@ -131,10 +124,6 @@ const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
   const mapRef = useRef<MapRef>(null);
   const cityViewRefs = useRef<HTMLDivElement[]>([]);
   const [override, setOverride] = useState(false);
-  const [center, setCenter] = useState<{ lng: number; lat: number }>({
-    lng: 0,
-    lat: 0,
-  });
   const previousFeatureRef = useRef<Feature<Point, GeoJsonProperties> | null>(
     null
   );
@@ -149,7 +138,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
     if (mapRef.current) {
       mapRef.current.resize();
     }
-  }, [width, height]);
+  }, [width]);
 
   const onClick = (event: MapMouseEvent) => {
     const feature = event.features?.[0] as Feature<Point, GeoJsonProperties>;
@@ -186,7 +175,6 @@ const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
       padding: { top: 0, bottom: 0, left: 0, right: 0 },
     });
     setDrawerOpen(false);
-    setCompleted(true);
     setCurrentFeature(null);
   };
 
@@ -282,7 +270,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
     }
     // Update the previous feature ref after the logic runs
     previousFeatureRef.current = currentFeature;
-  }, [currentFeature, drawerOpen]);
+  }, [currentFeature, drawerOpen, dataset]);
 
   useEffect(() => {
     const options = {
@@ -345,7 +333,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
       ref={mapRef}
       initialViewState={initialView}
       scrollZoom
-      onLoad={(e) => onLoad()}
+      onLoad={() => onLoad()}
       onMove={(e) => setViewState(e.viewState)}
       style={{ width, height }}
       mapStyle={mapStyle}
@@ -366,20 +354,18 @@ const CustomMap: React.FC<CustomMapProps> = ({ width, mapStyle, dataset }) => {
         absolute
         id='drawer-content'
       >
-        <>
-          {allFeatures.length > 0 &&
-            allFeatures.map((item) => (
-              <CityView
-                key={item.properties?.City}
-                item={item.properties as CityViewProps['item']}
-                ref={(el) => {
-                  if (el) {
-                    cityViewRefs.current.push(el);
-                  }
-                }}
-              />
-            ))}
-        </>
+        {allFeatures.length > 0 &&
+          allFeatures.map((item) => (
+            <CityView
+              key={item.properties?.City}
+              item={item.properties as CityViewProps['item']}
+              ref={(el) => {
+                if (el) {
+                  cityViewRefs.current.push(el);
+                }
+              }}
+            />
+          ))}
       </Drawer>
     </Map>
   );

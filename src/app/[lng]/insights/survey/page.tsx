@@ -3,12 +3,13 @@
 import Accordion from '@/app/components/Accordion';
 import Container from '@/app/components/Background';
 import Drawer from '@/app/components/Drawer';
+import TabSelect from '@/app/components/TabSelect';
 import BarChart from '@/app/components/dataviz/BarChart';
 import Clusters from '@/app/components/dataviz/Clusters';
 import Demographics from '@/app/components/dataviz/Demographics';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import { useDimensions } from '@/hooks/useDimensions';
-import { Button, Flex, Heading, Tabs, Text, View } from '@aws-amplify/ui-react';
+import { Heading, Text, View } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import { ReactNode, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -20,11 +21,13 @@ Amplify.configure(config, {
   ssr: true,
 });
 
-const StyledButton = styled(Button)<{ $active: boolean }>`
-  background-color: ${(props) =>
-    props.$active ? 'var(--amplify-colors-brand-secondary-60)' : 'default'};
-  color: ${(props) =>
-    props.$active ? 'var(--amplify-colors-font-primary)' : 'default'};
+const TabsContainer = styled(View)`
+  position: sticky;
+  top: 0;
+  z-index: 980;
+  background-color: rgba(33, 33, 33, 0.9);
+  backdrop-filter: blur(10px);
+  margin-bottom: var(--amplify-space-medium);
 `;
 
 const clusterMap: {
@@ -47,9 +50,9 @@ const getKeyFromValue = (value: string): string | null => {
 };
 
 const defaultFiles: Record<string, string> = {
-  '1': 'org-attractive-cluster.csv',
-  '2': 'org-attractive-city.csv',
-  '3': 'org-attractive-gender.csv',
+  '1': 'org-attractive-disability.csv',
+  '2': 'org-attractive-cluster.csv',
+  '3': 'org-attractive-city.csv',
 };
 
 const Survey: React.FC = () => {
@@ -59,7 +62,6 @@ const Survey: React.FC = () => {
   const height = 800;
   const [activeFile, setActiveFile] = useState('org-attractive-cluster.csv');
   const [currentCluster, setCurrentCluster] = useState('all');
-  const [tab, setTab] = useState('1');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [tooltipState, setTooltipState] = useState<{
     position: { x: number; y: number } | null;
@@ -80,10 +82,6 @@ const Survey: React.FC = () => {
     minWidth: 0,
   });
 
-  const changeTab = (newTab: string) => {
-    setActiveFile(defaultFiles[newTab]);
-    setTab(newTab);
-  };
   return (
     <Container>
       <View className='container padding'>
@@ -99,92 +97,40 @@ const Survey: React.FC = () => {
             employability, the resources provided by their cities, and the
             skills needed to succeed in the current and future job markets.
           </Text>
-          <Heading
-            className='padding'
-            level={5}
-            color='font.inverse'
-            textAlign='center'
-            marginTop='xl'
-          >
-            Select a data segment
+          <TabsContainer>
+            <Accordion
+              title='Select data segment'
+              open={0}
+              border={false}
+              padding={false}
+            >
+              <TabSelect
+                setActiveFile={setActiveFile}
+                activeFile={activeFile}
+                defaultFiles={defaultFiles}
+              />
+            </Accordion>
+          </TabsContainer>
+          {activeFile === 'org-attractive-cluster.csv' && (
+            <Accordion title='More about psychographic clusters'>
+              <Clusters
+                getKeyFromValue={getKeyFromValue}
+                currentCluster={currentCluster}
+                setCurrentCluster={setCurrentCluster}
+                clusterMap={clusterMap}
+                isDrawerOpen={isDrawerOpen}
+                setIsDrawerOpen={setIsDrawerOpen}
+                tooltipState={tooltipState}
+                setTooltipState={setTooltipState}
+              />
+            </Accordion>
+          )}
+          <Heading level={2} id='mismatch' marginTop='xl' color='font.inverse'>
+            Skill Mismatch
           </Heading>
-          <Tabs.Container
-            defaultValue='1'
-            value={tab}
-            onValueChange={(newTab) => changeTab(newTab)}
-          >
-            <Tabs.List>
-              <Tabs.Item value='1'>Identity</Tabs.Item>
-              <Tabs.Item value='2'>Psychographic</Tabs.Item>
-              <Tabs.Item value='3'>City</Tabs.Item>
-            </Tabs.List>
-            <Tabs.Panel value='1'>
-              <Flex justifyContent='center' wrap='wrap' marginTop='xl'>
-                <StyledButton
-                  $active={activeFile === 'org-attractive-city.csv'}
-                  variation='primary'
-                  onClick={() => setActiveFile('org-attractive-city.csv')}
-                >
-                  Age group
-                </StyledButton>
-                <StyledButton
-                  $active={activeFile === 'org-attractive-disability.csv'}
-                  variation='primary'
-                  onClick={() => setActiveFile('org-attractive-disability.csv')}
-                >
-                  [Dis]Ability
-                </StyledButton>
-                <StyledButton
-                  $active={activeFile === 'org-attractive-city.csv'}
-                  variation='primary'
-                  onClick={() => setActiveFile('org-attractive-city.csv')}
-                >
-                  Ethnicity
-                </StyledButton>
-              </Flex>
-            </Tabs.Panel>
-            <Tabs.Panel value='2'>
-              <Flex justifyContent='center' wrap='wrap' marginTop='xl'>
-                <StyledButton
-                  $active={activeFile === 'org-attractive-cluster.csv'}
-                  variation='primary'
-                  onClick={() => setActiveFile('org-attractive-cluster.csv')}
-                >
-                  Importance/performance cluster
-                </StyledButton>
-              </Flex>
-              <Accordion title='Examine clusters'>
-                <Clusters
-                  getKeyFromValue={getKeyFromValue}
-                  currentCluster={currentCluster}
-                  setCurrentCluster={setCurrentCluster}
-                  clusterMap={clusterMap}
-                  isDrawerOpen={isDrawerOpen}
-                  setIsDrawerOpen={setIsDrawerOpen}
-                  tooltipState={tooltipState}
-                  setTooltipState={setTooltipState}
-                />
-              </Accordion>
-            </Tabs.Panel>
-            <Tabs.Panel value='3'>
-              <Flex justifyContent='center' wrap='wrap' marginTop='xl'>
-                <StyledButton
-                  $active={activeFile === 'org-attractive-gender.csv'}
-                  variation='primary'
-                  onClick={() => setActiveFile('org-attractive-gender.csv')}
-                >
-                  Gender
-                </StyledButton>
-                <StyledButton
-                  $active={activeFile === 'org-attractive-citizen.csv'}
-                  variation='primary'
-                  onClick={() => setActiveFile('org-attractive-citizen.csv')}
-                >
-                  Citizenship Status
-                </StyledButton>
-              </Flex>
-            </Tabs.Panel>
-          </Tabs.Container>
+          <Heading level={3} color='font.inverse'>
+            Organizational Expectations and Preferences
+          </Heading>
           <Heading
             level={5}
             color='font.inverse'
@@ -202,6 +148,25 @@ const Survey: React.FC = () => {
             tooltipState={tooltipState}
             setTooltipState={setTooltipState}
           />
+
+          <Heading level={2} id='gap' marginTop='xl' color='font.inverse'>
+            Skill Gap
+          </Heading>
+          <Heading level={3} color='font.inverse'>
+            Gaps
+          </Heading>
+          <Heading level={3} color='font.inverse'>
+            Networking & Job Seeking
+          </Heading>
+          <Heading level={2} id='future' marginTop='xl' color='font.inverse'>
+            Future of work
+          </Heading>
+          <Heading level={3} color='font.inverse'>
+            Work Styles
+          </Heading>
+          <Heading level={3} color='font.inverse'>
+            AI Spotlight
+          </Heading>
         </div>
       </View>
       <Drawer

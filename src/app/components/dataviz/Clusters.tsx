@@ -19,7 +19,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { FaBrain, FaMoneyBill } from 'react-icons/fa6';
+import { FaBrain, FaBriefcase, FaDollarSign } from 'react-icons/fa6';
 import styled from 'styled-components';
 import Heatmap from './Heatmap';
 import Legend from './Legend';
@@ -269,44 +269,52 @@ const Clusters: React.FC<ClusterProps> = ({
 
   return (
     <OverflowContainer ref={containerRef}>
-      <Heading level={2} marginBottom='xl'>
-        Psychographic clusters
-      </Heading>
       <Text>
-        Survey participants were asked to rank the topics of affordability,
-        education and skills development, equity, diversity and inclusion,
-        Indigenous culture, truth and reconciliation, entrepreneurial spirit,
-        local economic growth, digital transformation, transportation, mental
-        health, and climate change in terms of importance. Then, they were asked
-        to rank how their cities were performing in each of these categories.
-        Based on the relationships between these importance/performance
-        rankings, three distinct groups emerge. Clusters are generated using the
-        UMAP method. Click on a data point to learn more about each cluster.
+        Psychographics classify people according to their attitudes,
+        aspirations, and other psychological criteria.
+      </Text>
+      <Text>
+        Survey participants ranked the importance of affordability, education
+        and skills development, equity, diversity and inclusion, Indigenous
+        culture, truth and reconciliation, entrepreneurial spirit, local
+        economic growth, digital transformation, transportation, mental health,
+        and climate change. Then, they ranked how their cities performed in each
+        category. These importance/performance rankings created three distinct
+        groups. Learn more about the clusters by clicking on the data points.
       </Text>
       <ChartContainer>
         <Placeholder height={height} isLoaded={!loading || false} />
         <div id='chart' />
         <Legend data={legendData} position='absolute' />
       </ChartContainer>
-      <Heading level={4} color='primary.60' marginTop='xl'>
-        Key Takeaways — What youth prioritize
+      <Heading level={4} color='primary.60' marginTop='xl' marginBottom='large'>
+        Key Takeaways — <span className='highlight'>What youth prioritize</span>
       </Heading>
-      <Flex alignItems='center' justifyContent='flex-start'>
-        <FaMoneyBill size='100px' color={tokens.colors.primary[60].value} />
-        <Text marginBottom='0'>
-          Regardless of cluster, all youth agree that
-          <strong> affordability</strong> is the top priority issue to improve
-          Canadian city performance nationwide.
-        </Text>
-      </Flex>
-      <Flex alignItems='center' justifyContent='flex-start'>
-        <FaBrain size='100px' color={tokens.colors.primary[60].value} />
-        <Text>
-          Regardless of cluster, all youth agree that
-          <strong> mental health</strong> and <strong> good youth jobs </strong>
-          are high priority issues to improve Canadian city performance
-          nationwide.
-        </Text>
+      <Flex direction='column' gap='medium'>
+        <Flex alignItems='center' justifyContent='flex-start'>
+          <FaDollarSign size='50px' color={tokens.colors.primary[60].value} />
+          <Text marginBottom='0'>
+            <strong>Affordability:</strong> Regardless of cluster, all youth
+            agree that affordability is the top priority to improve Canadian
+            city performance nationwide.
+          </Text>
+        </Flex>
+        <Flex alignItems='center' justifyContent='flex-start'>
+          <FaBrain size='50px' color={tokens.colors.primary[60].value} />
+          <Text>
+            <strong>Mental health: </strong>Regardless of cluster, all youth
+            agree that mental health is a high priority to improve Canadian city
+            performance nationwide.
+          </Text>
+        </Flex>
+        <Flex alignItems='center' justifyContent='flex-start'>
+          <FaBriefcase size='50px' color={tokens.colors.primary[60].value} />
+          <Text>
+            <strong>Good youth jobs: </strong>Regardless of cluster, all youth
+            agree that good youth jobs are a high priority to improve Canadian
+            city performance nationwide.
+          </Text>
+        </Flex>
       </Flex>
       <Heatmap
         activeFile='cluster-heatmap-economic.csv'

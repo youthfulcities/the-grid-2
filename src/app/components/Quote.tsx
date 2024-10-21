@@ -7,7 +7,7 @@ import { FaUserCircle } from 'react-icons/fa';
 import styled from 'styled-components';
 
 const ProfileIconContainer = styled(motion.div)<{ left: boolean }>`
-  margin-top: var(--amplify-space-xxl);
+  margin-top: var(--amplify-space-large);
   position: relative;
   display: flex;
   flex-direction: ${(props) => (props.left ? 'row' : 'row-reverse')};
@@ -26,22 +26,10 @@ const SpeechBubble = styled(motion.div)<{ left: boolean }>`
   top: 0;
   ${(props) => (props.left ? 'left:70px' : 'right:70px')};
   transform: translateX(-50%);
-  background: white;
+  background: var(--amplify-colors-neutral-80);
   border-radius: 8px;
-  padding: 10px;
+  padding: var(--amplify-space-small);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const Placeholder = styled.div<{ left: boolean }>`
-  background: white;
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  ${(props) => (props.left ? 'left:70px' : 'right:70px')};
-  transform: translateY(-70px);
-  width: 100%;
-  height: 100%;
-  opacity: 0;
 `;
 
 interface QuoteProps {
@@ -127,9 +115,7 @@ const Quote: React.FC<QuoteProps> = ({
             damping: 20, // Adjust damping for a more controlled movement
           }}
         >
-          <Text color='font.primary' margin='0'>
-            {quote}
-          </Text>
+          <Text margin='0'>{quote}</Text>
         </SpeechBubble>
       </ProfileIconContainer>
     </Flex>

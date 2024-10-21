@@ -151,12 +151,12 @@ const Survey: React.FC = () => {
           />
           <Quote
             $color='yellow'
-            quote="“There are generalized specialists for everything. And employers sometimes want someone with a specific skill set. So there is a mismatch because if asked to identify your strongest skill and if the person is more of a generalist, They can't describe their skills as well.” - M.P (Youth, Toronto)"
+            quote="“There are generalized specialists for everything. And employers sometimes want someone with a specific skill set. So there is a mismatch because if asked to identify your strongest skill and if the person is more of a generalist, they can't describe their skills as well.” - M.P (Youth, Toronto)"
           />
           <Quote
             $color='pink'
             left={false}
-            quote='“The people graduating are expected to know everything. Communication, social media, graphic design. Technical writing, become an expert in all of the technology that the older generation may not understand, and then be able to coach them through it” - Dana (Youth, Calgary)'
+            quote='“The people graduating are expected to know everything. Communication, social media, graphic design. Technical writing, become an expert in all of the technology that the older generation may not understand, and then be able to coach them through it” - D. (Youth, Calgary)'
           />
           <Quote
             $color='green'

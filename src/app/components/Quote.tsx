@@ -1,0 +1,139 @@
+'use client';
+
+import { Flex, Text } from '@aws-amplify/ui-react';
+import { motion, useAnimation } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { FaUserCircle } from 'react-icons/fa';
+import styled from 'styled-components';
+
+const ProfileIconContainer = styled(motion.div)<{ left: boolean }>`
+  margin-top: var(--amplify-space-xxl);
+  position: relative;
+  display: flex;
+  flex-direction: ${(props) => (props.left ? 'row' : 'row-reverse')};
+  gap: var(--amplify-space-xs);
+  height: 100%;
+  width: calc(90% - 70px);
+`;
+
+const Icon = styled(FaUserCircle)<{ $color: string }>`
+  font-size: 60px;
+  color: var(--amplify-colors-${(props) => props.$color}-60);
+`;
+
+const SpeechBubble = styled(motion.div)<{ left: boolean }>`
+  width: 100%;
+  top: 0;
+  ${(props) => (props.left ? 'left:70px' : 'right:70px')};
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
+
+const Placeholder = styled.div<{ left: boolean }>`
+  background: white;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  ${(props) => (props.left ? 'left:70px' : 'right:70px')};
+  transform: translateY(-70px);
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+`;
+
+interface QuoteProps {
+  left?: boolean;
+  $color?: 'red' | 'green' | 'yellow' | 'pink' | 'blue' | 'neutral';
+  quote: string;
+}
+
+const Quote: React.FC<QuoteProps> = ({
+  left = true,
+  $color = 'neutral',
+  quote = '',
+}) => {
+  const [inView, setInView] = useState(false);
+  const [currentText, setCurrentText] = useState('');
+  const ref = useRef<HTMLDivElement>(null);
+
+  const controls = useAnimation();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          controls.start({ opacity: 1, scale: 1, y: 0 });
+        } else {
+          setInView(false);
+          controls.start({ opacity: 0, scale: 0, y: -20 });
+        }
+      },
+      { threshold: 0.9 }
+    );
+
+    const currentRef = ref.current;
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [controls]);
+
+  // useEffect(() => {
+  //   if (inView) {
+  //     setCurrentText(''); // Reset the text only when in view
+  //     let index = 0;
+
+  //     const typingEffect = setInterval(() => {
+  //       if (index < quote.length) {
+  //         setCurrentText((prev) => prev + quote[index - 1]);
+  //         index += 1;
+  //       } else {
+  //         clearInterval(typingEffect); // Clear the interval when typing is done
+  //       }
+  //     }, 40); // Typing speed
+
+  //     // Cleanup interval on unmount or when effect re-runs
+  //     return () => clearInterval(typingEffect);
+  //   }
+  // }, [inView, quote]);
+
+  return (
+    <Flex
+      ref={ref}
+      width='100%'
+      direction={left ? 'row' : 'row-reverse'}
+      justifyContent='flex-start'
+    >
+      <ProfileIconContainer left={left}>
+        <Icon $color={$color} />
+        <SpeechBubble
+          left={left}
+          initial={{ scale: 0, opacity: 0, y: -20 }} // Start scaled down and invisible
+          animate={controls}
+          transition={{
+            duration: 0.5,
+            type: 'spring', // Use spring for a bouncier effect
+            stiffness: 300, // Adjust stiffness for more or less bounciness
+            damping: 20, // Adjust damping for a more controlled movement
+          }}
+        >
+          <Text color='font.primary' margin='0'>
+            {quote}
+          </Text>
+        </SpeechBubble>
+      </ProfileIconContainer>
+    </Flex>
+  );
+};
+
+export default Quote;

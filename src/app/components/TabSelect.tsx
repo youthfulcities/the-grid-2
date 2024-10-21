@@ -1,8 +1,12 @@
 import { Button, Flex, Tabs } from '@aws-amplify/ui-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import Accordion from './Accordion';
-import Clusters from './dataviz/Clusters';
+
+interface TabSelectProps {
+  setActiveFile: (file: string) => void; // Function to set the active file
+  activeFile: string; // Currently active file
+  defaultFiles: Record<string, string>; // Object mapping tab keys to file names
+}
 
 const StyledButton = styled(Button)<{ $active: boolean }>`
   background-color: ${(props) =>
@@ -10,8 +14,11 @@ const StyledButton = styled(Button)<{ $active: boolean }>`
   color: ${(props) =>
     props.$active ? 'var(--amplify-colors-font-primary)' : 'default'};
 `;
-
-const TabSelect = ({ setActiveFile, activeFile, defaultFiles }) => {
+const TabSelect: React.FC<TabSelectProps> = ({
+  setActiveFile,
+  activeFile,
+  defaultFiles,
+}) => {
   const [tab, setTab] = useState('1');
 
   const changeTab = (newTab: string) => {
@@ -61,7 +68,7 @@ const TabSelect = ({ setActiveFile, activeFile, defaultFiles }) => {
           </StyledButton>
         </Flex>
       </Tabs.Panel>
-      <Tabs.Panel value='2'></Tabs.Panel>
+      <Tabs.Panel value='2' />
       <Tabs.Panel value='3' />
     </Tabs.Container>
   );

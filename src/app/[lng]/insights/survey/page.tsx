@@ -3,6 +3,7 @@
 import Accordion from '@/app/components/Accordion';
 import Container from '@/app/components/Background';
 import Drawer from '@/app/components/Drawer';
+import Quote from '@/app/components/Quote';
 import TabSelect from '@/app/components/TabSelect';
 import BarChart from '@/app/components/dataviz/BarChart';
 import Clusters from '@/app/components/dataviz/Clusters';
@@ -148,7 +149,19 @@ const Survey: React.FC = () => {
             tooltipState={tooltipState}
             setTooltipState={setTooltipState}
           />
-
+          <Quote
+            $color='yellow'
+            quote="“There are generalized specialists for everything. And employers sometimes want someone with a specific skill set. So there is a mismatch because if asked to identify your strongest skill and if the person is more of a generalist, They can't describe their skills as well.” - M.P (Youth, Toronto)"
+          />
+          <Quote
+            $color='pink'
+            left={false}
+            quote='“The people graduating are expected to know everything. Communication, social media, graphic design. Technical writing, become an expert in all of the technology that the older generation may not understand, and then be able to coach them through it” - Dana (Youth, Calgary)'
+          />
+          <Quote
+            $color='green'
+            quote='“So many people are applying to the jobs, and because the labour market right now is so tight, people who are probably way overqualified for the position are getting the job over someone who actually is more on the entry-level side. So the competition for general administrative roles. Or even accounting right now is pretty tough out there.” (Professional, Express Employment, Calgary)'
+          />
           <Heading level={2} id='gap' marginTop='xl' color='font.inverse'>
             Skill Gap
           </Heading>

@@ -26,7 +26,7 @@ const SpeechBubble = styled(motion.div)<{ left: boolean }>`
   top: 0;
   ${(props) => (props.left ? 'left:70px' : 'right:70px')};
   transform: translateX(-50%);
-  background: var(--amplify-colors-neutral-80);
+  background: rgba(102, 100, 96, 0.3);
   border-radius: 8px;
   padding: var(--amplify-space-small);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -109,7 +109,7 @@ const Quote: React.FC<QuoteProps> = ({
           initial={{ scale: 0, opacity: 0, y: -20 }} // Start scaled down and invisible
           animate={controls}
           transition={{
-            duration: 0.5,
+            duration: 1,
             type: 'spring', // Use spring for a bouncier effect
             stiffness: 300, // Adjust stiffness for more or less bounciness
             damping: 20, // Adjust damping for a more controlled movement

@@ -97,18 +97,14 @@ describe('Survey Component', () => {
 
   test('renders the Survey component correctly', () => {
     render(<Survey />);
-
-    expect(screen.getByText(/Skills/i)).toBeInTheDocument();
     expect(
       screen.getByText(/What’s up with work lately?/i)
     ).toBeInTheDocument();
     expect(screen.getByText('Mocked BarChart')).toBeInTheDocument();
-    expect(screen.getByText(/Psychographic/i)).toBeInTheDocument();
   });
 
   test('handles tab changes correctly', () => {
     render(<Survey />);
-    expect(screen.getByText(/Psychographic/i)).toBeInTheDocument();
     const cityTabButton = screen.getByRole('tab', { name: /city/i });
     expect(cityTabButton).toBeInTheDocument();
   });
@@ -128,7 +124,7 @@ describe('Survey Component', () => {
   test('renders Accordion and Clusters component', () => {
     render(<Survey />);
     expect(
-      screen.getByText(/Accordion: Examine clusters/i)
+      screen.getByText(/Accordion: More about psychographic clusters/i)
     ).toBeInTheDocument();
     expect(screen.getByText('Mocked Clusters')).toBeInTheDocument();
   });

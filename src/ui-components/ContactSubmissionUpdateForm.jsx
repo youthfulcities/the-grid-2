@@ -13,11 +13,9 @@ import {
   SwitchField,
   TextField,
 } from "@aws-amplify/ui-react";
+import { ContactSubmission } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { generateClient } from "aws-amplify/api";
-import { getContactSubmission } from "../graphql/queries";
-import { updateContactSubmission } from "../graphql/mutations";
-const client = generateClient();
+import { DataStore } from "aws-amplify/datastore";
 export default function ContactSubmissionUpdateForm(props) {
   const {
     id: idProp,
@@ -68,12 +66,7 @@ export default function ContactSubmissionUpdateForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? (
-            await client.graphql({
-              query: getContactSubmission.replaceAll("__typename", ""),
-              variables: { id: idProp },
-            })
-          )?.data?.getContactSubmission
+        ? await DataStore.query(ContactSubmission, idProp)
         : contactSubmissionModelProp;
       setContactSubmissionRecord(record);
     };
@@ -115,13 +108,13 @@ export default function ContactSubmissionUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          firstName: firstName ?? null,
-          lastName: lastName ?? null,
-          email: email ?? null,
-          phoneNumber: phoneNumber ?? null,
-          topic: topic ?? null,
-          message: message ?? null,
-          subscribed: subscribed ?? null,
+          firstName,
+          lastName,
+          email,
+          phoneNumber,
+          topic,
+          message,
+          subscribed,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -151,22 +144,17 @@ export default function ContactSubmissionUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await client.graphql({
-            query: updateContactSubmission.replaceAll("__typename", ""),
-            variables: {
-              input: {
-                id: contactSubmissionRecord.id,
-                ...modelFields,
-              },
-            },
-          });
+          await DataStore.save(
+            ContactSubmission.copyOf(contactSubmissionRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
           }
         } catch (err) {
           if (onError) {
-            const messages = err.errors.map((e) => e.message).join("\n");
-            onError(modelFields, messages);
+            onError(modelFields, err.message);
           }
         }
       }}

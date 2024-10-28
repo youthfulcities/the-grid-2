@@ -6,6 +6,34 @@
     }
   },
   "api": {
+    "interview": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "interviewTest"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "interviewAll": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "interviewAll"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
     "s3": {
       "dependsOn": [
         {
@@ -15,6 +43,14 @@
           ],
           "category": "function",
           "resourceName": "dataapi"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "interviewTest"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -35,11 +71,14 @@
           "additionalAuthenticationProviders": [
             {
               "apiKeyConfig": {
-                "apiKeyExpirationDate": "2025-10-17T17:35:44.865Z",
+                "apiKeyExpirationDate": "2025-10-23T20:22:31.361Z",
                 "apiKeyExpirationDays": 365,
                 "description": "update"
               },
               "authenticationType": "API_KEY"
+            },
+            {
+              "authenticationType": "AWS_IAM"
             }
           ],
           "defaultAuthentication": {
@@ -102,6 +141,44 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "interviewAll": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributeEnvMap": {
+            "Arn": "TABLE_ARN",
+            "Name": "TABLE_NAME"
+          },
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "interviewTest": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributeEnvMap": {
+            "Arn": "TABLE_ARN",
+            "Name": "TABLE_NAME"
+          },
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "interviews"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
@@ -153,6 +230,158 @@
         }
       ]
     },
+    "AMPLIFY_function_interviewAll_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "interviewAll"
+        }
+      ]
+    },
+    "AMPLIFY_function_interviewAll_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "interviewAll"
+        }
+      ]
+    },
+    "AMPLIFY_function_interviewTest_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "interviewTest"
+        }
+      ]
+    },
+    "AMPLIFY_function_interviewTest_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "interviewTest"
+        }
+      ]
+    },
+    "AMPLIFY_function_interviewTest_tableName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "interviewTest"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviewall_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviewall_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviewall_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviewall_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviewall_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviewall_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviewall_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviews_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviews"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviews_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviews"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviews_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviews"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviews_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviews"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviews_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviews"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviews_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviews"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviews_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviews"
+        }
+      ]
+    },
     "AMPLIFY_storage_thegrid23ee127f9_bucketName": {
       "usedBy": [
         {
@@ -171,6 +400,18 @@
     }
   },
   "storage": {
+    "interviewall": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB",
+      "serviceType": "imported"
+    },
+    "interviews": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB",
+      "serviceType": "imported"
+    },
     "thegrid23ee127f9": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",

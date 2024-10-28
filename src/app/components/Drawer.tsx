@@ -34,7 +34,7 @@ const DrawerContainer = styled(motion.div)<{
   backdrop-filter: blur(10px);
   z-index: 998;
   overflow-y: scroll;
-  overflow-x: visible;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -166,7 +166,7 @@ const Drawer: React.FC<DrawerProps> = ({
           React.Children.map(children, (child) =>
             React.isValidElement(child)
               ? React.cloneElement(child as React.ReactElement, {
-                  drawerWidth: width, // Pass drawer width as a prop
+                drawerwidth: width, // Pass drawer width as a prop
                 })
               : child
           )}

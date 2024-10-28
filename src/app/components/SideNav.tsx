@@ -58,6 +58,7 @@ interface SideNavProps {
 
 const SideNav: React.FC<SideNavProps> = ({ sections }) => {
   const [activeSection, setActiveSection] = useState<string>('');
+  console.log(activeSection);
 
   useEffect(() => {
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
@@ -71,7 +72,7 @@ const SideNav: React.FC<SideNavProps> = ({ sections }) => {
     const observer = new IntersectionObserver(handleIntersection, {
       root: null,
       rootMargin: '0px',
-      threshold: 0.6, // Adjust the threshold to detect when section is in view
+      threshold: 0.1, // Adjust the threshold to detect when section is in view
     });
 
     sections.forEach((section) => {

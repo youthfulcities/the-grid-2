@@ -22,12 +22,22 @@
         "dataapi": {
           "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
           "s3Key": "amplify-builds/dataapi-6d334f74495235396a78-build.zip"
-        }
+        },
+        "interviewTest": {}
       },
       "storage": {
         "thegrid23ee127f9": {
           "bucketName": "ycthegrid",
           "region": "ca-central-1"
+        },
+        "interviews": {
+          "tableName": "interviews",
+          "region": "ca-central-1",
+          "arn": "arn:aws:dynamodb:ca-central-1:730335589682:table/interviews",
+          "partitionKeyName": "Document group",
+          "partitionKeyType": "S",
+          "sortKeyName": "Document name",
+          "sortKeyType": "S"
         }
       },
       "auth": {
@@ -62,6 +72,24 @@
         "thegrid23ee127f9": {
           "bucketName": "ycthegrid",
           "region": "ca-central-1"
+        },
+        "interviews": {
+          "tableName": "interviews",
+          "region": "ca-central-1",
+          "arn": "arn:aws:dynamodb:ca-central-1:730335589682:table/interviews",
+          "partitionKeyName": "Document group",
+          "partitionKeyType": "S",
+          "sortKeyName": "Document name",
+          "sortKeyType": "S"
+        },
+        "interviewall": {
+          "tableName": "interview-all",
+          "region": "ca-central-1",
+          "arn": "arn:aws:dynamodb:ca-central-1:730335589682:table/interview-all",
+          "partitionKeyName": "Document group",
+          "partitionKeyType": "S",
+          "sortKeyName": "UID",
+          "sortKeyType": "S"
         }
       },
       "function": {
@@ -74,11 +102,22 @@
           "s3Key": "amplify-builds/contactFormUploader-354e304f5a5835386b45-build.zip",
           "sesEmail": "info@youthfulcities.com",
           "sesEmailDev": "genna.weber@youthfulcities.com"
+        },
+        "interviewTest": {
+          "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
+          "s3Key": "amplify-builds/interviewTest-2f366f72636a3438387a-build.zip",
+          "tableName": "interviews"
+        },
+        "interviewAll": {
+          "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
+          "s3Key": "amplify-builds/interviewAll-682f63423761372b6b6f-build.zip"
         }
       },
       "api": {
         "s3": {},
-        "thegrid2": {}
+        "thegrid2": {},
+        "interview": {},
+        "interviewAll": {}
       },
       "analytics": {
         "thegrid2": {}

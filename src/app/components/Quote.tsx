@@ -13,7 +13,7 @@ const ProfileIconContainer = styled(motion.div)<{ left: boolean }>`
   flex-direction: ${(props) => (props.left ? 'row' : 'row-reverse')};
   gap: var(--amplify-space-xs);
   height: 100%;
-  width: calc(90% - 70px);
+  width: 100%;
 `;
 
 const Icon = styled(FaUserCircle)<{ $color: string }>`
@@ -38,9 +38,14 @@ interface QuoteProps {
   quote: string;
 }
 
+const randomColor = () => {
+  const colors = ['red', 'green', 'yellow', 'pink', 'blue'];
+  const index = Math.floor(Math.random() * colors.length);
+  return colors[index];
+};
 const Quote: React.FC<QuoteProps> = ({
   left = true,
-  $color = 'neutral',
+  $color = randomColor(),
   quote = '',
 }) => {
   const [inView, setInView] = useState(false);
@@ -60,7 +65,7 @@ const Quote: React.FC<QuoteProps> = ({
           controls.start({ opacity: 0, scale: 0, y: -20 });
         }
       },
-      { threshold: 0.9 }
+      { threshold: 0.1 }
     );
 
     const currentRef = ref.current;
@@ -75,25 +80,6 @@ const Quote: React.FC<QuoteProps> = ({
       }
     };
   }, [controls]);
-
-  // useEffect(() => {
-  //   if (inView) {
-  //     setCurrentText(''); // Reset the text only when in view
-  //     let index = 0;
-
-  //     const typingEffect = setInterval(() => {
-  //       if (index < quote.length) {
-  //         setCurrentText((prev) => prev + quote[index - 1]);
-  //         index += 1;
-  //       } else {
-  //         clearInterval(typingEffect); // Clear the interval when typing is done
-  //       }
-  //     }, 40); // Typing speed
-
-  //     // Cleanup interval on unmount or when effect re-runs
-  //     return () => clearInterval(typingEffect);
-  //   }
-  // }, [inView, quote]);
 
   return (
     <Flex
@@ -115,7 +101,9 @@ const Quote: React.FC<QuoteProps> = ({
             damping: 20, // Adjust damping for a more controlled movement
           }}
         >
-          <Text margin='0'>{quote}</Text>
+          <Text margin='0' fontSize='medium'>
+            {quote}
+          </Text>
         </SpeechBubble>
       </ProfileIconContainer>
     </Flex>

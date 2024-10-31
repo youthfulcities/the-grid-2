@@ -27,6 +27,7 @@ interface BubbleChartProps {
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   setCode: React.Dispatch<React.SetStateAction<string>>;
   setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  city: string;
 }
 
 const truncateText = (text: string, maxLength: number) => {
@@ -67,55 +68,89 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
   setTooltipState,
   setCode,
   setIsDrawerOpen,
+  city,
 }) => {
   const [data, setData] = useState([]);
+  const [rawData, setRawData] = useState({});
+  const [parsedData, setParsedData] = useState({});
+  const [loading, setLoading] = useState(true);
   const svgRef = useRef<SVGSVGElement | null>(null);
 
+  console.log(city);
+
   useEffect(() => {
-    if (data.length > 0) return;
-    const fetchData = async (filename: string) => {
+    const fetchData = async () => {
+      if (Object.prototype.hasOwnProperty.call(rawData, city)) return;
       try {
         const downloadResult = await downloadData({
-          path: `public/${filename}`,
+          path: `internal/doc_city=${city}/codes.csv`,
         }).result;
-        const parsedData = JSON.parse(await downloadResult.body.text());
-        setData(parsedData);
+        const text = await downloadResult.body.text();
+        setRawData({ ...rawData, [city]: text });
       } catch (error) {
         console.log('Error:', error);
       }
     };
 
-    fetchData('toronto-interview-codes.json');
-  }, [width]);
+    const parseDynamicCSVData = (city: string, csvString: string) => {
+      if (parsedData[city]) return;
+      setLoading(true);
+      const parsed = d3.csvParse(csvString, (d) => {
+        const row = {
+          name: d.code_2 || d.code_1,
+          parent: d.code_2 ? d.code_1 : 'Root',
+          value: +d['count(code_2)'] || 0,
+        };
+        return row;
+      });
+      setParsedData({ ...parsedData, [city]: parsed });
+      setLoading(false);
+    };
+
+    fetchData();
+    if (rawData[city]) parseDynamicCSVData(city, rawData[city]);
+  }, [city, rawData, parsedData]);
 
   useEffect(() => {
+    if (!parsedData[city] || !width) return;
+
     const height = width;
+    const allData = parsedData[city];
+    const syntheticRoot = { name: 'Root', parent: null };
+    const combinedData = [syntheticRoot, ...allData];
 
-    // Create a hierarchical data structure from the flat data
-    const root = d3
-      .hierarchy<Node>({ code_level_1: 'root', frequency: 0, children: data })
-      .sum((d) => d.frequency);
+    const stratify = d3
+      .stratify()
+      .id((d) => d.name)
+      .parentId((d) => d.parent);
+    const root = stratify(combinedData);
 
-    // Flatten nodes and links for the force simulation
+    // // Flatten nodes and links for the force simulation
     const nodes = root.descendants().slice(1); // Exclude the synthetic root node
-    const links = root
-      .links()
-      .filter(
-        (link) =>
-          link.source.depth > 0 &&
-          link.target.data &&
-          link.target.data.frequency > 0
-      );
+    const links = root.links().filter(
+      (link) =>
+        // Check if the source or target of the link is the synthetic root
+        link.source.data.name !== 'Root' && link.target.data.name !== 'Root'
+    );
+
+    // Calculate values for parent nodes
+    root.each((node) => {
+      if (node.data.oldValue) return;
+      if (node.children) {
+        node.data.oldValue = node.data.value;
+        node.data.value += d3.sum(node.children, (child) => child.data.value);
+      }
+    });
 
     const colorScale = d3
       .scaleSequential(d3.interpolateBlues) // Choose a color interpolation
-      .domain([0, d3.max(nodes, (d) => d.value || 0) || 1]);
+      .domain([0, d3.max(nodes, (d) => d.data.value || 0) || 1]);
 
     // Define radius scale based on the frequency
     const radiusScale = d3
       .scaleSqrt()
-      .domain([0, d3.max(nodes, (d) => d.value || 0) || 1])
-      .range([0, width / 10]);
+      .domain([0, d3.max(nodes, (d) => d.data.value || 0) || 1])
+      .range([width / 100, width / 10]);
 
     // Create the simulation for the force-directed graph
     const simulation = d3
@@ -124,20 +159,20 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
         'link',
         d3
           .forceLink(links)
-          .id((d: any) => d.data.code_level_1)
+          .id((d) => d.data.name)
           .distance(width / 10)
       ) // Link distance
       .force('charge', d3.forceManyBody().strength(-width / 10)) // Adjust charge strength
       .force('center', d3.forceCenter(width / 2, height / 2)) // Center the graph
       .force(
         'collision',
-        d3.forceCollide().radius((d: any) => radiusScale(d.value) + 5)
+        d3.forceCollide().radius((d) => radiusScale(d.data.value) + 5)
       ) // Prevent overlap
       .force(
         'attraction',
         d3
           .forceRadial(
-            (d: any) => radiusScale(d.value) / 2,
+            (d) => radiusScale(d.data.value) / 2,
             width / 2,
             height / 2
           )
@@ -173,7 +208,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
         const yPos = event.pageY;
         setTooltipState({
           position: { x: xPos, y: yPos },
-          content: d.data.code_level_1 || d.data.code_level_2,
+          content: d.data.name,
         });
       })
       .on('mousemove', (event) => {
@@ -189,14 +224,14 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       })
       .on('click', (event, d) => {
         setIsDrawerOpen(true);
-        setCode(d.data.code_level_1 || d.data.code_level_2);
+        setCode(d.data.name);
       }); // Position the group
 
     // Add nodes (bubbles) as circles
     node
       .append('circle')
-      .attr('r', (d: any) => radiusScale(d.value))
-      .attr('fill', (d) => colorScale(d.value))
+      .attr('r', (d) => radiusScale(d.data.value))
+      .attr('fill', (d) => colorScale(d.data.value))
       .attr('stroke-width', 1.5);
 
     // Make the nodes draggable using the drag behavior
@@ -222,10 +257,10 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
 
     node
       .append('foreignObject')
-      .attr('width', (d: any) => radiusScale(d.value) * 2)
-      .attr('height', (d: any) => radiusScale(d.value) * 2)
-      .attr('x', (d: any) => -radiusScale(d.value))
-      .attr('y', (d: any) => -radiusScale(d.value))
+      .attr('width', (d) => radiusScale(d.data.value) * 2)
+      .attr('height', (d) => radiusScale(d.data.value) * 2)
+      .attr('x', (d) => -radiusScale(d.data.value))
+      .attr('y', (d) => -radiusScale(d.data.value))
       .append('xhtml:div')
       .attr(
         'style',
@@ -244,7 +279,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       )
       .html(
         (d: any) =>
-          `<span style="font-size: ${Math.min(radiusScale(d.value) / 4, 14)}px; color: ${shouldUseWhiteText(colorScale(d.value)) ? 'white' : 'black'};">${truncateText(d.data.code_level_1 || d.data.code_level_2, 30)}</span>`
+          `<span style="font-size: ${Math.min(radiusScale(d.data.value) / 4, 14)}px; color: ${shouldUseWhiteText(colorScale(d.data.value)) ? 'white' : 'black'};">${truncateText(d.data.name, 30)}</span>`
       );
 
     // Update the simulation on tick to reposition nodes and links
@@ -264,7 +299,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     return () => {
       simulation.stop();
     };
-  }, [data, width]);
+  }, [parsedData, width, city]);
 
   return <svg ref={svgRef} />;
 };

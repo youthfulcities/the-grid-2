@@ -6,20 +6,6 @@
     }
   },
   "api": {
-    "interview": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "function",
-          "resourceName": "interviewTest"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "API Gateway"
-    },
     "interviewAll": {
       "dependsOn": [
         {

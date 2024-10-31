@@ -116,7 +116,6 @@
       "api": {
         "s3": {},
         "thegrid2": {},
-        "interview": {},
         "interviewAll": {}
       },
       "analytics": {

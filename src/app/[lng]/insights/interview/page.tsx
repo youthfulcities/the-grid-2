@@ -2,17 +2,48 @@
 
 import config from '@/amplifyconfiguration.json';
 import Container from '@/app/components/Background';
+import BubbleChart from '@/app/components/dataviz/BubbleChart';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import Drawer from '@/app/components/Drawer';
 import Quote from '@/app/components/Quote';
 import { useDimensions } from '@/hooks/useDimensions';
 import { Flex, Heading, Loader, Tabs, Text, View } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
-import { ReactNode, useRef, useState } from 'react';
-import BubbleChart from '@/app/components/dataviz/BubbleChart';
+import { downloadData } from 'aws-amplify/storage';
+import * as d3 from 'd3';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 
 Amplify.configure(config);
 const colors = ['red', 'green', 'yellow', 'pink', 'blue'];
+
+const useFetchQuoteData = (city: string, code: string) => {
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (data[city]) return;
+      try {
+        const downloadResult = await downloadData({
+          path: `internal/doc_city=${city}/code_1=${code}/data.csv`,
+        }).result;
+        const text = await downloadResult.body.text();
+        console.log(text);
+        setData((prevData) => ({ ...prevData, [city]: text }));
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, [city, data]);
+
+  return data[city];
+};
+
+const parseCSVData = (csvString: string, code: string) => {
+  const parsed = d3.csvParse(csvString);
+  console.log(parsed);
+  return parsed;
+};
 
 const Interview = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -35,11 +66,12 @@ const Interview = () => {
     child: null,
     minWidth: 0,
   });
-  const [data, setData] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [city, setCity] = useState('Toronto');
-  const [code, setCode] = useState('Flexibility');
+  const [code, setCode] = useState('Ideal Work Model');
+  const allQuotes = useFetchQuoteData(city, code);
+  const [data, setData] = useState(null);
 
   const [tab, setTab] = useState('Toronto');
   const changeTab = (newTab: string) => {
@@ -47,7 +79,11 @@ const Interview = () => {
     setTab(newTab);
   };
 
+  useEffect(() => {
+    if (allQuotes) setData(parseCSVData(allQuotes, code));
+  }, [allQuotes]);
 
+  console.log(data);
   return (
     <Container>
       <View className='container padding' ref={containerRef}>
@@ -114,20 +150,24 @@ const Interview = () => {
         }}
         tabText='Quotes'
       >
-        <Flex direction='column' paddingTop='xxl' paddingBottom='xxl'>
-          <Heading level={3} color='font.inverse' marginBottom={0}>
-            Quotes with tag: {code}
-          </Heading>
-          {data &&
-            data.map((item, index) => (
-              <Quote
-                $color={colors[index % colors.length]}
-                key={item.UID}
-                quote={item.Segment}
-                left={index % 2 === 0}
-              />
-            ))}
-        </Flex>
+        {data ? (
+          <Flex direction='column' paddingTop='xxl' paddingBottom='xxl'>
+            <Heading level={3} color='font.inverse' marginBottom={0}>
+              Quotes with tag: {code}
+            </Heading>
+            {data &&
+              data.map((item, index) => (
+                <Quote
+                  $color={colors[index % colors.length]}
+                  key={item.UID}
+                  quote={item.Segment}
+                  left={index % 2 === 0}
+                />
+              ))}
+          </Flex>
+        ) : (
+          <Text>Please click on a theme node to view quotes.</Text>
+        )}
         {loading && <Loader />}
       </Drawer>
       {tooltipState.position && (

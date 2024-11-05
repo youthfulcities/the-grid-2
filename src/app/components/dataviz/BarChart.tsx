@@ -68,15 +68,20 @@ const BarChart: React.FC<BarProps> = ({
   const [parsedData, setParsedData] = useState<{ [key: string]: DataItem[] }>(
     {}
   );
-  const [selectedOptions, setSelectedOptions] = useState<string[]>(() => {
-    const storedOptions = sessionStorage.getItem('selectedOptions');
-    return storedOptions && storedOptions.length > 0
-      ? JSON.parse(storedOptions)
-      : [];
-  });
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+
   const [allOptions, setAllOptions] = useState<string[]>([]);
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
   const [activeLegendItems, setActiveLegendItems] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && sessionStorage) {
+      const storedOptions = sessionStorage.getItem('selectedOptions');
+      if (storedOptions) {
+        setSelectedOptions(JSON.parse(storedOptions));
+      }
+    }
+  }, []);
 
   useEffect(() => {
     sessionStorage.setItem('selectedOptions', JSON.stringify(selectedOptions));

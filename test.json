@@ -1,42 +1,168 @@
 [
   {
-    "title": "Chart 1 Title",
-    "q_code": "code",
-    "data": [
-      {
-        "option_en": "Option 1",
-        "option_code":"code",
-        "segment_1": 1,
-        "segment_2": 2,
-        "segment_3": 3
-      },
-      {
-        "option_en": "Option 2",
-        "option_code": "code",
-        "segment_1": 4,
-        "segment_2": 5,
-        "segment_3": 6
+    "Action": {
+      "Operation": "REPLACE_PATTERN",
+      "Parameters": {
+        "pattern": "\\b[A-Z][a-z]+ \\d+ \\d{1,2}:\\d{2}|\\b[A-Z][a-z]+ [A-Z][a-z]+ \\(\\d{1,2}:\\d{2}\\)|\\*+\\s\\(\\d{1,2}:\\d{2}\\)|[A-Z][a-z]+ [A-Z][a-z]+ \\d{1,2}:\\d{2}",
+        "value": "*",
+        "sourceColumn": "Segment"
       }
-    ]
+    },
+    "ConditionExpressions": null
   },
   {
-    "title": "Chart 2 Title",
-    "q_code": "code",
-    "data": [
-      {
-        "option_en": "Option 3",
-        "option_code": "code",
-        "segment_1": 7,
-        "segment_2": 8,
-        "segment_3": 9
-      },
-      {
-        "option_en": "Option 4",
-        "option_code": "code",
-        "segment_1": 10,
-        "segment_2": 11,
-        "segment_3": 12
+    "Action": {
+      "Operation": "REPLACE_PATTERN",
+      "Parameters": {
+        "pattern": "\\d{1,2}:\\d{2}(?::\\d{2})?|\\(\\d{1,2}:\\d{2}(?::\\d{2})?\\)",
+        "value": "*",
+        "sourceColumn": "Segment"
       }
-    ]
+    },
+    "ConditionExpressions": null
+  },
+  {
+    "Action": {
+      "Operation": "REPLACE_PATTERN",
+      "Parameters": {
+        "pattern": "(Tayyaba|Rajae|Zarrin|Khan|Nithursan|Elamuhilan|Speaker 1|Speaker 2|Anshul|Sharma|Piper|Stump|Clare|Price|Amisha|Maini|Freshta|Ahmadzai|Mishika|Khurana|“Tubz” S\\.)",
+        "value": "*",
+        "sourceColumn": "Segment"
+      }
+    },
+    "ConditionExpressions": null
+  },
+  {
+    "Action": {
+      "Operation": "REMOVE_COMBINED",
+      "Parameters": {
+        "removeLeadingAndTrailingPunctuation": "false",
+        "removeNumbers": "false",
+        "removeLeadingAndTrailingWhitespace": "true",
+        "removeCustomCharacters": "true",
+        "removeAllPunctuation": "false",
+        "removeCustomValue": "false",
+        "removeAllQuotes": "false",
+        "removeAllWhitespace": "false",
+        "removeSpecialCharacters": "false",
+        "removeLetters": "false",
+        "removeLeadingAndTrailingQuotes": "false",
+        "collapseConsecutiveWhitespace": "true",
+        "customCharacters": "@;*:",
+        "sourceColumn": "Segment"
+      }
+    },
+    "ConditionExpressions": null
+  },
+  {
+    "Action": {
+      "Operation": "SPLIT_COLUMN_SINGLE_DELIMITER",
+      "Parameters": {
+        "limit": "1",
+        "pattern": " > ",
+        "includeInSplit": "true",
+        "sourceColumn": "Document group"
+      }
+    },
+    "ConditionExpressions": null
+  },
+  {
+    "Action": {
+      "Operation": "SPLIT_COLUMN_SINGLE_DELIMITER",
+      "Parameters": {
+        "limit": "1",
+        "pattern": " > ",
+        "includeInSplit": "true",
+        "sourceColumn": "Code"
+      }
+    },
+    "ConditionExpressions": null
+  },
+  {
+    "Action": {
+      "Operation": "SPLIT_COLUMN_SINGLE_DELIMITER",
+      "Parameters": {
+        "limit": "1",
+        "pattern": " > ",
+        "includeInSplit": "true",
+        "sourceColumn": "Code_2"
+      }
+    },
+    "ConditionExpressions": null
+  },
+  {
+    "Action": {
+      "Operation": "REMOVE_COMBINED",
+      "Parameters": {
+        "removeLeadingAndTrailingPunctuation": "false",
+        "removeNumbers": "false",
+        "removeLeadingAndTrailingWhitespace": "true",
+        "removeCustomCharacters": "false",
+        "removeAllPunctuation": "false",
+        "removeCustomValue": "false",
+        "removeAllQuotes": "false",
+        "removeAllWhitespace": "false",
+        "removeSpecialCharacters": "false",
+        "removeLetters": "false",
+        "removeLeadingAndTrailingQuotes": "false",
+        "collapseConsecutiveWhitespace": "false",
+        "sourceColumn": "Document group_2"
+      }
+    },
+    "ConditionExpressions": null
+  },
+  {
+    "Action": {
+      "Operation": "RENAME",
+      "Parameters": {
+        "sourceColumn": "Code_2_2",
+        "targetColumn": "code_2"
+      }
+    }
+  },
+  {
+    "Action": {
+      "Operation": "RENAME",
+      "Parameters": {
+        "sourceColumn": "Code_1",
+        "targetColumn": "code_group"
+      }
+    }
+  },
+  {
+    "Action": {
+      "Operation": "RENAME",
+      "Parameters": {
+        "sourceColumn": "Code_2_1",
+        "targetColumn": "code_1"
+      }
+    }
+  },
+  {
+    "Action": {
+      "Operation": "RENAME",
+      "Parameters": {
+        "sourceColumn": "Document group_1",
+        "targetColumn": "doc_group"
+      }
+    }
+  },
+  {
+    "Action": {
+      "Operation": "RENAME",
+      "Parameters": {
+        "sourceColumn": "Document group_2",
+        "targetColumn": "doc_city"
+      }
+    }
+  },
+  {
+    "Action": {
+      "Operation": "RENAME",
+      "Parameters": {
+        "sourceColumn": "Document name",
+        "targetColumn": "doc_name"
+      }
+    }
   }
 ]

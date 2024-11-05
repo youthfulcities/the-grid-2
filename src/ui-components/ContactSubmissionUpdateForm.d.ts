@@ -6,7 +6,7 @@
 
 import * as React from "react";
 import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
-import { ContactSubmission } from "../API.ts";
+import { ContactSubmission } from "../models";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;

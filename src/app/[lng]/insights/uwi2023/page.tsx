@@ -2,11 +2,11 @@
 
 import Container from '@/app/components/Background';
 import CustomMap from '@/app/components/dataviz/Map';
+import uwi2023 from '@/data/uwi-2023.json';
 import { useDimensions } from '@/hooks/useDimensions';
 import { Heading, View } from '@aws-amplify/ui-react';
-import { useRef } from 'react';
-import uwi2023 from '@/data/uwi-2023.json';
 import { FeatureCollection } from 'geojson';
+import { useRef } from 'react';
 
 const Index = () => {
   const containerRef = useRef<HTMLDivElement>(null);

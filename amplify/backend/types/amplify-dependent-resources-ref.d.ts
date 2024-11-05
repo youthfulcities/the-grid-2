@@ -7,6 +7,16 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "api": {
+    "interview": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
+    },
+    "interviewAll": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
+    },
     "s3": {
       "ApiId": "string",
       "ApiName": "string",
@@ -38,6 +48,20 @@ export type AmplifyDependentResourcesAttributes = {
       "Region": "string"
     },
     "dataapi": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "interviewAll": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "interviewTest": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",

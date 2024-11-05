@@ -3,8 +3,8 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import Survey from './page';
 
 interface AccordionProps {
-  title: string; // The title prop, expected to be a string
-  children: React.ReactNode; // Children can be any valid React nodes
+  title: string;
+  children: React.ReactNode;
 }
 
 interface BarChartProps {
@@ -18,7 +18,7 @@ interface DrawerProps {
   isopen: boolean;
   onOpen: () => void;
   onClose: () => void;
-  children: React.ReactNode; // or JSX.Element if you want a more specific type
+  children: React.ReactNode;
 }
 
 jest.mock(
@@ -97,18 +97,14 @@ describe('Survey Component', () => {
 
   test('renders the Survey component correctly', () => {
     render(<Survey />);
-
-    expect(screen.getByText(/Skills/i)).toBeInTheDocument();
     expect(
       screen.getByText(/What’s up with work lately?/i)
     ).toBeInTheDocument();
     expect(screen.getByText('Mocked BarChart')).toBeInTheDocument();
-    expect(screen.getByText(/Psychographic/i)).toBeInTheDocument();
   });
 
   test('handles tab changes correctly', () => {
     render(<Survey />);
-    expect(screen.getByText(/Psychographic/i)).toBeInTheDocument();
     const cityTabButton = screen.getByRole('tab', { name: /city/i });
     expect(cityTabButton).toBeInTheDocument();
   });
@@ -128,7 +124,7 @@ describe('Survey Component', () => {
   test('renders Accordion and Clusters component', () => {
     render(<Survey />);
     expect(
-      screen.getByText(/Accordion: Examine clusters/i)
+      screen.getByText(/Accordion: More about psychographic clusters/i)
     ).toBeInTheDocument();
     expect(screen.getByText('Mocked Clusters')).toBeInTheDocument();
   });

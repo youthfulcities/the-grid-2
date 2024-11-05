@@ -143,7 +143,7 @@ const NavBar = () => {
   }
 
   return (
-    <StyledFlex as='nav'>
+    <StyledFlex as='nav' className='soft-shadow'>
       <Flex
         justifyContent='space-between'
         className='short-container'

@@ -18,7 +18,7 @@ interface TooltipState {
 interface DemographicProps {
   currentCluster: string;
   currentClusterName: string | null;
-  drawerWidth?: number;
+  drawerwidth?: number;
   tooltipState: TooltipState;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
 }
@@ -26,7 +26,7 @@ interface DemographicProps {
 const Demographics: React.FC<DemographicProps> = ({
   currentCluster,
   currentClusterName,
-  drawerWidth,
+  drawerwidth,
   tooltipState,
   setTooltipState,
 }) => {
@@ -70,7 +70,7 @@ const Demographics: React.FC<DemographicProps> = ({
         ref={containerRef}
       >
         <Pie
-          width={drawerWidth}
+          width={drawerwidth}
           type='gender'
           title='Gender'
           cluster={currentCluster}
@@ -79,7 +79,7 @@ const Demographics: React.FC<DemographicProps> = ({
           setTooltipState={setTooltipState}
         />
         <Pie
-          width={drawerWidth}
+          width={drawerwidth}
           type='status'
           title='Citizenship Status'
           cluster={currentCluster}
@@ -88,7 +88,7 @@ const Demographics: React.FC<DemographicProps> = ({
           setTooltipState={setTooltipState}
         />
         <Pie
-          width={drawerWidth}
+          width={drawerwidth}
           type='disability'
           cluster={currentCluster}
           title='Ability'

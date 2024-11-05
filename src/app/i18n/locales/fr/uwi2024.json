@@ -1,5 +1,5 @@
 {
-  "title": "Travail urban indice <span>2024</span>",
+  "title": "Indice du travail urbain <span>2024</span>",
   "subtitle": "La meilleure ville pour les jeunes travailleurs au Canada",
   "blurb": "L'Indice du travail urbain 2024 classe 30 villes en fonction des priorités des jeunes en matière de vie et de travail idéaux. Il fait partie de <a>laboDEV</a>, une enquête visant à créer une main-d'œuvre dynamique, engagée et vitale au Canada.",
   "map_heading": "Résultats globaux",
@@ -22,7 +22,7 @@
   "chatbot_prompt4": "Que disent les jeunes du processus d'embauche à Calgary ?",
   "chatbot_button": "Aller au chatbot",
   "stories_heading": "Histoires de données",
-  "stories_blurb": "La série « Skills and Ladders » sur le blog Youthful Cities explore quelques-unes des résultats les plus surprenantes et les plus marquantes du projet de recherche labDEV.",
+  "stories_blurb": "La série « Compétences et échelles » sur le blog Youthful Cities explore quelques-unes des résultats les plus surprenantes et les plus marquantes du projet de recherche labDEV.",
   "stories_button": "Aller sur le blog de Youthful Cities",
   "reset": "Réinitialiser"
 }

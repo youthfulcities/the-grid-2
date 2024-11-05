@@ -24,9 +24,9 @@ interface BubbleChartProps {
   width: number;
   tooltipState: TooltipState;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
-  setCode: React.Dispatch<React.SetStateAction<string>>;
   setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   city: string;
+  onBubbleClick: (code_parent: string, code_child: string) => Promise<void>;
 }
 
 interface CustomNode extends d3.SimulationNodeDatum {
@@ -43,6 +43,7 @@ interface CustomNode extends d3.SimulationNodeDatum {
   y?: number; // Current y position
 }
 
+//helper functions
 const truncateText = (text: string, maxLength: number) => {
   // Remove anything within parentheses and the parentheses themselves
   if (text) {
@@ -73,6 +74,15 @@ const shouldUseWhiteText = (color: string) => {
   const rgb = d3.rgb(color);
   const luminance = calculateLuminance(rgb.r, rgb.g, rgb.b);
   return luminance < 0.3;
+};
+
+const getLevelBeforeRoot = (node: d3.HierarchyNode<DataItem>) => {
+  let current = node;
+  // Traverse up until the current node has depth 1
+  while (current.depth > 1 && current.parent) {
+    current = current.parent;
+  }
+  return current;
 };
 
 const useFetchCityData = (city: string) => {
@@ -131,9 +141,9 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
   width,
   tooltipState,
   setTooltipState,
-  setCode,
   setIsDrawerOpen,
   city,
+  onBubbleClick,
 }) => {
   const [parsedData, setParsedData] = useState<DataItem[]>([]);
   const rawData = useFetchCityData(city);
@@ -279,15 +289,23 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       })
       .on('click', (event, d) => {
         setIsDrawerOpen(true);
-        setCode(d.data.name);
-      }); // Position the group
+        setTooltipState({ ...tooltipState, position: null });
+        const levelBeforeRoot = getLevelBeforeRoot(d).id ?? '';
+        if (d.depth > 2) {
+          onBubbleClick(levelBeforeRoot, d.data.name);
+        } else onBubbleClick(d.data.parent ?? '', d.data.name);
+      });
 
     const drag = d3
-      .drag<SVGCircleElement, d3.HierarchyNode<DataItem>>()
+      .drag<SVGElement, d3.HierarchyNode<DataItem>>()
       .on(
         'start',
         (
-          event: d3.D3DragEvent<SVGCircleElement, CustomNode, CustomNode>,
+          event: d3.D3DragEvent<
+            SVGCircleElement,
+            d3.HierarchyNode<DataItem>,
+            d3.HierarchyNode<DataItem>
+          >,
           customNode: d3.HierarchyNode<DataItem>
         ) => {
           if (!event.active) simulation.alphaTarget(0.3).restart();
@@ -302,7 +320,11 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       .on(
         'drag',
         (
-          event: d3.D3DragEvent<SVGCircleElement, CustomNode, CustomNode>,
+          event: d3.D3DragEvent<
+            SVGCircleElement,
+            d3.HierarchyNode<DataItem>,
+            d3.HierarchyNode<DataItem>
+          >,
           customNode: d3.HierarchyNode<DataItem>
         ) => {
           const nodeCopy = { ...customNode, fx: event.x, fy: event.y };
@@ -312,7 +334,11 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       .on(
         'end',
         (
-          event: d3.D3DragEvent<SVGCircleElement, CustomNode, CustomNode>,
+          event: d3.D3DragEvent<
+            SVGCircleElement,
+            d3.HierarchyNode<DataItem>,
+            d3.HierarchyNode<DataItem>
+          >,
           customNode: d3.HierarchyNode<DataItem>
         ) => {
           if (!event.active) simulation.alphaTarget(0);
@@ -321,13 +347,21 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
         }
       );
 
+    (
+      node as d3.Selection<
+        SVGElement,
+        d3.HierarchyNode<DataItem>,
+        SVGSVGElement,
+        unknown
+      >
+    ).call(drag);
+
     // Add nodes (bubbles) as circles
     node
       .append('circle')
       .attr('r', (d) => radiusScale(d.value ?? 0))
       .attr('fill', (d) => colorScale(d.value ?? 0))
-      .attr('stroke-width', 1.5)
-      .call(drag);
+      .attr('stroke-width', 1.5);
 
     node
       .append('foreignObject')

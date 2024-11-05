@@ -7,42 +7,32 @@ import Tooltip from '@/app/components/dataviz/TooltipChart';
 import Drawer from '@/app/components/Drawer';
 import Quote from '@/app/components/Quote';
 import { useDimensions } from '@/hooks/useDimensions';
-import { Flex, Heading, Loader, Tabs, Text, View } from '@aws-amplify/ui-react';
+import { Button, Flex, Heading, Tabs, Text, View } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import { ReactNode, useRef, useState } from 'react';
 
 Amplify.configure(config);
+
 const colors = ['red', 'green', 'yellow', 'pink', 'blue'];
 
-const useFetchQuoteData = (city: string, code: string) => {
-  const [data, setData] = useState({});
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (data[city]) return;
-      try {
-        const downloadResult = await downloadData({
-          path: `internal/doc_city=${city}/code_1=${code}/data.csv`,
-        }).result;
-        const text = await downloadResult.body.text();
-        console.log(text);
-        setData((prevData) => ({ ...prevData, [city]: text }));
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData();
-  }, [city, data]);
-
-  return data[city];
+const parseCSVData = (csvString: string) => {
+  const parsed = d3.csvParse(csvString);
+  return parsed;
 };
 
-const parseCSVData = (csvString: string, code: string) => {
-  const parsed = d3.csvParse(csvString);
-  console.log(parsed);
-  return parsed;
+const fetchData = async (city: string, code: string) => {
+  try {
+    const downloadResult = await downloadData({
+      path: `internal/doc_city=${city}/code_1=${code}/data.csv`,
+    }).result;
+    const text = await downloadResult.body.text();
+    return text;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
 };
 
 const Interview = () => {
@@ -69,9 +59,8 @@ const Interview = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [city, setCity] = useState('Toronto');
-  const [code, setCode] = useState('Ideal Work Model');
-  const allQuotes = useFetchQuoteData(city, code);
-  const [data, setData] = useState(null);
+  const [code, setCode] = useState('');
+  const [data, setData] = useState<d3.DSVRowString<string>[]>([]);
 
   const [tab, setTab] = useState('Toronto');
   const changeTab = (newTab: string) => {
@@ -79,11 +68,30 @@ const Interview = () => {
     setTab(newTab);
   };
 
-  useEffect(() => {
-    if (allQuotes) setData(parseCSVData(allQuotes, code));
-  }, [allQuotes]);
+  const onBubbleClick = async (code_parent: string, code_child: string) => {
+    if (!code_parent) return;
+    setLoading(true);
+    const fetchedData = await fetchData(
+      city,
+      code_parent === 'Root' ? code_child : code_parent
+    );
+    const parsedData = parseCSVData(fetchedData as string);
+    console.log(code_parent, code_child);
+    if (code_parent === 'Root') {
+      const filteredData = parsedData.filter((quote) => quote.code_2 === '');
+      setData(filteredData.length > 0 ? filteredData : parsedData);
+      setCode(code_child || code_parent);
+      setLoading(false);
+    } else {
+      const filteredData = parsedData.filter((quote) =>
+        quote.code_2.includes(code_child)
+      );
+      setData(filteredData.length > 0 ? filteredData : parsedData);
+      setCode(code_child || code_parent);
+      setLoading(false);
+    }
+  };
 
-  console.log(data);
   return (
     <Container>
       <View className='container padding' ref={containerRef}>
@@ -139,8 +147,16 @@ const Interview = () => {
           tooltipState={tooltipState}
           setIsDrawerOpen={setIsDrawerOpen}
           setTooltipState={setTooltipState}
-          setCode={setCode}
+          onBubbleClick={onBubbleClick}
         />
+        <Text>
+          What to query quotes across all cities? Use the YDL Chatbot.
+        </Text>
+        <Link href='/chatbot' target='_blank'>
+          <Button variation='primary' marginTop='small' marginBottom='xl'>
+            Go to YDL Chatbot
+          </Button>
+        </Link>
       </View>
       <Drawer
         isopen={isDrawerOpen}
@@ -150,25 +166,51 @@ const Interview = () => {
         }}
         tabText='Quotes'
       >
-        {data ? (
+        {data.length > 0 ? (
           <Flex direction='column' paddingTop='xxl' paddingBottom='xxl'>
             <Heading level={3} color='font.inverse' marginBottom={0}>
-              Quotes with tag: {code}
+              Quotes tagged with theme {code}
             </Heading>
             {data &&
               data.map((item, index) => (
                 <Quote
-                  $color={colors[index % colors.length]}
+                  $color={
+                    colors[index % colors.length] as
+                      | 'red'
+                      | 'green'
+                      | 'yellow'
+                      | 'pink'
+                      | 'blue'
+                      | 'neutral'
+                      | undefined
+                  }
                   key={item.UID}
                   quote={item.Segment}
                   left={index % 2 === 0}
                 />
               ))}
+            <Text>
+              What to query quotes across all cities? Use the YDL Chatbot.
+            </Text>
+            <Link href='/chatbot' target='_blank'>
+              <Button variation='primary' marginTop='small' marginBottom='xl'>
+                Go to YDL Chatbot
+              </Button>
+            </Link>
           </Flex>
         ) : (
-          <Text>Please click on a theme node to view quotes.</Text>
+          <>
+            <Text>Please click on a theme node to view quotes.</Text>{' '}
+            <Text>
+              What to query quotes across all cities? Use the YDL Chatbot.
+            </Text>
+            <Link href='/chatbot' target='_blank'>
+              <Button variation='primary' marginTop='small' marginBottom='xl'>
+                Go to YDL Chatbot
+              </Button>
+            </Link>
+          </>
         )}
-        {loading && <Loader />}
       </Drawer>
       {tooltipState.position && (
         <Tooltip

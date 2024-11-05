@@ -1,9 +1,7 @@
 import config from '@/amplifyconfiguration.json';
-import { Text } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import axios from 'axios'; // Import Axios
 import { useEffect, useState } from 'react';
-import Quote from './Quote';
 
 Amplify.configure(config);
 

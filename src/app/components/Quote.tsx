@@ -56,20 +56,11 @@ const Quote: React.FC<QuoteProps> = ({
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          controls.start({ opacity: 1, scale: 1, y: 0 });
-        } else {
-          setInView(false);
-          controls.start({ opacity: 0, scale: 0, y: -20 });
-        }
-      },
-      { threshold: 0.1 }
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0 }
     );
 
     const currentRef = ref.current;
-
     if (currentRef) {
       observer.observe(currentRef);
     }
@@ -79,7 +70,16 @@ const Quote: React.FC<QuoteProps> = ({
         observer.unobserve(currentRef);
       }
     };
-  }, [controls]);
+  }, []);
+
+  // Run the animation whenever inView changes
+  useEffect(() => {
+    if (inView) {
+      controls.start({ opacity: 1, scale: 1, y: 0 });
+    } else {
+      controls.start({ opacity: 0, scale: 0, y: -20 });
+    }
+  }, [inView, controls]);
 
   return (
     <Flex

@@ -1,20 +1,20 @@
 'use client';
 
-import Container from '@/app/components/Background';
+import Background from '@/app/components/Background';
 import IndexHeatmap from '@/app/components/dataviz/IndexHeatmap';
 import CustomMap from '@/app/components/dataviz/Map';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import useTranslation from '@/app/i18n/client';
+import uwi2024 from '@/data/uwi-2024.json';
 import { useDimensions } from '@/hooks/useDimensions';
 import { Button, Heading, Text, View } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
+import { FeatureCollection } from 'geojson';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { ReactNode, useRef, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
 import config from '../../../../amplifyconfiguration.json';
-import uwi2024 from '@/data/uwi-2024.json';
-import { FeatureCollection } from 'geojson';
 
 interface TooltipState {
   position: { x: number; y: number } | null;
@@ -45,7 +45,7 @@ const Index = () => {
   });
 
   return (
-    <Container>
+    <Background noOverflow>
       <View className='container padding' ref={containerRef}>
         <Heading level={1}>
           <Trans
@@ -152,7 +152,7 @@ const Index = () => {
           child={tooltipState.child}
         />
       )}
-    </Container>
+    </Background>
   );
 };
 

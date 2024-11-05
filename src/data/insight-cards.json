@@ -25,7 +25,7 @@
     {
       "title": "Best Work City Quiz",
       "titlefr": "Trouver ma meilleure ville où travailler",
-      "dataset": "Urban Work Index",
+      "dataset": "Urban Work Index 2023",
       "datasetfr": "Indice du travail urbain 2023",
       "date": "2023",
       "type": "external",
@@ -42,7 +42,7 @@
       "link": "/insights/survey"
     },
     {
-      "title": "Chatbot",
+      "title": "YDL Chatbot",
       "titlefr": "Chatbot",
       "dataset": "",
       "datasetfr": "",

@@ -307,12 +307,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
               50 + (link.source.depth || 0) * (-link.value || 1) * 10
           )
       ) // Variable link distance
-      .force(
-        'charge',
-        d3
-          .forceManyBody()
-          .strength((d) => -Math.sqrt(width / 8) * (d as CustomNode).depth || 1) // Charge strength varies with node depth
-      )
+      .force('charge', d3.forceManyBody().strength(-20))
       .force('center', d3.forceCenter(width / 2, height / 2)) // Center the graph
       .force(
         'collision',
@@ -333,8 +328,8 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
           )
           .strength(0.4) // Increased strength to pull nodes to their radial positions
       )
-      .alphaDecay(0.02)
-      .alpha(0.2);
+      .alphaDecay(0.01)
+      .alpha(0.1);
 
     // Select the SVG element
     const svg = d3

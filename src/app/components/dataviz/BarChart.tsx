@@ -69,9 +69,23 @@ const BarChart: React.FC<BarProps> = ({
     {}
   );
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+
   const [allOptions, setAllOptions] = useState<string[]>([]);
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
   const [activeLegendItems, setActiveLegendItems] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && sessionStorage) {
+      const storedOptions = sessionStorage.getItem('selectedOptions');
+      if (storedOptions) {
+        setSelectedOptions(JSON.parse(storedOptions));
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem('selectedOptions', JSON.stringify(selectedOptions));
+  }, [selectedOptions]);
 
   useEffect(() => {
     const fetchData = async (filename: string) => {
@@ -118,7 +132,11 @@ const BarChart: React.FC<BarProps> = ({
     if (parsedData[activeFile]) {
       const options = parsedData[activeFile].map((d) => d.option_en as string);
       setAllOptions(options);
-      setSelectedOptions(options.slice(0, 10));
+
+      const storedOptions = sessionStorage.getItem('selectedOptions');
+      if (storedOptions && storedOptions.length > 2) {
+        setSelectedOptions(JSON.parse(storedOptions));
+      } else setSelectedOptions(options.slice(0, 10));
 
       const allKeys = Object.keys(parsedData[activeFile][0]).filter(
         (key) => key !== 'option_en'
@@ -324,7 +342,15 @@ const BarChart: React.FC<BarProps> = ({
       .delay((d, i) => i * (duration / 10))
       .attr('x', xScale(0))
       .attr('width', (d) => xScale(d.value) - xScale(0));
-  }, [width, height, parsedData, activeFile, selectedOptions]);
+  }, [
+    width,
+    height,
+    parsedData,
+    activeFile,
+    selectedOptions,
+    activeLegendItems,
+    duration,
+  ]);
 
   return (
     <>

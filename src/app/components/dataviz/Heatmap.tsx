@@ -1,6 +1,6 @@
 'use client';
 
-import { Placeholder, Text } from '@aws-amplify/ui-react';
+import { Placeholder } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import { ReactNode, useEffect, useRef, useState } from 'react';
@@ -32,10 +32,9 @@ interface HeatmapProps {
 }
 
 const ChartContainer = styled.div`
-  overflow: visible;  
+  overflow: visible;
   position: relative;
 `;
-
 
 const truncateText = (text: string, maxLength: number) => {
   const cleanedText = text.replace(/\(.*?\)/g, '').trim();
@@ -49,7 +48,9 @@ const truncateText = (text: string, maxLength: number) => {
 const calculateLuminance = (r: number, g: number, b: number) => {
   const a = [r, g, b].map((value) => {
     const normalized = value / 255;
-    return normalized <= 0.03928 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
+    return normalized <= 0.03928
+      ? normalized / 12.92
+      : ((normalized + 0.055) / 1.055) ** 2.4;
   });
   return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
 };
@@ -65,13 +66,15 @@ const Heatmap: React.FC<HeatmapProps> = ({
   width,
   activeFile,
   setTooltipState,
-  title
+  title,
 }) => {
   const height = 400;
   const ref = useRef<SVGSVGElement>(null);
   const [loading, setLoading] = useState(true);
   const [rawData, setRawData] = useState<Record<string, string>>({});
-  const [parsedData, setParsedData] = useState<{ [key: string]: DataItem[] }>({});
+  const [parsedData, setParsedData] = useState<{ [key: string]: DataItem[] }>(
+    {}
+  );
   const margin = { top: 50, right: 80, bottom: 0, left: 30 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
@@ -81,7 +84,9 @@ const Heatmap: React.FC<HeatmapProps> = ({
       if (Object.prototype.hasOwnProperty.call(rawData, filename)) return;
       try {
         setLoading(true);
-        const downloadResult = await downloadData({ path: `public/${filename}` }).result;
+        const downloadResult = await downloadData({
+          path: `public/${filename}`,
+        }).result;
         const text = await downloadResult.body.text();
         setRawData({ ...rawData, [filename]: text });
       } catch (error) {
@@ -104,36 +109,54 @@ const Heatmap: React.FC<HeatmapProps> = ({
     };
 
     fetchData(activeFile);
-    if (rawData[activeFile]) parseDynamicCSVData(activeFile, rawData[activeFile]);
-
+    if (rawData[activeFile])
+      parseDynamicCSVData(activeFile, rawData[activeFile]);
   }, [activeFile, rawData, parsedData]);
 
   useEffect(() => {
     if (!width || !height || !parsedData[activeFile]) return;
     if (parsedData[activeFile]) {
       const data = parsedData[activeFile];
-      const clusters: string[] = [...new Set(data.map((d) => d.Cluster.toString()))];
-      const topics: string[] = [...new Set(data.map((d) => d.Topic.toString()))];
+      const clusters: string[] = [
+        ...new Set(data.map((d) => d.Cluster.toString())),
+      ];
+      const topics: string[] = [
+        ...new Set(data.map((d) => d.Topic.toString())),
+      ];
 
-      const svg = d3.select(ref.current).attr('width', width).attr('height', height);
+      const svg = d3
+        .select(ref.current)
+        .attr('width', width)
+        .attr('height', height);
       svg.selectAll('*').remove();
 
-      const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+      const g = svg
+        .append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
 
       g.append('text')
         .attr('x', innerWidth / 2)
         .attr('y', -10)
         .attr('text-anchor', 'middle')
         .style('font-size', '18px')
-        .style('font-weight', 'bold')
         .style('font-family', 'Gotham Narrow Medium')
         .style('fill', 'white')
         .text(title);
 
-      const x = d3.scaleBand().range([0, innerWidth]).domain(clusters).padding(0.05);
-      const y = d3.scaleBand().range([0, innerHeight]).domain(topics).padding(0);
+      const x = d3
+        .scaleBand()
+        .range([0, innerWidth])
+        .domain(clusters)
+        .padding(0.05);
+      const y = d3
+        .scaleBand()
+        .range([0, innerHeight])
+        .domain(topics)
+        .padding(0);
 
-      const colorScale = d3.scaleSequential(d3.interpolateRdYlBu).domain([-40, 40]);
+      const colorScale = d3
+        .scaleSequential(d3.interpolateRdYlBu)
+        .domain([-40, 40]);
 
       const legendWidth = 20;
       const legendPadding = 10;
@@ -142,14 +165,25 @@ const Heatmap: React.FC<HeatmapProps> = ({
       const currentMinValue = d3.min(data, (d) => d.Value as number) || 0;
       const currentMaxValue = d3.max(data, (d) => d.Value as number) || 100;
 
-      const legend = svg.append('g')
-        .attr('transform', `translate(${width - margin.right + 20}, ${margin.top})`);
+      const legend = svg
+        .append('g')
+        .attr(
+          'transform',
+          `translate(${width - margin.right + 20}, ${margin.top})`
+        );
 
-      const quantizedValues = d3.quantize(d3.interpolate(currentMinValue, currentMaxValue), chunks);
-      const legendScale = d3.scaleLinear().domain([currentMaxValue, currentMinValue]).rangeRound([legendHeight, 0]);
+      const quantizedValues = d3.quantize(
+        d3.interpolate(currentMinValue, currentMaxValue),
+        chunks
+      );
+      const legendScale = d3
+        .scaleLinear()
+        .domain([currentMaxValue, currentMinValue])
+        .rangeRound([legendHeight, 0]);
       const chunkHeight = legendHeight / chunks;
 
-      legend.selectAll('rect')
+      legend
+        .selectAll('rect')
         .data(quantizedValues)
         .enter()
         .append('rect')
@@ -160,10 +194,12 @@ const Heatmap: React.FC<HeatmapProps> = ({
         .style('fill', (d) => colorScale(d))
         .style('stroke', 'black');
 
-      legend.append('g')
+      legend
+        .append('g')
         .attr('transform', `translate(${legendWidth}, ${legendPadding})`)
         .call(
-          d3.axisRight(legendScale)
+          d3
+            .axisRight(legendScale)
             .tickSize(10)
             .tickValues(quantizedValues)
             .tickFormat((d) => {
@@ -184,7 +220,13 @@ const Heatmap: React.FC<HeatmapProps> = ({
           topic: d.Topic as string,
           value: d.Value as number,
           minWidth: 200,
-          child: (<HeatmapTooltip value={d.Value as number} cluster={d.Cluster as string} topic={d.Topic as string} />),
+          child: (
+            <HeatmapTooltip
+              value={d.Value as number}
+              cluster={d.Cluster as string}
+              topic={d.Topic as string}
+            />
+          ),
         }));
       };
 
@@ -198,7 +240,13 @@ const Heatmap: React.FC<HeatmapProps> = ({
           topic: d.Topic as string,
           value: d.Value as number,
           minWidth: 200,
-          child: (<HeatmapTooltip value={d.Value as number} cluster={d.Cluster as string} topic={d.Topic as string} />),
+          child: (
+            <HeatmapTooltip
+              value={d.Value as number}
+              cluster={d.Cluster as string}
+              topic={d.Topic as string}
+            />
+          ),
         }));
       };
 
@@ -215,7 +263,9 @@ const Heatmap: React.FC<HeatmapProps> = ({
       };
 
       g.selectAll()
-        .data(data, (d) => d ? `${d.Cluster as string}:${d.Topic as string}` : '')
+        .data(data, (d) =>
+          d ? `${d.Cluster as string}:${d.Topic as string}` : ''
+        )
         .join('rect')
         .attr('x', (d) => x(d.Cluster as string) ?? '')
         .attr('y', (d) => y(d.Topic as string) ?? '')
@@ -253,8 +303,19 @@ const Heatmap: React.FC<HeatmapProps> = ({
         .on('mousemove', mousemove)
         .on('mouseout', mouseleave);
     }
-    requestAnimationFrame(() => { setLoading(false); });
-  }, [width, height, parsedData, activeFile, innerHeight, innerWidth, margin, title]);
+    requestAnimationFrame(() => {
+      setLoading(false);
+    });
+  }, [
+    width,
+    height,
+    parsedData,
+    activeFile,
+    innerHeight,
+    innerWidth,
+    margin,
+    title,
+  ]);
 
   return (
     <>

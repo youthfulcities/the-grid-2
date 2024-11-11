@@ -50,7 +50,7 @@ const AbsoluteLegendContainer = styled.div`
   position: absolute;
   right: 0;
   bottom: 80px;
-  z-index: 9999;
+  z-index: 800;
   flex-direction: column;
   padding: var(--amplify-space-xs) var(--amplify-space-small);
   text-align: left;

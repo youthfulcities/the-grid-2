@@ -2,3 +2,4 @@ amplify-codegen-temp/models/models
 src/models/models
 **.test.tsx
 src/__mocks__/*
+amplify/backend/*

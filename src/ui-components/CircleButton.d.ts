@@ -26,6 +26,9 @@ export declare type CircleButtonOverridesProps = {
     "Button Icon58551432"?: PrimitiveOverrideProps<ViewProps>;
 } & EscapeHatchProps;
 export declare type CircleButtonProps = React.PropsWithChildren<Partial<FlexProps> & {
+    circleButton?: React.ReactNode;
+    icon?: React.ReactNode;
+} & {
     property1?: "Default" | "Disabled" | "Hover";
 } & {
     overrides?: CircleButtonOverridesProps | undefined | null;

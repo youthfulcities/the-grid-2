@@ -7,13 +7,20 @@
       "mode": "AMAZON_COGNITO_USER_POOLS",
       "cognitoUserPoolId": "auththegrid2fafc44b3"
     },
-    "conflictResolution": {},
+    "conflictResolution": {
+      "defaultResolutionStrategy": {
+        "type": "AUTOMERGE"
+      }
+    },
     "additionalAuthTypes": [
       {
         "mode": "API_KEY",
         "expirationTime": 365,
-        "apiKeyExpirationDate": "2025-10-17T17:35:44.865Z",
+        "apiKeyExpirationDate": "2025-10-23T20:22:31.361Z",
         "keyDescription": "update"
+      },
+      {
+        "mode": "AWS_IAM"
       }
     ]
   }

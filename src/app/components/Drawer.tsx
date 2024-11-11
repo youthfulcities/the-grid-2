@@ -27,14 +27,14 @@ const DrawerContainer = styled(motion.div)<{
   top: 0;
   right: 0;
   min-width: 300px;
-  max-width: 40%;
+  max-width: 50%;
   height: 100%;
   color: var(--amplify-colors-font-inverse);
   background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
   z-index: 998;
   overflow-y: scroll;
-  overflow-x: visible;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -103,8 +103,14 @@ const Drawer: React.FC<DrawerProps> = ({
   const [tabOffset, setTabOffset] = useState<number>(0);
   const { width } = useDimensions(drawerRef, isopen);
 
-  // Expose the drawerRef to parent components via ref
+  // Scroll to top when the drawer is opened
+  useEffect(() => {
+    if (isopen && drawerRef.current) {
+      drawerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [isopen]);
 
+  // Expose the drawerRef to parent components via ref
   useEffect(() => {
     if (drawerRef.current) {
       const resizeObserver = new ResizeObserver(() => {
@@ -166,7 +172,7 @@ const Drawer: React.FC<DrawerProps> = ({
           React.Children.map(children, (child) =>
             React.isValidElement(child)
               ? React.cloneElement(child as React.ReactElement, {
-                  drawerWidth: width, // Pass drawer width as a prop
+                  drawerwidth: width, // Pass drawer width as a prop
                 })
               : child
           )}

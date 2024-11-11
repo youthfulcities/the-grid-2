@@ -51,10 +51,13 @@ export default function CommentCard(props) {
           {...getOverrideProps(overrides, "User Liked")}
         >
           <MyIcon
+            width="24px"
+            height="24px"
             display="block"
             gap="unset"
             alignItems="unset"
             justifyContent="unset"
+            overflow="hidden"
             shrink="0"
             position="relative"
             padding="0px 0px 0px 0px"
@@ -188,10 +191,13 @@ export default function CommentCard(props) {
               {...getOverrideProps(overrides, "Frame29766885")}
             >
               <MyIcon
+                width="24px"
+                height="24px"
                 display="block"
                 gap="unset"
                 alignItems="unset"
                 justifyContent="unset"
+                overflow="hidden"
                 shrink="0"
                 position="relative"
                 padding="0px 0px 0px 0px"
@@ -254,10 +260,13 @@ export default function CommentCard(props) {
           {...getOverrideProps(overrides, "Share29766889")}
         >
           <MyIcon
+            width="24px"
+            height="24px"
             display="block"
             gap="unset"
             alignItems="unset"
             justifyContent="unset"
+            overflow="hidden"
             shrink="0"
             position="relative"
             padding="0px 0px 0px 0px"
@@ -300,10 +309,13 @@ export default function CommentCard(props) {
           {...getOverrideProps(overrides, "Repost")}
         >
           <MyIcon
+            width="24px"
+            height="24px"
             display="block"
             gap="unset"
             alignItems="unset"
             justifyContent="unset"
+            overflow="hidden"
             shrink="0"
             position="relative"
             padding="0px 0px 0px 0px"
@@ -346,10 +358,13 @@ export default function CommentCard(props) {
           {...getOverrideProps(overrides, "Like")}
         >
           <MyIcon
+            width="24px"
+            height="24px"
             display="block"
             gap="unset"
             alignItems="unset"
             justifyContent="unset"
+            overflow="hidden"
             shrink="0"
             position="relative"
             padding="0px 0px 0px 0px"
@@ -380,10 +395,13 @@ export default function CommentCard(props) {
           ></Text>
         </Flex>
         <MyIcon
+          width="24px"
+          height="24px"
           display="block"
           gap="unset"
           alignItems="unset"
           justifyContent="unset"
+          overflow="hidden"
           shrink="0"
           position="relative"
           padding="0px 0px 0px 0px"

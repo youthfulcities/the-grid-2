@@ -14,7 +14,7 @@ import {
 import MyIcon from "./MyIcon";
 import { Flex, Text, View } from "@aws-amplify/ui-react";
 export default function CircleButton(props) {
-  const { overrides: overridesProp, ...rest } = props;
+  const { circleButton, icon, overrides: overridesProp, ...rest } = props;
   const variants = [
     {
       overrides: {

@@ -26,7 +26,7 @@ const parseCSVData = (csvString: string) => {
 const fetchData = async (city: string, code: string) => {
   try {
     const downloadResult = await downloadData({
-      path: `internal/doc_city=${city}/code_1=${code}/data.csv`,
+      path: `internal/interview-outputs/doc_city=${city}/code_1=${code}/data.csv`,
     }).result;
     const text = await downloadResult.body.text();
     return text;
@@ -189,11 +189,11 @@ const Interview = () => {
                   left={index % 2 === 0}
                 />
               ))}
-            <Text>
+            <Text marginTop='xl'>
               What to query quotes across all cities? Use the YDL Chatbot.
             </Text>
             <Link href='/chatbot' target='_blank'>
-              <Button variation='primary' marginTop='small' marginBottom='xl'>
+              <Button variation='primary' marginBottom='xl'>
                 Go to YDL Chatbot
               </Button>
             </Link>
@@ -201,11 +201,11 @@ const Interview = () => {
         ) : (
           <>
             <Text>Please click on a theme node to view quotes.</Text>{' '}
-            <Text>
+            <Text marginTop='xl'>
               What to query quotes across all cities? Use the YDL Chatbot.
             </Text>
             <Link href='/chatbot' target='_blank'>
-              <Button variation='primary' marginTop='small' marginBottom='xl'>
+              <Button variation='primary' marginBottom='xl'>
                 Go to YDL Chatbot
               </Button>
             </Link>

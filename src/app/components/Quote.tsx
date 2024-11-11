@@ -17,7 +17,7 @@ const ProfileIconContainer = styled(motion.div)<{ left: boolean }>`
 `;
 
 const Icon = styled(FaUserCircle)<{ $color: string }>`
-  font-size: 60px;
+  font-size: 40px;
   color: var(--amplify-colors-${(props) => props.$color}-60);
 `;
 
@@ -29,6 +29,7 @@ const SpeechBubble = styled(motion.div)<{ left: boolean }>`
   background: rgba(102, 100, 96, 0.3);
   border-radius: 8px;
   padding: var(--amplify-space-small);
+  padding-bottom: 0;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
@@ -49,7 +50,6 @@ const Quote: React.FC<QuoteProps> = ({
   quote = '',
 }) => {
   const [inView, setInView] = useState(false);
-  const [currentText, setCurrentText] = useState('');
   const ref = useRef<HTMLDivElement>(null);
 
   const controls = useAnimation();

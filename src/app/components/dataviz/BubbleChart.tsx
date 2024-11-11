@@ -93,7 +93,29 @@ const useFetchCityData = (city: string) => {
       if (rawData[city]) return;
       try {
         const downloadResult = await downloadData({
-          path: `internal/doc_city=${city}/data.csv`,
+          path: `internal/interview-outputs/doc_city=${city}/data.csv`,
+        }).result;
+        const text = await downloadResult.body.text();
+        setRawData((prevData) => ({ ...prevData, [city]: text }));
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, [city, rawData]);
+
+  return rawData[city];
+};
+
+const useFetchAdditionalLinks = (city: string) => {
+  const [rawData, setRawData] = useState<{ [key: string]: string }>({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (rawData[city]) return;
+      try {
+        const downloadResult = await downloadData({
+          path: `internal/interview-outputs/code-links/doc_city=${city}/data.csv`,
         }).result;
         const text = await downloadResult.body.text();
         setRawData((prevData) => ({ ...prevData, [city]: text }));
@@ -109,6 +131,7 @@ const useFetchCityData = (city: string) => {
 
 const parseCSVData = (csvString: string) => {
   const nodeMap = new Map();
+
   d3.csvParse(csvString, (d) => {
     if (!d.code_1) return null;
     const levels = (d.code_2 || '').split('>').map((l) => l.trim());
@@ -137,6 +160,31 @@ const parseCSVData = (csvString: string) => {
   return parsed as DataItem[];
 };
 
+const parseLinks = (csvString: string) => {
+  const nodeMap = new Map();
+
+  d3.csvParse(csvString, (d) => {
+    if (!d.code_1 || !d.links) return null;
+    const levels = (d.code_2 || '').split('>').map((l) => l.trim());
+    let parentName = d.links;
+
+    levels.forEach((level, i) => {
+      const nodeName = level;
+      if (!nodeMap.has(nodeName))
+        nodeMap.set(nodeName, {
+          name: nodeName,
+          parent: parentName,
+          value: +d['count(links)'] || 1,
+        });
+      if (i === levels.length - 1)
+        nodeMap.get(nodeName).value += +d['count(links)'] || 1;
+      parentName = nodeName;
+    });
+  });
+  const parsed = Array.from(nodeMap.values()).filter((node) => node.name);
+  return parsed as DataItem[];
+};
+
 const BubbleChart: React.FC<BubbleChartProps> = ({
   width,
   tooltipState,
@@ -146,7 +194,9 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
   onBubbleClick,
 }) => {
   const [parsedData, setParsedData] = useState<DataItem[]>([]);
+  const [linkData, setLinkData] = useState<DataItem[]>([]);
   const rawData = useFetchCityData(city);
+  const rawLinkData = useFetchAdditionalLinks(city);
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   useEffect(() => {
@@ -155,14 +205,19 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       const result = parseCSVData(rawData);
       setParsedData(result);
     }
-  }, [rawData]);
+
+    if (rawLinkData) {
+      const result = parseLinks(rawLinkData);
+      setLinkData(result);
+    }
+  }, [rawData, rawLinkData]);
 
   useEffect(() => {
     if (!parsedData || !width) return;
 
     const height = width;
     const allData = parsedData;
-    const maxNodes = 40;
+    const maxNodes = 50;
     const syntheticRoot = { name: 'Root', parent: null };
     const combinedData = [syntheticRoot, ...allData];
 
@@ -173,12 +228,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     const root = stratify(combinedData);
     root.sum((d) => d.value ?? 0);
 
-    // // Flatten nodes and links for the force simulation
     let nodes = root.descendants().slice(1); // Exclude the synthetic root node
-    // Sort nodes by value in descending order and limit to maxNodes
-    nodes = nodes
-      .sort((a, b) => (b.value ?? 0) - (a.value ?? 0))
-      .slice(0, maxNodes);
     // Create a Set of remaining node IDs for easy lookup
     const nodeNames = new Set(nodes.map((node) => node.data.name));
 
@@ -189,7 +239,46 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
         (link) =>
           nodeNames.has(link.source.data.name) &&
           nodeNames.has(link.target.data.name)
+      )
+      .map((link) => ({ ...link, value: link.target.value ?? 1 }));
+
+    linkData.forEach(({ name, parent, value }) => {
+      const existingLink = links.find(
+        (link) =>
+          (link.source.id === parent && link.target.id === name) ||
+          (link.source.id === name && link.target.id === parent)
       );
+      if (existingLink) {
+        existingLink.value = value ?? 0; // Update value if link exists
+      } else {
+        // Add new link if it doesn't exist
+        const sourceNode = nodes.find((node) => node.data.name === name);
+        const targetNode = nodes.find((node) => node.data.name === parent);
+        if (sourceNode && targetNode) {
+          links.push({
+            source: sourceNode,
+            target: targetNode,
+            value: value || 1,
+          });
+        }
+      }
+    });
+
+    const linkedNodeNames = new Set(
+      links.flatMap((link) => [link.source.data.name, link.target.data.name])
+    );
+
+    nodes = nodes
+      // Sort nodes with linked nodes prioritized, then by value
+      .sort((a, b) => {
+        const isALinked = linkedNodeNames.has(a.data.name) ? 1 : 0;
+        const isBLinked = linkedNodeNames.has(b.data.name) ? 1 : 0;
+        if (isALinked !== isBLinked) {
+          return isBLinked - isALinked; // Linked nodes come first
+        }
+        return (b.value ?? 0) - (a.value ?? 0); // Sort by value for nodes within the same group
+      })
+      .slice(0, maxNodes);
 
     const minValue = 0;
     const maxValue = d3.max(nodes, (d) => d.value || 1) || 1;
@@ -215,21 +304,17 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
           .distance(
             (link) =>
               // Increase distance based on node depth or value
-              50 + (link.source.depth || 0) * 20
+              50 + (link.source.depth || 0) * (-link.value || 1) * 10
           )
       ) // Variable link distance
-      .force(
-        'charge',
-        d3
-          .forceManyBody()
-          .strength((d) => -Math.sqrt(width / 8) * (d as CustomNode).depth || 1) // Charge strength varies with node depth
-      )
+      .force('charge', d3.forceManyBody().strength(-20))
       .force('center', d3.forceCenter(width / 2, height / 2)) // Center the graph
       .force(
         'collision',
         d3
           .forceCollide()
-          .radius((d) => radiusScale((d as CustomNode).value ?? 0) + 10) // Adjusted collision radius for better spacing
+          .radius((d) => radiusScale((d as CustomNode).value ?? 0) + 10)
+          .strength(0.4)
       )
       .force(
         'attraction',
@@ -241,8 +326,10 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
             width / 2,
             height / 2
           )
-          .strength(0.3) // Increased strength to pull nodes to their radial positions
-      );
+          .strength(0.4) // Increased strength to pull nodes to their radial positions
+      )
+      .alphaDecay(0.01)
+      .alpha(0.1);
 
     // Select the SVG element
     const svg = d3
@@ -260,7 +347,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       .data(links)
       .join('line')
       .attr('stroke', '#999')
-      .attr('stroke-width', 1.5);
+      .attr('stroke-width', (d) => Math.sqrt(d.value) ?? 1);
 
     const node = svg
       .selectAll('g') // Change to group elements to contain both circle and text
@@ -393,10 +480,10 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     simulation.on('tick', () => {
       // Update link positions
       link
-        .attr('x1', (d) => d.source.x ?? 0)
-        .attr('y1', (d) => d.source.y ?? 0)
-        .attr('x2', (d) => d.target.x ?? 0)
-        .attr('y2', (d) => d.target.y ?? 0);
+        .attr('x1', (d) => d.source?.x ?? 0)
+        .attr('y1', (d) => d.source?.y ?? 0)
+        .attr('x2', (d) => d.target?.x ?? 0)
+        .attr('y2', (d) => d.target?.y ?? 0);
       node.attr('cx', (d) => d.x ?? 0).attr('cy', (d) => d.y ?? 0);
       // Update group positions for nodes
       node.attr('transform', (d) => `translate(${d.x}, ${d.y})`);
@@ -406,7 +493,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     return () => {
       simulation.stop();
     };
-  }, [parsedData, width, city]);
+  }, [parsedData, width, city, linkData]);
 
   return <svg ref={svgRef} />;
 };

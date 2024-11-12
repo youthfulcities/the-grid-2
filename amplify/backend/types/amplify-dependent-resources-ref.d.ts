@@ -7,11 +7,6 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "api": {
-    "interview": {
-      "ApiId": "string",
-      "ApiName": "string",
-      "RootUrl": "string"
-    },
     "interviewAll": {
       "ApiId": "string",
       "ApiName": "string",

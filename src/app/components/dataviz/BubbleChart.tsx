@@ -93,7 +93,7 @@ const useFetchCityData = (city: string) => {
       if (rawData[city]) return;
       try {
         const downloadResult = await downloadData({
-          path: `internal/interview-outputs/doc_city=${city}/data.csv`,
+          path: `internal/interview-outputs/city_code=${city}/data.csv`,
         }).result;
         const text = await downloadResult.body.text();
         setRawData((prevData) => ({ ...prevData, [city]: text }));
@@ -115,7 +115,7 @@ const useFetchAdditionalLinks = (city: string) => {
       if (rawData[city]) return;
       try {
         const downloadResult = await downloadData({
-          path: `internal/interview-outputs/code-links/doc_city=${city}/data.csv`,
+          path: `internal/interview-outputs/code-links/city_code=${city}/data.csv`,
         }).result;
         const text = await downloadResult.body.text();
         setRawData((prevData) => ({ ...prevData, [city]: text }));
@@ -233,7 +233,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     const nodeNames = new Set(nodes.map((node) => node.data.name));
 
     // Filter links to include only those where both source and target are in the remaining nodes
-    const links = root
+    let links = root
       .links()
       .filter(
         (link) =>
@@ -279,6 +279,16 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
         return (b.value ?? 0) - (a.value ?? 0); // Sort by value for nodes within the same group
       })
       .slice(0, maxNodes);
+
+    //Update the nodeNames Set to reflect only the final set of nodes
+    const finalNodeNames = new Set(nodes.map((node) => node.data.name));
+
+    //Final link filtering to ensure links only include final nodes
+    links = links.filter(
+      (link) =>
+        finalNodeNames.has(link.source.data.name) &&
+        finalNodeNames.has(link.target.data.name)
+    );
 
     const minValue = 0;
     const maxValue = d3.max(nodes, (d) => d.value || 1) || 1;

@@ -314,17 +314,17 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
           .distance(
             (link) =>
               // Increase distance based on node depth or value
-              50 + (link.source.depth || 0) * (-link.value || 1) * 10
+              (link.source.depth || 0) * (-link.value || 1) * 10
           )
       ) // Variable link distance
-      .force('charge', d3.forceManyBody().strength(-20))
+      .force('charge', d3.forceManyBody().strength(40))
       .force('center', d3.forceCenter(width / 2, height / 2)) // Center the graph
       .force(
         'collision',
         d3
           .forceCollide()
           .radius((d) => radiusScale((d as CustomNode).value ?? 0) + 10)
-          .strength(0.4)
+          .strength(0.8)
       )
       .force(
         'attraction',
@@ -332,13 +332,13 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
           .forceRadial(
             (d) =>
               radiusScale((d as CustomNode).value ?? 0) +
-              ((d as CustomNode).depth || 1) * 40, // Position by depth level
+              ((d as CustomNode).depth || 1), // Position by depth level
             width / 2,
             height / 2
           )
-          .strength(0.4) // Increased strength to pull nodes to their radial positions
+          .strength(0.8) // Increased strength to pull nodes to their radial positions
       )
-      .alphaDecay(0.01)
+      .alphaDecay(0.06)
       .alpha(0.1);
 
     // Select the SVG element
@@ -405,7 +405,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
           >,
           customNode: d3.HierarchyNode<DataItem>
         ) => {
-          if (!event.active) simulation.alphaTarget(0.3).restart();
+          if (!event.active) simulation.alphaTarget(0.1).restart();
           const nodeCopy = {
             ...customNode,
             fx: customNode.x,

@@ -20,6 +20,9 @@ export const getContactSubmission = /* GraphQL */ `query GetContactSubmission($i
     subscribed
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -48,13 +51,54 @@ export const listContactSubmissions = /* GraphQL */ `query ListContactSubmission
       subscribed
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     nextToken
+    startedAt
     __typename
   }
 }
 ` as GeneratedQuery<
   APITypes.ListContactSubmissionsQueryVariables,
   APITypes.ListContactSubmissionsQuery
+>;
+export const syncContactSubmissions = /* GraphQL */ `query SyncContactSubmissions(
+  $filter: ModelContactSubmissionFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncContactSubmissions(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      firstName
+      lastName
+      email
+      phoneNumber
+      topic
+      message
+      subscribed
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.SyncContactSubmissionsQueryVariables,
+  APITypes.SyncContactSubmissionsQuery
 >;

@@ -22,6 +22,9 @@ export const onCreateContactSubmission = /* GraphQL */ `subscription OnCreateCon
     subscribed
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -43,6 +46,9 @@ export const onUpdateContactSubmission = /* GraphQL */ `subscription OnUpdateCon
     subscribed
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -64,6 +70,9 @@ export const onDeleteContactSubmission = /* GraphQL */ `subscription OnDeleteCon
     subscribed
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }

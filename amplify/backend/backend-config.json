@@ -175,6 +175,22 @@
         }
       ]
     },
+    "AMPLIFY_function_interviewAll_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "interviewAll"
+        }
+      ]
+    },
+    "AMPLIFY_function_interviewAll_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "interviewAll"
+        }
+      ]
+    },
     "AMPLIFY_storage_interviewall_arn": {
       "usedBy": [
         {

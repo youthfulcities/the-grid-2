@@ -23,7 +23,7 @@
           "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
           "s3Key": "amplify-builds/dataapi-6d334f74495235396a78-build.zip"
         },
-        "interviewTest": {}
+        "interviewAll": {}
       },
       "storage": {
         "thegrid23ee127f9": {
@@ -38,6 +38,16 @@
           "partitionKeyType": "S",
           "sortKeyName": "Document name",
           "sortKeyType": "S"
+        },
+        "interviewall": {
+          "tableName": "AmplifyDataStore-wofasv37cfdxloqotkyysgdb5u-staging",
+          "region": "ca-central-1",
+          "arn": "arn:aws:dynamodb:ca-central-1:730335589682:table/AmplifyDataStore-wofasv37cfdxloqotkyysgdb5u-staging",
+          "streamArn": "arn:aws:dynamodb:ca-central-1:730335589682:table/AmplifyDataStore-wofasv37cfdxloqotkyysgdb5u-staging/stream/2024-10-23T21:43:15.109",
+          "partitionKeyName": "ds_pk",
+          "partitionKeyType": "S",
+          "sortKeyName": "ds_sk",
+          "sortKeyType": "S"
         }
       },
       "auth": {
@@ -47,7 +57,6 @@
         "thegrid2": {}
       },
       "api": {
-        "s3": {},
         "thegrid2": {}
       }
     }

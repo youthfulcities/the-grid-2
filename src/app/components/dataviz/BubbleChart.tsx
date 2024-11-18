@@ -324,7 +324,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
         d3
           .forceCollide()
           .radius((d) => radiusScale((d as CustomNode).value ?? 0) + 10)
-          .strength(0.8)
+          .strength(0.6)
       )
       .force(
         'attraction',
@@ -336,7 +336,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
             width / 2,
             height / 2
           )
-          .strength(0.8) // Increased strength to pull nodes to their radial positions
+          .strength(0.9) // Increased strength to pull nodes to their radial positions
       )
       .alphaDecay(0.06)
       .alpha(0.1);
@@ -483,7 +483,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       )
       .html(
         (d) =>
-          `<span style="font-size: ${Math.min(radiusScale(d.value ?? 0) / 4, 14)}px; color: ${shouldUseWhiteText(colorScale(d.value ?? 0)) ? 'white' : 'black'};">${truncateText(d.data.name, 30)}</span>`
+          `<span style="font-size: ${Math.min(radiusScale(d.value ?? 0) / 4, 14)}px; color: ${shouldUseWhiteText(colorScale(d.value ?? 0)) ? 'white' : 'black'};">${truncateText(d.data.name, 50)}</span>`
       );
 
     // Update the simulation on tick to reposition nodes and links

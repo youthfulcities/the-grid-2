@@ -23,7 +23,10 @@
           "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
           "s3Key": "amplify-builds/dataapi-6d334f74495235396a78-build.zip"
         },
-        "interviewTest": {}
+        "interviewAll": {
+          "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
+          "s3Key": "amplify-builds/interviewAll-682f63423761372b6b6f-build.zip"
+        }
       },
       "storage": {
         "thegrid23ee127f9": {
@@ -38,6 +41,16 @@
           "partitionKeyType": "S",
           "sortKeyName": "Document name",
           "sortKeyType": "S"
+        },
+        "interviewall": {
+          "tableName": "AmplifyDataStore-wofasv37cfdxloqotkyysgdb5u-staging",
+          "region": "ca-central-1",
+          "arn": "arn:aws:dynamodb:ca-central-1:730335589682:table/AmplifyDataStore-wofasv37cfdxloqotkyysgdb5u-staging",
+          "streamArn": "arn:aws:dynamodb:ca-central-1:730335589682:table/AmplifyDataStore-wofasv37cfdxloqotkyysgdb5u-staging/stream/2024-10-23T21:43:15.109",
+          "partitionKeyName": "ds_pk",
+          "partitionKeyType": "S",
+          "sortKeyName": "ds_sk",
+          "sortKeyType": "S"
         }
       },
       "auth": {
@@ -47,8 +60,8 @@
         "thegrid2": {}
       },
       "api": {
-        "s3": {},
-        "thegrid2": {}
+        "thegrid2": {},
+        "interviewAll": {}
       }
     }
   },
@@ -102,11 +115,6 @@
           "s3Key": "amplify-builds/contactFormUploader-354e304f5a5835386b45-build.zip",
           "sesEmail": "info@youthfulcities.com",
           "sesEmailDev": "genna.weber@youthfulcities.com"
-        },
-        "interviewTest": {
-          "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
-          "s3Key": "amplify-builds/interviewTest-2f366f72636a3438387a-build.zip",
-          "tableName": "interviews"
         },
         "interviewAll": {
           "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",

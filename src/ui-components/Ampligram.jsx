@@ -179,13 +179,10 @@ export default function Ampligram(props) {
           {...getOverrideProps(overrides, "Share")}
         >
           <MyIcon
-            width="24px"
-            height="24px"
             display="block"
             gap="unset"
             alignItems="unset"
             justifyContent="unset"
-            overflow="hidden"
             shrink="0"
             position="relative"
             padding="0px 0px 0px 0px"
@@ -193,13 +190,10 @@ export default function Ampligram(props) {
             {...getOverrideProps(overrides, "MyIcon29766772")}
           ></MyIcon>
           <MyIcon
-            width="24px"
-            height="24px"
             display="block"
             gap="unset"
             alignItems="unset"
             justifyContent="unset"
-            overflow="hidden"
             shrink="0"
             position="relative"
             padding="0px 0px 0px 0px"
@@ -207,13 +201,10 @@ export default function Ampligram(props) {
             {...getOverrideProps(overrides, "MyIcon29766773")}
           ></MyIcon>
           <MyIcon
-            width="24px"
-            height="24px"
             display="block"
             gap="unset"
             alignItems="unset"
             justifyContent="unset"
-            overflow="hidden"
             shrink="0"
             position="relative"
             padding="0px 0px 0px 0px"

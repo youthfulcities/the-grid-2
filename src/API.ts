@@ -2,8 +2,8 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type UpdateContactSubmissionInput = {
-  id: string,
+export type CreateContactSubmissionInput = {
+  id?: string | null,
   firstName?: string | null,
   lastName?: string | null,
   email?: string | null,
@@ -11,6 +11,7 @@ export type UpdateContactSubmissionInput = {
   topic?: string | null,
   message?: string | null,
   subscribed?: boolean | null,
+  _version?: number | null,
 };
 
 export type ModelContactSubmissionConditionInput = {
@@ -24,6 +25,7 @@ export type ModelContactSubmissionConditionInput = {
   and?: Array< ModelContactSubmissionConditionInput | null > | null,
   or?: Array< ModelContactSubmissionConditionInput | null > | null,
   not?: ModelContactSubmissionConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
 };
@@ -87,14 +89,13 @@ export type ContactSubmission = {
   subscribed?: boolean | null,
   createdAt: string,
   updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
 };
 
-export type DeleteContactSubmissionInput = {
+export type UpdateContactSubmissionInput = {
   id: string,
-};
-
-export type CreateContactSubmissionInput = {
-  id?: string | null,
   firstName?: string | null,
   lastName?: string | null,
   email?: string | null,
@@ -102,6 +103,12 @@ export type CreateContactSubmissionInput = {
   topic?: string | null,
   message?: string | null,
   subscribed?: boolean | null,
+  _version?: number | null,
+};
+
+export type DeleteContactSubmissionInput = {
+  id: string,
+  _version?: number | null,
 };
 
 export type ModelContactSubmissionFilterInput = {
@@ -118,6 +125,7 @@ export type ModelContactSubmissionFilterInput = {
   and?: Array< ModelContactSubmissionFilterInput | null > | null,
   or?: Array< ModelContactSubmissionFilterInput | null > | null,
   not?: ModelContactSubmissionFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelIDInput = {
@@ -140,6 +148,7 @@ export type ModelContactSubmissionConnection = {
   __typename: "ModelContactSubmissionConnection",
   items:  Array<ContactSubmission | null >,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type ModelSubscriptionContactSubmissionFilterInput = {
@@ -155,6 +164,7 @@ export type ModelSubscriptionContactSubmissionFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionContactSubmissionFilterInput | null > | null,
   or?: Array< ModelSubscriptionContactSubmissionFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -192,6 +202,30 @@ export type ModelSubscriptionBooleanInput = {
   eq?: boolean | null,
 };
 
+export type CreateContactSubmissionMutationVariables = {
+  input: CreateContactSubmissionInput,
+  condition?: ModelContactSubmissionConditionInput | null,
+};
+
+export type CreateContactSubmissionMutation = {
+  createContactSubmission?:  {
+    __typename: "ContactSubmission",
+    id: string,
+    firstName?: string | null,
+    lastName?: string | null,
+    email?: string | null,
+    phoneNumber?: string | null,
+    topic?: string | null,
+    message?: string | null,
+    subscribed?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
 export type UpdateContactSubmissionMutationVariables = {
   input: UpdateContactSubmissionInput,
   condition?: ModelContactSubmissionConditionInput | null,
@@ -210,6 +244,9 @@ export type UpdateContactSubmissionMutation = {
     subscribed?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -231,27 +268,9 @@ export type DeleteContactSubmissionMutation = {
     subscribed?: boolean | null,
     createdAt: string,
     updatedAt: string,
-  } | null,
-};
-
-export type CreateContactSubmissionMutationVariables = {
-  input: CreateContactSubmissionInput,
-  condition?: ModelContactSubmissionConditionInput | null,
-};
-
-export type CreateContactSubmissionMutation = {
-  createContactSubmission?:  {
-    __typename: "ContactSubmission",
-    id: string,
-    firstName?: string | null,
-    lastName?: string | null,
-    email?: string | null,
-    phoneNumber?: string | null,
-    topic?: string | null,
-    message?: string | null,
-    subscribed?: boolean | null,
-    createdAt: string,
-    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -272,6 +291,9 @@ export type GetContactSubmissionQuery = {
     subscribed?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -296,8 +318,43 @@ export type ListContactSubmissionsQuery = {
       subscribed?: boolean | null,
       createdAt: string,
       updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
     } | null >,
     nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncContactSubmissionsQueryVariables = {
+  filter?: ModelContactSubmissionFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncContactSubmissionsQuery = {
+  syncContactSubmissions?:  {
+    __typename: "ModelContactSubmissionConnection",
+    items:  Array< {
+      __typename: "ContactSubmission",
+      id: string,
+      firstName?: string | null,
+      lastName?: string | null,
+      email?: string | null,
+      phoneNumber?: string | null,
+      topic?: string | null,
+      message?: string | null,
+      subscribed?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -318,6 +375,9 @@ export type OnCreateContactSubmissionSubscription = {
     subscribed?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -338,6 +398,9 @@ export type OnUpdateContactSubmissionSubscription = {
     subscribed?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -358,5 +421,8 @@ export type OnDeleteContactSubmissionSubscription = {
     subscribed?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };

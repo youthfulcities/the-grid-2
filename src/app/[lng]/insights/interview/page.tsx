@@ -81,8 +81,8 @@ const Interview = () => {
       const filteredData = parsedData.filter((quote) => quote.code_2 === '');
       const finalData = filteredData.length > 0 ? filteredData : parsedData;
 
-      //limit to 10 quotes
-      setData(finalData.length > 10 ? finalData.slice(0, 9) : finalData);
+      //limit to 50 quotes
+      setData(finalData.length > 50 ? finalData.slice(0, 49) : finalData);
       setCode(code_child || code_parent);
       setLoading(false);
     } else {
@@ -92,8 +92,8 @@ const Interview = () => {
 
       const finalData = filteredData.length > 0 ? filteredData : parsedData;
 
-      //limit to 10 quotes
-      setData(finalData.length > 10 ? finalData.slice(0, 9) : finalData);
+      //limit to 50 quotes
+      setData(finalData.length > 50 ? finalData.slice(0, 49) : finalData);
       setCode(code_child || code_parent);
       setLoading(false);
     }
@@ -249,7 +249,7 @@ const Interview = () => {
           </li>
         </ul>
         <Text>
-          We then found and categorized common themes across over 10,000 minutes
+          We then found and categorized common themes across over 11,000 minutes
           of interview transcripts.
         </Text>
       </View>

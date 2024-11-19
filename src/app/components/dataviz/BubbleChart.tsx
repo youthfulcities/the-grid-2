@@ -17,6 +17,7 @@ interface DataItem {
   name: string;
   parent: string | null | undefined;
   value?: number | undefined;
+  color?: string;
 }
 
 // Define the props of the component
@@ -41,6 +42,11 @@ interface CustomNode extends d3.SimulationNodeDatum {
   fy?: number | null; // Fixed y position
   x?: number; // Current x position
   y?: number; // Current y position
+  color?: string;
+}
+
+interface CustomHierarchyNode extends d3.HierarchyNode<DataItem> {
+  color?: string; // Add optional color property
 }
 
 //helper functions
@@ -83,6 +89,14 @@ const getLevelBeforeRoot = (node: d3.HierarchyNode<DataItem>) => {
     current = current.parent;
   }
   return current;
+};
+
+// Get the top-level theme node (one level below root)
+const getTopLevelTheme = (node: d3.HierarchyNode<DataItem>) => {
+  if (node.parent && node.parent.depth === 1) {
+    return node.parent.data.name; // Parent is the second-level node
+  }
+  return node.depth === 1 ? node.data.name : null; // For second-level nodes themselves
 };
 
 const useFetchCityData = (city: string) => {
@@ -226,6 +240,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       .id((d) => d.name)
       .parentId((d) => d.parent);
     const root = stratify(combinedData);
+
     root.sum((d) => d.value ?? 0);
 
     let nodes = root.descendants().slice(1); // Exclude the synthetic root node
@@ -293,9 +308,34 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     const minValue = 0;
     const maxValue = d3.max(nodes, (d) => d.value || 1) || 1;
 
-    const colorScale = d3
-      .scaleSequential(d3.interpolateBlues) // Choose a color interpolation
-      .domain([minValue, maxValue]);
+    const themeColorScales = {
+      'Engaging with post pandemic work ecosystems': d3.scaleSequential(
+        d3.interpolateBlues
+      ),
+      'Navigating the transition from education to work': d3.scaleSequential(
+        d3.interpolateReds
+      ),
+      'Paving the way for the future of work in cities': d3.scaleSequential(
+        d3.interpolateGreens
+      ),
+      'Envisioning an ideal organization ': d3.scaleSequential(
+        d3.interpolatePurples
+      ),
+    } as const;
+
+    type ThemeKey = keyof typeof themeColorScales;
+
+    nodes.forEach((node: CustomHierarchyNode) => {
+      const topLevelTheme = getTopLevelTheme(node) as ThemeKey;
+      console.log(topLevelTheme);
+      const colorScale =
+        themeColorScales[topLevelTheme] ??
+        d3.scaleSequential(d3.interpolateBlues);
+      if (colorScale) {
+        colorScale.domain([minValue, maxValue]); // Adjust domain per theme if needed
+        node.color = colorScale(node.value || 1); // Assign a color based on node value
+      }
+    });
 
     // Define radius scale based on the frequency
     const radiusScale = d3
@@ -457,7 +497,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     node
       .append('circle')
       .attr('r', (d) => radiusScale(d.value ?? 0))
-      .attr('fill', (d) => colorScale(d.value ?? 0))
+      .attr('fill', (d: CustomHierarchyNode) => d.color ?? 'grey')
       .attr('stroke-width', 1.5);
 
     node
@@ -482,8 +522,8 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     white-space: normal;`
       )
       .html(
-        (d) =>
-          `<span style="font-size: ${Math.min(radiusScale(d.value ?? 0) / 4, 14)}px; color: ${shouldUseWhiteText(colorScale(d.value ?? 0)) ? 'white' : 'black'};">${truncateText(d.data.name, 50)}</span>`
+        (d: CustomHierarchyNode) =>
+          `<span style="font-size: ${Math.min(radiusScale(d.value ?? 0) / 4, 14)}px; color: ${shouldUseWhiteText(d.color ?? 'grey') ? 'white' : 'black'};">${truncateText(d.data.name, 50)}</span>`
       );
 
     // Update the simulation on tick to reposition nodes and links

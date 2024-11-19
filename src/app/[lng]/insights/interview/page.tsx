@@ -81,8 +81,8 @@ const Interview = () => {
       const filteredData = parsedData.filter((quote) => quote.code_2 === '');
       const finalData = filteredData.length > 0 ? filteredData : parsedData;
 
-      //limit to 10 quotes
-      setData(finalData.length > 10 ? finalData.slice(0, 9) : finalData);
+      //limit to 50 quotes
+      setData(finalData.length > 50 ? finalData.slice(0, 49) : finalData);
       setCode(code_child || code_parent);
       setLoading(false);
     } else {
@@ -92,8 +92,8 @@ const Interview = () => {
 
       const finalData = filteredData.length > 0 ? filteredData : parsedData;
 
-      //limit to 10 quotes
-      setData(finalData.length > 10 ? finalData.slice(0, 9) : finalData);
+      //limit to 50 quotes
+      setData(finalData.length > 50 ? finalData.slice(0, 49) : finalData);
       setCode(code_child || code_parent);
       setLoading(false);
     }
@@ -109,7 +109,7 @@ const Interview = () => {
             Explore over 300 interviews with youth and industry leaders on the
             challenges, skills, and workplace expectations shaping young
             people’s experiences in Canada. This interactive visualization
-            reveals key themes from more than 10,000 minutes of conversations:
+            reveals key themes from more than 11,000 minutes of conversations:
             from preparing for the job market to adapting workplaces for youth.
             Larger circles highlight themes with more discussion, while
             branching nodes show subtopics and related insights.
@@ -249,7 +249,7 @@ const Interview = () => {
           </li>
         </ul>
         <Text>
-          We then found and categorized common themes across over 10,000 minutes
+          We then found and categorized common themes across over 11,000 minutes
           of interview transcripts.
         </Text>
       </View>

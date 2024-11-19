@@ -109,7 +109,7 @@ const Interview = () => {
             Explore over 300 interviews with youth and industry leaders on the
             challenges, skills, and workplace expectations shaping young
             people’s experiences in Canada. This interactive visualization
-            reveals key themes from more than 10,000 minutes of conversations:
+            reveals key themes from more than 11,000 minutes of conversations:
             from preparing for the job market to adapting workplaces for youth.
             Larger circles highlight themes with more discussion, while
             branching nodes show subtopics and related insights.

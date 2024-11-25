@@ -22,7 +22,7 @@ const colors = ['red', 'green', 'yellow', 'pink', 'blue'];
 const fetchData = async () => {
   try {
     const downloadResult = await downloadData({
-      path: `internal/HOM/survey/updated_network_limited_quotes.json`,
+      path: `internal/HOM/survey/reduced_network_chart_data.json`,
     }).result;
     const text = await downloadResult.body.text();
     const jsonData = JSON.parse(text);

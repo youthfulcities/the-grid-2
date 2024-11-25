@@ -101,7 +101,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     const height = width;
 
     const minValue = 0;
-    const maxValue = d3.max(nodes, (d) => d.weight || 1) || 1;
+    const maxValue = d3.max(nodes, (d) => d.value || 1) || 1;
 
     const colorScale = d3
       .scaleSequential(d3.interpolateBlues) // Choose a color interpolation
@@ -123,24 +123,24 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
           .id((d) => d.id)
           .distance((link) => (-link.weight || 1) * 10)
       ) // Variable link distance
-      .force('charge', d3.forceManyBody().strength(40))
+      .force('charge', d3.forceManyBody().strength(200))
       .force('center', d3.forceCenter(width / 2, height / 2)) // Center the graph
       .force(
         'collision',
         d3
           .forceCollide()
-          .radius((d) => radiusScale(d.weight ?? 0) + 10)
+          .radius((d) => radiusScale(d.value ?? 0) + 10)
           .strength(0.8)
       )
       .force(
         'attraction',
         d3
           .forceRadial(
-            (d) => radiusScale(d.weight ?? 0) + (d.depth || 1), // Position by depth level
+            (d) => radiusScale(d.value ?? 0) + (d.depth || 1), // Position by depth level
             width / 2,
             height / 2
           )
-          .strength(0.4) // Increased strength to pull nodes to their radial positions
+          .strength(0.1) // Increased strength to pull nodes to their radial positions
       )
       .alphaDecay(0.01)
       .alpha(0.3);
@@ -161,7 +161,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       .data(links)
       .join('line')
       .attr('stroke', '#999')
-      .attr('stroke-width', (d) => Math.sqrt(d.weight) ?? 1);
+      .attr('stroke-width', (d) => Math.sqrt(d.value) ?? 1);
 
     const node = svg
       .selectAll('g') // Change to group elements to contain both circle and text
@@ -250,16 +250,16 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     // Add nodes (bubbles) as circles
     node
       .append('circle')
-      .attr('r', (d) => radiusScale(d.weight ?? 0))
-      .attr('fill', (d) => colorScale(d.weight ?? 0))
+      .attr('r', (d) => radiusScale(d.value ?? 0))
+      .attr('fill', (d) => colorScale(d.value ?? 0))
       .attr('stroke-width', 1.5);
 
     node
       .append('foreignObject')
-      .attr('width', (d) => radiusScale(d.weight ?? 0) * 2)
-      .attr('height', (d) => radiusScale(d.weight ?? 0) * 2)
-      .attr('x', (d) => -radiusScale(d.weight ?? 0))
-      .attr('y', (d) => -radiusScale(d.weight ?? 0))
+      .attr('width', (d) => radiusScale(d.value ?? 0) * 2)
+      .attr('height', (d) => radiusScale(d.value ?? 0) * 2)
+      .attr('x', (d) => -radiusScale(d.value ?? 0))
+      .attr('y', (d) => -radiusScale(d.value ?? 0))
       .append('xhtml:div')
       .attr(
         'style',
@@ -277,7 +277,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       )
       .html(
         (d) =>
-          `<span style="font-size: ${Math.min(radiusScale(d.weight ?? 0) / 4, 14)}px; color: ${shouldUseWhiteText(colorScale(d.weight ?? 0)) ? 'white' : 'black'};">${truncateText(d.id, 100)}</span>`
+          `<span style="font-size: ${Math.min(radiusScale(d.value ?? 0) / 4, 14)}px; color: ${shouldUseWhiteText(colorScale(d.value ?? 0)) ? 'white' : 'black'};">${truncateText(d.id, 100)}</span>`
       );
 
     // Update the simulation on tick to reposition nodes and links

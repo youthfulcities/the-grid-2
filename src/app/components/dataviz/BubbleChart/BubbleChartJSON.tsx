@@ -1,17 +1,18 @@
-// @ts-nocheck
-
+import shouldUseWhiteText from '@/lib/shouldUseWhiteText';
+import truncateText from '@/lib/truncateText';
 import * as d3 from 'd3';
-import React, { ReactNode, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { TooltipState } from './types';
 
-interface TooltipState {
-  position: { x: number; y: number } | null;
+interface CustomNode extends d3.SimulationNodeDatum {
+  id: string;
+  quotes: string[];
+  depth?: number | null;
   value?: number | null;
-  topic?: string;
-  content?: string;
-  group?: string;
-  cluster?: string;
-  child?: ReactNode | null;
-  minWidth?: number;
+  fx?: number | null;
+  fy?: number | null;
+  x?: number;
+  y?: number;
 }
 
 interface DataItem {
@@ -22,30 +23,10 @@ interface DataItem {
   }>;
   links: Array<{
     id: string;
-    source: string;
-    target: string;
+    source: string | CustomNode;
+    target: string | CustomNode;
     value: number;
   }>;
-}
-
-// Define the props of the component
-interface BubbleChartProps {
-  width: number;
-  tooltipState: TooltipState;
-  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
-  setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setQuotes: React.Dispatch<React.SetStateAction<string[]>>;
-  setCode: React.Dispatch<React.SetStateAction<string>>;
-  data?: DataItem[];
-}
-
-interface CustomNode extends d3.SimulationNodeDatum {
-  id: string;
-  quotes: string[];
-  depth?: number | null;
-  value?: number | null;
-  fx?: number | null;
-  fy?: number | null;
 }
 
 interface CustomDataNode extends d3.HierarchyNode<DataItem> {
@@ -54,45 +35,23 @@ interface CustomDataNode extends d3.HierarchyNode<DataItem> {
   value: number;
 }
 
-interface CustomLink extends d3.SimulationLinkDatum<CustomNode> {
-  id: string;
-  source: string | CustomNode; // Can be a node ID or a node object
-  target: string | CustomNode; // Can be a node ID or a node object
-  value: number;
+// Define the props of the component
+interface BubbleChartProps {
+  width: number;
+  tooltipState: TooltipState;
+  setTooltipState: (newState: Partial<TooltipState>) => void;
+  setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setQuotes: React.Dispatch<React.SetStateAction<string[]>>;
+  setCode: React.Dispatch<React.SetStateAction<string>>;
+  data?: DataItem;
 }
 
-//helper functions
-const truncateText = (text: string, maxLength: number) => {
-  // Remove anything within parentheses and the parentheses themselves
-  if (text) {
-    const cleanedText = text.replace(/\(.*?\)/g, '').trim();
-
-    // Truncate the text if it exceeds the maxLength
-    if (cleanedText.length > maxLength) {
-      return `${cleanedText.slice(0, maxLength)}...`;
-    }
-
-    return cleanedText;
-  }
-};
-
-// Function to calculate luminance of a color
-const calculateLuminance = (r: number, g: number, b: number) => {
-  const a = [r, g, b].map((value) => {
-    const normalized = value / 255;
-    return normalized <= 0.03928
-      ? normalized / 12.92
-      : ((normalized + 0.055) / 1.055) ** 2.4;
-  });
-  return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
-};
-
-// Function to determine if white text is better based on contrast
-const shouldUseWhiteText = (color: string) => {
-  const rgb = d3.rgb(color);
-  const luminance = calculateLuminance(rgb.r, rgb.g, rgb.b);
-  return luminance < 0.3;
-};
+interface CustomLink extends d3.SimulationLinkDatum<CustomNode> {
+  id: string;
+  source: string | CustomNode;
+  target: string | CustomNode;
+  value: number;
+}
 
 const BubbleChart: React.FC<BubbleChartProps> = ({
   width,
@@ -173,7 +132,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       .data(links)
       .join('line')
       .attr('stroke', '#999')
-      .attr('stroke-width', (d) => Math.sqrt(d.value) ?? 1);
+      .attr('stroke-width', (d) => Math.sqrt(d.value ?? 1));
 
     const node = svg
       .selectAll('g') // Change to group elements to contain both circle and text
@@ -192,13 +151,12 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       .on('mousemove', (event) => {
         const xPos = event.pageX;
         const yPos = event.pageY;
-        setTooltipState((prevTooltipState) => ({
-          ...prevTooltipState,
+        setTooltipState({
           position: { x: xPos, y: yPos },
-        }));
+        });
       })
       .on('mouseout', () => {
-        setTooltipState({ ...tooltipState, position: null });
+        setTooltipState({ position: null });
       })
       .on('click', (event, d) => {
         setQuotes(d.quotes);
@@ -207,45 +165,34 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       });
 
     const drag = d3
-      .drag<SVGElement, CustomDataNode>()
-      .on(
-        'start',
-        (
-          event: d3.D3DragEvent<SVGElement, CustomDataNode, SVGSVGElement>,
-          customNode: CustomDataNode
-        ) => {
-          if (!event.active) simulation.alphaTarget(0.1).restart();
-          const nodeCopy = {
-            ...customNode,
-            fx: customNode.x,
-            fy: customNode.y,
-          };
-          Object.assign(node, nodeCopy);
-        }
-      )
-      .on(
-        'drag',
-        (
-          event: d3.D3DragEvent<SVGElement, CustomDataNode, SVGSVGElement>,
-          customNode: CustomDataNode
-        ) => {
-          const nodeCopy = { ...customNode, fx: event.x, fy: event.y };
-          Object.assign(customNode, nodeCopy);
-        }
-      )
-      .on(
-        'end',
-        (
-          event: d3.D3DragEvent<SVGElement, CustomDataNode, SVGSVGElement>,
-          customNode: CustomDataNode
-        ) => {
-          if (!event.active) simulation.alphaTarget(0);
-          const nodeCopy = { ...customNode, fx: null, fy: null };
-          Object.assign(customNode, nodeCopy);
-        }
-      );
+      .drag<SVGGElement, CustomDataNode>()
+      .on('start', (event, customNode) => {
+        if (!event.active) simulation.alphaTarget(0.1).restart();
+        const nodeCopy = {
+          ...customNode,
+          fx: customNode.x,
+          fy: customNode.y,
+        };
+        Object.assign(node, nodeCopy);
+      })
+      .on('drag', (event, customNode) => {
+        const nodeCopy = { ...customNode, fx: event.x, fy: event.y };
+        Object.assign(customNode, nodeCopy);
+      })
+      .on('end', (event, customNode) => {
+        if (!event.active) simulation.alphaTarget(0);
+        const nodeCopy = { ...customNode, fx: null, fy: null };
+        Object.assign(customNode, nodeCopy);
+      });
 
-    node.call(drag);
+    (
+      node as d3.Selection<
+        SVGGElement,
+        CustomDataNode,
+        SVGSVGElement | null,
+        unknown
+      >
+    ).call(drag);
 
     // Add nodes (bubbles) as circles
     node
@@ -284,10 +231,10 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     simulation.on('tick', () => {
       // Update link positions
       link
-        .attr('x1', (d) => d.source?.x ?? 0)
-        .attr('y1', (d) => d.source?.y ?? 0)
-        .attr('x2', (d) => d.target?.x ?? 0)
-        .attr('y2', (d) => d.target?.y ?? 0);
+        .attr('x1', (d) => (d.source as CustomNode)?.x ?? 0)
+        .attr('y1', (d) => (d.source as CustomNode)?.y ?? 0)
+        .attr('x2', (d) => (d.target as CustomNode)?.x ?? 0)
+        .attr('y2', (d) => (d.target as CustomNode)?.y ?? 0);
       node.attr('cx', (d) => d.x ?? 0).attr('cy', (d) => d.y ?? 0);
       // Update group positions for nodes
       node.attr('transform', (d) => `translate(${d.x}, ${d.y})`);
@@ -297,7 +244,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     return () => {
       simulation.stop();
     };
-  }, [data, width]);
+  }, [data, width, setCode, setIsDrawerOpen, setQuotes, setTooltipState]);
 
   return <svg ref={svgRef} />;
 };

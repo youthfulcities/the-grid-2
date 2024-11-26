@@ -32,7 +32,7 @@ const DrawerContainer = styled(motion.div)<{
   color: var(--amplify-colors-font-inverse);
   background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
-  z-index: 998;
+  z-index: 1000;
   overflow-y: scroll;
   overflow-x: hidden;
   display: flex;

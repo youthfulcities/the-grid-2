@@ -133,15 +133,6 @@ const topicWeightsArray = Object.entries(topicWeights).map(([key, value]) => ({
   weight: value.weight,
 }));
 
-// List of city groups to which the 10% penalty should be applied
-// const penaltyCityGroups = [
-//   'Vancouver',
-//   'Ottawa-Gatineau',
-//   'Victoria',
-//   'Kitchener - Cambridge - Waterloo',
-//   'St. Catharines - Niagara',
-// ];
-
 const truncateText = (text: string, maxLength: number) => {
   // Remove anything within parentheses and the parentheses themselves
   const cleanedText = text.replace(/\(.*?\)/g, '').trim();
@@ -153,24 +144,6 @@ const truncateText = (text: string, maxLength: number) => {
 
   return cleanedText;
 };
-
-// Function to calculate luminance of a color
-// const calculateLuminance = (r: number, g: number, b: number) => {
-//   const a = [r, g, b].map((value) => {
-//     const normalized = value / 255;
-//     return normalized <= 0.03928
-//       ? normalized / 12.92
-//       : ((normalized + 0.055) / 1.055) ** 2.4;
-//   });
-//   return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
-// };
-
-// // Function to determine if white text is better based on contrast
-// const shouldUseWhiteText = (color: string) => {
-//   const rgb = d3.rgb(color);
-//   const luminance = calculateLuminance(rgb.r, rgb.g, rgb.b);
-//   return luminance < 0.3;
-// };
 
 const IndexHeatmap: React.FC<HeatmapProps> = ({
   width,
@@ -536,6 +509,7 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
       };
 
       const mouseover = (event: MouseEvent, d: DataItem) => {
+        if (isDrawerOpen) return;
         const xPos = event.pageX;
         const yPos = event.pageY;
         setTooltipState((prevTooltipState) => ({
@@ -546,6 +520,7 @@ const IndexHeatmap: React.FC<HeatmapProps> = ({
       };
 
       const mousemove = (event: MouseEvent, d: DataItem) => {
+        if (isDrawerOpen) return;
         const xPos = event.pageX;
         const yPos = event.pageY;
         setTooltipState((prevTooltipState) => ({

@@ -1,17 +1,9 @@
+import shouldUseWhiteText from '@/lib/shouldUseWhiteText';
+import truncateText from '@/lib/truncateText';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
-
-interface TooltipState {
-  position: { x: number; y: number } | null;
-  value?: number | null;
-  topic?: string;
-  content?: string;
-  group?: string;
-  cluster?: string;
-  child?: ReactNode | null;
-  minWidth?: number;
-}
+import React, { useEffect, useRef, useState } from 'react';
+import { TooltipState } from './types';
 
 interface DataItem {
   name: string;
@@ -31,56 +23,23 @@ interface BubbleChartProps {
 }
 
 interface CustomNode extends d3.SimulationNodeDatum {
-  data: DataItem; // The actual data for this node
-  depth: number; // Depth in the hierarchy
-  height?: number; // Optional height in the hierarchy
-  parent?: CustomNode | null; // Reference to the parent node
-  children?: CustomNode[]; // Array of child nodes
-  value?: number; // Optional value, if applicable
-  id: string; // Unique identifier for the node
-  fx?: number | null; // Fixed x position
-  fy?: number | null; // Fixed y position
-  x?: number; // Current x position
-  y?: number; // Current y position
+  data: DataItem;
+  depth: number;
+  height?: number;
+  parent?: CustomNode | null;
+  children?: CustomNode[];
+  value?: number;
+  id: string;
+  fx?: number | null;
+  fy?: number | null;
+  x?: number;
+  y?: number;
   color?: string;
 }
 
 interface CustomHierarchyNode extends d3.HierarchyNode<DataItem> {
   color?: string; // Add optional color property
 }
-
-//helper functions
-const truncateText = (text: string, maxLength: number) => {
-  // Remove anything within parentheses and the parentheses themselves
-  if (text) {
-    const cleanedText = text.replace(/\(.*?\)/g, '').trim();
-
-    // Truncate the text if it exceeds the maxLength
-    if (cleanedText.length > maxLength) {
-      return `${cleanedText.slice(0, maxLength)}...`;
-    }
-
-    return cleanedText;
-  }
-};
-
-// Function to calculate luminance of a color
-const calculateLuminance = (r: number, g: number, b: number) => {
-  const a = [r, g, b].map((value) => {
-    const normalized = value / 255;
-    return normalized <= 0.03928
-      ? normalized / 12.92
-      : ((normalized + 0.055) / 1.055) ** 2.4;
-  });
-  return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
-};
-
-// Function to determine if white text is better based on contrast
-const shouldUseWhiteText = (color: string) => {
-  const rgb = d3.rgb(color);
-  const luminance = calculateLuminance(rgb.r, rgb.g, rgb.b);
-  return luminance < 0.3;
-};
 
 const getLevelBeforeRoot = (node: d3.HierarchyNode<DataItem>) => {
   let current = node;

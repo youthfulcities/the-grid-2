@@ -104,6 +104,10 @@ html {
   padding: 0;
 }
 
+body {
+  overflow-x: hidden;
+}
+
 main {
   margin: 0;
   flex: 1;

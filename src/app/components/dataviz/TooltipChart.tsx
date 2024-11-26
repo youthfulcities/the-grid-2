@@ -25,18 +25,26 @@ const TooltipContainer = styled.div<{ $minWidth?: number }>`
 `;
 
 const Tooltip: React.FC<{
-  x: number;
-  y: number;
+  x: number | null;
+  y: number | null;
   content?: string;
   group?: string;
   child?: ReactNode;
   minWidth?: number;
-}> = ({ x, y, content, group, child, minWidth = 0 }) => (
-  <TooltipContainer style={{ left: x, top: y }} $minWidth={minWidth || 0}>
-    {content}
-    {group && <SmallText>{group}</SmallText>}
-    {child}
-  </TooltipContainer>
-);
+}> = React.memo(({ x, y, content, group, child, minWidth = 0 }) => {
+  if (x === null || y === null) {
+    return null;
+  }
+
+  return (
+    <TooltipContainer style={{ left: x, top: y }} $minWidth={minWidth}>
+      {content}
+      {group && <SmallText>{group}</SmallText>}
+      {child}
+    </TooltipContainer>
+  );
+});
+
+Tooltip.displayName = 'Tooltip';
 
 export default Tooltip;

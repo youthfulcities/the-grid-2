@@ -2,7 +2,7 @@
 
 import config from '@/amplifyconfiguration.json';
 import Container from '@/app/components/Background';
-import BubbleChart from '@/app/components/dataviz/BubbleChart';
+import BubbleChart from '@/app/components/dataviz/BubbleChart/BubbleChart';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import Drawer from '@/app/components/Drawer';
 import Quote from '@/app/components/Quote';

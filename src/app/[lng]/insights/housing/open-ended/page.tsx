@@ -2,16 +2,16 @@
 
 import config from '@/amplifyconfiguration.json';
 import Container from '@/app/components/Background';
-import BubbleChartJSON from '@/app/components/dataviz/BubbleChartJSON';
+import BubbleChartJSON from '@/app/components/dataviz/BubbleChart/BubbleChartJSON';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import Drawer from '@/app/components/Drawer';
 import Quote from '@/app/components/Quote';
 import { useDimensions } from '@/hooks/useDimensions';
-import { Flex, Heading, Text, View } from '@aws-amplify/ui-react';
+import { Flex, Heading, Placeholder, Text, View } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import { downloadData } from 'aws-amplify/storage';
 import { uniqueId } from 'lodash';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 
 Amplify.configure(config);
 
@@ -68,8 +68,21 @@ const Interview = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [code, setCode] = useState('');
-  const [data, setData] = useState<DataItem[]>();
+  const [data, setData] = useState<DataItem>();
   const [quotes, setQuotes] = useState<string[]>([]);
+
+  const updateTooltipState = useCallback(
+    (newState: Partial<typeof tooltipState>) => {
+      setTooltipState((prev) => {
+        const hasChanged = (
+          Object.keys(newState) as Array<keyof typeof tooltipState>
+        ).some((key) => prev[key] !== newState[key]);
+
+        return hasChanged ? { ...prev, ...newState } : prev;
+      });
+    },
+    []
+  );
 
   useEffect(() => {
     const loadData = async () => {
@@ -81,10 +94,13 @@ const Interview = () => {
     loadData();
   }, []);
 
-  console.log(data);
+  useEffect(() => {
+    if (isDrawerOpen) updateTooltipState({ position: null });
+    if (isDrawerOpen === false) setQuotes([]);
+  }, [isDrawerOpen, updateTooltipState]);
 
   return (
-    <View ref={containerRef} style={{ overflow: 'hidden' }}>
+    <View ref={containerRef} style={{ overflowX: 'hidden' }}>
       <Container>
         <View className='short-container' paddingTop='xxxl'>
           <Heading level={1}>
@@ -102,17 +118,23 @@ const Interview = () => {
             </Text>
           </View>
         </View>
-        <Flex justifyContent='center' paddingBottom='xxxl'>
-          <BubbleChartJSON
-            data={data}
-            setQuotes={setQuotes}
-            setCode={setCode}
-            width={width}
-            tooltipState={tooltipState}
-            setIsDrawerOpen={setIsDrawerOpen}
-            setTooltipState={setTooltipState}
-          />
-        </Flex>
+        {loading ? (
+          <Placeholder width={width} height={width || 600} />
+        ) : (
+          <Flex justifyContent='center' paddingBottom='xxxl'>
+            (
+            <BubbleChartJSON
+              data={data}
+              setQuotes={setQuotes}
+              setCode={setCode}
+              width={width}
+              tooltipState={tooltipState}
+              setIsDrawerOpen={setIsDrawerOpen}
+              setTooltipState={updateTooltipState}
+            />
+            )
+          </Flex>
+        )}
         <Drawer
           isopen={isDrawerOpen}
           onOpen={() => setIsDrawerOpen(true)}

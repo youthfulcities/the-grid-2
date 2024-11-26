@@ -1,300 +1,305 @@
-// import * as d3 from 'd3';
-// import React, { ReactNode, useEffect, useRef } from 'react';
+// @ts-nocheck
 
-// interface TooltipState {
-//   position: { x: number; y: number } | null;
-//   value?: number | null;
-//   topic?: string;
-//   content?: string;
-//   group?: string;
-//   cluster?: string;
-//   child?: ReactNode | null;
-//   minWidth?: number;
-// }
+import * as d3 from 'd3';
+import React, { ReactNode, useEffect, useRef } from 'react';
 
-// interface DataItem {
-//   name: string;
-//   parent: string | null | undefined;
-//   value?: number | undefined;
-// }
+interface TooltipState {
+  position: { x: number; y: number } | null;
+  value?: number | null;
+  topic?: string;
+  content?: string;
+  group?: string;
+  cluster?: string;
+  child?: ReactNode | null;
+  minWidth?: number;
+}
 
-// // Define the props of the component
-// interface BubbleChartProps {
-//   width: number;
-//   tooltipState: TooltipState;
-//   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
-//   setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
-// }
+interface DataItem {
+  nodes: Array<{
+    id: string;
+    quotes: string[];
+    value: number;
+  }>;
+  links: Array<{
+    id: string;
+    source: string;
+    target: string;
+    value: number;
+  }>;
+}
 
-// interface CustomNode extends d3.SimulationNodeDatum {
-//   data: DataItem; // The actual data for this node
-//   depth: number; // Depth in the hierarchy
-//   height?: number; // Optional height in the hierarchy
-//   parent?: CustomNode | null; // Reference to the parent node
-//   children?: CustomNode[]; // Array of child nodes
-//   value?: number; // Optional value, if applicable
-//   id: string; // Unique identifier for the node
-//   fx?: number | null; // Fixed x position
-//   fy?: number | null; // Fixed y position
-//   x?: number; // Current x position
-//   y?: number; // Current y position
-// }
+// Define the props of the component
+interface BubbleChartProps {
+  width: number;
+  tooltipState: TooltipState;
+  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
+  setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setQuotes: React.Dispatch<React.SetStateAction<string[]>>;
+  setCode: React.Dispatch<React.SetStateAction<string>>;
+  data?: DataItem[];
+}
 
-// //helper functions
-// const truncateText = (text: string, maxLength: number) => {
-//   // Remove anything within parentheses and the parentheses themselves
-//   if (text) {
-//     const cleanedText = text.replace(/\(.*?\)/g, '').trim();
+interface CustomNode extends d3.SimulationNodeDatum {
+  id: string;
+  quotes: string[];
+  depth?: number | null;
+  value?: number | null;
+  fx?: number | null;
+  fy?: number | null;
+}
 
-//     // Truncate the text if it exceeds the maxLength
-//     if (cleanedText.length > maxLength) {
-//       return `${cleanedText.slice(0, maxLength)}...`;
-//     }
+interface CustomDataNode extends d3.HierarchyNode<DataItem> {
+  id: string;
+  quotes: string[];
+  value: number;
+}
 
-//     return cleanedText;
-//   }
-// };
+interface CustomLink extends d3.SimulationLinkDatum<CustomNode> {
+  id: string;
+  source: string | CustomNode; // Can be a node ID or a node object
+  target: string | CustomNode; // Can be a node ID or a node object
+  value: number;
+}
 
-// // Function to calculate luminance of a color
-// const calculateLuminance = (r: number, g: number, b: number) => {
-//   const a = [r, g, b].map((value) => {
-//     const normalized = value / 255;
-//     return normalized <= 0.03928
-//       ? normalized / 12.92
-//       : ((normalized + 0.055) / 1.055) ** 2.4;
-//   });
-//   return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
-// };
+//helper functions
+const truncateText = (text: string, maxLength: number) => {
+  // Remove anything within parentheses and the parentheses themselves
+  if (text) {
+    const cleanedText = text.replace(/\(.*?\)/g, '').trim();
 
-// // Function to determine if white text is better based on contrast
-// const shouldUseWhiteText = (color: string) => {
-//   const rgb = d3.rgb(color);
-//   const luminance = calculateLuminance(rgb.r, rgb.g, rgb.b);
-//   return luminance < 0.3;
-// };
+    // Truncate the text if it exceeds the maxLength
+    if (cleanedText.length > maxLength) {
+      return `${cleanedText.slice(0, maxLength)}...`;
+    }
 
-// const BubbleChart: React.FC<BubbleChartProps> = ({
-//   width,
-//   tooltipState,
-//   setTooltipState,
-//   setIsDrawerOpen,
-//   data,
-// }) => {
-//   const svgRef = useRef<SVGSVGElement | null>(null);
+    return cleanedText;
+  }
+};
 
-//   useEffect(() => {
-//     if (!data || !width) return;
-//     const { nodes, links } = data;
-//     const height = width;
+// Function to calculate luminance of a color
+const calculateLuminance = (r: number, g: number, b: number) => {
+  const a = [r, g, b].map((value) => {
+    const normalized = value / 255;
+    return normalized <= 0.03928
+      ? normalized / 12.92
+      : ((normalized + 0.055) / 1.055) ** 2.4;
+  });
+  return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+};
 
-//     const minValue = 0;
-//     const maxValue = d3.max(nodes, (d) => d.weight || 1) || 1;
+// Function to determine if white text is better based on contrast
+const shouldUseWhiteText = (color: string) => {
+  const rgb = d3.rgb(color);
+  const luminance = calculateLuminance(rgb.r, rgb.g, rgb.b);
+  return luminance < 0.3;
+};
 
-//     const colorScale = d3
-//       .scaleSequential(d3.interpolateBlues) // Choose a color interpolation
-//       .domain([minValue, maxValue]);
+const BubbleChart: React.FC<BubbleChartProps> = ({
+  width,
+  tooltipState,
+  setTooltipState,
+  setIsDrawerOpen,
+  data,
+  setQuotes,
+  setCode,
+}) => {
+  const svgRef = useRef<SVGSVGElement | null>(null);
 
-//     // Define radius scale based on the frequency
-//     const radiusScale = d3
-//       .scaleSqrt()
-//       .domain([minValue, maxValue])
-//       .range([width / 100, width / 10]);
+  useEffect(() => {
+    if (!data || !width) return;
+    const { nodes, links } = data;
+    const height = width;
+    const margin = width * 0.01;
+    const updatedWidth = width - margin * 2;
 
-//     // Create the simulation for the force-directed graph
-//     const simulation = d3
-//       .forceSimulation(nodes as CustomNode[])
-//       .force(
-//         'link',
-//         d3
-//           .forceLink(links)
-//           .id((d) => (d as CustomNode).id)
-//           .distance(
-//             (link) =>
-//               // Increase distance based on node depth or value
-//               (link.source.depth || 0) * (-link.weight || 1) * 10
-//           )
-//       ) // Variable link distance
-//       .force('charge', d3.forceManyBody().strength(40))
-//       .force('center', d3.forceCenter(width / 2, height / 2)) // Center the graph
-//       .force(
-//         'collision',
-//         d3
-//           .forceCollide()
-//           .radius((d) => radiusScale((d as CustomNode).weight ?? 0) + 10)
-//           .strength(0.6)
-//       )
-//       .force(
-//         'attraction',
-//         d3
-//           .forceRadial(
-//             (d) =>
-//               radiusScale((d as CustomNode).weight ?? 0) +
-//               ((d as CustomNode).depth || 1), // Position by depth level
-//             width / 2,
-//             height / 2
-//           )
-//           .strength(0.9) // Increased strength to pull nodes to their radial positions
-//       )
-//       .alphaDecay(0.01)
-//       .alpha(0.3);
+    const minValue = 0;
+    const maxValue = d3.max(nodes, (d) => d.value || 1) || 1;
 
-//     // Select the SVG element
-//     const svg = d3
-//       .select(svgRef.current)
-//       .attr('width', width)
-//       .attr('height', height);
+    const colorScale = d3
+      .scaleSequential(d3.interpolateBlues) // Choose a color interpolation
+      .domain([minValue, maxValue]);
 
-//     // Remove old nodes and links
-//     svg.selectAll('g').remove();
-//     svg.selectAll('line').remove();
+    // Define radius scale based on the frequency
+    const radiusScale = d3
+      .scaleSqrt()
+      .domain([minValue, maxValue])
+      .range([updatedWidth / 50, updatedWidth / 10]);
 
-//     // Add links (lines between nodes)
-//     const link = svg
-//       .selectAll('line')
-//       .data(links)
-//       .join('line')
-//       .attr('stroke', '#999')
-//       .attr('stroke-width', (d) => Math.sqrt(d.weight) ?? 1);
+    // Create the simulation for the force-directed graph
+    const simulation = d3
+      .forceSimulation<CustomNode>(nodes as CustomNode[])
+      .force(
+        'link',
+        d3
+          .forceLink<CustomNode, CustomLink>(links)
+          .id((d) => d.id)
+          .distance((link) => Math.sqrt(link.value))
+      ) // Variable link distance
+      .force('charge', d3.forceManyBody().strength(40))
+      .force('center', d3.forceCenter(updatedWidth / 2, height / 2)) // Center the graph
+      .force(
+        'collision',
+        d3
+          .forceCollide<CustomNode>()
+          .radius((d) => radiusScale(d.value ?? 0) + 10)
+          .strength(0.8)
+      )
+      .force(
+        'attraction',
+        d3
+          .forceRadial<CustomNode>(
+            (d) => radiusScale(d.value ?? 0) + (d.depth || 1), // Position by depth level
+            updatedWidth / 2,
+            height / 2
+          )
+          .strength(0.2) // Increased strength to pull nodes to their radial positions
+      )
+      .alphaDecay(0.01)
+      .alpha(0.3);
 
-//     const node = svg
-//       .selectAll('g') // Change to group elements to contain both circle and text
-//       .data(nodes)
-//       .join('g') // Create a group for each node
-//       .attr('transform', (d) => `translate(${d.x}, ${d.y})`)
-//       .style('cursor', 'pointer')
-//       .on('mouseover', (event, d) => {
-//         const xPos = event.pageX;
-//         const yPos = event.pageY;
-//         setTooltipState({
-//           position: { x: xPos, y: yPos },
-//           content: d.id,
-//         });
-//       })
-//       .on('mousemove', (event) => {
-//         const xPos = event.pageX;
-//         const yPos = event.pageY;
-//         setTooltipState((prevTooltipState) => ({
-//           ...prevTooltipState,
-//           position: { x: xPos, y: yPos },
-//         }));
-//       })
-//       .on('mouseout', () => {
-//         setTooltipState({ ...tooltipState, position: null });
-//       });
+    // Select the SVG element
+    const svg = d3
+      .select(svgRef.current)
+      .attr('width', updatedWidth)
+      .attr('height', height);
 
-//     const drag = d3
-//       .drag<SVGElement, d3.HierarchyNode<DataItem>>()
-//       .on(
-//         'start',
-//         (
-//           event: d3.D3DragEvent<
-//             SVGCircleElement,
-//             d3.HierarchyNode<DataItem>,
-//             d3.HierarchyNode<DataItem>
-//           >,
-//           customNode: d3.HierarchyNode<DataItem>
-//         ) => {
-//           if (!event.active) simulation.alphaTarget(0.1).restart();
-//           const nodeCopy = {
-//             ...customNode,
-//             fx: customNode.x,
-//             fy: customNode.y,
-//           };
-//           Object.assign(node, nodeCopy);
-//         }
-//       )
-//       .on(
-//         'drag',
-//         (
-//           event: d3.D3DragEvent<
-//             SVGCircleElement,
-//             d3.HierarchyNode<DataItem>,
-//             d3.HierarchyNode<DataItem>
-//           >,
-//           customNode: d3.HierarchyNode<DataItem>
-//         ) => {
-//           const nodeCopy = { ...customNode, fx: event.x, fy: event.y };
-//           Object.assign(customNode, nodeCopy);
-//         }
-//       )
-//       .on(
-//         'end',
-//         (
-//           event: d3.D3DragEvent<
-//             SVGCircleElement,
-//             d3.HierarchyNode<DataItem>,
-//             d3.HierarchyNode<DataItem>
-//           >,
-//           customNode: d3.HierarchyNode<DataItem>
-//         ) => {
-//           if (!event.active) simulation.alphaTarget(0);
-//           const nodeCopy = { ...customNode, fx: null, fy: null };
-//           Object.assign(customNode, nodeCopy);
-//         }
-//       );
+    // Remove old nodes and links
+    svg.selectAll('g').remove();
+    svg.selectAll('line').remove();
 
-//     (
-//       node as d3.Selection<
-//         SVGElement,
-//         d3.HierarchyNode<DataItem>,
-//         SVGSVGElement,
-//         unknown
-//       >
-//     ).call(drag);
+    // Add links (lines between nodes)
+    const link = svg
+      .selectAll('line')
+      .data(links)
+      .join('line')
+      .attr('stroke', '#999')
+      .attr('stroke-width', (d) => Math.sqrt(d.value) ?? 1);
 
-//     // Add nodes (bubbles) as circles
-//     node
-//       .append('circle')
-//       .attr('r', (d) => radiusScale(d.weight ?? 0))
-//       .attr('fill', (d) => colorScale(d.weight ?? 0))
-//       .attr('stroke-width', 1.5);
+    const node = svg
+      .selectAll('g') // Change to group elements to contain both circle and text
+      .data(nodes as CustomDataNode[])
+      .join('g') // Create a group for each node
+      .attr('transform', (d) => `translate(${d.x}, ${d.y})`)
+      .style('cursor', 'pointer')
+      .on('mouseover', (event, d) => {
+        const xPos = event.pageX;
+        const yPos = event.pageY;
+        setTooltipState({
+          position: { x: xPos, y: yPos },
+          content: d.id,
+        });
+      })
+      .on('mousemove', (event) => {
+        const xPos = event.pageX;
+        const yPos = event.pageY;
+        setTooltipState((prevTooltipState) => ({
+          ...prevTooltipState,
+          position: { x: xPos, y: yPos },
+        }));
+      })
+      .on('mouseout', () => {
+        setTooltipState({ ...tooltipState, position: null });
+      })
+      .on('click', (event, d) => {
+        setQuotes(d.quotes);
+        setIsDrawerOpen(true);
+        setCode(d.id);
+      });
 
-//     node
-//       .append('foreignObject')
-//       .attr('width', (d) => radiusScale(d.weight ?? 0) * 2)
-//       .attr('height', (d) => radiusScale(d.weight ?? 0) * 2)
-//       .attr('x', (d) => -radiusScale(d.weight ?? 0))
-//       .attr('y', (d) => -radiusScale(d.weight ?? 0))
-//       .append('xhtml:div')
-//       .attr(
-//         'style',
-//         `
-//     width: 100%;
-//     height: 100%;
-//     display: flex;
-//     padding: 5px;
-//     flex-wrap: wrap;
-//     align-items: center;
-//     justify-content: center;
-//     text-align: center;
-//     overflow-wrap: anywhere;
-//     white-space: normal;`
-//       )
-//       .html(
-//         (d) =>
-//           `<span style="font-size: ${Math.min(radiusScale(d.weight ?? 0) / 4, 14)}px; color: ${shouldUseWhiteText(colorScale(d.weight ?? 0)) ? 'white' : 'black'};">${truncateText(d.id, 50)}</span>`
-//       );
+    const drag = d3
+      .drag<SVGElement, CustomDataNode>()
+      .on(
+        'start',
+        (
+          event: d3.D3DragEvent<SVGElement, CustomDataNode, SVGSVGElement>,
+          customNode: CustomDataNode
+        ) => {
+          if (!event.active) simulation.alphaTarget(0.1).restart();
+          const nodeCopy = {
+            ...customNode,
+            fx: customNode.x,
+            fy: customNode.y,
+          };
+          Object.assign(node, nodeCopy);
+        }
+      )
+      .on(
+        'drag',
+        (
+          event: d3.D3DragEvent<SVGElement, CustomDataNode, SVGSVGElement>,
+          customNode: CustomDataNode
+        ) => {
+          const nodeCopy = { ...customNode, fx: event.x, fy: event.y };
+          Object.assign(customNode, nodeCopy);
+        }
+      )
+      .on(
+        'end',
+        (
+          event: d3.D3DragEvent<SVGElement, CustomDataNode, SVGSVGElement>,
+          customNode: CustomDataNode
+        ) => {
+          if (!event.active) simulation.alphaTarget(0);
+          const nodeCopy = { ...customNode, fx: null, fy: null };
+          Object.assign(customNode, nodeCopy);
+        }
+      );
 
-//     // Update the simulation on tick to reposition nodes and links
-//     simulation.on('tick', () => {
-//       // Update link positions
-//       link
-//         .attr('x1', (d) => d.source?.x ?? 0)
-//         .attr('y1', (d) => d.source?.y ?? 0)
-//         .attr('x2', (d) => d.target?.x ?? 0)
-//         .attr('y2', (d) => d.target?.y ?? 0);
-//       node.attr('cx', (d) => d.x ?? 0).attr('cy', (d) => d.y ?? 0);
-//       // Update group positions for nodes
-//       node.attr('transform', (d) => `translate(${d.x}, ${d.y})`);
-//     });
+    node.call(drag);
 
-//     // Cleanup function to stop the simulation
-//     return () => {
-//       simulation.stop();
-//     };
-//   }, [data, width]);
+    // Add nodes (bubbles) as circles
+    node
+      .append('circle')
+      .attr('r', (d) => radiusScale(d.value ?? 0))
+      .attr('fill', (d) => colorScale(d.value ?? 0))
+      .attr('stroke-width', 1.5);
 
-//   return <svg ref={svgRef} />;
-// };
+    node
+      .append('foreignObject')
+      .attr('width', (d) => radiusScale(d.value ?? 0) * 2)
+      .attr('height', (d) => radiusScale(d.value ?? 0) * 2)
+      .attr('x', (d) => -radiusScale(d.value ?? 0))
+      .attr('y', (d) => -radiusScale(d.value ?? 0))
+      .append('xhtml:div')
+      .attr(
+        'style',
+        `
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 5px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow-wrap: anywhere;
+    white-space: normal;`
+      )
+      .html(
+        (d) =>
+          `<span style="font-size: ${Math.min(radiusScale(d.value ?? 0) / 4, 14)}px; color: ${shouldUseWhiteText(colorScale(d.value ?? 0)) ? 'white' : 'black'};">${truncateText(d.id, 100)}</span>`
+      );
 
-// export default BubbleChart;
+    // Update the simulation on tick to reposition nodes and links
+    simulation.on('tick', () => {
+      // Update link positions
+      link
+        .attr('x1', (d) => d.source?.x ?? 0)
+        .attr('y1', (d) => d.source?.y ?? 0)
+        .attr('x2', (d) => d.target?.x ?? 0)
+        .attr('y2', (d) => d.target?.y ?? 0);
+      node.attr('cx', (d) => d.x ?? 0).attr('cy', (d) => d.y ?? 0);
+      // Update group positions for nodes
+      node.attr('transform', (d) => `translate(${d.x}, ${d.y})`);
+    });
+
+    // Cleanup function to stop the simulation
+    return () => {
+      simulation.stop();
+    };
+  }, [data, width]);
+
+  return <svg ref={svgRef} />;
+};
+
+export default BubbleChart;

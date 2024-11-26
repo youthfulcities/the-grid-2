@@ -18,13 +18,13 @@ interface DataItem {
   nodes: Array<{
     id: string;
     quotes: string[];
-    type: string;
-    weight: number;
+    value: number;
   }>;
   links: Array<{
+    id: string;
     source: string;
     target: string;
-    weight: number;
+    value: number;
   }>;
 }
 
@@ -34,21 +34,31 @@ interface BubbleChartProps {
   tooltipState: TooltipState;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setQuotes: React.Dispatch<React.SetStateAction<[]>>;
+  setQuotes: React.Dispatch<React.SetStateAction<string[]>>;
   setCode: React.Dispatch<React.SetStateAction<string>>;
-  data: DataItem;
+  data?: DataItem[];
 }
 
 interface CustomNode extends d3.SimulationNodeDatum {
-  value?: number; // Optional value, if applicable
-  quotes: [];
-  type: string;
-  weight: number;
-  id: string; // Unique identifier for the node
-  fx?: number | null; // Fixed x position
-  fy?: number | null; // Fixed y position
-  x?: number; // Current x position
-  y?: number; // Current y position
+  id: string;
+  quotes: string[];
+  depth?: number | null;
+  value?: number | null;
+  fx?: number | null;
+  fy?: number | null;
+}
+
+interface CustomDataNode extends d3.HierarchyNode<DataItem> {
+  id: string;
+  quotes: string[];
+  value: number;
+}
+
+interface CustomLink extends d3.SimulationLinkDatum<CustomNode> {
+  id: string;
+  source: string | CustomNode; // Can be a node ID or a node object
+  target: string | CustomNode; // Can be a node ID or a node object
+  value: number;
 }
 
 //helper functions
@@ -99,6 +109,8 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     if (!data || !width) return;
     const { nodes, links } = data;
     const height = width;
+    const margin = width * 0.01;
+    const updatedWidth = width - margin * 2;
 
     const minValue = 0;
     const maxValue = d3.max(nodes, (d) => d.value || 1) || 1;
@@ -111,36 +123,36 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     const radiusScale = d3
       .scaleSqrt()
       .domain([minValue, maxValue])
-      .range([width / 100, width / 10]);
+      .range([updatedWidth / 50, updatedWidth / 10]);
 
     // Create the simulation for the force-directed graph
     const simulation = d3
-      .forceSimulation(nodes as CustomNode[])
+      .forceSimulation<CustomNode>(nodes as CustomNode[])
       .force(
         'link',
         d3
-          .forceLink(links)
+          .forceLink<CustomNode, CustomLink>(links)
           .id((d) => d.id)
-          .distance((link) => (-link.weight || 1) * 10)
+          .distance((link) => Math.sqrt(link.value))
       ) // Variable link distance
-      .force('charge', d3.forceManyBody().strength(200))
-      .force('center', d3.forceCenter(width / 2, height / 2)) // Center the graph
+      .force('charge', d3.forceManyBody().strength(40))
+      .force('center', d3.forceCenter(updatedWidth / 2, height / 2)) // Center the graph
       .force(
         'collision',
         d3
-          .forceCollide()
+          .forceCollide<CustomNode>()
           .radius((d) => radiusScale(d.value ?? 0) + 10)
           .strength(0.8)
       )
       .force(
         'attraction',
         d3
-          .forceRadial(
+          .forceRadial<CustomNode>(
             (d) => radiusScale(d.value ?? 0) + (d.depth || 1), // Position by depth level
-            width / 2,
+            updatedWidth / 2,
             height / 2
           )
-          .strength(0.1) // Increased strength to pull nodes to their radial positions
+          .strength(0.2) // Increased strength to pull nodes to their radial positions
       )
       .alphaDecay(0.01)
       .alpha(0.3);
@@ -148,7 +160,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     // Select the SVG element
     const svg = d3
       .select(svgRef.current)
-      .attr('width', width)
+      .attr('width', updatedWidth)
       .attr('height', height);
 
     // Remove old nodes and links
@@ -165,7 +177,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
 
     const node = svg
       .selectAll('g') // Change to group elements to contain both circle and text
-      .data(nodes)
+      .data(nodes as CustomDataNode[])
       .join('g') // Create a group for each node
       .attr('transform', (d) => `translate(${d.x}, ${d.y})`)
       .style('cursor', 'pointer')
@@ -195,16 +207,12 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       });
 
     const drag = d3
-      .drag<SVGElement, d3.HierarchyNode<DataItem>>()
+      .drag<SVGElement, CustomDataNode>()
       .on(
         'start',
         (
-          event: d3.D3DragEvent<
-            SVGCircleElement,
-            d3.HierarchyNode<DataItem>,
-            d3.HierarchyNode<DataItem>
-          >,
-          customNode: d3.HierarchyNode<DataItem>
+          event: d3.D3DragEvent<SVGElement, CustomDataNode, SVGSVGElement>,
+          customNode: CustomDataNode
         ) => {
           if (!event.active) simulation.alphaTarget(0.1).restart();
           const nodeCopy = {
@@ -218,12 +226,8 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       .on(
         'drag',
         (
-          event: d3.D3DragEvent<
-            SVGCircleElement,
-            d3.HierarchyNode<DataItem>,
-            d3.HierarchyNode<DataItem>
-          >,
-          customNode: d3.HierarchyNode<DataItem>
+          event: d3.D3DragEvent<SVGElement, CustomDataNode, SVGSVGElement>,
+          customNode: CustomDataNode
         ) => {
           const nodeCopy = { ...customNode, fx: event.x, fy: event.y };
           Object.assign(customNode, nodeCopy);
@@ -232,12 +236,8 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       .on(
         'end',
         (
-          event: d3.D3DragEvent<
-            SVGCircleElement,
-            d3.HierarchyNode<DataItem>,
-            d3.HierarchyNode<DataItem>
-          >,
-          customNode: d3.HierarchyNode<DataItem>
+          event: d3.D3DragEvent<SVGElement, CustomDataNode, SVGSVGElement>,
+          customNode: CustomDataNode
         ) => {
           if (!event.active) simulation.alphaTarget(0);
           const nodeCopy = { ...customNode, fx: null, fy: null };

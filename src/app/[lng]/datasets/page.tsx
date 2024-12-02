@@ -113,7 +113,7 @@ const Datasets: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
           </Text>
         </View>
         <Flex className='inner-container'>
-          <Flex className='cards-container'>
+          <Flex wrap='wrap' direction='row'>
             <DataCard
               fetchUrl={fetchUrl}
               getFileProperties={getFileProperties}

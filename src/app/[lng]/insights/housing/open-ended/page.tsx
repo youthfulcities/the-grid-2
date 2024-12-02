@@ -4,14 +4,19 @@ import config from '@/amplifyconfiguration.json';
 import Container from '@/app/components/Background';
 import BubbleChartJSON from '@/app/components/dataviz/BubbleChart/BubbleChartJSON';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
-import Drawer from '@/app/components/Drawer';
 import Quote from '@/app/components/Quote';
 import { useDimensions } from '@/hooks/useDimensions';
-import { Flex, Heading, Placeholder, Text, View } from '@aws-amplify/ui-react';
+import {
+  Flex,
+  Heading,
+  Text,
+  View,
+  useBreakpointValue,
+} from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import { downloadData } from 'aws-amplify/storage';
-import { uniqueId } from 'lodash';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import Masonry from 'react-masonry-css';
 
 Amplify.configure(config);
 
@@ -46,6 +51,8 @@ const fetchData = async () => {
 
 const Interview = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const quotesRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
   const { width } = useDimensions(containerRef);
   const [tooltipState, setTooltipState] = useState<{
     position: { x: number; y: number } | null;
@@ -66,10 +73,31 @@ const Interview = () => {
     minWidth: 0,
   });
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [code, setCode] = useState('');
   const [data, setData] = useState<DataItem>();
   const [quotes, setQuotes] = useState<string[]>([]);
+  const [offset, setOffset] = useState(0);
+  const [visibleQuotes, setVisibleQuotes] = useState<string[]>([]);
+
+  const batchSize = 10;
+  const quoteCols = useBreakpointValue({
+    base: 1,
+    small: 1,
+    medium: 2,
+    large: 2,
+    xl: 3,
+  });
+
+  const fetchMoreQuotes = () => {
+    if (!loading && offset < quotes.length) {
+      setVisibleQuotes((prev) => [
+        ...prev,
+        ...quotes.slice(offset, offset + batchSize),
+      ]);
+      setOffset((prev) => prev + batchSize);
+    }
+  };
 
   const updateTooltipState = useCallback(
     (newState: Partial<typeof tooltipState>) => {
@@ -97,7 +125,40 @@ const Interview = () => {
   useEffect(() => {
     if (isDrawerOpen) updateTooltipState({ position: null });
     if (isDrawerOpen === false) setQuotes([]);
+    if (isDrawerOpen === false) setVisibleQuotes([]);
   }, [isDrawerOpen, updateTooltipState]);
+
+  useEffect(() => {
+    if (observerRef.current) observerRef.current.disconnect();
+
+    observerRef.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        fetchMoreQuotes();
+      }
+    });
+
+    if (containerRef.current) {
+      const lastQuote = quotesRef.current?.querySelector('.quote:last-child');
+      if (lastQuote) observerRef.current.observe(lastQuote);
+    }
+
+    return () => observerRef.current?.disconnect();
+  }, [visibleQuotes]);
+
+  const handleSetQuotes = (incomingQuotes: string[]) => {
+    setQuotes(incomingQuotes);
+    setVisibleQuotes(incomingQuotes.slice(0, batchSize));
+    setOffset(batchSize);
+  };
+
+  useEffect(() => {
+    if (quotes) {
+      const element = document.getElementById('quotes-container');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' }); // Smooth scrolling
+      }
+    }
+  }, [quotes]);
 
   return (
     <View ref={containerRef} style={{ overflowX: 'hidden' }}>
@@ -114,65 +175,61 @@ const Interview = () => {
               have about housing in Canada. What were your experiences like
               finding housing? What are you concerned about in the future? What
               would you like to see happen to solve the housing crisis in
-              Canada? This visualization is generated with the help of AI.
+              Canada? This visualization is generated with the help of AI. Click
+              on a node to view quotes.
             </Text>
           </View>
         </View>
-        {loading ? (
-          <Placeholder width={width} height={width || 600} />
-        ) : (
-          <Flex justifyContent='center' paddingBottom='xxxl'>
-            (
-            <BubbleChartJSON
-              data={data}
-              setQuotes={setQuotes}
-              setCode={setCode}
-              width={width}
-              tooltipState={tooltipState}
-              setIsDrawerOpen={setIsDrawerOpen}
-              setTooltipState={updateTooltipState}
-            />
-            )
+        <Flex justifyContent='center'>
+          (
+          <BubbleChartJSON
+            data={data}
+            handleSetQuotes={handleSetQuotes}
+            setCode={setCode}
+            width={width}
+            setIsDrawerOpen={setIsDrawerOpen}
+            setTooltipState={updateTooltipState}
+          />
+          )
+        </Flex>
+        {visibleQuotes?.length > 0 && (
+          <Flex
+            direction='column'
+            className='short-container'
+            id='quotes-container'
+            paddingBottom='xxl'
+          >
+            <Heading level={3} color='font.inverse' marginBottom={0}>
+              Quotes tagged with theme {code}
+            </Heading>
+            <View ref={quotesRef}>
+              <Masonry
+                className='masonry-grid'
+                breakpointCols={quoteCols as number}
+                columnClassName='masonry-grid_column'
+              >
+                {visibleQuotes &&
+                  visibleQuotes.map((item, index) => (
+                    <Quote
+                      $color={
+                        colors[index % colors.length] as
+                          | 'red'
+                          | 'green'
+                          | 'yellow'
+                          | 'pink'
+                          | 'blue'
+                          | 'neutral'
+                          | undefined
+                      }
+                      key={index}
+                      quote={item}
+                      left
+                    />
+                  ))}
+              </Masonry>
+            </View>
           </Flex>
         )}
-        <Drawer
-          isopen={isDrawerOpen}
-          onOpen={() => setIsDrawerOpen(true)}
-          onClose={() => {
-            setIsDrawerOpen(false);
-          }}
-          tabText='Quotes'
-        >
-          {quotes?.length > 0 ? (
-            <Flex direction='column' paddingTop='xxl' paddingBottom='xxl'>
-              <Heading level={3} color='font.inverse' marginBottom={0}>
-                Quotes tagged with theme {code}
-              </Heading>
-              {quotes &&
-                quotes.map((item, index) => (
-                  <Quote
-                    $color={
-                      colors[index % colors.length] as
-                        | 'red'
-                        | 'green'
-                        | 'yellow'
-                        | 'pink'
-                        | 'blue'
-                        | 'neutral'
-                        | undefined
-                    }
-                    key={uniqueId()}
-                    quote={item}
-                    left={index % 2 === 0}
-                  />
-                ))}
-            </Flex>
-          ) : (
-            <>
-              <Text>Please click on a theme node to view quotes.</Text>{' '}
-            </>
-          )}
-        </Drawer>
         {tooltipState.position && (
           <Tooltip
             x={tooltipState.position.x}

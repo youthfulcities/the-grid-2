@@ -29,7 +29,6 @@ const SpeechBubble = styled(motion.div)<{ left: boolean }>`
   background: rgba(102, 100, 96, 0.3);
   border-radius: 8px;
   padding: var(--amplify-space-small);
-  padding-bottom: 0;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
@@ -37,6 +36,7 @@ interface QuoteProps {
   left?: boolean;
   $color?: 'red' | 'green' | 'yellow' | 'pink' | 'blue' | 'neutral';
   quote: string;
+  $width?: number;
 }
 
 const randomColor = () => {
@@ -48,6 +48,7 @@ const Quote: React.FC<QuoteProps> = ({
   left = true,
   $color = randomColor(),
   quote = '',
+  $width = 100,
 }) => {
   const [inView, setInView] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -83,8 +84,9 @@ const Quote: React.FC<QuoteProps> = ({
 
   return (
     <Flex
+      className='quote'
       ref={ref}
-      width='100%'
+      maxWidth={`${$width}%`}
       direction={left ? 'row' : 'row-reverse'}
       justifyContent='flex-start'
     >

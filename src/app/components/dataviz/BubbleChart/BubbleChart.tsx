@@ -168,6 +168,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
 }) => {
   const [parsedData, setParsedData] = useState<DataItem[]>([]);
   const [linkData, setLinkData] = useState<DataItem[]>([]);
+  const [isRendering, setIsRendering] = useState(true);
   const rawData = useFetchCityData(city);
   const rawLinkData = useFetchAdditionalLinks(city);
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -187,7 +188,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
 
   useEffect(() => {
     if (!parsedData || !width) return;
-
+    setIsRendering(true);
     const height = width;
     const allData = parsedData;
     const maxNodes = 50;
@@ -268,18 +269,12 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     const maxValue = d3.max(nodes, (d) => d.value || 1) || 1;
 
     const themeColorScales = {
-      'Engaging with post pandemic work ecosystems': d3.scaleSequential(
-        d3.interpolateBlues
-      ),
-      'Navigating the transition from education to work': d3.scaleSequential(
+      ' Post Pandemic Work Ecosystems': d3.scaleSequential(d3.interpolateBlues),
+      'Transition from education to work': d3.scaleSequential(
         d3.interpolateReds
       ),
-      'Paving the way for the future of work in cities': d3.scaleSequential(
-        d3.interpolateGreens
-      ),
-      'Envisioning an ideal organization ': d3.scaleSequential(
-        d3.interpolatePurples
-      ),
+      'Future of Work in Cities': d3.scaleSequential(d3.interpolateGreens),
+      'An ideal organization': d3.scaleSequential(d3.interpolatePurples),
     } as const;
 
     type ThemeKey = keyof typeof themeColorScales;
@@ -300,7 +295,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     const radiusScale = d3
       .scaleSqrt()
       .domain([minValue, maxValue])
-      .range([width / 100, width / 10]);
+      .range([width / 40, width / 8]);
 
     // Create the simulation for the force-directed graph
     const simulation = d3
@@ -310,11 +305,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
         d3
           .forceLink(links)
           .id((d) => (d as CustomNode).id)
-          .distance(
-            (link) =>
-              // Increase distance based on node depth or value
-              (link.source.depth || 0) * (-link.value || 1) * 10
-          )
+          .distance((link) => Math.sqrt(link.value))
       ) // Variable link distance
       .force('charge', d3.forceManyBody().strength(40))
       .force('center', d3.forceCenter(width / 2, height / 2)) // Center the graph
@@ -356,6 +347,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       .data(links)
       .join('line')
       .attr('stroke', '#999')
+      .attr('opacity', 0.5)
       .attr('stroke-width', (d) => Math.sqrt(d.value) ?? 1);
 
     const node = svg

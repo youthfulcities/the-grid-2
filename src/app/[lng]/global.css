@@ -1288,3 +1288,14 @@ a.outline-button:hover {
 .authenticator-container .amplify-label {
   color: white !important; /* Make label text color white */
 }
+
+.masonry-grid {
+  display: flex;
+  width: auto;
+  margin-left: -10px;
+}
+
+.masonry-grid_column {
+  padding-left: 10px; /* gutter size */
+  background-clip: padding-box;
+}

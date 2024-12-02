@@ -7,12 +7,22 @@ import Tooltip from '@/app/components/dataviz/TooltipChart';
 import Drawer from '@/app/components/Drawer';
 import Quote from '@/app/components/Quote';
 import { useDimensions } from '@/hooks/useDimensions';
-import { Button, Flex, Heading, Tabs, Text, View } from '@aws-amplify/ui-react';
+import {
+  Button,
+  Flex,
+  Heading,
+  Loader,
+  Placeholder,
+  Tabs,
+  Text,
+  View,
+  useBreakpointValue,
+} from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import Link from 'next/link';
-import { ReactNode, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 
 Amplify.configure(config);
 
@@ -37,6 +47,8 @@ const fetchData = async (city: string, code: string) => {
 
 const Interview = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const quotesRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
   const { width } = useDimensions(containerRef);
   const [tooltipState, setTooltipState] = useState<{
     position: { x: number; y: number } | null;
@@ -57,10 +69,33 @@ const Interview = () => {
     minWidth: 0,
   });
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [city, setCity] = useState('ALL');
   const [code, setCode] = useState('');
   const [data, setData] = useState<d3.DSVRowString<string>[]>([]);
+  const [offset, setOffset] = useState(0);
+  const [visibleQuotes, setVisibleQuotes] = useState<d3.DSVRowString<string>[]>(
+    []
+  );
+  const quoteSize = useBreakpointValue({
+    base: 90,
+    small: 90,
+    medium: 70,
+    large: 60,
+    xl: 40,
+  });
+
+  const batchSize = 10;
+
+  const fetchMoreQuotes = () => {
+    if (!loading && offset < data.length) {
+      setVisibleQuotes((prev) => [
+        ...prev,
+        ...data.slice(offset, offset + batchSize),
+      ]);
+      setOffset((prev) => prev + batchSize);
+    }
+  };
 
   const [tab, setTab] = useState('ALL');
   const changeTab = (newTab: string) => {
@@ -80,9 +115,9 @@ const Interview = () => {
     if (code_parent === 'Root') {
       const filteredData = parsedData.filter((quote) => quote.code_2 === '');
       const finalData = filteredData.length > 0 ? filteredData : parsedData;
-
-      //limit to 50 quotes
-      setData(finalData.length > 50 ? finalData.slice(0, 49) : finalData);
+      setData(finalData);
+      setVisibleQuotes(finalData.slice(0, batchSize));
+      setOffset(batchSize);
       setCode(code_child || code_parent);
       setLoading(false);
     } else {
@@ -91,13 +126,37 @@ const Interview = () => {
       );
 
       const finalData = filteredData.length > 0 ? filteredData : parsedData;
-
-      //limit to 50 quotes
-      setData(finalData.length > 50 ? finalData.slice(0, 49) : finalData);
+      setData(finalData);
+      setVisibleQuotes(finalData.slice(0, batchSize));
+      setOffset(batchSize);
       setCode(code_child || code_parent);
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (isDrawerOpen) setTooltipState({ position: null });
+    if (isDrawerOpen === false) setData([]);
+    if (isDrawerOpen === false) setVisibleQuotes([]);
+  }, [isDrawerOpen, setTooltipState]);
+
+  useEffect(() => {
+    if (observerRef.current) observerRef.current.disconnect();
+
+    observerRef.current = new IntersectionObserver((entries) => {
+      console.log(entries[0]);
+      if (entries[0].isIntersecting) {
+        fetchMoreQuotes();
+      }
+    });
+
+    if (containerRef.current) {
+      const lastQuote = quotesRef.current?.querySelector('.quote:last-child');
+      if (lastQuote) observerRef.current.observe(lastQuote);
+    }
+
+    return () => observerRef.current?.disconnect();
+  }, [visibleQuotes]);
 
   return (
     <Container>
@@ -183,14 +242,18 @@ const Interview = () => {
             <Text />
           </Tabs.Panel>
         </Tabs.Container>
-        <BubbleChart
-          city={city}
-          width={width}
-          tooltipState={tooltipState}
-          setIsDrawerOpen={setIsDrawerOpen}
-          setTooltipState={setTooltipState}
-          onBubbleClick={onBubbleClick}
-        />
+        {loading ? (
+          <Placeholder width={width} height={width || 600} />
+        ) : (
+          <BubbleChart
+            city={city}
+            width={width}
+            tooltipState={tooltipState}
+            setIsDrawerOpen={setIsDrawerOpen}
+            setTooltipState={setTooltipState}
+            onBubbleClick={onBubbleClick}
+          />
+        )}
         <Text>
           What to query quotes across all cities? Use the YDL Chatbot.
         </Text>
@@ -260,30 +323,34 @@ const Interview = () => {
           setIsDrawerOpen(false);
         }}
         tabText='Quotes'
+        maxWidth={quoteSize as number}
       >
-        {data.length > 0 ? (
+        {visibleQuotes.length > 0 ? (
           <Flex direction='column' paddingTop='xxl' paddingBottom='xxl'>
             <Heading level={3} color='font.inverse' marginBottom={0}>
               Quotes tagged with theme {code}
             </Heading>
-            {data &&
-              data.map((item, index) => (
-                <Quote
-                  $color={
-                    colors[index % colors.length] as
-                      | 'red'
-                      | 'green'
-                      | 'yellow'
-                      | 'pink'
-                      | 'blue'
-                      | 'neutral'
-                      | undefined
-                  }
-                  key={item.UID}
-                  quote={item.segment}
-                  left={index % 2 === 0}
-                />
-              ))}
+            <View ref={quotesRef}>
+              {visibleQuotes &&
+                visibleQuotes.map((item, index) => (
+                  <Quote
+                    $color={
+                      colors[index % colors.length] as
+                        | 'red'
+                        | 'green'
+                        | 'yellow'
+                        | 'pink'
+                        | 'blue'
+                        | 'neutral'
+                        | undefined
+                    }
+                    key={item.UID}
+                    quote={item.segment}
+                    left={index % 2 === 0}
+                  />
+                ))}
+            </View>
+            {loading && <Loader />}
             <Text marginTop='xl'>
               What to query quotes across all cities? Use the YDL Chatbot.
             </Text>

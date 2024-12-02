@@ -16,18 +16,20 @@ interface DrawerProps {
   noClickOutside?: boolean;
   translate?: number;
   id?: string;
+  maxWidth?: number;
 }
 
 const DrawerContainer = styled(motion.div)<{
   isopen: boolean;
   $absolute: boolean;
   $translate: number;
+  $maxWidth: number;
 }>`
   position: ${({ $absolute }) => ($absolute ? 'absolute' : 'fixed')};
   top: 0;
   right: 0;
   min-width: 300px;
-  max-width: 50%;
+  max-width: ${({ $maxWidth }) => $maxWidth}%;
   height: 100%;
   color: var(--amplify-colors-font-inverse);
   background-color: rgba(0, 0, 0, 0.8);
@@ -97,6 +99,7 @@ const Drawer: React.FC<DrawerProps> = ({
   noClickOutside,
   translate = 0,
   id = 'drawer-content',
+  maxWidth = 50,
 }) => {
   const drawerRef = useRef<HTMLDivElement>(null);
   const tabRef = useRef<HTMLDivElement>(null);
@@ -167,6 +170,7 @@ const Drawer: React.FC<DrawerProps> = ({
         ref={drawerRef}
         isopen={isopen}
         $absolute={absolute || false}
+        $maxWidth={maxWidth}
       >
         {width !== undefined &&
           React.Children.map(children, (child) =>

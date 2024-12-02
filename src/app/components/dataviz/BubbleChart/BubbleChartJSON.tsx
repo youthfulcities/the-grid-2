@@ -38,10 +38,9 @@ interface CustomDataNode extends d3.HierarchyNode<DataItem> {
 // Define the props of the component
 interface BubbleChartProps {
   width: number;
-  tooltipState: TooltipState;
   setTooltipState: (newState: Partial<TooltipState>) => void;
   setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setQuotes: React.Dispatch<React.SetStateAction<string[]>>;
+  handleSetQuotes: (incomingQuotes: string[]) => void;
   setCode: React.Dispatch<React.SetStateAction<string>>;
   data?: DataItem;
 }
@@ -55,11 +54,10 @@ interface CustomLink extends d3.SimulationLinkDatum<CustomNode> {
 
 const BubbleChart: React.FC<BubbleChartProps> = ({
   width,
-  tooltipState,
   setTooltipState,
   setIsDrawerOpen,
   data,
-  setQuotes,
+  handleSetQuotes,
   setCode,
 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -159,7 +157,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
         setTooltipState({ position: null });
       })
       .on('click', (event, d) => {
-        setQuotes(d.quotes);
+        handleSetQuotes(d.quotes);
         setIsDrawerOpen(true);
         setCode(d.id);
       });
@@ -244,7 +242,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     return () => {
       simulation.stop();
     };
-  }, [data, width, setCode, setIsDrawerOpen, setQuotes, setTooltipState]);
+  }, [data, width, setCode, setIsDrawerOpen, setTooltipState]);
 
   return <svg ref={svgRef} />;
 };

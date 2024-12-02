@@ -12,7 +12,6 @@ import {
   Flex,
   Heading,
   Loader,
-  Placeholder,
   Tabs,
   Text,
   View,
@@ -242,18 +241,14 @@ const Interview = () => {
             <Text />
           </Tabs.Panel>
         </Tabs.Container>
-        {loading ? (
-          <Placeholder width={width} height={width || 600} />
-        ) : (
-          <BubbleChart
-            city={city}
-            width={width}
-            tooltipState={tooltipState}
-            setIsDrawerOpen={setIsDrawerOpen}
-            setTooltipState={setTooltipState}
-            onBubbleClick={onBubbleClick}
-          />
-        )}
+        <BubbleChart
+          city={city}
+          width={width}
+          tooltipState={tooltipState}
+          setIsDrawerOpen={setIsDrawerOpen}
+          setTooltipState={setTooltipState}
+          onBubbleClick={onBubbleClick}
+        />
         <Text>
           What to query quotes across all cities? Use the YDL Chatbot.
         </Text>

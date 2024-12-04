@@ -90,7 +90,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
         d3
           .forceLink<CustomNode, CustomLink>(links)
           .id((d) => d.id)
-          .distance((link) => Math.sqrt(link.value))
+          .distance((link) => Math.sqrt(width / link.value))
       ) // Variable link distance
       .force('charge', d3.forceManyBody().strength(40))
       .force('center', d3.forceCenter(updatedWidth / 2, height / 2)) // Center the graph
@@ -98,7 +98,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
         'collision',
         d3
           .forceCollide<CustomNode>()
-          .radius((d) => radiusScale(d.value ?? 0) + 10)
+          .radius((d) => radiusScale(d.value ?? 0) + 8)
           .strength(0.8)
       )
       .force(

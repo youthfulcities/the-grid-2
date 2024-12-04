@@ -1,9 +1,20 @@
 {
   "cards": [
     {
+      "title": "State of Housing for Young People in Canada",
+      "titlefr": "",
+      "dataset": "Survey | Open-Ended Responses",
+      "datasetfr": "",
+      "date": "July 2024",
+      "type": "",
+      "desc": "Visualize insightful open-ended responses to the State of Housing for Young People in Canada survey conducted by Youthful Cities.",
+      "descfr": "",
+      "link": "/insights/housing/open-ended"
+    },
+    {
       "title": "Best City to Work in Canada",
       "titlefr": "Meilleure ville où travailler au Canada",
-      "dataset": "Urban Work Index 2024",
+      "dataset": "Index | Urban Work Index 2024",
       "datasetfr": "Indice du travail urbain 2024",
       "date": "2024",
       "type": "",
@@ -34,8 +45,8 @@
       "link": "https://bestworkcity.ca/"
     },
     {
-      "title": "Survey Preview",
-      "dataset": "What's up with work lately?",
+      "title": "What's up with work lately?",
+      "dataset": "Survey | Preview",
       "date": "2024",
       "type": "",
       "desc": "Preview initial findings from the What's up with work lately? survey performed by Youthful Cities as part of the DEVlab project.",

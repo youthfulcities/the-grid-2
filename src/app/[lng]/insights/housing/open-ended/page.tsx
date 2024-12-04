@@ -232,7 +232,7 @@ const Interview = () => {
           }}
           tabText={t('drawer_tab')}
         >
-          {visibleQuotes?.length > 0 && (
+          {visibleQuotes?.length > 0 ? (
             <Flex direction='column'>
               <Heading level={3} color='font.inverse' marginBottom={0}>
                 <Trans t={t} i18nKey='helper_text' values={{ code }} />
@@ -258,12 +258,13 @@ const Interview = () => {
                   ))}
               </View>
             </Flex>
+          ) : (
+            <Flex direction='column'>
+              <Heading level={3} color='font.inverse' marginBottom={0}>
+                {t('quotes_empty')}
+              </Heading>
+            </Flex>
           )}
-          <Flex direction='column'>
-            <Heading level={3} color='font.inverse' marginBottom={0}>
-              {t('quotes_empty')}
-            </Heading>
-          </Flex>
         </Drawer>
         {tooltipState.position && (
           <Tooltip

@@ -42,7 +42,6 @@ interface DatasetCard {
 }
 
 const StyledCard = styled(Card)<{ $background: string; $font: string }>`
-  width: 350px;
   height: 550px;
   position: relative;
   display: flex;

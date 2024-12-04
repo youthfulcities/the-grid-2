@@ -110,7 +110,7 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng, maxLength }) => {
   };
 
   return (
-    <Flex className='cards-container'>
+    <View className='cards-container'>
       {truncatedInsightCards.map((card, index) => (
         <StyledCard
           key={uuidv4()}
@@ -162,7 +162,7 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng, maxLength }) => {
         </StyledCard>
       ))}
       {/* <Dialogue open={openDialogue} onClose={handleClose} /> */}
-    </Flex>
+    </View>
   );
 };
 

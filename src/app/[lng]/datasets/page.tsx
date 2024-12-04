@@ -88,7 +88,7 @@ const Datasets: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
 
   return (
     <Container>
-      <View as='section' className='container section-padding'>
+      <View as='section' className='container' paddingTop='xxxl'>
         <Heading level={2}>
           <Trans
             t={t}
@@ -113,12 +113,12 @@ const Datasets: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
           </Text>
         </View>
         <Flex className='inner-container'>
-          <Flex wrap='wrap' direction='row'>
+          <View className='cards-container'>
             <DataCard
               fetchUrl={fetchUrl}
               getFileProperties={getFileProperties}
             />
-          </Flex>
+          </View>
         </Flex>
       </View>
     </Container>

@@ -3,37 +3,6 @@ import { Flex, Heading, Text, View, useTheme } from '@aws-amplify/ui-react';
 import styled from 'styled-components';
 import useTranslation from '../i18n/client';
 
-// .outline-text {
-// color: var(--light-blue);
-// font-family: 'Gotham Narrow Black';
-// font-style: normal;
-// font-size: 6.5rem;
-// line-height: 6.5rem;
-// -webkit-text-fill-color: var(--blue);
-// -webkit-text-stroke-width: 2px;
-// -webkit-text-stroke-color: var(--light-blue);
-// }
-
-// .large-text {
-//   color: var(--blue);
-//   font-family: 'Gotham Narrow Black';
-//   font-style: normal;
-//   font-size: 6.5rem;
-//   line-height: 6.5rem;
-// }
-
-// @media screen and (max-width: 992px) {
-//   .outline-text {
-//     font-size: 5rem;
-//     line-height: 5rem;
-//   }
-
-//   .large-text {
-//     font-size: 5rem;
-//     line-height: 5rem;
-//   }
-// }
-
 const BarBackground = styled(View)<{ $background: string; $space: string }>`
   width: 100%;
   padding: ${(props) => props.$space} 0;

@@ -180,6 +180,7 @@ const Interview = () => {
             <Heading level={4} color='font.inverse'>
               {t('description_sub_2')}
             </Heading>
+            <Text>{t('description_p_1.5')}</Text>
             <Text>{t('description_p_2')}</Text>
           </View>
         </View>

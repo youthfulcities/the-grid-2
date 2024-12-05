@@ -2,13 +2,14 @@
   "cards": [
     {
       "title": "State of Housing for Young People in Canada",
-      "titlefr": "",
-      "dataset": "Survey | Open-Ended Responses",
-      "datasetfr": "",
+      "titlefr": "État du logement des jeunes au Canada",
+      "dataset": "Youth Cite",
+      "datasetfr": "Jeunesse Cite",
       "date": "July 2024",
+      "datefr": "juillet 2024",
       "type": "",
-      "desc": "Visualize insightful open-ended responses to the State of Housing for Young People in Canada survey conducted by Youthful Cities.",
-      "descfr": "",
+      "desc": "Explore what youth across Canada are saying about housing in our survey. See their thoughts organized into an interactive, theme-based visual.",
+      "descfr": "Découvrez ce que les jeunes de tout le Canada disent sur le logement dans notre enquête. Voyez leurs pensées organisées en un visuel interactif et thématique.",
       "link": "/insights/housing/open-ended"
     },
     {

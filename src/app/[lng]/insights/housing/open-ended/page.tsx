@@ -211,8 +211,7 @@ const Interview = () => {
             <Heading level={5} color='secondary.60'>
               {t('method_sub_2')}
             </Heading>
-            <Text>{t('method_p_2')}</Text>
-            <Text marginBottom='xl'>{t('method_p_1')}</Text>
+            <Text marginBottom='xl'>{t('method_p_2')}</Text>
             <Heading level={5} color='secondary.60'>
               {t('method_sub_3')}
             </Heading>

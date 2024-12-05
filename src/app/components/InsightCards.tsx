@@ -110,7 +110,7 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng, maxLength }) => {
   };
 
   return (
-    <Flex className='cards-container'>
+    <View className='cards-container'>
       {truncatedInsightCards.map((card, index) => (
         <StyledCard
           key={uuidv4()}
@@ -130,7 +130,7 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng, maxLength }) => {
               marginTop='xl'
               color='font.primary'
             >
-              {card.date}
+              {lng === 'fr' ? card.datefr : card.date}
             </Text>
             <Text fontSize='small' color='font.primary'>
               {lng === 'fr' ? card.descfr || card.desc : card.desc}
@@ -162,7 +162,7 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng, maxLength }) => {
         </StyledCard>
       ))}
       {/* <Dialogue open={openDialogue} onClose={handleClose} /> */}
-    </Flex>
+    </View>
   );
 };
 

@@ -4,8 +4,13 @@ import config from '@/amplifyconfiguration.json';
 import Container from '@/app/components/Background';
 import BubbleChartJSON from '@/app/components/dataviz/BubbleChart/BubbleChartJSON';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
+import Drawer from '@/app/components/Drawer';
 import Quote from '@/app/components/Quote';
+import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
+import { useParams } from 'next/navigation';
+import { Trans } from 'react-i18next/TransWithoutContext';
+
 import {
   Flex,
   Heading,
@@ -16,7 +21,6 @@ import {
 import { Amplify } from 'aws-amplify';
 import { downloadData } from 'aws-amplify/storage';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
-import Masonry from 'react-masonry-css';
 
 Amplify.configure(config);
 
@@ -50,6 +54,9 @@ const fetchData = async () => {
 };
 
 const Interview = () => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'housing-open');
+
   const containerRef = useRef<HTMLDivElement>(null);
   const quotesRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -81,12 +88,12 @@ const Interview = () => {
   const [visibleQuotes, setVisibleQuotes] = useState<string[]>([]);
 
   const batchSize = 10;
-  const quoteCols = useBreakpointValue({
-    base: 1,
-    small: 1,
-    medium: 2,
-    large: 2,
-    xl: 3,
+  const quoteSize = useBreakpointValue({
+    base: 90,
+    small: 90,
+    medium: 70,
+    large: 50,
+    xl: 40,
   });
 
   const fetchMoreQuotes = () => {
@@ -151,33 +158,29 @@ const Interview = () => {
     setOffset(batchSize);
   };
 
-  useEffect(() => {
-    if (quotes) {
-      const element = document.getElementById('quotes-container');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' }); // Smooth scrolling
-      }
-    }
-  }, [quotes]);
-
   return (
     <View ref={containerRef} style={{ overflowX: 'hidden' }}>
       <Container>
         <View className='short-container' paddingTop='xxxl'>
           <Heading level={1}>
-            Housing Survey —{' '}
-            <span className='highlight'>Open-ended responses</span>
+            <Trans
+              t={t}
+              i18nKey='title'
+              components={{ span: <span className='highlight' /> }}
+            />
           </Heading>
           <View className='inner-container'>
-            <Heading level={3} color='font.inverse' marginBottom='xl' />
-            <Text>
-              Explore answers to this question: Tell us any other ideas you may
-              have about housing in Canada. What were your experiences like
-              finding housing? What are you concerned about in the future? What
-              would you like to see happen to solve the housing crisis in
-              Canada? This visualization is generated with the help of AI. Click
-              on a node to view quotes.
-            </Text>
+            <Heading level={3} color='font.inverse' marginBottom='xl'>
+              {t('subtitle')}
+            </Heading>
+            <Heading level={4} color='font.inverse'>
+              {t('description_sub_1')}
+            </Heading>
+            <Text marginBottom='xl'>{t('description_p_1')}</Text>
+            <Heading level={4} color='font.inverse'>
+              {t('description_sub_2')}
+            </Heading>
+            <Text>{t('description_p_2')}</Text>
           </View>
         </View>
         <Flex justifyContent='center'>
@@ -192,22 +195,48 @@ const Interview = () => {
           />
           )
         </Flex>
-        {visibleQuotes?.length > 0 && (
-          <Flex
-            direction='column'
-            className='short-container'
-            id='quotes-container'
-            paddingBottom='xxl'
-          >
-            <Heading level={3} color='font.inverse' marginBottom={0}>
-              Quotes tagged with theme {code}
+        <View
+          className='short-container'
+          paddingTop='medium'
+          paddingBottom='xxxl'
+        >
+          <View className='inner-container'>
+            <Heading level={4} color='font.inverse' marginBottom='xl'>
+              {t('method_title')}
             </Heading>
-            <View ref={quotesRef}>
-              <Masonry
-                className='masonry-grid'
-                breakpointCols={quoteCols as number}
-                columnClassName='masonry-grid_column'
-              >
+            <Heading level={5} color='secondary.60'>
+              {t('method_sub_1')}
+            </Heading>
+            <Text marginBottom='xl'>{t('method_p_1')}</Text>
+            <Heading level={5} color='secondary.60'>
+              {t('method_sub_2')}
+            </Heading>
+            <Text marginBottom='xl'>{t('method_p_2')}</Text>
+            <Heading level={5} color='secondary.60'>
+              {t('method_sub_3')}
+            </Heading>
+            <Trans
+              t={t}
+              i18nKey='method_p_3'
+              components={{ p: <Text />, ul: <ul />, li: <li /> }}
+            />
+          </View>
+        </View>
+        <Drawer
+          isopen={isDrawerOpen}
+          maxWidth={quoteSize as number}
+          onOpen={() => setIsDrawerOpen(true)}
+          onClose={() => {
+            setIsDrawerOpen(false);
+          }}
+          tabText={t('drawer_tab')}
+        >
+          {visibleQuotes?.length > 0 ? (
+            <Flex direction='column'>
+              <Heading level={3} color='font.inverse' marginBottom={0}>
+                <Trans t={t} i18nKey='helper_text' values={{ code }} />
+              </Heading>
+              <View ref={quotesRef}>
                 {visibleQuotes &&
                   visibleQuotes.map((item, index) => (
                     <Quote
@@ -223,13 +252,19 @@ const Interview = () => {
                       }
                       key={index}
                       quote={item}
-                      left
+                      left={index % 2 === 0}
                     />
                   ))}
-              </Masonry>
-            </View>
-          </Flex>
-        )}
+              </View>
+            </Flex>
+          ) : (
+            <Flex direction='column'>
+              <Heading level={3} color='font.inverse' marginBottom={0}>
+                {t('quotes_empty')}
+              </Heading>
+            </Flex>
+          )}
+        </Drawer>
         {tooltipState.position && (
           <Tooltip
             x={tooltipState.position.x}

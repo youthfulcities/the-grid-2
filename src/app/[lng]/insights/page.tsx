@@ -19,7 +19,7 @@ const Insights: React.FC<InsightLayoutProps> = ({ params: { lng } }) => {
 
   return (
     <Container>
-      <View as='section' className='container section-padding'>
+      <View as='section' className='container' paddingTop='xxxl'>
         <Heading level={2} style={{ color: '#F26B5F' }}>
           {t('insights')}
         </Heading>

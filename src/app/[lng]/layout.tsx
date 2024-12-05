@@ -9,7 +9,6 @@ import React from 'react';
 import config from '../../amplifyconfiguration.json';
 import StyledComponentsRegistry from '../../lib/registry';
 import AutheticatorProvider from '../components/AuthenticatorProvider';
-import BetaBanner from '../components/BetaBanner';
 import Footer from '../components/Footer';
 import NavBar from '../components/NavBar';
 import { languages } from '../i18n/settings';
@@ -133,7 +132,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({
     })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`}
       </Script>
       {/* override layout shift when opening nav bar */}
-      <body style={{ margin: '0px !important' }}>
+      <body>
         <GoogleAnalytics gaId='G-GEF0PPKZXD' />
         <GoogleTagManager gtmId='GTM-MXZ2WJTV' />
         <StyledComponentsRegistry>
@@ -147,7 +146,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({
                   height: '100%',
                 }}
               >
-                <BetaBanner />
+                {/* <BetaBanner /> */}
                 <NavBar />
                 {children}
                 <Footer />

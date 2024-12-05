@@ -268,7 +268,7 @@ const FooterComponent = () => {
             </a>
           </Flex>
           <Text fontSize='12px' color='white'>
-            © 2024 Youthful Cities. {t('rights')}. Version 1.1.2
+            © 2024 Youthful Cities. {t('rights')}. Version 1.1.3
           </Text>
         </FooterBottomSection>
       </Flex>

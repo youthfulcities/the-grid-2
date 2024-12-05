@@ -1,6 +1,6 @@
 {
   "success": "You have successfully subscribed!",
-  "duplicate": "It looks like this email is already subscribed.",
+  "duplicate": "Uh oh, it looks like this email's already subscribed.🧐",
   "error": "Oops! There was an error subscribing you to the newsletter. Please email us at info@youthfulcities.com and we'll add you to the list manually.",
   "invalid": "Please enter a valid email address."
 }

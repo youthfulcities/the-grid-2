@@ -12,7 +12,7 @@ const About = () => {
 
   return (
     <Container>
-      <Flex className='container section-padding'>
+      <Flex className='container' paddingTop='xxxl'>
         <Flex direction='column'>
           <Heading marginBottom='medium' level={1}>
             <Trans

@@ -294,7 +294,7 @@ const ContactForm = () => {
 
   return (
     <Container>
-      <View as='section' className='container section-padding'>
+      <View as='section' className='container' paddingTop='xxxl'>
         <StyledForm as='form' onSubmit={handleSubmit}>
           <Heading marginBottom={tokens.space.medium.value} level={2}>
             {t('title')}

@@ -1,38 +1,6 @@
-import cityCards from '@/data/city-cards.json';
 import { Flex, Heading, Text, View, useTheme } from '@aws-amplify/ui-react';
 import styled from 'styled-components';
 import useTranslation from '../i18n/client';
-
-// .outline-text {
-// color: var(--light-blue);
-// font-family: 'Gotham Narrow Black';
-// font-style: normal;
-// font-size: 6.5rem;
-// line-height: 6.5rem;
-// -webkit-text-fill-color: var(--blue);
-// -webkit-text-stroke-width: 2px;
-// -webkit-text-stroke-color: var(--light-blue);
-// }
-
-// .large-text {
-//   color: var(--blue);
-//   font-family: 'Gotham Narrow Black';
-//   font-style: normal;
-//   font-size: 6.5rem;
-//   line-height: 6.5rem;
-// }
-
-// @media screen and (max-width: 992px) {
-//   .outline-text {
-//     font-size: 5rem;
-//     line-height: 5rem;
-//   }
-
-//   .large-text {
-//     font-size: 5rem;
-//     line-height: 5rem;
-//   }
-// }
 
 const BarBackground = styled(View)<{ $background: string; $space: string }>`
   width: 100%;
@@ -51,7 +19,7 @@ const OutlineText = styled(Text)<{
   color: ${(props) => props.$outlineColor};
   font-family: 'Gotham Narrow Black';
   font-style: normal;
-  font-size: 6.5rem;
+  font-size: 6rem;
   line-height: 6.5rem;
   -webkit-text-fill-color: ${(props) => props.$innerColor};
   -webkit-text-stroke-width: 2px;
@@ -84,7 +52,7 @@ const Banner: React.FC<{ lng: string }> = ({ lng }) => {
             $innerColor={tokens.colors.primary[60].value}
             $outlineColor={tokens.colors.font.primary.value}
           >
-            11
+            31 000
           </OutlineText>
         </Fact>
         <Fact $space={tokens.space.medium.value}>
@@ -94,7 +62,7 @@ const Banner: React.FC<{ lng: string }> = ({ lng }) => {
             $innerColor={tokens.colors.primary[60].value}
             $outlineColor={tokens.colors.font.primary.value}
           >
-            {cityCards.cityCards.length}
+            7000
           </OutlineText>
         </Fact>
         <Fact $space={tokens.space.medium.value}>
@@ -104,7 +72,7 @@ const Banner: React.FC<{ lng: string }> = ({ lng }) => {
             $innerColor={tokens.colors.primary[60].value}
             $outlineColor={tokens.colors.font.primary.value}
           >
-            454k
+            35 000
           </OutlineText>
         </Fact>
       </Flex>

@@ -7,6 +7,12 @@ const theme = createTheme(
   {
     name: 'my-theme',
     tokens: {
+      space: {
+        xxxl: { value: '7rem' },
+        relative: {
+          xxxl: { value: '7rem' },
+        },
+      },
       fonts: {
         default: {
           variable: { value: 'Gotham Narrow Book, Raleway, sans-serif' },

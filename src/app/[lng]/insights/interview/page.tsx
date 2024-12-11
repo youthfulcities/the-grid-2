@@ -160,8 +160,13 @@ const Interview = () => {
   return (
     <Container>
       <View className='container padding' ref={containerRef}>
-        <Heading level={1}>Interview</Heading>
+        <Heading level={1}>
+          What’s up with <span className='highlight'>work lately?</span>
+        </Heading>
         <div className='inner-container'>
+          <Heading level={3} color='font.inverse'>
+            Youth Cite
+          </Heading>
           <Heading level={3} color='font.inverse' marginBottom='xl' />
           <Text>
             Explore over 300 interviews with youth and industry leaders on the

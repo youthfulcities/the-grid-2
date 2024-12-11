@@ -163,10 +163,13 @@ export default function SocialPost(props) {
             {...getOverrideProps(overrides, "Article")}
           >
             <MyIcon
+              width="24px"
+              height="24px"
               display="block"
               gap="unset"
               alignItems="unset"
               justifyContent="unset"
+              overflow="hidden"
               shrink="0"
               position="relative"
               padding="0px 0px 0px 0px"
@@ -235,10 +238,13 @@ export default function SocialPost(props) {
               {...getOverrideProps(overrides, "Share29766863")}
             ></Text>
             <MyIcon
+              width="24px"
+              height="24px"
               display="block"
               gap="unset"
               alignItems="unset"
               justifyContent="unset"
+              overflow="hidden"
               shrink="0"
               position="relative"
               padding="0px 0px 0px 0px"
@@ -246,10 +252,13 @@ export default function SocialPost(props) {
               {...getOverrideProps(overrides, "MyIcon29766864")}
             ></MyIcon>
             <MyIcon
+              width="24px"
+              height="24px"
               display="block"
               gap="unset"
               alignItems="unset"
               justifyContent="unset"
+              overflow="hidden"
               shrink="0"
               position="relative"
               padding="0px 0px 0px 0px"
@@ -257,10 +266,13 @@ export default function SocialPost(props) {
               {...getOverrideProps(overrides, "MyIcon29766865")}
             ></MyIcon>
             <MyIcon
+              width="24px"
+              height="24px"
               display="block"
               gap="unset"
               alignItems="unset"
               justifyContent="unset"
+              overflow="hidden"
               shrink="0"
               position="relative"
               padding="0px 0px 0px 0px"
@@ -298,10 +310,13 @@ export default function SocialPost(props) {
         {...getOverrideProps(overrides, "Read more29766868")}
       >
         <MyIcon
+          width="24px"
+          height="24px"
           display="block"
           gap="unset"
           alignItems="unset"
           justifyContent="unset"
+          overflow="hidden"
           shrink="0"
           position="relative"
           padding="0px 0px 0px 0px"

@@ -84,10 +84,17 @@ const BarChart: React.FC<BarProps> = ({
 
     const segmentOptions = _.keys(_.values(data)[0]);
     const answers = _.keys(data).filter((item) => item !== 'Total Sample');
+    // Filter out segmentOptions with values less than 50
+    const filteredSegmentOptions = segmentOptions.filter((option) =>
+      answers.some((answer) => {
+        const value = _.get(data, [answer, option], 0);
+        return value >= 50; // Keep this option if any value >= 50
+      })
+    );
 
     // Calculate percentages for each option
     const dataToDisplay = _.flatMap(answers, (answer) =>
-      _.map(segmentOptions, (option) => {
+      _.map(filteredSegmentOptions, (option) => {
         const value = _.get(data, [answer, option], 0);
         const totalSample = _.get(data, ['Total Sample', option], 1);
         const percentage = totalSample ? (value / totalSample) * 100 : 0; // Calculate percentage
@@ -156,12 +163,15 @@ const BarChart: React.FC<BarProps> = ({
       .attr('class', 'bar')
       .attr('x', xScale(0)) // Start from 0%
       .attr('y', (d) => {
-        const groupIndex = segmentOptions.indexOf(d.option);
+        const groupIndex = filteredSegmentOptions.indexOf(d.option);
         const groupHeight = yScale.bandwidth();
-        const barHeight = groupHeight / segmentOptions.length;
+        const barHeight = groupHeight / filteredSegmentOptions.length;
         return groupIndex * barHeight;
       })
-      .attr('height', () => yScale.bandwidth() / segmentOptions.length - 2) // Adjust height with padding
+      .attr(
+        'height',
+        () => yScale.bandwidth() / filteredSegmentOptions.length - 2
+      ) // Adjust height with padding
       .attr('width', (d) => xScale(d.value) - xScale(0)) // Scale width based on percentage
       .attr('fill', (d) => colorScale(d.option)) // Use color based on `region`
       .on('mouseover', (event, d) => {

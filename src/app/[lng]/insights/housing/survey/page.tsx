@@ -84,7 +84,7 @@ const HousingSurvey = () => {
             key !== 'question_type'
         );
         setSegments(allSegments ?? []);
-        setCurrentSegment(allSegments[2]);
+        setCurrentSegment(allSegments[5]);
       }
     };
 
@@ -98,6 +98,9 @@ const HousingSurvey = () => {
         <View className='inner-container' ref={containerRef}>
           <Text>{currentQuestion}</Text>
           <Text>{currentSegment}</Text>
+          <Text>
+            Note: Segments below a sample size of 50 are not displayed.
+          </Text>
           <BarChart
             data={
               data && currentQuestion && currentSegment

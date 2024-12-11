@@ -12,7 +12,7 @@ interface BarChartTooltipProps {
   value: string;
   group: string;
   topic: string;
-  activeFile: string;
+  activeFile?: string;
 }
 
 const BarChartTooltip: React.FC<BarChartTooltipProps> = ({
@@ -22,10 +22,10 @@ const BarChartTooltip: React.FC<BarChartTooltipProps> = ({
   activeFile,
 }) => {
   const getGrammer = (currentGroup: string) => {
-    if (activeFile.includes('cluster')) {
+    if (activeFile?.includes('cluster')) {
       return `in the ${currentGroup} cluster`;
     }
-    if (activeFile.includes('city')) {
+    if (activeFile?.includes('city')) {
       return `living in ${currentGroup}`;
     }
     return `who identified as ${currentGroup}`;

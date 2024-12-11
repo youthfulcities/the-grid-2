@@ -15,5 +15,9 @@
   "method_sub_2": "Data collection",
   "method_p_2": "The survey was in the field between April 2024 and July 2024, exclusively through online collection. It was hosted on SurveyMonkey, a common survey data collection platform. SurveyMonkey has implemented governance, risk management, and compliance practices that align with the most globally recognized information security frameworks. We gathered 1500 responses.",
   "method_sub_3": "Limitations",
-  "method_p_3": "<p>While steps were taken to ensure the sample was representative of the youth population in Canada, and ethical considerations were met, some biases may be present within the data.</p><ul><li><p>Sampling bias: Although the sample was designed to be representative, certain identities may have been underrepresented or overrepresented, which can impact insights and findings.</p></li><li><p>Response bias: The survey relied on self-reported data, which may be subject to social desirability bias or recall bias, particularly for questions related to sensitive topics.</p></li></ul>"
+  "method_p_3": "<p>While steps were taken to ensure the sample was representative of the youth population in Canada, and ethical considerations were met, some biases may be present within the data.</p><ul><li><p>Sampling bias: Although the sample was designed to be representative, certain identities may have been underrepresented or overrepresented, which can impact insights and findings.</p></li><li><p>Response bias: The survey relied on self-reported data, which may be subject to social desirability bias or recall bias, particularly for questions related to sensitive topics.</p></li></ul>",
+  "stories_heading": "Read the stories behind the data",
+  "blog_title": "Priced Out: The state of youth housing in Canada’s urban centres",
+  "blog_button": "Read the blog post",
+  "blog_alt": "The State of Housing for Young People in Canada: Episode 1 - priced out"
 }

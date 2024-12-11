@@ -11,6 +11,7 @@ import { useDimensions } from '@/hooks/useDimensions';
 import { useParams } from 'next/navigation';
 import { Trans } from 'react-i18next/TransWithoutContext';
 
+import CrosslinkCard from '@/app/components/CrosslinkCard';
 import {
   Flex,
   Heading,
@@ -173,11 +174,11 @@ const Interview = () => {
             <Heading level={3} color='font.inverse' marginBottom='xl'>
               {t('subtitle')}
             </Heading>
-            <Heading level={4} color='font.inverse'>
+            <Heading level={4} color='secondary.60' marginBottom='xs'>
               {t('description_sub_1')}
             </Heading>
             <Text marginBottom='xl'>{t('description_p_1')}</Text>
-            <Heading level={4} color='font.inverse'>
+            <Heading level={4} color='secondary.60' marginBottom='xs'>
               {t('description_sub_2')}
             </Heading>
             <Text>{t('description_p_1.5')}</Text>
@@ -202,7 +203,26 @@ const Interview = () => {
           paddingBottom='xxxl'
         >
           <View className='inner-container'>
-            <Heading level={4} color='font.inverse' marginBottom='xl'>
+            <Heading level={4} color='secondary.60' marginBottom='xs'>
+              {t('stories_heading')}
+            </Heading>
+            <CrosslinkCard
+              heading={t('blog_title')}
+              buttonText={t('blog_button')}
+              link='https://www.youthfulcities.com/blog/2024/12/12/priced-out-the-state-of-youth-housing-in-canadas-urban-centres/'
+              src='https://www.youthfulcities.com/wp-content/uploads/2024/12/HousingSurvey-Episode1-blogtitle.png'
+              alt={t('blog_alt')}
+              r={183}
+              g={152}
+              b={182}
+              inverse={false}
+            />
+            <Heading
+              level={4}
+              color='secondary.60'
+              marginTop='xxl'
+              marginBottom='xs'
+            >
               {t('method_title')}
             </Heading>
             <Heading level={5} color='secondary.60'>

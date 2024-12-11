@@ -29,10 +29,6 @@
         }
       },
       "storage": {
-        "thegrid23ee127f9": {
-          "bucketName": "ycthegrid",
-          "region": "ca-central-1"
-        },
         "interviews": {
           "tableName": "interviews",
           "region": "ca-central-1",
@@ -51,6 +47,10 @@
           "partitionKeyType": "S",
           "sortKeyName": "ds_sk",
           "sortKeyType": "S"
+        },
+        "thegrid24c63f4ac": {
+          "bucketName": "ycydl-prod",
+          "region": "ca-central-1"
         }
       },
       "auth": {

@@ -79,7 +79,7 @@ const HousingSurvey = () => {
       if (data) {
         const allQuestions = Object.keys(data);
         setQuestions(allQuestions ?? []);
-        setCurrentQuestion(allQuestions[2]);
+        setCurrentQuestion(allQuestions[34]);
       }
     };
 
@@ -97,7 +97,7 @@ const HousingSurvey = () => {
             key !== 'question_type'
         );
         setSegments(allSegments ?? []);
-        setCurrentSegment(allSegments[5]);
+        setCurrentSegment(allSegments[1]);
       }
     };
 
@@ -113,9 +113,9 @@ const HousingSurvey = () => {
         <Heading level={1} marginBottom='xl'>
           Youth Housing Study
         </Heading>
-        {data && (
-          <View ref={containerRef}>
-            <View>
+        <View ref={containerRef}>
+          {data && (
+            <>
               <StyledSelect
                 marginBottom='large'
                 label='Select a question'
@@ -152,6 +152,8 @@ const HousingSurvey = () => {
                   </Heading>
                   <Text fontSize='xs' textAlign='center'>
                     *Note: Segments below a sample size of 50 are not displayed.
+                    The dotted lined represents the national average, which
+                    includes segments not displayed on the chart.
                   </Text>
                 </>
               )}
@@ -165,9 +167,9 @@ const HousingSurvey = () => {
                 tooltipState={tooltipState}
                 setTooltipState={setTooltipState}
               />
-            </View>
-          </View>
-        )}
+            </>
+          )}
+        </View>
       </View>
       {tooltipState.position && (
         <Tooltip

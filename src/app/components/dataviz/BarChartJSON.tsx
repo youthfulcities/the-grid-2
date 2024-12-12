@@ -47,6 +47,7 @@ interface LegendProps {
 
 const ChartContainer = styled.div`
   position: relative;
+  margin-bottom: var(--amplify-space-xl);
 `;
 
 const BarChart: React.FC<BarProps> = ({
@@ -56,6 +57,7 @@ const BarChart: React.FC<BarProps> = ({
   data,
 }) => {
   const ref = useRef<SVGSVGElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const [parsedData, setParsedData] = useState<{ [key: string]: DataItem[] }>(
     {}
@@ -80,6 +82,8 @@ const BarChart: React.FC<BarProps> = ({
     }
   }, []);
 
+  console.log(data);
+
   useEffect(() => {
     const segmentOptions = _.keys(_.values(data)[0]);
 
@@ -89,25 +93,46 @@ const BarChart: React.FC<BarProps> = ({
       )
     );
 
-    const processedDataToDisplay = _.flatMap(selectedAnswers, (answer) =>
-      _.chain(processedValidSegmentOptions)
+    // Calculate averages for each answer
+    const answerAverages = selectedAnswers.map((answer) => {
+      const totalValue = segmentOptions.reduce(
+        (sum, option) => sum + _.get(data, [answer, option], 0),
+        0
+      );
+      const totalSample = segmentOptions.reduce(
+        (sum, option) => sum + _.get(data, ['Total Sample', option], 0),
+        0
+      );
+      const average = totalSample ? (totalValue / totalSample) * 100 : 0;
+      return { answer, average: +average.toFixed(1) }; // Keep average as a number
+    });
+
+    // Prepare data for display
+    const processedDataToDisplay = _.flatMap(selectedAnswers, (answer) => {
+      // Find the average for the current answer
+      const answerAverage =
+        answerAverages.find((avg) => avg.answer === answer)?.average || 0;
+
+      return _.chain(processedValidSegmentOptions)
         .map((option) => {
           const value = _.get(data, [answer, option], 0); // Get the value
-          if (value < sample) return null; // Skip values below 50
+          if (value < sample) return null; // Skip values below the cutoff
           const totalSample = _.get(data, ['Total Sample', option], 1); // Total sample for the option
           const percentage = totalSample ? (value / totalSample) * 100 : 0; // Calculate percentage
           return {
             answer,
             option,
-            value: +percentage.toFixed(1), // Store the percentage
+            value: +percentage.toFixed(1), // Store the percentage as a number
+            average: answerAverage, // Append the average to the object
           };
         })
         .compact() // Remove null values
-        .value()
-    );
+        .value();
+    });
 
     setDataToDisplay(processedDataToDisplay);
     setValidSegmentOptions(processedValidSegmentOptions);
+    setActiveLegendItems(processedValidSegmentOptions);
   }, [data, selectedAnswers]);
 
   useEffect(() => {
@@ -121,11 +146,14 @@ const BarChart: React.FC<BarProps> = ({
   }, [data]);
 
   useEffect(() => {
-    setActiveLegendItems(validSegmentOptions);
-  }, [validSegmentOptions]);
-
-  useEffect(() => {
-    if (!width || !height || !dataToDisplay) return;
+    if (
+      !width ||
+      !height ||
+      !dataToDisplay ||
+      !selectedAnswers ||
+      !validSegmentOptions
+    )
+      return;
 
     const maxValue = _.maxBy(dataToDisplay, 'value')?.value || 100;
 
@@ -220,12 +248,14 @@ const BarChart: React.FC<BarProps> = ({
         setTooltipState({
           position: { x: event.pageX, y: event.pageY },
           content: `${d.value}% of youth who identify as ${d.option} selected ${d.answer}`,
+          group: `National average: ${d.average}%`,
         });
       })
       .on('mousemove', (event, d) => {
         setTooltipState({
           position: { x: event.pageX, y: event.pageY },
           content: `${d.value}% of youth who identify as ${d.option} selected ${d.answer}`,
+          group: `National average: ${d.average}%`,
         });
       })
       .on('mouseout', () => {
@@ -239,7 +269,29 @@ const BarChart: React.FC<BarProps> = ({
       .duration(duration) // Set duration for the transition
       .delay((d, i) => i * (duration / 10)) // Add delay for staggered animation
       .attr('width', (d) => xScale(d.value as number) - xScale(0));
-  }, [data, dataToDisplay, width, height, selectedAnswers]);
+
+    // Add dotted lines for averages
+    svg
+      .selectAll('.average-line')
+      .data(dataToDisplay)
+      .join('line')
+      .attr('class', 'average-line')
+      .attr('x1', (d) => xScale(d.average)) // Position based on the average value
+      .attr('x2', (d) => xScale(d.average)) // Same as x1 for a vertical line
+      .attr('y1', (d) => yScale(d.answer as string)) // Start at the top of the group
+      .attr('y2', (d) => yScale(d.answer as string) + yScale.bandwidth()) // End at the bottom of the group
+      .attr('stroke', 'white') // Line color
+      .attr('stroke-dasharray', '4') // Dotted line style
+      .attr('stroke-width', 2)
+      .attr('opacity', '0.9');
+  }, [
+    data,
+    dataToDisplay,
+    width,
+    height,
+    selectedAnswers,
+    validSegmentOptions,
+  ]);
 
   return (
     <>

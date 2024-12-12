@@ -209,8 +209,16 @@ const Interview = () => {
             <CrosslinkCard
               heading={t('blog_title')}
               buttonText={t('blog_button')}
-              link='https://www.youthfulcities.com/blog/2024/12/12/priced-out-the-state-of-youth-housing-in-canadas-urban-centres/'
-              src='https://www.youthfulcities.com/wp-content/uploads/2024/12/HousingSurvey-Episode1-blogtitle.png'
+              link={
+                lng === 'fr'
+                  ? 'https://www.youthfulcities.com/blog/2024/12/13/le-prix-a-payer-letat-du-logement-des-jeunes-dans-les-centres-urbains-du-canada/'
+                  : 'https://www.youthfulcities.com/blog/2024/12/12/priced-out-the-state-of-youth-housing-in-canadas-urban-centres/'
+              }
+              src={
+                lng === 'fr'
+                  ? 'https://www.youthfulcities.com/wp-content/uploads/2024/12/Episode-1-titre-FR.png'
+                  : 'https://www.youthfulcities.com/wp-content/uploads/2024/12/HousingSurvey-Episode1-blogtitle.png'
+              }
               alt={t('blog_alt')}
               r={183}
               g={152}

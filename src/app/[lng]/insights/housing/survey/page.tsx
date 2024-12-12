@@ -2,10 +2,12 @@
 
 import Background from '@/app/components/Background';
 import BarChart from '@/app/components/dataviz/BarChartJSON';
+import Tooltip from '@/app/components/dataviz/TooltipChart';
 import { useDimensions } from '@/hooks/useDimensions';
 import fetchData from '@/lib/fetchData';
-import { Heading, Text, View } from '@aws-amplify/ui-react';
+import { Heading, SelectField, Text, View } from '@aws-amplify/ui-react';
 import { ReactNode, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 interface TooltipState {
   position: { x: number; y: number } | null;
@@ -29,6 +31,16 @@ interface QuestionResponses {
 interface SurveyData {
   [question: string]: QuestionResponses;
 }
+
+const StyledSelect = styled(SelectField)`
+  select: {
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+  option: {
+    word-wrap: break-word;
+  }
+`;
 
 const HousingSurvey = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -76,6 +88,7 @@ const HousingSurvey = () => {
 
   useEffect(() => {
     const getSegments = () => {
+      if (!data || !data[currentQuestion]) return;
       if (currentQuestion && data && data[currentQuestion]) {
         const allSegments = Object.keys(data[currentQuestion]).filter(
           (key) =>
@@ -91,28 +104,81 @@ const HousingSurvey = () => {
     getSegments();
   }, [data, currentQuestion]);
 
+  const regex =
+    /(\[Please choose all that apply\]_feature|_Feature|\[Please choose all that apply\]|_feature|_ feature|\[Please choose only one\]|Select as many as apply.|On a scale of 1 to 10 — with 1 being not at all_featurre interested, and 10 being extremely interested —|Choose as many as apply.)/;
+
   return (
     <Background>
-      <View className='container' padding='xxxl'>
-        <Heading level={1}>Youth Housing Study</Heading>
-        <View className='inner-container' ref={containerRef}>
-          <Text>{currentQuestion}</Text>
-          <Text>{currentSegment}</Text>
-          <Text>
-            Note: Segments below a sample size of 50 are not displayed.
-          </Text>
-          <BarChart
-            data={
-              data && currentQuestion && currentSegment
-                ? data[currentQuestion][currentSegment]
-                : null
-            }
-            width={width}
-            tooltipState={tooltipState}
-            setTooltipState={setTooltipState}
-          />
-        </View>
+      <View className='container' paddingTop='xxxl'>
+        <Heading level={1} marginBottom='xl'>
+          Youth Housing Study
+        </Heading>
+        {data && (
+          <View ref={containerRef}>
+            <View>
+              <StyledSelect
+                marginBottom='large'
+                label='Select a question'
+                color='font.inverse'
+                value={currentQuestion}
+                onChange={(e) => setCurrentQuestion(e.target.value)}
+              >
+                {questions.map((question) => (
+                  <option value={question} key={question}>
+                    {question.replace(regex, '').trim()}
+                  </option>
+                ))}
+              </StyledSelect>
+              <StyledSelect
+                marginBottom='xl'
+                label='Select a demographic segment'
+                color='font.inverse'
+                value={currentSegment}
+                onChange={(e) => setCurrentSegment(e.target.value)}
+              >
+                {segments.map((segment) => (
+                  <option value={segment} key={segment}>
+                    {segment.replace(regex, '').trim()}
+                  </option>
+                ))}
+              </StyledSelect>
+              {currentSegment && (
+                <>
+                  <Heading level={3} textAlign='center' color='font.inverse'>
+                    {currentQuestion.replace(regex, '').trim()}
+                  </Heading>
+                  <Heading level={5} textAlign='center' color='font.inverse'>
+                    Broken down by: {currentSegment.replace(regex, '').trim()}
+                  </Heading>
+                  <Text fontSize='xs' textAlign='center'>
+                    *Note: Segments below a sample size of 50 are not displayed.
+                  </Text>
+                </>
+              )}
+              <BarChart
+                data={
+                  data && currentQuestion && currentSegment
+                    ? data[currentQuestion][currentSegment]
+                    : null
+                }
+                width={width}
+                tooltipState={tooltipState}
+                setTooltipState={setTooltipState}
+              />
+            </View>
+          </View>
+        )}
       </View>
+      {tooltipState.position && (
+        <Tooltip
+          x={tooltipState.position.x}
+          content={tooltipState.content}
+          y={tooltipState.position.y}
+          group={tooltipState.group}
+          child={tooltipState.child}
+          minWidth={tooltipState.minWidth}
+        />
+      )}
     </Background>
   );
 };

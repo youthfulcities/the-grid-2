@@ -276,10 +276,13 @@ const BarChart: React.FC<BarProps> = ({
       .data(dataToDisplay)
       .join('line')
       .attr('class', 'average-line')
-      .attr('x1', (d) => xScale(d.average)) // Position based on the average value
-      .attr('x2', (d) => xScale(d.average)) // Same as x1 for a vertical line
-      .attr('y1', (d) => yScale(d.answer as string)) // Start at the top of the group
-      .attr('y2', (d) => yScale(d.answer as string) + yScale.bandwidth()) // End at the bottom of the group
+      .attr('x1', (d) => xScale(d.average as number)) // Position based on the average value
+      .attr('x2', (d) => xScale(d.average as number)) // Same as x1 for a vertical line
+      .attr('y1', (d) => yScale(d.answer as string) as number) // Start at the top of the group
+      .attr(
+        'y2',
+        (d) => (yScale(d.answer as string) as number) + yScale.bandwidth()
+      ) // End at the bottom of the group
       .attr('stroke', 'white') // Line color
       .attr('stroke-dasharray', '4') // Dotted line style
       .attr('stroke-width', 2)

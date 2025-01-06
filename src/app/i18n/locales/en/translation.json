@@ -1,10 +1,11 @@
 {
   "home": "Home",
-  "datasets": "Interview Minutes",
+  "datasets": "Datasets",
   "insights": "Insights",
   "about": "About",
   "contact": "Contact",
   "cities": "Survey Responses",
+  "chatbot": "Chatbot",
   "records": "Quantitative Data Points",
   "subscribe": "Subscribe",
   "email": "Your email",

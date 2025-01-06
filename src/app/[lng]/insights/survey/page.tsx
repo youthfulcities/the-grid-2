@@ -88,19 +88,16 @@ const Survey: React.FC = () => {
     <Container>
       <View className='container padding'>
         <Heading level={1}>
-          Skills <span className='highlight'>Mismatch</span>
+          What’s up with <span className='highlight'>work lately?</span>
         </Heading>
         <div className='inner-container' ref={containerRef}>
           <Heading level={3} color='font.inverse'>
-            What’s up with work lately? Survey 2024
+            Survey Preview
           </Heading>
-          <Heading
-            className='padding'
-            level={5}
-            color='font.inverse'
-            textAlign='center'
-            marginTop='xl'
-          >
+          <Heading level={2} marginTop='xxxl'>
+            Skills Mismatch
+          </Heading>
+          <Heading level={5} color='font.inverse' textAlign='center'>
             Select a segment
           </Heading>
           <Tabs.Container

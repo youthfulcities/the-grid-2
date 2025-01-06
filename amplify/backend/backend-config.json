@@ -239,14 +239,6 @@
         }
       ]
     },
-    "AMPLIFY_storage_interviewall_streamArn": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "interviewall"
-        }
-      ]
-    },
     "AMPLIFY_storage_interviewall_tableName": {
       "usedBy": [
         {
@@ -311,19 +303,19 @@
         }
       ]
     },
-    "AMPLIFY_storage_thegrid23ee127f9_bucketName": {
+    "AMPLIFY_storage_thegrid24c63f4ac_bucketName": {
       "usedBy": [
         {
           "category": "storage",
-          "resourceName": "thegrid23ee127f9"
+          "resourceName": "thegrid24c63f4ac"
         }
       ]
     },
-    "AMPLIFY_storage_thegrid23ee127f9_region": {
+    "AMPLIFY_storage_thegrid24c63f4ac_region": {
       "usedBy": [
         {
           "category": "storage",
-          "resourceName": "thegrid23ee127f9"
+          "resourceName": "thegrid24c63f4ac"
         }
       ]
     }
@@ -341,7 +333,7 @@
       "service": "DynamoDB",
       "serviceType": "imported"
     },
-    "thegrid23ee127f9": {
+    "thegrid24c63f4ac": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3",

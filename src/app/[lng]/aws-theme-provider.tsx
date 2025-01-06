@@ -7,6 +7,12 @@ const theme = createTheme(
   {
     name: 'my-theme',
     tokens: {
+      space: {
+        xxxl: { value: '7rem' },
+        relative: {
+          xxxl: { value: '7rem' },
+        },
+      },
       fonts: {
         default: {
           variable: { value: 'Gotham Narrow Book, Raleway, sans-serif' },
@@ -49,6 +55,15 @@ const theme = createTheme(
           borderRadius: { value: '{radii.large}' },
           startColor: { value: '{colors.neutral.90}' },
           endColor: { value: '{colors.neutral.80}' },
+        },
+        fieldcontrol: {
+          borderColor: { value: '{components.button.border.color.value}' },
+        },
+        select: {
+          color: { value: '{colors.font.inverse.value}' },
+          option: {
+            color: { value: '{colors.font.inverse.value}' },
+          },
         },
       },
       // these colour definitions had to be made because typescript wasn't accepting the colors.brand notation in styled components, and for some reason the default primary and secondary colours weren't matching the brand theme

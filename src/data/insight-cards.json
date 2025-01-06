@@ -13,10 +13,10 @@
       "link": "/insights/housing/open-ended"
     },
     {
-      "title": "Best City to Work in Canada",
-      "titlefr": "Meilleure ville où travailler au Canada",
-      "dataset": "Index | Urban Work Index 2024",
-      "datasetfr": "Indice du travail urbain 2024",
+      "title": "Urban Work Index 2024",
+      "titlefr": "Indice du travail urbain 2024",
+      "dataset": "Best City to Work in Canada",
+      "datasetfr": "Meilleure ville où travailler au Canada",
       "date": "2024",
       "type": "",
       "desc": "Urban Work Index 2024 ranks 30 cities based on youth priorities for ideal living and working. It is the culmination of DEVlab, an investigation to help build dynamic, engaged, and vital workforces in Canada.",

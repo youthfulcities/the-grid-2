@@ -99,6 +99,18 @@ const Index = () => {
             {t('more_heading')}
           </Heading>
           <Heading level={3} color='brand.primary.60'>
+            {t('stories_heading')}
+          </Heading>
+          <Text>{t('stories_blurb')}</Text>
+          <a
+            href='https://www.youthfulcities.com/blog/tag/devlab/'
+            target='_blank'
+          >
+            <Button variation='primary' marginTop='small'>
+              {t('stories_button')}
+            </Button>
+          </a>
+          <Heading marginTop='xl' level={3} color='brand.primary.60'>
             {t('chatbot_heading')}
           </Heading>
           <Text>{t('chatbot_blurb')}</Text>
@@ -129,18 +141,6 @@ const Index = () => {
               {t('chatbot_button')}
             </Button>
           </Link>
-          <Heading level={3} color='brand.primary.60'>
-            {t('stories_heading')}
-          </Heading>
-          <Text>{t('stories_blurb')}</Text>
-          <a
-            href='https://www.youthfulcities.com/blog/tag/devlab/'
-            target='_blank'
-          >
-            <Button variation='primary' marginTop='small'>
-              {t('stories_button')}
-            </Button>
-          </a>
         </div>
       </View>
       {tooltipState.position && (

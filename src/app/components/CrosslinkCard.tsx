@@ -67,7 +67,7 @@ const CrosslinkCard: React.FC<CrosslinkCardProps> = ({
     base: true,
     small: true,
     medium: true,
-    large: false,
+    large: true,
   });
 
   return (

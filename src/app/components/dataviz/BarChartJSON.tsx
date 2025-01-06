@@ -161,7 +161,7 @@ const BarChart: React.FC<BarProps> = ({
       return;
 
     const filteredDataToDisplay = dataToDisplay.filter((d) =>
-      activeLegendItems.includes(d.option)
+      activeLegendItems.includes(d.option as string)
     );
     const maxValue = _.maxBy(filteredDataToDisplay, 'value')?.value || 100;
 
@@ -302,52 +302,6 @@ const BarChart: React.FC<BarProps> = ({
       .attr('stroke-dasharray', '4') // Dotted line style
       .attr('stroke-width', 2)
       .attr('opacity', '0.9');
-
-    // Add background to the value labels
-    // svg
-    //   .selectAll('.label-background')
-    //   .data(dataToDisplay)
-    //   .enter()
-    //   .append('rect')
-    //   .attr('class', 'label-background')
-    //   .attr('x', (d) => xScale(d.value as number) + 3) // Position to the right of the bar
-    //   .attr('y', (d) => {
-    //     const groupIndex = validSegmentOptions.indexOf(d.option as string);
-    //     const groupHeight = yScale.bandwidth();
-    //     const barHeight = groupHeight / validSegmentOptions.length;
-    //     return (
-    //       (yScale(d.answer as string) ?? 0) +
-    //       groupIndex * barHeight +
-    //       barHeight / 2 -
-    //       10
-    //     );
-    //   })
-    //   .attr('width', (d) => `${d.value}%`.length * 10) // Adjust width based on text length
-    //   .attr('height', 20) // Fixed height for the background
-    //   .attr('fill', '#212121'); // Background color
-
-    // Render the value labels beside the bars
-    // svg
-    //   .selectAll('.label')
-    //   .data(dataToDisplay)
-    //   .enter()
-    //   .append('text')
-    //   .attr('class', 'label')
-    //   .attr('x', (d) => xScale(d.value as number) + 5) // Position to the right of the bar
-    //   .attr('y', (d) => {
-    //     const groupIndex = validSegmentOptions.indexOf(d.option as string);
-    //     const groupHeight = yScale.bandwidth();
-    //     const barHeight = groupHeight / validSegmentOptions.length;
-    //     return (
-    //       (yScale(d.answer as string) ?? 0) +
-    //       +groupIndex * barHeight +
-    //       barHeight / 2
-    //     );
-    //   })
-    //   .attr('dy', '.35em') // Vertical alignment
-    //   .attr('text-anchor', 'start')
-    //   .attr('fill', 'white')
-    //   .text((d) => `${d.value}%`);
   }, [
     data,
     dataToDisplay,

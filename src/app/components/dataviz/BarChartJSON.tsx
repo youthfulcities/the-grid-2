@@ -57,21 +57,19 @@ const BarChart: React.FC<BarProps> = ({
   data,
 }) => {
   const ref = useRef<SVGSVGElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
-  const [parsedData, setParsedData] = useState<{ [key: string]: DataItem[] }>(
-    {}
-  );
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [allOptions, setAllOptions] = useState<string[]>([]);
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
   const [activeLegendItems, setActiveLegendItems] = useState<string[]>([]);
   const [validSegmentOptions, setValidSegmentOptions] = useState<string[]>([]);
+  const [leftMargin, setLeftMargin] = useState(50);
   const [dataToDisplay, setDataToDisplay] = useState<ResponseGroup[]>([]);
   const height = width;
-  const margin = { left: 150, right: 10, top: 0, bottom: 60 };
+  const margin = { left: leftMargin, right: 10, top: 0, bottom: 60 };
   const duration = 1000;
   const sampleCutoff = 50;
+  const truncateThreshold = 25;
 
   useEffect(() => {
     if (typeof window !== 'undefined' && sessionStorage) {
@@ -81,8 +79,6 @@ const BarChart: React.FC<BarProps> = ({
       }
     }
   }, []);
-
-  console.log(data);
 
   useEffect(() => {
     const segmentOptions = _.keys(_.values(data)[0]);
@@ -143,6 +139,15 @@ const BarChart: React.FC<BarProps> = ({
     if (storedOptions && storedOptions.length > 2) {
       setSelectedAnswers(JSON.parse(storedOptions));
     } else setSelectedAnswers(answers.slice(0, 10));
+
+    // Get the length of the longest item in allOptions using lodash
+    const maxLength = _.get(_.maxBy(answers, 'length'), 'length', 0);
+
+    if (maxLength < truncateThreshold) {
+      // Update the left margin based on the max label length
+      const estimatedLabelWidth = maxLength * 8;
+      setLeftMargin(estimatedLabelWidth);
+    } else setLeftMargin(truncateThreshold * 5);
   }, [data]);
 
   useEffect(() => {
@@ -155,7 +160,10 @@ const BarChart: React.FC<BarProps> = ({
     )
       return;
 
-    const maxValue = _.maxBy(dataToDisplay, 'value')?.value || 100;
+    const filteredDataToDisplay = dataToDisplay.filter((d) =>
+      activeLegendItems.includes(d.option)
+    );
+    const maxValue = _.maxBy(filteredDataToDisplay, 'value')?.value || 100;
 
     const svg = d3
       .select(ref.current)
@@ -197,7 +205,12 @@ const BarChart: React.FC<BarProps> = ({
       .append('g')
       .attr('class', 'x-axis')
       .attr('transform', `translate(0, ${height - margin.bottom})`)
-      .call(d3.axisBottom(xScale).ticks(5))
+      .call(
+        d3
+          .axisBottom(xScale)
+          .ticks(5)
+          .tickFormat((d) => `${d}%`)
+      )
       .selectAll('text')
       .style('fill', 'white');
 
@@ -219,7 +232,9 @@ const BarChart: React.FC<BarProps> = ({
       .call(
         d3
           .axisLeft(yScale)
-          .tickFormat((d) => truncateText(d as string, 25) as string)
+          .tickFormat(
+            (d) => truncateText(d as string, truncateThreshold) as string
+          )
       )
       .selectAll('text')
       .attr('transform', 'rotate(-30)')
@@ -228,7 +243,7 @@ const BarChart: React.FC<BarProps> = ({
     // Bars
     svg
       .selectAll('.bar-group')
-      .data(dataToDisplay)
+      .data(filteredDataToDisplay)
       .join('g')
       .attr('class', 'bar-group')
       .attr('transform', (d) => `translate(0, ${yScale(d.answer as string)})`) // Position group by `answer`
@@ -238,9 +253,9 @@ const BarChart: React.FC<BarProps> = ({
       .attr('class', 'bar')
       .attr('x', xScale(0)) // Start from 0%
       .attr('y', (d) => {
-        const groupIndex = validSegmentOptions.indexOf(d.option as string);
+        const groupIndex = activeLegendItems.indexOf(d.option as string);
         const groupHeight = yScale.bandwidth();
-        const barHeight = groupHeight / validSegmentOptions.length;
+        const barHeight = groupHeight / activeLegendItems.length;
         return groupIndex * barHeight;
       })
       .attr('pointer-events', 'all')
@@ -261,7 +276,7 @@ const BarChart: React.FC<BarProps> = ({
       .on('mouseout', () => {
         setTooltipState(() => ({ position: null }));
       })
-      .attr('height', () => yScale.bandwidth() / validSegmentOptions.length - 2) // Adjust height with padding
+      .attr('height', () => yScale.bandwidth() / activeLegendItems.length - 2) // Adjust height with padding
       .attr('fill', (d) => colorScale(d.option as string)) // Use color based on `region`
       .attr('x', xScale(0)) // Start position of the bar
       .attr('width', 0) // Initially set width to 0 for animation
@@ -273,7 +288,7 @@ const BarChart: React.FC<BarProps> = ({
     // Add dotted lines for averages
     svg
       .selectAll('.average-line')
-      .data(dataToDisplay)
+      .data(filteredDataToDisplay)
       .join('line')
       .attr('class', 'average-line')
       .attr('x1', (d) => xScale(d.average as number)) // Position based on the average value
@@ -287,6 +302,52 @@ const BarChart: React.FC<BarProps> = ({
       .attr('stroke-dasharray', '4') // Dotted line style
       .attr('stroke-width', 2)
       .attr('opacity', '0.9');
+
+    // Add background to the value labels
+    // svg
+    //   .selectAll('.label-background')
+    //   .data(dataToDisplay)
+    //   .enter()
+    //   .append('rect')
+    //   .attr('class', 'label-background')
+    //   .attr('x', (d) => xScale(d.value as number) + 3) // Position to the right of the bar
+    //   .attr('y', (d) => {
+    //     const groupIndex = validSegmentOptions.indexOf(d.option as string);
+    //     const groupHeight = yScale.bandwidth();
+    //     const barHeight = groupHeight / validSegmentOptions.length;
+    //     return (
+    //       (yScale(d.answer as string) ?? 0) +
+    //       groupIndex * barHeight +
+    //       barHeight / 2 -
+    //       10
+    //     );
+    //   })
+    //   .attr('width', (d) => `${d.value}%`.length * 10) // Adjust width based on text length
+    //   .attr('height', 20) // Fixed height for the background
+    //   .attr('fill', '#212121'); // Background color
+
+    // Render the value labels beside the bars
+    // svg
+    //   .selectAll('.label')
+    //   .data(dataToDisplay)
+    //   .enter()
+    //   .append('text')
+    //   .attr('class', 'label')
+    //   .attr('x', (d) => xScale(d.value as number) + 5) // Position to the right of the bar
+    //   .attr('y', (d) => {
+    //     const groupIndex = validSegmentOptions.indexOf(d.option as string);
+    //     const groupHeight = yScale.bandwidth();
+    //     const barHeight = groupHeight / validSegmentOptions.length;
+    //     return (
+    //       (yScale(d.answer as string) ?? 0) +
+    //       +groupIndex * barHeight +
+    //       barHeight / 2
+    //     );
+    //   })
+    //   .attr('dy', '.35em') // Vertical alignment
+    //   .attr('text-anchor', 'start')
+    //   .attr('fill', 'white')
+    //   .text((d) => `${d.value}%`);
   }, [
     data,
     dataToDisplay,
@@ -294,6 +355,8 @@ const BarChart: React.FC<BarProps> = ({
     height,
     selectedAnswers,
     validSegmentOptions,
+    leftMargin,
+    activeLegendItems,
   ]);
 
   return (

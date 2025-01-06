@@ -206,25 +206,46 @@ const Interview = () => {
             <Heading level={4} color='secondary.60' marginBottom='xs'>
               {t('stories_heading')}
             </Heading>
-            <CrosslinkCard
-              heading={t('blog_title')}
-              buttonText={t('blog_button')}
-              link={
-                lng === 'fr'
-                  ? 'https://www.youthfulcities.com/blog/2024/12/13/le-prix-a-payer-letat-du-logement-des-jeunes-dans-les-centres-urbains-du-canada/'
-                  : 'https://www.youthfulcities.com/blog/2024/12/12/priced-out-the-state-of-youth-housing-in-canadas-urban-centres/'
-              }
-              src={
-                lng === 'fr'
-                  ? 'https://www.youthfulcities.com/wp-content/uploads/2024/12/Episode-1-titre-FR.png'
-                  : 'https://www.youthfulcities.com/wp-content/uploads/2024/12/HousingSurvey-Episode1-blogtitle.png'
-              }
-              alt={t('blog_alt')}
-              r={183}
-              g={152}
-              b={182}
-              inverse={false}
-            />
+            <Flex>
+              <CrosslinkCard
+                heading={t('blog_title')}
+                buttonText={t('blog_button')}
+                link={
+                  lng === 'fr'
+                    ? 'https://www.youthfulcities.com/blog/2024/12/13/le-prix-a-payer-letat-du-logement-des-jeunes-dans-les-centres-urbains-du-canada/'
+                    : 'https://www.youthfulcities.com/blog/2024/12/12/priced-out-the-state-of-youth-housing-in-canadas-urban-centres/'
+                }
+                src={
+                  lng === 'fr'
+                    ? 'https://www.youthfulcities.com/wp-content/uploads/2024/12/Episode-1-titre-FR.png'
+                    : 'https://www.youthfulcities.com/wp-content/uploads/2024/12/HousingSurvey-Episode1-blogtitle.png'
+                }
+                alt={t('blog_alt')}
+                r={183}
+                g={152}
+                b={182}
+                inverse={false}
+              />
+              <CrosslinkCard
+                heading={t('blog_title_2')}
+                buttonText={t('blog_button')}
+                link={
+                  lng === 'fr'
+                    ? 'https://www.youthfulcities.com/blog/2025/01/03/les-jeunes-lequite-et-la-crise-du-logement-qui-peut-devenir-proprietaire/'
+                    : 'https://www.youthfulcities.com/blog/2025/01/02/youth-equity-and-the-housing-crisis-who-gets-to-own/'
+                }
+                src={
+                  lng === 'fr'
+                    ? 'https://www.youthfulcities.com/wp-content/uploads/2025/01/Episode-2-blog-titre-FR.png'
+                    : 'https://www.youthfulcities.com/wp-content/uploads/2024/12/The-state-of-housing-for-youth-in-Canada-Episode-2-title.png'
+                }
+                alt={t('blog_alt_2')}
+                r={183}
+                g={152}
+                b={182}
+                inverse={false}
+              />
+            </Flex>
             <Heading
               level={4}
               color='secondary.60'

@@ -17,14 +17,17 @@ const Chatbot = () => {
 
   useEffect(() => {
     if (authStatus !== 'authenticated') {
-      sessionStorage.setItem('postLoginRedirect', '/chatbot');
+      sessionStorage.setItem(
+        'postLoginRedirect',
+        '/insights/housing/open-ended'
+      );
       router.push('/authentication');
     }
   }, [authStatus, router]);
 
-  if (authStatus !== 'authenticated') {
-    return null;
-  }
+  // if (authStatus !== 'authenticated') {
+  //   return null;
+  // }
 
   return (
     <Container background='#0E1117'>

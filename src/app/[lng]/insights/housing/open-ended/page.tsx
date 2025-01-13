@@ -12,12 +12,15 @@ import { useParams } from 'next/navigation';
 import { Trans } from 'react-i18next/TransWithoutContext';
 
 import CrosslinkCard from '@/app/components/CrosslinkCard';
+import useDownloadFile from '@/hooks/useDownloadFile';
 import {
+  Button,
   Flex,
+  Grid,
   Heading,
   Text,
-  View,
   useBreakpointValue,
+  View,
 } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import { downloadData } from 'aws-amplify/storage';
@@ -87,6 +90,7 @@ const Interview = () => {
   const [quotes, setQuotes] = useState<string[]>([]);
   const [offset, setOffset] = useState(0);
   const [visibleQuotes, setVisibleQuotes] = useState<string[]>([]);
+  const filename = 'Housing Survey Open-Ended Responses.csv';
 
   const batchSize = 10;
   const quoteSize = useBreakpointValue({
@@ -206,7 +210,15 @@ const Interview = () => {
             <Heading level={4} color='secondary.60' marginBottom='xs'>
               {t('stories_heading')}
             </Heading>
-            <Flex>
+            <Grid
+              columnGap='small'
+              rowGap='small'
+              templateColumns={{
+                base: '1fr',
+                medium: '1fr 1fr',
+                large: '1fr 1fr 1fr',
+              }}
+            >
               <CrosslinkCard
                 heading={t('blog_title')}
                 buttonText={t('blog_button')}
@@ -245,7 +257,26 @@ const Interview = () => {
                 b={182}
                 inverse={false}
               />
-            </Flex>
+              <CrosslinkCard
+                heading={t('blog_title_3')}
+                buttonText={t('blog_button')}
+                link={
+                  lng === 'fr'
+                    ? 'https://www.youthfulcities.com/blog/2025/01/10/experiences-vecues-par-les-jeunes-naviguer-dans-le-domaine-du-logement-au-canada/'
+                    : 'https://www.youthfulcities.com/blog/2025/01/09/youth-lived-experiences-navigating-housing-in-canada/'
+                }
+                src={
+                  lng === 'fr'
+                    ? 'https://www.youthfulcities.com/wp-content/uploads/2025/01/Episode-blog-titre-FR.png'
+                    : 'https://www.youthfulcities.com/wp-content/uploads/2025/01/Episode-3-blog-title.png'
+                }
+                alt={t('blog_alt_3')}
+                r={183}
+                g={152}
+                b={182}
+                inverse={false}
+              />
+            </Grid>
             <Heading
               level={4}
               color='secondary.60'
@@ -270,6 +301,18 @@ const Interview = () => {
               i18nKey='method_p_3'
               components={{ p: <Text />, ul: <ul />, li: <li /> }}
             />
+            <Heading
+              level={4}
+              color='secondary.60'
+              marginTop='xxl'
+              marginBottom='xs'
+            >
+              Download Raw Data
+            </Heading>
+            <Text>Create an account or sign in to download the dataset.</Text>
+            <Button variation='primary' onClick={useDownloadFile(filename)}>
+              Download
+            </Button>
           </View>
         </View>
         <Drawer

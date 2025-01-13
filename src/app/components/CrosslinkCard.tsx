@@ -20,7 +20,7 @@ interface CrosslinkCardProps {
   link: string;
 }
 
-const CardContainer = styled(Flex)`
+const CardContainer = styled(Flex)<{ $width: number }>`
   position: relative;
 `;
 
@@ -70,8 +70,20 @@ const CrosslinkCard: React.FC<CrosslinkCardProps> = ({
     large: true,
   });
 
+  const dynamicWidth = useBreakpointValue({
+    base: 100,
+    small: 100,
+    medium: 50,
+    large: 33,
+  });
+
   return (
-    <CardContainer direction='column' width='100%' gap='0' boxShadow='large'>
+    <CardContainer
+      direction='column'
+      gap='0'
+      boxShadow='large'
+      $width={dynamicWidth as number}
+    >
       <img src={src} alt={alt} width='100%' />
       <CardOverlay
         padding='medium'

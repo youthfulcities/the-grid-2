@@ -1091,6 +1091,12 @@ a.outline-button:hover {
   background-size: cover;
 }
 
+.image-card-housing {
+  background-image: url('https://www.youthfulcities.com/wp-content/uploads/2024/12/YouthCite-rentcontrol.png');
+  background-position: bottom;
+  background-size: cover;
+}
+
 /* Animations
 ========================================================================== */
 

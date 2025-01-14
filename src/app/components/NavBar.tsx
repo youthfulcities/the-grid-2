@@ -16,8 +16,9 @@ import {
 import { Amplify } from 'aws-amplify';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import { FaBars } from 'react-icons/fa6';
+import { FaBars, FaMoon, FaRegMoon, FaRegSun, FaSun } from 'react-icons/fa6';
 import styled from 'styled-components';
+import { useThemeContext } from '../context/ThemeContext';
 import useTranslation from '../i18n/client';
 import AuthLink from './AuthLink';
 
@@ -115,6 +116,7 @@ const MobileMenuItem = styled(MenuItem)`
 
 const SmallText = styled(Text)`
   font-size: var(--amplify-font-sizes-xs);
+  color: var(--amplify-colors-font-inverse);
   margin: 0;
 `;
 
@@ -133,6 +135,7 @@ const NavBar = () => {
   });
 
   const { tokens } = useTheme();
+  const { colorMode, setColorMode } = useThemeContext();
 
   const { authStatus } = useAuthenticator((context) => [context.authStatus]);
 
@@ -141,6 +144,10 @@ const NavBar = () => {
     router.prefetch(newPath);
     router.push(newPath, { scroll: false });
   }
+
+  const handleModeChange = (value: 'light' | 'dark') => {
+    setColorMode(value);
+  };
 
   return (
     <StyledFlex as='nav' className='soft-shadow'>
@@ -166,6 +173,7 @@ const NavBar = () => {
             )}
             <SmallText>Powered by Youthful Cities</SmallText>
           </Link>
+
           <View style={{ marginLeft: '20px' }}>
             <Button
               color={tokens.colors.font.inverse}
@@ -173,6 +181,7 @@ const NavBar = () => {
               border='0'
               width='30px'
               height='30px'
+              aria-label='English'
               size='small'
               fontWeight={lng === 'en' ? 600 : 300}
               onClick={() => handleLanguageChange('en')}
@@ -186,12 +195,44 @@ const NavBar = () => {
               border='0'
               width='30px'
               height='30px'
+              aria-label='French'
               size='small'
               fontWeight={lng === 'fr' ? 600 : 300}
               onClick={() => handleLanguageChange('fr')}
             >
               FR
             </Button>
+            <Flex gap='0' alignItems='center' display='none'>
+              <Button
+                color={tokens.colors.font.inverse}
+                colorTheme='overlay'
+                border='0'
+                size='small'
+                fontSize='medium'
+                aria-label='Light mode'
+                margin='0'
+                paddingRight='6px'
+                paddingLeft='6px'
+                onClick={() => handleModeChange('light')}
+              >
+                {colorMode === 'light' ? <FaSun /> : <FaRegSun />}
+              </Button>
+              |
+              <Button
+                color={tokens.colors.font.inverse}
+                colorTheme='overlay'
+                border='0'
+                size='small'
+                margin='0'
+                paddingRight='6px'
+                aria-label='Dark mode'
+                paddingLeft='6px'
+                fontSize='medium'
+                onClick={() => handleModeChange('dark')}
+              >
+                {colorMode === 'dark' ? <FaMoon /> : <FaRegMoon />}
+              </Button>
+            </Flex>
           </View>
         </Flex>
         {isMobile ? (
@@ -250,7 +291,7 @@ const NavBar = () => {
                 {t('insights')}
               </NavLink>
               <NavLink
-                $currentPage={pathNoLocale === '/insights'}
+                $currentPage={pathNoLocale === '/chatbot'}
                 href={`/${lng}/chatbot`}
               >
                 {t('chatbot')}

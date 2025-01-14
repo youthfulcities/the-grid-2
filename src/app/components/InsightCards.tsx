@@ -118,21 +118,25 @@ const InsightCards: React.FC<InsightCardProps> = ({ lng, maxLength }) => {
           $background={getColor(index).background}
         >
           <View>
-            <Heading level={3}>
+            <Heading level={3} color={getColor(index).titleFont}>
               {lng === 'fr' ? card.titlefr || card.title : card.title}
             </Heading>
-            <ItalicText as='em' fontSize='small' color='font.primary'>
+            <ItalicText
+              as='em'
+              fontSize='small'
+              color={getColor(index).titleFont}
+            >
               {lng === 'fr' ? card.datasetfr || card.dataset : card.dataset}
             </ItalicText>
             <Text
               fontWeight='bold'
               fontSize='medium'
               marginTop='xl'
-              color='font.primary'
+              color={getColor(index).titleFont}
             >
               {lng === 'fr' ? card.datefr : card.date}
             </Text>
-            <Text fontSize='small' color='font.primary'>
+            <Text fontSize='small' color={getColor(index).titleFont}>
               {lng === 'fr' ? card.descfr || card.desc : card.desc}
             </Text>
           </View>

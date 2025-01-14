@@ -11,6 +11,7 @@ import StyledComponentsRegistry from '../../lib/registry';
 import AutheticatorProvider from '../components/AuthenticatorProvider';
 import Footer from '../components/Footer';
 import NavBar from '../components/NavBar';
+import { ThemeProvider } from '../context/ThemeContext';
 import { languages } from '../i18n/settings';
 import AWSThemeProvider from './aws-theme-provider';
 import './global.css';
@@ -137,21 +138,23 @@ const RootLayout: React.FC<RootLayoutProps> = ({
         <GoogleTagManager gtmId='GTM-MXZ2WJTV' />
         <StyledComponentsRegistry>
           <AutheticatorProvider>
-            <AWSThemeProvider>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  minHeight: '100vh',
-                  height: '100%',
-                }}
-              >
-                {/* <BetaBanner /> */}
-                <NavBar />
-                {children}
-                <Footer />
-              </div>
-            </AWSThemeProvider>
+            <ThemeProvider>
+              <AWSThemeProvider>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minHeight: '100vh',
+                    height: '100%',
+                  }}
+                >
+                  {/* <BetaBanner /> */}
+                  <NavBar />
+                  {children}
+                  <Footer />
+                </div>
+              </AWSThemeProvider>
+            </ThemeProvider>
           </AutheticatorProvider>
         </StyledComponentsRegistry>
       </body>

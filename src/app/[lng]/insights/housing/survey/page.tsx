@@ -3,10 +3,25 @@
 import Background from '@/app/components/Background';
 import BarChart from '@/app/components/dataviz/BarChartJSON';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
+import { useHousingSurvey } from '@/app/context/HousingSurveyContext';
+import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
+import useDownloadFile from '@/hooks/useDownloadFile';
 import fetchData from '@/lib/fetchData';
-import { Heading, SelectField, Text, View } from '@aws-amplify/ui-react';
+import {
+  Button,
+  Heading,
+  SelectField,
+  Text,
+  ToggleButton,
+  ToggleButtonGroup,
+  View,
+  useBreakpointValue,
+} from '@aws-amplify/ui-react';
+import _ from 'lodash';
+import { useParams } from 'next/navigation';
 import { ReactNode, useEffect, useRef, useState } from 'react';
+import { Trans } from 'react-i18next/TransWithoutContext';
 import styled from 'styled-components';
 
 interface TooltipState {
@@ -25,12 +40,15 @@ interface ResponseGroup {
 }
 
 interface QuestionResponses {
-  [key: string]: ResponseGroup;
+  question_id: number;
+  [key: string]: ResponseGroup | number;
 }
 
 interface SurveyData {
   [question: string]: QuestionResponses;
 }
+
+type QuestionRange = { start: number; end: number };
 
 const StyledSelect = styled(SelectField)`
   select: {
@@ -42,15 +60,53 @@ const StyledSelect = styled(SelectField)`
   }
 `;
 
+const StyledToggleButton = styled(ToggleButton)`
+  &:disabled {
+    background-color: var(--amplify-colors-secondary-60);
+    color: #000;
+    border-color: var(--amplify-colors-secondary-60);
+  }
+`;
+
+const questionRanges: Record<string, QuestionRange[]> = {
+  general: [
+    { start: 1, end: 4 },
+    { start: 54, end: 58 },
+    { start: 66, end: 70 },
+  ],
+  situation: [
+    { start: 4, end: 17 },
+    { start: 28, end: 37 },
+  ],
+  co: [{ start: 17, end: 28 }],
+  preference: [
+    { start: 37, end: 41 },
+    { start: 50, end: 54 },
+  ],
+  mental: [{ start: 41, end: 50 }],
+  income: [{ start: 58, end: 66 }],
+};
+
 const HousingSurvey = () => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'housing');
+
+  const {
+    data,
+    setData,
+    currentQuestion,
+    setCurrentQuestion,
+    currentSegment,
+    setCurrentSegment,
+    currentTopic,
+    setCurrentTopic,
+  } = useHousingSurvey();
+
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
   const { width } = useDimensions(containerRef);
-  const [data, setData] = useState<SurveyData>();
   const [questions, setQuestions] = useState<string[]>([]);
-  const [currentQuestion, setCurrentQuestion] = useState('');
   const [segments, setSegments] = useState<string[]>([]);
-  const [currentSegment, setCurrentSegment] = useState('');
   const [tooltipState, setTooltipState] = useState<TooltipState>({
     position: null,
     value: null,
@@ -60,8 +116,17 @@ const HousingSurvey = () => {
     child: null,
     minWidth: 0,
   });
+
+  const isMobile = useBreakpointValue({
+    base: true,
+    small: true,
+    medium: true,
+    large: false,
+  });
+
   const activeFile = 'survey_results_processed_weighted.json';
   const path = 'internal/HOM/survey/quant';
+  const filename = 'YC Housing Survey Analysis Totals.csv';
 
   useEffect(() => {
     const loadData = async () => {
@@ -74,17 +139,42 @@ const HousingSurvey = () => {
     loadData();
   }, []);
 
+  const filterQuestionsByTopic = (
+    topic: keyof typeof questionRanges,
+    currentData: SurveyData
+  ) => {
+    const ranges = questionRanges[topic];
+
+    if (!currentData) {
+      return;
+    }
+    if (!ranges) {
+      // Handle the case where the topic is not defined
+      return [];
+    }
+
+    const pickedData = _.pickBy(currentData, (question) =>
+      ranges.some(
+        (range) =>
+          question.question_id >= range.start &&
+          question.question_id < range.end
+      )
+    );
+    return pickedData;
+  };
+
   useEffect(() => {
     const getQuestions = () => {
       if (data) {
-        const allQuestions = Object.keys(data);
+        const filteredData = filterQuestionsByTopic(currentTopic, data);
+        const allQuestions = Object.keys(filteredData || data);
         setQuestions(allQuestions ?? []);
-        setCurrentQuestion(allQuestions[34]);
+        setCurrentQuestion(allQuestions[0]);
       }
     };
 
     getQuestions();
-  }, [data]);
+  }, [data, currentTopic]);
 
   useEffect(() => {
     const getSegments = () => {
@@ -97,7 +187,9 @@ const HousingSurvey = () => {
             key !== 'question_type'
         );
         setSegments(allSegments ?? []);
-        setCurrentSegment(allSegments[1]);
+        if (!currentSegment) {
+          setCurrentSegment(allSegments[1]);
+        }
       }
     };
 
@@ -111,9 +203,58 @@ const HousingSurvey = () => {
     <Background>
       <View className='container' paddingTop='xxxl'>
         <Heading level={1} marginBottom='xl'>
-          Youth Housing Study
+          <Trans
+            i18nKey='title'
+            t={t}
+            components={{ span: <span className='highlight' /> }}
+          />
         </Heading>
         <View ref={containerRef}>
+          <Text marginBottom='0'>Select a topic</Text>
+          <ToggleButtonGroup
+            direction={isMobile ? 'column' : 'row'}
+            alignItems='stretch'
+            value={currentTopic}
+            onChange={(value) => setCurrentTopic(value as string)}
+            isExclusive
+            marginBottom='medium'
+          >
+            <StyledToggleButton
+              marginLeft={isMobile ? '-3px' : '0'}
+              defaultPressed
+              isDisabled={currentTopic === 'general'}
+              value='general'
+            >
+              General & Demographics
+            </StyledToggleButton>
+            <StyledToggleButton
+              isDisabled={currentTopic === 'situation'}
+              value='situation'
+            >
+              Living Situation
+            </StyledToggleButton>
+            <StyledToggleButton isDisabled={currentTopic === 'co'} value='co'>
+              Co-living
+            </StyledToggleButton>
+            <StyledToggleButton
+              isDisabled={currentTopic === 'preference'}
+              value='preference'
+            >
+              Housing Preferences
+            </StyledToggleButton>
+            <StyledToggleButton
+              isDisabled={currentTopic === 'mental'}
+              value='mental'
+            >
+              Mental Wellbeing
+            </StyledToggleButton>
+            <StyledToggleButton
+              isDisabled={currentTopic === 'income'}
+              value='income'
+            >
+              Education & Income
+            </StyledToggleButton>
+          </ToggleButtonGroup>
           {data && (
             <>
               <StyledSelect
@@ -145,7 +286,7 @@ const HousingSurvey = () => {
               {currentSegment && (
                 <>
                   <Heading level={3} textAlign='center' color='font.inverse'>
-                    {currentQuestion.replace(regex, '').trim()}
+                    {currentQuestion?.replace(regex, '').trim()}
                   </Heading>
                   <Heading level={5} textAlign='center' color='font.inverse'>
                     Broken down by: {currentSegment.replace(regex, '').trim()}
@@ -169,6 +310,42 @@ const HousingSurvey = () => {
               />
             </>
           )}
+          <Heading
+            level={4}
+            color='secondary.60'
+            marginTop='xxl'
+            marginBottom='xs'
+          >
+            {t('method_title')}
+          </Heading>
+          <Heading level={5} color='secondary.60'>
+            {t('method_sub_1')}
+          </Heading>
+          <Text marginBottom='xl'>{t('method_p_1')}</Text>
+          <Heading level={5} color='secondary.60'>
+            {t('method_sub_2')}
+          </Heading>
+          <Text marginBottom='xl'>{t('method_p_2')}</Text>
+          <Heading level={5} color='secondary.60'>
+            {t('method_sub_3')}
+          </Heading>
+          <Trans
+            t={t}
+            i18nKey='method_p_3'
+            components={{ p: <Text />, ul: <ul />, li: <li /> }}
+          />
+          <Heading
+            level={4}
+            color='secondary.60'
+            marginTop='xxl'
+            marginBottom='xs'
+          >
+            Download Raw Data
+          </Heading>
+          <Text>Create an account or sign in to download the dataset.</Text>
+          <Button variation='primary' onClick={useDownloadFile(filename)}>
+            Download
+          </Button>
         </View>
       </View>
       {tooltipState.position && (

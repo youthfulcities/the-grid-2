@@ -46,7 +46,9 @@ const Banner: React.FC<{ lng: string }> = ({ lng }) => {
         gap='1rem'
       >
         <Fact $space={tokens.space.medium.value}>
-          <Heading level={4}>{t('datasets')}</Heading>
+          <Heading level={4} color={tokens.colors.font.primary.value}>
+            {t('datasets')}
+          </Heading>
           <OutlineText
             as='h3'
             $innerColor={tokens.colors.primary[60].value}
@@ -56,7 +58,9 @@ const Banner: React.FC<{ lng: string }> = ({ lng }) => {
           </OutlineText>
         </Fact>
         <Fact $space={tokens.space.medium.value}>
-          <Heading level={4}>{t('cities')}</Heading>
+          <Heading level={4} color={tokens.colors.font.primary.value}>
+            {t('cities')}
+          </Heading>
           <OutlineText
             as='h3'
             $innerColor={tokens.colors.primary[60].value}
@@ -66,7 +70,9 @@ const Banner: React.FC<{ lng: string }> = ({ lng }) => {
           </OutlineText>
         </Fact>
         <Fact $space={tokens.space.medium.value}>
-          <Heading level={4}>{t('records')}</Heading>
+          <Heading level={4} color={tokens.colors.font.primary.value}>
+            {t('records')}
+          </Heading>
           <OutlineText
             as='h3'
             $innerColor={tokens.colors.primary[60].value}

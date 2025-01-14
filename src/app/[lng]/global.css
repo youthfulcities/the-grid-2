@@ -186,7 +186,7 @@ a:hover {
   color: var(--plum);
 }
 .alt-highlight {
-  color: var(--blue);
+  color: var(--amplify-colors-yellow-60);
 }
 .orange-highlight {
   color: var(--orange);
@@ -565,7 +565,7 @@ a.outline-button:hover {
   color: var(--yellow);
 }
 .card-small-text {
-  color: #fff;
+  color: var(--amplify-colors-font-primary);
   font-size: 1rem;
   margin: 20px 0;
 }

@@ -82,7 +82,6 @@ const DownloadButton = styled(Button)<{
   position: absolute;
   bottom: 0px;
   left: 0px;
-  font-family: var(--amplify-colors.neutral.100.value);
   font-size: 15px;
   text-transform: uppercase;
   background-color: ${(props) => props.$background};
@@ -234,7 +233,7 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
             >
               {card.date}
             </Text>
-            <Text fontSize='small' color='font.primary'>
+            <Text fontSize='small' color={getColor(index).titleFont}>
               {lng === 'fr' ? card.descfr : card.desc}
             </Text>
           </View>
@@ -249,13 +248,17 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
 
           {cardMetadata && (
             <MetadataContainer>
-              <Text fontSize='xs' color='font.primary'>
+              <Text fontSize='xs' color={getColor(index).titleFont}>
                 <strong>File Size:</strong>{' '}
                 {cardMetadata.size
                   ? `${bytesToMB(cardMetadata.size)} MB`
                   : 'N/A'}
               </Text>
-              <Text fontSize='xs' color='font.primary' marginBottom='large'>
+              <Text
+                fontSize='xs'
+                color={getColor(index).titleFont}
+                marginBottom='large'
+              >
                 <strong>Last Modified:</strong>{' '}
                 {cardMetadata.lastModified
                   ? new Date(cardMetadata.lastModified).toLocaleDateString()

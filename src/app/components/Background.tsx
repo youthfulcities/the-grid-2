@@ -9,7 +9,7 @@ interface ContainerProps {
 }
 
 const Background = styled.main<{ $background: string; $noOverflow: boolean }>`
-  background-color: ${(props) => props.$background};
+  background-color: var(--amplify-colors-background-primary);
   height: 100%;
   ${(props) => props.$noOverflow && 'overflow-x: hidden'}
 `;
@@ -20,11 +20,11 @@ const Container: React.FC<ContainerProps> = ({
   children,
 }) => {
   const { tokens } = useTheme();
+  const backgroundColor = tokens.colors.background.primary.value;
+
+  console.log(backgroundColor);
   return (
-    <Background
-      $background={background || tokens.colors.background.primary.value}
-      $noOverflow={noOverflow}
-    >
+    <Background $background={backgroundColor} $noOverflow={noOverflow}>
       {children}
     </Background>
   );

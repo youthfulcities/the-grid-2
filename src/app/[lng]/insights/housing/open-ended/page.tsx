@@ -59,7 +59,7 @@ const fetchData = async () => {
 
 const Interview = () => {
   const { lng } = useParams<{ lng: string }>();
-  const { t } = useTranslation(lng, 'housing-open');
+  const { t } = useTranslation(lng, 'housing');
 
   const containerRef = useRef<HTMLDivElement>(null);
   const quotesRef = useRef<HTMLDivElement>(null);

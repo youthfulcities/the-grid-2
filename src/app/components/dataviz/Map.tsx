@@ -77,21 +77,21 @@ const CityView = forwardRef<HTMLDivElement, CityViewProps>(({ item }, ref) => {
         Score: {item.Score} / 821
       </Heading>
 
-      <Text>
+      <Text color='font.inverse'>
         <FaThumbsUp
           fontSize='large'
           color={tokens.colors.green[60].toString()}
         />{' '}
         {lng === 'fr' ? item.Force_1 : item.Strength_1}
       </Text>
-      <Text>
+      <Text color='font.inverse'>
         <FaThumbsUp
           fontSize='large'
           color={tokens.colors.green[60].toString()}
         />{' '}
         {lng === 'fr' ? item.Force_2 : item.Strength_2}
       </Text>
-      <Text>
+      <Text color='font.inverse'>
         <FaThumbsDown
           color={tokens.colors.red[60].toString()}
           fontSize='large'

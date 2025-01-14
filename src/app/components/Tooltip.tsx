@@ -18,6 +18,7 @@ const StyledBadge = styled(Badge)<{
   top: 50%;
   left: ${(props) => (props.$show ? '110%' : '0')};
   transform: translateY(-50%);
+  color: var(--amplify-colors-neutral-100);
   display: flex;
   flex-direction: column;
   padding: var(--amplify-space-small);
@@ -32,7 +33,7 @@ const StyledBadge = styled(Badge)<{
 `;
 const SmallText = styled(Text)`
   margin-top: var(--amplify-space-small);
-  color: var(--amplify-colors-font-primary);
+  color: var(--amplify-colors-neutral-100);
   font-weight: 400;
   font-size: var(--amplify-fontsize-xs);
 `;

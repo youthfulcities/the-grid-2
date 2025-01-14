@@ -62,7 +62,7 @@ const HomeHeader = () => {
           <Trans
             t={t}
             i18nKey='home-tagline'
-            components={{ span: <span className='highlight' /> }}
+            components={{ span: <span className='alt-highlight' /> }}
           />
         </h1>
         <Flex gap='zero' wrap='wrap' alignItems='center'>

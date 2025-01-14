@@ -1,11 +1,85 @@
 'use client';
 
+import { useThemeContext } from '@/app/context/ThemeContext';
 import studioTheme from '@/ui-components/studioTheme';
 import { createTheme, ThemeProvider } from '@aws-amplify/ui-react';
 
 const theme = createTheme(
   {
     name: 'my-theme',
+    overrides: [
+      {
+        colorMode: 'light',
+        tokens: {
+          colors: {
+            background: {
+              primary: { value: '#ffffff' },
+            },
+            font: {
+              primary: { value: '#000000' },
+              inverse: { value: '#ffffff' },
+            },
+            brand: {
+              primary: {
+                10: { value: '{colors.red.10.value}' },
+                20: { value: '{colors.red.20.value}' },
+                40: { value: '{colors.red.40.value}' },
+                60: { value: '{colors.red.60.value}' },
+                80: { value: '{colors.red.80.value}' },
+                90: { value: '{colors.red.90.value}' },
+                100: { value: '{colors.red.100.value}' },
+              },
+              secondary: {
+                10: { value: '{colors.blue.10.value}' },
+                20: { value: '{colors.blue.20.value}' },
+                40: { value: '{colors.blue.40.value}' },
+                60: { value: '{colors.blue.60.value}' },
+                80: { value: '{colors.blue.80.value}' },
+                90: { value: '{colors.blue.90.value}' },
+                100: { value: '{colors.blue.100.value}' },
+              },
+            },
+          },
+          components: {
+            text: {
+              color: { value: '{colors.font.primary.value}' },
+            },
+          },
+        },
+      },
+      {
+        colorMode: 'dark',
+        tokens: {
+          components: {
+            togglebutton: {
+              borderColor: { value: '{colors.border.primary.value}' },
+              color: { value: '{colors.font.primary.value}' },
+              _hover: {
+                backgroundColor: { value: '{colors.neutral.60.value}' },
+              },
+              _focus: {
+                borderColor: { value: '{colors.brand.secondary.80.value}' },
+                color: { value: '{colors.font.primary.value}' },
+              },
+              _active: {
+                backgroundColor: { value: '{colors.transparent.value}' },
+              },
+              _disabled: {
+                backgroundColor: { value: '{colors.transparent.value}' },
+                borderColor: { value: '{colors.border.secondary.value}' },
+                color: { value: '{colors.font.disabled.value}' },
+              },
+            },
+          },
+          colors: {
+            font: {
+              primary: { value: '#ffffff' },
+              inverse: { value: '#ffffff' },
+            },
+          },
+        },
+      },
+    ],
     tokens: {
       space: {
         xxxl: { value: '7rem' },
@@ -39,7 +113,9 @@ const theme = createTheme(
         button: {
           primary: {
             _hover: {
-              backgroundColor: { value: '{colors.brand.primary.100.value}' },
+              backgroundColor: {
+                value: '{colors.brand.primary.100.value}',
+              },
               color: { value: '{colors.font.inverse.value}' },
             },
           },
@@ -47,7 +123,9 @@ const theme = createTheme(
         tabs: {
           item: {
             color: { value: '{colors.font.inverse.value}' },
-            _active: { color: { value: '{colors.brand.primary.60.value}' } },
+            _active: {
+              color: { value: '{colors.brand.primary.60.value}' },
+            },
           },
         },
         placeholder: {
@@ -120,8 +198,13 @@ const theme = createTheme(
   studioTheme
 );
 
-const AWSThemeProvider = ({ children }: { children: React.ReactNode }) => (
-  <ThemeProvider theme={theme}>{children}</ThemeProvider>
-);
+const AWSThemeProvider = ({ children }: { children: React.ReactNode }) => {
+  const { colorMode } = useThemeContext();
+  return (
+    <ThemeProvider theme={theme} colorMode={colorMode}>
+      {children}
+    </ThemeProvider>
+  );
+};
 
 export default AWSThemeProvider;

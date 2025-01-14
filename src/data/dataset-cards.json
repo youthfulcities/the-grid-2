@@ -1,6 +1,18 @@
 {
   "datasetCards": [
     {
+      "title": "State of Housing for Young People in Canada",
+      "titlefr": "État du logement des jeunes au Canada",
+      "date": "2024",
+      "type": "index",
+      "desc": "Download open-ended responses from the State of Housing for Young People in Canada survey.",
+      "descfr": "Téléchargez les réponses ouvertes de l'enquête sur l'état du logement des jeunes au Canada.",
+      "className": "image-card-housing",
+      "file": "Housing Survey Open-Ended Responses.csv",
+      "link": "https://youthdatalab.youthfulcities.com/en/insights/housing/open-ended",
+      "keywords": []
+    },
+    {
       "title": "Urban Work Index 2024",
       "titlefr": "Indice du travail urbain 2024",
       "date": "2024",

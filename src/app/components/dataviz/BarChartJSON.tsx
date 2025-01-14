@@ -38,7 +38,7 @@ interface BarProps {
   width: number;
   tooltipState: TooltipState;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
-  data: ResponseGroup | null;
+  data: ResponseGroup | number | null;
 }
 
 interface LegendProps {
@@ -49,6 +49,29 @@ const ChartContainer = styled.div`
   position: relative;
   margin-bottom: var(--amplify-space-xl);
 `;
+
+const colors = [
+  '#F2695D',
+  '#FBD166',
+  '#B8D98D',
+  '#253D88',
+  '#F6D9D7',
+  '#673934',
+];
+const newColors = [
+  '#F2695D',
+  '#FBD166',
+  '#B8D98D',
+  '#2f4eac',
+  '#F6D9D7',
+  '#af6860',
+];
+
+const saturatedColors = colors.map((color) => {
+  const hsl = d3.hsl(color);
+  hsl.s = Math.min(1, hsl.s * 1.5); // Increase saturation by 50%
+  return hsl.formatHex(); // Return the new color in hex format
+});
 
 const BarChart: React.FC<BarProps> = ({
   width,
@@ -189,11 +212,11 @@ const BarChart: React.FC<BarProps> = ({
       .range([margin.top, height - margin.bottom])
       .padding(0.1);
 
-    const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+    const colorScale = d3.scaleOrdinal().range(newColors);
 
     const customLegendData = validSegmentOptions.map((item) => ({
       key: item,
-      color: colorScale(item),
+      color: colorScale(item) as string,
     }));
 
     setLegendData(customLegendData);
@@ -277,7 +300,7 @@ const BarChart: React.FC<BarProps> = ({
         setTooltipState(() => ({ position: null }));
       })
       .attr('height', () => yScale.bandwidth() / activeLegendItems.length - 2) // Adjust height with padding
-      .attr('fill', (d) => colorScale(d.option as string)) // Use color based on `region`
+      .attr('fill', (d) => colorScale(d.option as string) as string) // Use color based on `region`
       .attr('x', xScale(0)) // Start position of the bar
       .attr('width', 0) // Initially set width to 0 for animation
       .transition() // Start the transition

@@ -3,12 +3,24 @@
     {
       "title": "State of Housing for Young People in Canada",
       "titlefr": "État du logement des jeunes au Canada",
+      "dataset": "Youth Chart",
+      "datasetfr": "Tableau jeunesse",
+      "date": "July 2024",
+      "datefr": "juillet 2024",
+      "type": "",
+      "desc": "This interactive visualization displays 1500 quantitative responses from the State of Housing for Young People in Canada survey. Use it to explore youth perspectives on housing, co-living, and affordability in Canada.",
+      "descfr": "",
+      "link": "/insights/housing/survey"
+    },
+    {
+      "title": "State of Housing for Young People in Canada",
+      "titlefr": "État du logement des jeunes au Canada",
       "dataset": "Youth Cite",
       "datasetfr": "Jeunesse Cite",
       "date": "July 2024",
       "datefr": "juillet 2024",
       "type": "",
-      "desc": "Explore what youth across Canada are saying about housing in our survey. See their thoughts organized into an interactive, theme-based visual.",
+      "desc": "Explore what youth across Canada are saying about housing. See their quotes organized into an interactive, theme-based visual.",
       "descfr": "Découvrez ce que les jeunes de tout le Canada disent sur le logement dans notre enquête. Voyez leurs pensées organisées en un visuel interactif et thématique.",
       "link": "/insights/housing/open-ended"
     },

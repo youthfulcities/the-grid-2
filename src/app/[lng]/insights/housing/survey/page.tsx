@@ -1,6 +1,7 @@
 'use client';
 
 import Background from '@/app/components/Background';
+import CrosslinkCard from '@/app/components/CrosslinkCard';
 import BarChart from '@/app/components/dataviz/BarChartJSON';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import { useHousingSurvey } from '@/app/context/HousingSurveyContext';
@@ -10,15 +11,17 @@ import useDownloadFile from '@/hooks/useDownloadFile';
 import fetchData from '@/lib/fetchData';
 import {
   Button,
+  Grid,
   Heading,
   SelectField,
   Text,
   ToggleButton,
   ToggleButtonGroup,
-  View,
   useBreakpointValue,
+  View,
 } from '@aws-amplify/ui-react';
 import _ from 'lodash';
+import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
@@ -76,12 +79,12 @@ const questionRanges: Record<string, QuestionRange[]> = {
   ],
   situation: [
     { start: 4, end: 17 },
-    { start: 28, end: 37 },
+    { start: 28, end: 32 },
   ],
   co: [{ start: 17, end: 28 }],
   preference: [
-    { start: 37, end: 41 },
-    { start: 50, end: 54 },
+    { start: 32, end: 41 },
+    { start: 51, end: 54 },
   ],
   mental: [{ start: 41, end: 50 }],
   income: [{ start: 58, end: 66 }],
@@ -202,13 +205,22 @@ const HousingSurvey = () => {
   return (
     <Background>
       <View className='container' paddingTop='xxxl'>
-        <Heading level={1} marginBottom='xl'>
+        <Heading level={1}>
           <Trans
             i18nKey='title'
             t={t}
             components={{ span: <span className='highlight' /> }}
           />
         </Heading>
+        <View className='inner-container'>
+          <Heading level={3}>Youth Chart</Heading>
+          <Text marginBottom='xl'>
+            This interactive visualization displays 1500 responses from the
+            State of Housing for Young People in Canada survey. Use it to
+            explore youth perspectives on housing, co-living, and affordability
+            in Canada.
+          </Text>
+        </View>
         <View ref={containerRef}>
           <Text marginBottom='0'>Select a topic</Text>
           <ToggleButtonGroup
@@ -220,15 +232,9 @@ const HousingSurvey = () => {
             marginBottom='medium'
           >
             <StyledToggleButton
-              marginLeft={isMobile ? '-3px' : '0'}
               defaultPressed
-              isDisabled={currentTopic === 'general'}
-              value='general'
-            >
-              General & Demographics
-            </StyledToggleButton>
-            <StyledToggleButton
               isDisabled={currentTopic === 'situation'}
+              marginLeft={isMobile ? '-3px' : '0'}
               value='situation'
             >
               Living Situation
@@ -240,7 +246,7 @@ const HousingSurvey = () => {
               isDisabled={currentTopic === 'preference'}
               value='preference'
             >
-              Housing Preferences
+              Housing Search & Preferences
             </StyledToggleButton>
             <StyledToggleButton
               isDisabled={currentTopic === 'mental'}
@@ -253,6 +259,12 @@ const HousingSurvey = () => {
               value='income'
             >
               Education & Income
+            </StyledToggleButton>
+            <StyledToggleButton
+              isDisabled={currentTopic === 'general'}
+              value='general'
+            >
+              General & Demographics
             </StyledToggleButton>
           </ToggleButtonGroup>
           {data && (
@@ -291,11 +303,6 @@ const HousingSurvey = () => {
                   <Heading level={5} textAlign='center' color='font.inverse'>
                     Broken down by: {currentSegment.replace(regex, '').trim()}
                   </Heading>
-                  <Text fontSize='xs' textAlign='center'>
-                    *Note: Segments below a sample size of 50 are not displayed.
-                    The dotted lined represents the national average, which
-                    includes segments not displayed on the chart.
-                  </Text>
                 </>
               )}
               <BarChart
@@ -307,9 +314,335 @@ const HousingSurvey = () => {
                 width={width}
                 tooltipState={tooltipState}
                 setTooltipState={setTooltipState}
-              />
+              >
+                <Text fontSize='xs'>
+                  *Note: Segments below a sample size of 50 are not displayed.
+                  The dotted lined represents the national average, which
+                  includes segments not displayed on the chart. Hover or click
+                  on bars to reveal values.
+                </Text>
+              </BarChart>
             </>
           )}
+          {currentTopic === 'situation' && (
+            <View>
+              <Heading
+                level={4}
+                color='secondary.60'
+                marginTop='xxl'
+                marginBottom='xs'
+              >
+                Key Takeaways
+              </Heading>
+              <ul>
+                <li>
+                  <Text>58% of young people rent.</Text>
+                  <ul>
+                    <li>
+                      <Text>
+                        Renting is higher than average for black (69%) and
+                        Indigenous youth (61%).
+                      </Text>
+                    </li>
+                    <li>
+                      <Text>
+                        18% live rent and mortgage free (do not contribute, own,
+                        or rent).
+                      </Text>
+                    </li>
+                    <li>
+                      <Text>27% of men own vs only 17% of women.</Text>
+                    </li>
+                    <li>
+                      <Text>
+                        Ownership is lowest in prairie provinces (16%) & highest
+                        in Maritimes (28%). Prairies also have highest
+                        percentage of youth living rent/mortgage free (24%).
+                      </Text>
+                    </li>
+                  </ul>
+                </li>
+
+                <li>
+                  <Text>
+                    Geographically, nearly half of youth (43%) live outside city
+                    centres, drawn to slightly more affordable housing but
+                    facing challenges like car dependency and limited
+                    infrastructure, while 34% live in suburbs and 19% live
+                    downtown.
+                  </Text>
+                </li>
+                <li>
+                  <Text>
+                    44% of youth decide to live with others to reduce housing
+                    costs. Between 18-25 years old it increases to 52.5%.
+                  </Text>
+                  <ul>
+                    <li>
+                      <Text>
+                        26% of all youth live with their parents, but this rises
+                        to 34% among youth of color.
+                      </Text>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <Text>
+                    The majority of youth live in two-bedroom (24%) or
+                    three-bedroom (21%) units, with smaller spaces like
+                    one-bedroom (14%) and studios (5%) being less common and
+                    often costly.
+                  </Text>
+                </li>
+                <li>
+                  <Text>
+                    While 50% move out between 18-21, among them 53% have also
+                    returned home.
+                  </Text>
+                  <ul>
+                    <li>
+                      <Text>
+                        Overall, 93% of young people have moved out of their
+                        childhood living situation before the age of 26.
+                      </Text>
+                    </li>
+                    <li>
+                      <Text>
+                        A significantly higher percentage (38%) of Indigenous
+                        youth moved out of their childhood living situation
+                        before turning 18.
+                      </Text>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </View>
+          )}
+          {currentTopic === 'preference' && (
+            <View>
+              <Heading
+                level={4}
+                color='secondary.60'
+                marginTop='xxl'
+                marginBottom='xs'
+              >
+                Key Takeaways
+              </Heading>
+              <ul>
+                <li>
+                  <Text>
+                    50% of youth stated that finding a place within their price
+                    range was the most challenging part of their rental
+                    experience, followed by 39% who stated finding a place in
+                    the area they wanted to be in was the most challenging.
+                  </Text>
+                  <ul>
+                    <li>
+                      <Text>
+                        Among regions, youth in the Maritimes (62%) and in
+                        Quebec (62%) found it most challenging to find a rental
+                        within their price range. That is compared to 46% in
+                        Ontario, 48% in BC and 39% in the Prairies.
+                      </Text>
+                    </li>
+                    <li>
+                      <Text>
+                        61% of Black youth found finding a rental within price
+                        range most challenging, higher than the average.
+                      </Text>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <Text>
+                    When searching for a place to live, young people’s
+                    priorities reflect practical needs. Over half (51%) cite
+                    monthly costs as their top concern, followed by safety
+                    (14%), proximity to work (11%), and access to nearby
+                    services (10%).
+                  </Text>
+                </li>
+                <li>
+                  <Text>
+                    Public transit emerges as a critical component of youth
+                    housing needs, with 62% of respondents regularly using
+                    transit, highlighting the connection between housing and
+                    mobility.
+                  </Text>
+                  <ul>
+                    <li>
+                      <Text>55% walk regularly.</Text>
+                    </li>
+                    <li>
+                      <Text>42% use a personal vehicle.</Text>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <Text>
+                    29% of youth find the idea of building their own home
+                    exciting, showing resilience and creativity in imagining
+                    their housing futures.
+                  </Text>
+                </li>
+              </ul>
+            </View>
+          )}
+          {currentTopic === 'mental' && (
+            <View>
+              <Heading
+                level={4}
+                color='secondary.60'
+                marginTop='xxl'
+                marginBottom='xs'
+              >
+                Key Takeaways
+              </Heading>
+              <ul>
+                <li>
+                  <Text>
+                    Three quarters of young people reported feeling “on edge”
+                    while searching for housing, and 50% expressed anxiety over
+                    the stability or cost of their current housing situation.
+                  </Text>
+                  <ul>
+                    <li>
+                      <Text>
+                        Alberta youth experience this anxiety at a higher rate
+                        (55%) than the national average.
+                      </Text>
+                    </li>
+                    <li>
+                      <Text>
+                        While youth report other, compounding pressures like
+                        concerns about global events (41%), national issues in
+                        Canada (38%), and local occurrences in their cities
+                        (26%), the rates of incidence are much lower nationally
+                        than the rate of worry about housing.
+                      </Text>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <Text>
+                    68% percent of youth selected that the most challenging part
+                    of finding housing is finding something they can afford.
+                  </Text>
+                </li>
+                <ul>
+                  <li>
+                    <Text>
+                      More women (73%) than men (61%) found it challenging to
+                      find a place they can afford.
+                    </Text>
+                  </li>
+                </ul>
+              </ul>
+            </View>
+          )}
+          <Heading
+            level={4}
+            color='secondary.60'
+            marginBottom='xs'
+            marginTop='xl'
+          >
+            {t('stories_heading')}
+          </Heading>
+          <Grid
+            columnGap='small'
+            rowGap='small'
+            templateColumns={{
+              base: '1fr',
+              medium: '1fr 1fr',
+              large: '1fr 1fr 1fr',
+            }}
+          >
+            <CrosslinkCard
+              heading={t('blog_title')}
+              buttonText={t('blog_button')}
+              link={
+                lng === 'fr'
+                  ? 'https://www.youthfulcities.com/blog/2024/12/13/le-prix-a-payer-letat-du-logement-des-jeunes-dans-les-centres-urbains-du-canada/'
+                  : 'https://www.youthfulcities.com/blog/2024/12/12/priced-out-the-state-of-youth-housing-in-canadas-urban-centres/'
+              }
+              src={
+                lng === 'fr'
+                  ? 'https://www.youthfulcities.com/wp-content/uploads/2024/12/Episode-1-titre-FR.png'
+                  : 'https://www.youthfulcities.com/wp-content/uploads/2024/12/HousingSurvey-Episode1-blogtitle.png'
+              }
+              alt={t('blog_alt')}
+              r={183}
+              g={152}
+              b={182}
+              inverse={false}
+            />
+            <CrosslinkCard
+              heading={t('blog_title_2')}
+              buttonText={t('blog_button')}
+              link={
+                lng === 'fr'
+                  ? 'https://www.youthfulcities.com/blog/2025/01/03/les-jeunes-lequite-et-la-crise-du-logement-qui-peut-devenir-proprietaire/'
+                  : 'https://www.youthfulcities.com/blog/2025/01/02/youth-equity-and-the-housing-crisis-who-gets-to-own/'
+              }
+              src={
+                lng === 'fr'
+                  ? 'https://www.youthfulcities.com/wp-content/uploads/2025/01/Episode-2-blog-titre-FR.png'
+                  : 'https://www.youthfulcities.com/wp-content/uploads/2024/12/The-state-of-housing-for-youth-in-Canada-Episode-2-title.png'
+              }
+              alt={t('blog_alt_2')}
+              r={183}
+              g={152}
+              b={182}
+              inverse={false}
+            />
+            <CrosslinkCard
+              heading={t('blog_title_3')}
+              buttonText={t('blog_button')}
+              link={
+                lng === 'fr'
+                  ? 'https://www.youthfulcities.com/blog/2025/01/10/experiences-vecues-par-les-jeunes-naviguer-dans-le-domaine-du-logement-au-canada/'
+                  : 'https://www.youthfulcities.com/blog/2025/01/09/youth-lived-experiences-navigating-housing-in-canada/'
+              }
+              src={
+                lng === 'fr'
+                  ? 'https://www.youthfulcities.com/wp-content/uploads/2025/01/Episode-blog-titre-FR.png'
+                  : 'https://www.youthfulcities.com/wp-content/uploads/2025/01/Episode-3-blog-title.png'
+              }
+              alt={t('blog_alt_3')}
+              r={183}
+              g={152}
+              b={182}
+              inverse={false}
+            />
+          </Grid>
+          <Heading
+            level={4}
+            color='secondary.60'
+            marginTop='xxl'
+            marginBottom='xs'
+          >
+            Explore Open-ended Responses
+          </Heading>
+          <Text>
+            Want to know what youth are saying about housing? Use the Youth Cite
+            tool to explore quotes from the State of Housing for Young People in
+            Canada survey.
+          </Text>
+          <Link href='/insights/housing/open-ended'>
+            <Button variation='primary'>Go to Youth Cite</Button>
+          </Link>
+          <Heading
+            level={4}
+            color='secondary.60'
+            marginTop='xxl'
+            marginBottom='xs'
+          >
+            Download Raw Data
+          </Heading>
+          <Text>Create an account or sign in to download the dataset.</Text>
+          <Button variation='primary' onClick={useDownloadFile(filename)}>
+            Download
+          </Button>
           <Heading
             level={4}
             color='secondary.60'
@@ -334,18 +667,6 @@ const HousingSurvey = () => {
             i18nKey='method_p_3'
             components={{ p: <Text />, ul: <ul />, li: <li /> }}
           />
-          <Heading
-            level={4}
-            color='secondary.60'
-            marginTop='xxl'
-            marginBottom='xs'
-          >
-            Download Raw Data
-          </Heading>
-          <Text>Create an account or sign in to download the dataset.</Text>
-          <Button variation='primary' onClick={useDownloadFile(filename)}>
-            Download
-          </Button>
         </View>
       </View>
       {tooltipState.position && (

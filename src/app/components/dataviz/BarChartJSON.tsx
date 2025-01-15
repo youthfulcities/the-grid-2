@@ -39,6 +39,7 @@ interface BarProps {
   tooltipState: TooltipState;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   data: ResponseGroup | number | null;
+  children?: ReactNode;
 }
 
 interface LegendProps {
@@ -78,6 +79,7 @@ const BarChart: React.FC<BarProps> = ({
   tooltipState,
   setTooltipState,
   data,
+  children,
 }) => {
   const ref = useRef<SVGSVGElement>(null);
   const [loading, setLoading] = useState(true);
@@ -86,13 +88,13 @@ const BarChart: React.FC<BarProps> = ({
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
   const [activeLegendItems, setActiveLegendItems] = useState<string[]>([]);
   const [validSegmentOptions, setValidSegmentOptions] = useState<string[]>([]);
-  const [leftMargin, setLeftMargin] = useState(50);
+  const [leftMargin, setLeftMargin] = useState(10);
   const [dataToDisplay, setDataToDisplay] = useState<ResponseGroup[]>([]);
   const height = width;
   const margin = { left: leftMargin, right: 10, top: 0, bottom: 60 };
   const duration = 1000;
   const sampleCutoff = 50;
-  const truncateThreshold = 25;
+  const truncateThreshold = 20;
 
   useEffect(() => {
     if (typeof window !== 'undefined' && sessionStorage) {
@@ -165,13 +167,16 @@ const BarChart: React.FC<BarProps> = ({
 
     // Get the length of the longest item in allOptions using lodash
     const maxLength = _.get(_.maxBy(answers, 'length'), 'length', 0);
+    console.log(maxLength);
 
-    if (maxLength < truncateThreshold) {
+    if (maxLength * 8 < truncateThreshold * 5) {
       // Update the left margin based on the max label length
       const estimatedLabelWidth = maxLength * 8;
       setLeftMargin(estimatedLabelWidth);
     } else setLeftMargin(truncateThreshold * 5);
   }, [data]);
+
+  console.log(leftMargin);
 
   useEffect(() => {
     if (
@@ -347,6 +352,7 @@ const BarChart: React.FC<BarProps> = ({
           position='absolute'
         />
       </ChartContainer>
+      {children}
       <Customize
         selectedOptions={selectedAnswers}
         setSelectedOptions={setSelectedAnswers}

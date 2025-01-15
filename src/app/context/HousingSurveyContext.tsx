@@ -36,7 +36,7 @@ export const HousingSurveyProvider: React.FC<{ children: React.ReactNode }> = ({
   const [data, setData] = useState<SurveyData>();
   const [currentQuestion, setCurrentQuestion] = useState('');
   const [currentSegment, setCurrentSegment] = useState('');
-  const [currentTopic, setCurrentTopic] = useState('general');
+  const [currentTopic, setCurrentTopic] = useState('situation');
 
   const value = React.useMemo(
     () => ({

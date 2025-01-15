@@ -92,7 +92,7 @@ const CrosslinkCard: React.FC<CrosslinkCardProps> = ({
         g={g}
         b={b}
       >
-        <Heading level={3} color={inverse ? 'font.inverse' : 'font.primary'}>
+        <Heading level={3} color='neutral.100'>
           {heading}
         </Heading>
         <Link href={link} target='_blank'>

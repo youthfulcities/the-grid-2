@@ -215,10 +215,11 @@ const HousingSurvey = () => {
         <View className='inner-container'>
           <Heading level={3}>Youth Chart</Heading>
           <Text marginBottom='xl'>
-            This interactive visualization displays 1500 responses from the
-            State of Housing for Young People in Canada survey. Use it to
-            explore youth perspectives on housing, co-living, and affordability
-            in Canada.
+            Explore 1500 youth perspectives on housing affordability, equity,
+            and shared housing alternatives in Canada, gathered from our State
+            of Housing for Young People in Canada survey. This interactive
+            visualization offers insights into how young people view their
+            housing options and the challenges they face.
           </Text>
         </View>
         <View ref={containerRef}>

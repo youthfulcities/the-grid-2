@@ -312,7 +312,7 @@ const HousingSurvey = () => {
                     ? data[currentQuestion][currentSegment]
                     : null
                 }
-                width={width}
+                width={width > 800 ? 800 : width}
                 tooltipState={tooltipState}
                 setTooltipState={setTooltipState}
               >

@@ -1,6 +1,5 @@
 'use client';
 
-import Accordion from '@/app/components/Accordion';
 import Container from '@/app/components/Background';
 import Drawer from '@/app/components/Drawer';
 import BarChart from '@/app/components/dataviz/BarChart';
@@ -42,10 +41,9 @@ const clusterMap: {
 
 // Function to get key from value
 const getKeyFromValue = (value: string): string | null => {
-  const entry = Object.values(clusterMap).find((val) => val === value);
+  const entry = Object.entries(clusterMap).find(([key, val]) => val === value);
   return entry ? entry[0] : null; // Return the key if found, otherwise null
 };
-
 const defaultFiles: Record<string, string> = {
   '1': 'org-attractive-cluster.csv',
   '2': 'org-attractive-city.csv',
@@ -120,18 +118,6 @@ const Survey: React.FC = () => {
                   Importance/performance cluster
                 </StyledButton>
               </Flex>
-              <Accordion title='Examine clusters'>
-                <Clusters
-                  getKeyFromValue={getKeyFromValue}
-                  currentCluster={currentCluster}
-                  setCurrentCluster={setCurrentCluster}
-                  clusterMap={clusterMap}
-                  isDrawerOpen={isDrawerOpen}
-                  setIsDrawerOpen={setIsDrawerOpen}
-                  tooltipState={tooltipState}
-                  setTooltipState={setTooltipState}
-                />
-              </Accordion>
             </Tabs.Panel>
             <Tabs.Panel value='2'>
               <Flex justifyContent='center' wrap='wrap' marginTop='xl'>
@@ -188,6 +174,19 @@ const Survey: React.FC = () => {
             setTooltipState={setTooltipState}
           />
         </div>
+        <Heading level={2} marginTop='xxxl'>
+          Go Deeper
+        </Heading>
+        <Clusters
+          getKeyFromValue={getKeyFromValue}
+          currentCluster={currentCluster}
+          setCurrentCluster={setCurrentCluster}
+          clusterMap={clusterMap}
+          isDrawerOpen={isDrawerOpen}
+          setIsDrawerOpen={setIsDrawerOpen}
+          tooltipState={tooltipState}
+          setTooltipState={setTooltipState}
+        />
       </View>
       <Drawer
         isopen={isDrawerOpen}

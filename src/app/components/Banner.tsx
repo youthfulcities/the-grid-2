@@ -54,7 +54,7 @@ const Banner: React.FC<{ lng: string }> = ({ lng }) => {
             $innerColor={tokens.colors.primary[60].value}
             $outlineColor={tokens.colors.font.primary.value}
           >
-            31 000
+            31
           </OutlineText>
         </Fact>
         <Fact $space={tokens.space.medium.value}>
@@ -66,7 +66,7 @@ const Banner: React.FC<{ lng: string }> = ({ lng }) => {
             $innerColor={tokens.colors.primary[60].value}
             $outlineColor={tokens.colors.font.primary.value}
           >
-            7000
+            11,000+
           </OutlineText>
         </Fact>
         <Fact $space={tokens.space.medium.value}>
@@ -78,7 +78,7 @@ const Banner: React.FC<{ lng: string }> = ({ lng }) => {
             $innerColor={tokens.colors.primary[60].value}
             $outlineColor={tokens.colors.font.primary.value}
           >
-            35 000
+            400,000+
           </OutlineText>
         </Fact>
       </Flex>

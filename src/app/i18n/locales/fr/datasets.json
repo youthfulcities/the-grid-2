@@ -4,6 +4,7 @@
   "index": "<strong>Les indices</strong> sont des ensembles de données fondés sur des valeurs pour des données quantifiables. Par exemple, le salaire minimum a une valeur dans chaque ville que nous pouvons mesurer.",
   "survey": "<strong>Les ensembles de données d'enquête</strong> comprennent les réponses aux questionnaires de Youthful Cities, qui donnent un meilleur aperçu des données quantifiables",
   "interview": "<strong>Les ensembles de données d'entretiens</strong> contiennent des citations des participants et sont utiles pour comprendre le contexte des idées.",
+  "more": "Need more data? <a>Contactez-nous !</a>",
   "download": "Télécharger le fichier {{type}}",
   "report": "Télécharger le rapport",
   "link": "En savoir plus"

@@ -4,7 +4,8 @@
   "index": "<strong>Indexes</strong> are value-based datasets for data that is quantifiable; for example, minimum wage has a value in each city that we can measure",
   "survey": "<strong>Survey datasets</strong> include responses to Youthful Cities’ questionnaires, which provide greater insight into the quantifiable data.",
   "interview": "<strong>Interview datasets</strong> contain quotes from participants and are useful for understanding the context of insights.",
+  "more": "Need more data? <a>Get it touch with us!</a>",
   "download": "Download {{type}} file",
   "report": "Download report",
-  "link":"Learn more"
+  "link": "Learn more"
 }

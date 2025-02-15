@@ -237,15 +237,6 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
               {lng === 'fr' ? card.descfr : card.desc}
             </Text>
           </View>
-
-          <ClickableText
-            onClick={handleRequestMoreData}
-            $color={getColor(index).titleFont}
-            $inverse={getColor(index).button}
-          >
-            Request more data
-          </ClickableText>
-
           {cardMetadata && (
             <MetadataContainer>
               <Text fontSize='xs' color={getColor(index).titleFont}>
@@ -277,7 +268,7 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
             handleDownload((lng === 'fr' && card.filefr) || card.file)
           }
         >
-          Download CSV
+          Download
         </DownloadButton>
 
         {/* Conditionally render CardAccordion */}

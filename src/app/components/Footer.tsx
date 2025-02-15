@@ -213,6 +213,14 @@ const FooterComponent = () => {
             </LinkColumn>
             <LinkColumn>
               <HoverLink
+                href='/chatbot'
+                passHref
+                $hover={tokens.colors.primary[60].value}
+                $color={tokens.colors.font.inverse.value}
+              >
+                {t('chatbot')}
+              </HoverLink>
+              <HoverLink
                 href='/cookie-policy'
                 passHref
                 $hover={tokens.colors.primary[60].value}

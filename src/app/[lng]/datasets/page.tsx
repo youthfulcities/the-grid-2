@@ -9,6 +9,7 @@ import {
 } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import { getProperties, getUrl } from 'aws-amplify/storage';
+import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
 import config from '../../../amplifyconfiguration.json';
@@ -109,6 +110,13 @@ const Datasets: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
               t={t}
               i18nKey='interview'
               components={{ strong: <strong /> }}
+            />
+          </Text>
+          <Text>
+            <Trans
+              t={t}
+              i18nKey='more'
+              components={{ a: <Link href='/contact' /> }}
             />
           </Text>
         </View>

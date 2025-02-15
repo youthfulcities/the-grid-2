@@ -1097,6 +1097,12 @@ a.outline-button:hover {
   background-size: cover;
 }
 
+.image-card-dev-interviews {
+  background-image: url('https://www.youthfulcities.com/wp-content/uploads/2024/05/edit-1.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
 /* Animations
 ========================================================================== */
 

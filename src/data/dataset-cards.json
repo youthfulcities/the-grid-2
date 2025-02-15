@@ -1,12 +1,24 @@
 {
   "datasetCards": [
     {
+      "title": "DEVLab Interviews — Excerpts",
+      "titlefr": "Entretiens laboDEV - Extraits",
+      "date": "2024",
+      "type": "interview",
+      "desc": "Download thematic coded excerpts from 11,000 minutes of interviews we conducted with young people across Canada as part of the DEVLab project.",
+      "descfr": "Téléchargez des extraits codés par thème de 11 000 minutes d'entretiens que nous avons menés avec des jeunes dans tout le Canada dans le cadre du projet laboDEV.",
+      "className": "image-card-dev-interviews",
+      "file": "devlab-2024-interview-cleaned.csv",
+      "link": "https://youthdatalab.youthfulcities.com/en/insights/interview",
+      "keywords": []
+    },
+    {
       "title": "State of Housing for Young People in Canada",
       "titlefr": "État du logement des jeunes au Canada",
       "date": "2024",
       "type": "survey",
       "desc": "Download aggregated quantitative responses from the State of Housing for Young People in Canada survey.",
-      "descfr": "",
+      "descfr": "Téléchargez les réponses quantitatives agrégées de l'enquête sur l'état du logement des jeunes au Canada.",
       "className": "image-card-calgary",
       "file": "YC Housing Survey Analysis Totals.csv",
       "link": "https://youthdatalab.youthfulcities.com/en/insights/housing/survey",

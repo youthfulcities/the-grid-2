@@ -73,7 +73,7 @@ const HomeHeader = () => {
             <Image alt='Youthful Cities logo' src={ycLogo} width={200} />
           </a> */}
         </Flex>
-        <InsightCards lng={lng} maxLength={3} />
+        <InsightCards lng={lng} maxLength={4} />
       </Flex>
     </HomeHeaderSection>
   );

@@ -65,7 +65,11 @@ const StyledCard = styled(Card)<{ $background: string }>`
 
 const InsightCards: React.FC<InsightCardProps> = ({ lng, maxLength }) => {
   const { tokens } = useTheme();
-  const sortedInsightCards = _.orderBy(insightCards.cards, 'date', 'desc');
+  const sortedInsightCards = _.orderBy(
+    insightCards.cards,
+    ['priority', 'date'],
+    ['asc', 'desc']
+  );
   const truncatedInsightCards = _.slice(
     sortedInsightCards,
     0,

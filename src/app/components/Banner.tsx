@@ -47,7 +47,7 @@ const Banner: React.FC<{ lng: string }> = ({ lng }) => {
       >
         <Fact $space={tokens.space.medium.value}>
           <Heading level={4} color={tokens.colors.font.primary.value}>
-            {t('datasets')}
+            {t('datasets-literal')}
           </Heading>
           <OutlineText
             as='h3'
@@ -66,7 +66,7 @@ const Banner: React.FC<{ lng: string }> = ({ lng }) => {
             $innerColor={tokens.colors.primary[60].value}
             $outlineColor={tokens.colors.font.primary.value}
           >
-            11,000+
+            31,000+
           </OutlineText>
         </Fact>
         <Fact $space={tokens.space.medium.value}>

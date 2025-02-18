@@ -29,7 +29,7 @@ const StyledBadge = styled(Badge)<{
   opacity: ${(props) => (props.$show ? '1' : '0')};
   word-break: keep-all;
   width: ${(props) => (props.$isBig ? '300%' : 'auto')};
-  z-index: 1010;
+  z-index: 1;
 `;
 const SmallText = styled(Text)`
   margin-top: var(--amplify-space-small);

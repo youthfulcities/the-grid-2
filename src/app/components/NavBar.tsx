@@ -126,7 +126,7 @@ const NavBar = () => {
   const pathname = usePathname();
   const pathNoLocale = pathname.substring(3);
   const router = useRouter();
-  const isMobile = useBreakpointValue({
+  const ismobile = useBreakpointValue({
     base: true,
     small: true,
     medium: true,
@@ -235,7 +235,7 @@ const NavBar = () => {
             </Flex>
           </View>
         </Flex>
-        {isMobile ? (
+        {ismobile ? (
           <Menu
             menuAlign='end'
             trigger={

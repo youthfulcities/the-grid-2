@@ -268,7 +268,7 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
             handleDownload((lng === 'fr' && card.filefr) || card.file)
           }
         >
-          Download
+          Download File
         </DownloadButton>
 
         {/* Conditionally render CardAccordion */}

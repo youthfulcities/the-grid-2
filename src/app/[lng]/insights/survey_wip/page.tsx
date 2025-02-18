@@ -94,7 +94,7 @@ const Survey: React.FC = () => {
     minWidth: 0,
   });
 
-  const isMobile = useBreakpointValue({
+  const ismobile = useBreakpointValue({
     base: true,
     small: true,
     medium: true,
@@ -103,7 +103,7 @@ const Survey: React.FC = () => {
 
   return (
     <Container>
-      {!isMobile && <SideNav sections={sections} />}
+      {!ismobile && <SideNav sections={sections} />}
       <View className='container padding'>
         <Heading level={1}>
           Skills <span className='highlight'>Development</span>

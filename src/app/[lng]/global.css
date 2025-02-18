@@ -694,6 +694,7 @@ a.outline-button:hover {
 .image-card-youth-employment {
   background-image: url('/assets/theme_image/work.jpg');
   background-size: cover;
+  background-position: bottom;
 }
 /* Image card backgrounds - CITIES
 ========================================================================== */

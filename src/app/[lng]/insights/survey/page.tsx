@@ -2,62 +2,130 @@
 
 import Container from '@/app/components/Background';
 import Drawer from '@/app/components/Drawer';
-import BarChart from '@/app/components/dataviz/BarChart';
+import BarChart from '@/app/components/dataviz/BarChartGeneral';
 import Clusters from '@/app/components/dataviz/Clusters';
 import Demographics from '@/app/components/dataviz/Demographics';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
+import { useWUWWLSurvey } from '@/app/context/WUWWLSurveyContext';
 import { useDimensions } from '@/hooks/useDimensions';
-import { Button, Flex, Heading, Tabs, View } from '@aws-amplify/ui-react';
+import fetchData from '@/lib/fetchData';
+import {
+  Heading,
+  SelectField,
+  Text,
+  ToggleButton,
+  ToggleButtonGroup,
+  useBreakpointValue,
+  View,
+} from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
-import { ReactNode, useRef, useState } from 'react';
+import * as d3 from 'd3';
+import _ from 'lodash';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import config from '../../../../amplifyconfiguration.json';
-
-const duration = 500;
 
 Amplify.configure(config, {
   ssr: true,
 });
 
-const StyledButton = styled(Button)<{ $active: boolean }>`
-  background-color: ${(props) =>
-    props.$active ? 'var(--amplify-colors-brand-secondary-60)' : 'default'};
-  color: ${(props) =>
-    props.$active ? 'var(--amplify-colors-font-primary)' : 'default'};
-`;
+interface DataItem {
+  option_en: string;
+  question_ID: number;
+  count_Total: number;
+  percentage_Total: number;
+  [key: string]: string | number | undefined;
+}
+
+type SurveyData = DataItem[] | null;
+
+type QuestionRange = { start: number; end: number };
 
 const clusterMap: {
   'Social good focus': string;
   'Forming opinions': string;
-  'Affordability focus': string;
+  'Economic focus': string;
   All: string;
   [key: string]: string; // Index signature
 } = {
   'Social good focus': 'social',
   'Forming opinions': 'forming',
-  'Affordability focus': 'affordability',
+  'Economic focus': 'affordability',
   All: 'all',
 };
+
+const StyledSelect = styled(SelectField)`
+  select: {
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+  option: {
+    word-wrap: break-word;
+  }
+`;
+
+const StyledToggleButton = styled(ToggleButton)`
+  &:disabled {
+    background-color: var(--amplify-colors-secondary-60);
+    color: #000;
+    border-color: var(--amplify-colors-secondary-60);
+  }
+`;
 
 // Function to get key from value
 const getKeyFromValue = (value: string): string | null => {
   const entry = Object.entries(clusterMap).find(([key, val]) => val === value);
   return entry ? entry[0] : null; // Return the key if found, otherwise null
 };
-const defaultFiles: Record<string, string> = {
-  '1': 'org-attractive-cluster.csv',
-  '2': 'org-attractive-city.csv',
-  '3': 'org-attractive-gender.csv',
+
+const questionRanges: Record<string, QuestionRange[]> = {
+  future: [
+    { start: 49, end: 50 },
+    { start: 93, end: 94 },
+  ],
+  pandemic: [
+    { start: 60, end: 62 },
+    { start: 65, end: 67 },
+  ],
+  org: [
+    { start: 68, end: 68 },
+    { start: 71, end: 74 },
+    { start: 95, end: 95 },
+  ],
+  transition: [
+    { start: 56, end: 59 },
+    { start: 90, end: 90 },
+  ],
+  other: [
+    { start: 1, end: 48 },
+    { start: 51, end: 55 },
+    { start: 63, end: 64 },
+    { start: 69, end: 70 },
+    { start: 75, end: 89 },
+    { start: 91, end: 92 },
+    { start: 96, end: 97 },
+  ],
 };
 
+const regex =
+  /(\[Please choose all that apply\]_feature|_Feature|\[Please choose all that apply\]|_feature|_ feature|\[Please choose only one\]|Select as many as apply.|On a scale of 1 to 10 — with 1 being not at all_featurre interested, and 10 being extremely interested —|Choose as many as apply.)/;
+
 const Survey: React.FC = () => {
-  const margin = { top: 20, bottom: 60, left: 150, right: 40 };
+  const {
+    data,
+    setData,
+    currentQuestion,
+    setCurrentQuestion,
+    currentSegment,
+    setCurrentSegment,
+    currentTopic,
+    setCurrentTopic,
+  } = useWUWWLSurvey();
+
   const containerRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false);
   const { width } = useDimensions(containerRef);
-  const height = 800;
-  const [activeFile, setActiveFile] = useState('org-attractive-cluster.csv');
   const [currentCluster, setCurrentCluster] = useState('all');
-  const [tab, setTab] = useState('1');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [tooltipState, setTooltipState] = useState<{
     position: { x: number; y: number } | null;
@@ -77,105 +145,212 @@ const Survey: React.FC = () => {
     child: null,
     minWidth: 0,
   });
+  const [questions, setQuestions] = useState<string[]>([]);
+  const [segments, setSegments] = useState<string[]>([]);
+  const [currentData, setCurrentData] = useState<SurveyData>(null);
 
-  const changeTab = (newTab: string) => {
-    setActiveFile(defaultFiles[newTab]);
-    setTab(newTab);
-  };
+  const ismobile = useBreakpointValue({
+    base: true,
+    small: true,
+    medium: true,
+    large: false,
+  });
+
+  const activeFile = 'WUWWL_Full_National_ONLY - Questions.csv';
+  const path = 'internal/DEV/survey';
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const csvText = await fetchData(path, activeFile); // Fetch CSV as text
+        if (csvText) {
+          const parsedData = d3.csvParse(csvText); // Parse CSV string to JSON
+          // Convert count_Total and percentage_Total to numbers
+          const jsonData = parsedData.map((d) => ({
+            ...d,
+            question_ID: +d.question_ID, // Convert ID to number
+            count_Total: +d.count_Total, // Convert count to number
+            percentage_Total:
+              +d.percentage_Total.replace('%', '') < 1
+                ? Math.round(+d.percentage_Total.replace('%', '') * 100)
+                : +d.percentage_Total.replace('%', ''), // Remove "%" and convert to number
+            option_en: d.option_en || '', // Ensure option_en is always a string
+          }));
+
+          setData(jsonData);
+        }
+      } catch (error) {
+        console.error('Error loading CSV:', error);
+      }
+      setLoading(false);
+    };
+
+    loadData();
+  }, [path, activeFile]);
+
+  // ** Filter Questions by Topic **
+  useEffect(() => {
+    if (!data) return;
+
+    const filteredData = data.filter((d) =>
+      questionRanges[currentTopic]?.some(
+        (range) => d.question_ID >= range.start && d.question_ID <= range.end
+      )
+    );
+
+    const uniqueQuestions = _.uniq(filteredData.map((d) => d.question_en));
+    setQuestions(uniqueQuestions as string[]);
+    setCurrentQuestion((uniqueQuestions[0] as string) || '');
+  }, [data, currentTopic]);
+
+  // ** Filter Data by Selected Question **
+  useEffect(() => {
+    if (!data || !currentQuestion) return;
+    const filteredData = data.filter((d) => d.question_en === currentQuestion);
+    setCurrentData(filteredData);
+  }, [data, currentQuestion]);
+
+  useEffect(() => {
+    const filterDataByQuestion = () => {
+      if (data && currentQuestion) {
+        const filteredData = data.filter(
+          (d) => d.question_en === currentQuestion
+        );
+        setCurrentData(filteredData);
+      }
+    };
+
+    filterDataByQuestion();
+  }, [data, currentQuestion]);
+
+  // useEffect(() => {
+  //   const getSegments = () => {
+  //     if (!data || !data[currentQuestion]) return;
+  //     if (currentQuestion && data && data[currentQuestion]) {
+  //       const allSegments = Object.keys(data[currentQuestion]).filter(
+  //         (key) =>
+  //           key !== 'question_id' &&
+  //           key !== 'question_text' &&
+  //           key !== 'question_type'
+  //       );
+  //       setSegments(allSegments ?? []);
+  //       if (!currentSegment) {
+  //         setCurrentSegment(allSegments[1]);
+  //       }
+  //     }
+  //   };
+
+  //   getSegments();
+  // }, [data, currentQuestion]);
+
   return (
     <Container>
       <View className='container padding'>
         <Heading level={1}>
           What’s up with <span className='highlight'>work lately?</span>
         </Heading>
-        <div className='inner-container' ref={containerRef}>
-          <Heading level={3} color='font.inverse'>
-            Survey Preview
+        <View className='inner-container'>
+          <Heading level={3} marginBottom='xl'>
+            Youth Chart
           </Heading>
-          <Heading level={2} marginTop='xxxl'>
-            Skills Mismatch
-          </Heading>
-          <Heading level={5} color='font.inverse' textAlign='center'>
-            Select a segment
-          </Heading>
-          <Tabs.Container
-            defaultValue='1'
-            value={tab}
-            onValueChange={(newTab) => changeTab(newTab)}
+        </View>
+        <div ref={containerRef}>
+          <Text marginBottom='0'>Select a topic</Text>
+          <ToggleButtonGroup
+            direction={ismobile ? 'column' : 'row'}
+            alignItems='stretch'
+            value={currentTopic}
+            onChange={(value) => setCurrentTopic(value as string)}
+            isExclusive
+            marginBottom='medium'
           >
-            <Tabs.List>
-              <Tabs.Item value='1'>Psychographic</Tabs.Item>
-              <Tabs.Item value='2'>City</Tabs.Item>
-              <Tabs.Item value='3'>Identity</Tabs.Item>
-            </Tabs.List>
-            <Tabs.Panel value='1'>
-              <Flex justifyContent='center' wrap='wrap' marginTop='xl'>
-                <StyledButton
-                  $active={activeFile === 'org-attractive-cluster.csv'}
-                  variation='primary'
-                  onClick={() => setActiveFile('org-attractive-cluster.csv')}
-                >
-                  Importance/performance cluster
-                </StyledButton>
-              </Flex>
-            </Tabs.Panel>
-            <Tabs.Panel value='2'>
-              <Flex justifyContent='center' wrap='wrap' marginTop='xl'>
-                <StyledButton
-                  $active={activeFile === 'org-attractive-city.csv'}
-                  variation='primary'
-                  onClick={() => setActiveFile('org-attractive-city.csv')}
-                >
-                  City
-                </StyledButton>
-              </Flex>
-            </Tabs.Panel>
-            <Tabs.Panel value='3'>
-              <Flex justifyContent='center' wrap='wrap' marginTop='xl'>
-                <StyledButton
-                  $active={activeFile === 'org-attractive-gender.csv'}
-                  variation='primary'
-                  onClick={() => setActiveFile('org-attractive-gender.csv')}
-                >
-                  Gender
-                </StyledButton>
-                <StyledButton
-                  $active={activeFile === 'org-attractive-citizen.csv'}
-                  variation='primary'
-                  onClick={() => setActiveFile('org-attractive-citizen.csv')}
-                >
-                  Citizenship Status
-                </StyledButton>
-                <StyledButton
-                  $active={activeFile === 'org-attractive-disability.csv'}
-                  variation='primary'
-                  onClick={() => setActiveFile('org-attractive-disability.csv')}
-                >
-                  Ability
-                </StyledButton>
-              </Flex>
-            </Tabs.Panel>
-          </Tabs.Container>
-          <Heading
-            level={5}
-            color='font.inverse'
-            textAlign='center'
-            marginTop='xl'
-          >
-            What makes an organization/company the most attractive to work for?
-          </Heading>
-          <BarChart
-            width={width}
-            height={height}
-            margin={margin}
-            duration={duration}
-            activeFile={activeFile}
-            tooltipState={tooltipState}
-            setTooltipState={setTooltipState}
-          />
+            <StyledToggleButton
+              defaultPressed
+              isDisabled={currentTopic === 'future'}
+              marginLeft={ismobile ? '-3px' : '0'}
+              value='future'
+            >
+              Paving the way for the future of work in cities
+            </StyledToggleButton>
+            <StyledToggleButton
+              isDisabled={currentTopic === 'pandemic'}
+              value='pandemic'
+            >
+              Engaging with post-pandemic work ecosystems
+            </StyledToggleButton>
+            <StyledToggleButton isDisabled={currentTopic === 'org'} value='org'>
+              Envisioning an ideal organization
+            </StyledToggleButton>
+            <StyledToggleButton
+              isDisabled={currentTopic === 'transition'}
+              value='transition'
+            >
+              Navigating the transition from education to work
+            </StyledToggleButton>
+            <StyledToggleButton
+              isDisabled={currentTopic === 'other'}
+              value='other'
+            >
+              Other
+            </StyledToggleButton>
+          </ToggleButtonGroup>
+          {data && (
+            <>
+              <StyledSelect
+                marginBottom='large'
+                label='Select a question'
+                color='font.inverse'
+                value={currentQuestion}
+                onChange={(e) => setCurrentQuestion(e.target.value)}
+              >
+                {questions.map((question) => (
+                  <option value={question} key={question}>
+                    {question.replace(regex, '').trim()}
+                  </option>
+                ))}
+              </StyledSelect>
+              {/* <StyledSelect
+                marginBottom='xl'
+                label='Select a demographic segment'
+                color='font.inverse'
+                value={currentSegment}
+                onChange={(e) => setCurrentSegment(e.target.value)}
+              >
+                {segments.map((segment) => (
+                  <option value={segment} key={segment}>
+                    {segment.replace(regex, '').trim()}
+                  </option>
+                ))}
+              </StyledSelect> */}
+              {currentData && (
+                <>
+                  <Heading level={3} textAlign='center' color='font.inverse'>
+                    {currentQuestion?.replace(regex, '').trim()}
+                  </Heading>
+                  {/* <Heading level={5} textAlign='center' color='font.inverse'>
+                    Broken down by: {currentSegment.replace(regex, '').trim()}
+                  </Heading> */}
+                </>
+              )}
+              <BarChart
+                data={currentData || []}
+                width={width > 800 ? 800 : width}
+                tooltipState={tooltipState}
+                setTooltipState={setTooltipState}
+              >
+                {/* <Text fontSize='xs'>
+                  *Note: Segments below a sample size of 50 are not displayed.
+                  The dotted lined represents the national average, which
+                  includes segments not displayed on the chart. Hover or click
+                  on bars to reveal values.
+                </Text> */}
+              </BarChart>
+            </>
+          )}
         </div>
         <Heading level={2} marginTop='xxxl'>
-          Go Deeper
+          Dig Deeper
         </Heading>
         <Clusters
           getKeyFromValue={getKeyFromValue}
@@ -187,6 +362,58 @@ const Survey: React.FC = () => {
           tooltipState={tooltipState}
           setTooltipState={setTooltipState}
         />
+        <Heading level={2} marginTop='xxxl'>
+          Methodology
+        </Heading>
+        <Text marginBottom='xl'>
+          The bilingual survey investigated how Canada&apos;s youth workforce
+          and work ecosystems changed after the COVID-19 pandemic. The primary
+          objective of this survey was to collect insights from youth
+          nationally, to support the development of evidence-based solutions
+          focused on improving community-specific pathways towards skills
+          development and meaningful employment. It was designed in
+          collaboration with policy experts and local actors to ensure that the
+          questions were relevant and aligned with the project&apos;s goals. The
+          Equity, Diversity, Inclusivity, Justice and Reconciliation team
+          (EDIJR) at Tamarack Institute validated the survey design. It ensured
+          the content was inclusive and suitable for youth of different
+          identities and lived experiences.
+        </Text>
+        <Heading level={3} color='secondary.60'>
+          Sampling Design
+        </Heading>
+        <Text marginBottom='xl'>
+          The survey targeted a representative sample of young people aged 16 to
+          30, reaching 1626 respondents across Canada. The sampling frame was
+          designed based on Statistics Canada Census 2021 data. Respondents were
+          identified using voluntary sampling through promotion on the Youthful
+          Cities and Tamarack Institute media channels. To align with the values
+          and scope of the DEVlab project, the sample focused on eight
+          cities—Toronto, Vancouver, Montreal, Calgary, Regina, Moncton,
+          Yellowknife, and Whitehorse—where solutions based on the findings were
+          implemented. Furthermore, the survey design prioritized increasing the
+          representation of equity-deserving groups within the sample.
+        </Text>
+        <Heading level={3} color='secondary.60'>
+          Data Collection
+        </Heading>
+        <Text marginBottom='xl'>
+          The survey was in the field between November 2023 and May 2024,
+          exclusively through online collection. It was hosted on Typeform, a
+          common data collection platform. The data collected through Typeform
+          is protected by leading Canadian and international cybersecurity and
+          data protection standards. While the survey was in the field, Youthful
+          Cities purchased a panel sample, totalling 1090 respondents
+          (pre-exclusion and data cleaning), from CICIC research, a Canadian,
+          Dynata-affiliated and ESOMAR-recognized market research organization.
+          The survey complied with ethical guidelines for research involving
+          human participants. All participants were provided with an informed
+          consent form detailing the purpose of the study, the voluntary nature
+          of participation, and assurances of anonymity and confidentiality.
+          Respondents were informed of their right to withdraw from the survey
+          at any point without penalty, and the data collection process was
+          designed to minimize any potential discomfort or risk to participants.
+        </Text>
       </View>
       <Drawer
         isopen={isDrawerOpen}

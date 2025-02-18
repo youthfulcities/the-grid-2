@@ -49,7 +49,7 @@ interface ClusterProps {
     [key: string]: string;
     'Social good focus': string;
     'Forming opinions': string;
-    'Affordability focus': string;
+    'Economic focus': string;
     All: string;
   };
   isDrawerOpen: boolean;
@@ -70,7 +70,7 @@ const OverflowContainer = styled(View)`
 const clusterNames = [
   'Social good focus',
   'Forming opinions',
-  'Affordability focus',
+  'Economic focus',
 ];
 
 const Clusters: React.FC<ClusterProps> = ({
@@ -114,13 +114,18 @@ const Clusters: React.FC<ClusterProps> = ({
       if (parsedData[filename]) return;
 
       const parsed = d3.csvParse(csvString, (d) => {
-        setLoading(true);
         const row: DataItem = {};
         Object.keys(d).forEach((oldKey) => {
           const parts = oldKey.split(/DEM_|\(SUM\)/);
           const newKey = parts.length > 1 ? parts[1] : oldKey;
           row[newKey] = Number.isNaN(+d[oldKey]) ? d[newKey] : +d[oldKey];
         });
+
+        // Rename cluster name
+        if (row.Cluster_Label === 'Affordability focus') {
+          row.Cluster_Label = 'Economic focus';
+        }
+
         return row;
       });
 
@@ -279,8 +284,9 @@ const Clusters: React.FC<ClusterProps> = ({
         culture, truth and reconciliation, entrepreneurial spirit, local
         economic growth, digital transformation, transportation, mental health,
         and climate change. Then, they ranked how their cities performed in each
-        category. These importance/performance rankings created three distinct
-        groups. Learn more about the clusters by clicking on the data points.
+        category. By clustering these importance/performance rankings, three
+        distinct groups emerged. Learn more about the clusters by clicking on
+        the data points. Each point represents a survey response.
       </Text>
       <ChartContainer>
         <Placeholder height={height} isLoaded={!loading || false} />
@@ -290,29 +296,32 @@ const Clusters: React.FC<ClusterProps> = ({
       <Heading level={4} color='primary.60' marginTop='xl' marginBottom='large'>
         Key Takeaways — <span className='highlight'>What youth prioritize</span>
       </Heading>
-      <Flex direction='column' gap='medium'>
+      <Flex
+        direction='row'
+        justifyContent='space-between'
+        wrap='wrap'
+        gap='medium'
+      >
+        <Text>
+          Regardless of cluster, the following priorities emerged as key areas
+          to improve Canadian city performance:
+        </Text>
         <Flex alignItems='center' justifyContent='flex-start'>
           <FaDollarSign size='50px' color={tokens.colors.primary[60].value} />
           <Text marginBottom='0'>
-            <strong>Affordability:</strong> Regardless of cluster, all youth
-            agree that affordability is the top priority to improve Canadian
-            city performance nationwide.
+            <strong>Affordability</strong>
           </Text>
         </Flex>
         <Flex alignItems='center' justifyContent='flex-start'>
           <FaBrain size='50px' color={tokens.colors.primary[60].value} />
           <Text>
-            <strong>Mental health: </strong>Regardless of cluster, all youth
-            agree that mental health is a high priority to improve Canadian city
-            performance nationwide.
+            <strong>Mental health</strong>
           </Text>
         </Flex>
         <Flex alignItems='center' justifyContent='flex-start'>
           <FaBriefcase size='50px' color={tokens.colors.primary[60].value} />
           <Text>
-            <strong>Good youth jobs: </strong>Regardless of cluster, all youth
-            agree that good youth jobs are a high priority to improve Canadian
-            city performance nationwide.
+            <strong>Good youth jobs</strong>
           </Text>
         </Flex>
       </Flex>

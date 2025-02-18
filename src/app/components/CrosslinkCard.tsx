@@ -25,12 +25,12 @@ const CardContainer = styled(Flex)<{ $width: number }>`
 `;
 
 const CardOverlay = styled(Flex)<{
-  isMobile: boolean;
+  ismobile: boolean;
   r: number;
   g: number;
   b: number;
 }>`
-  position: ${({ isMobile }) => (isMobile ? 'relative' : 'absolute')};
+  position: ${({ ismobile }) => (ismobile ? 'relative' : 'absolute')};
   flex-direction: column;
   justify-content: flex-end;
   gap: 0;
@@ -38,8 +38,8 @@ const CardOverlay = styled(Flex)<{
   width: 100%;
   height: 100%;
 
-  background: ${({ isMobile, r, g, b }) =>
-    isMobile
+  background: ${({ ismobile, r, g, b }) =>
+    ismobile
       ? `rgba(${r}, ${g}, ${b}, 1)`
       : `linear-gradient(
       0deg,
@@ -63,7 +63,7 @@ const CrosslinkCard: React.FC<CrosslinkCardProps> = ({
   buttonText = 'Read the blog post',
   link,
 }) => {
-  const isMobile = useBreakpointValue({
+  const ismobile = useBreakpointValue({
     base: true,
     small: true,
     medium: true,
@@ -87,7 +87,7 @@ const CrosslinkCard: React.FC<CrosslinkCardProps> = ({
       <img src={src} alt={alt} width='100%' />
       <CardOverlay
         padding='medium'
-        isMobile={isMobile as boolean}
+        ismobile={ismobile as boolean}
         r={r}
         g={g}
         b={b}

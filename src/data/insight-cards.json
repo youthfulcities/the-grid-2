@@ -1,6 +1,31 @@
 {
   "cards": [
     {
+      "title": "What's up with work lately?",
+      "titlefr": "Quoi de neuf au travail, dernièrement?",
+      "dataset": "Youth Cite",
+      "datasetfr": "Jeunesse Cite",
+      "date": "April 2024",
+      "datefr": "avril 2024",
+      "type": "",
+      "desc": "Explore what youth across Canada are saying about work preferences, education, and the impact of the COVID-19 pandemic. See their quotes organized into an interactive, theme-based visual.",
+      "descfr": "Découvrez ce que les jeunes du Canada disent de leurs préférences en matière de travail, d'éducation et de l'impact de la pandémie de COVID-19. Voyez leurs citations organisées en un visuel interactif basé sur des thèmes.",
+      "link": "/insights/interview",
+      "priority": 2
+    },
+    {
+      "title": "What's up with work lately?",
+      "titlefr": "Quoi de neuf au travail, dernièrement?",
+      "dataset": "Youth Chart",
+      "datasetfr": "Tableau jeunesse",
+      "date": "April 2024",
+      "type": "avril 2024",
+      "desc": "Findings from the What's up with work lately? survey performed by Youthful Cities as part of the DEVlab project.",
+      "descfr": "Résultats de l'enquête « What's up with work lately ? » réalisée par Youthful Cities dans le cadre du projet DEVlab.",
+      "link": "/insights/survey",
+      "priority": 1
+    },
+    {
       "title": "State of Housing for Young People in Canada",
       "titlefr": "État du logement des jeunes au Canada",
       "dataset": "Youth Chart",
@@ -10,7 +35,8 @@
       "type": "",
       "desc": "Explore 1500 youth perspectives on housing affordability, equity, and shared housing alternatives in Canada, gathered from our State of Housing for Young People in Canada survey.",
       "descfr": "",
-      "link": "/insights/housing/survey"
+      "link": "/insights/housing/survey",
+      "priority": 3
     },
     {
       "title": "State of Housing for Young People in Canada",
@@ -22,7 +48,8 @@
       "type": "",
       "desc": "Explore what youth across Canada are saying about housing. See their quotes organized into an interactive, theme-based visual.",
       "descfr": "Découvrez ce que les jeunes de tout le Canada disent sur le logement dans notre enquête. Voyez leurs pensées organisées en un visuel interactif et thématique.",
-      "link": "/insights/housing/open-ended"
+      "link": "/insights/housing/open-ended",
+      "priority": 4
     },
     {
       "title": "Urban Work Index 2024",
@@ -57,14 +84,7 @@
       "descfr": "Vous êtes curieux de savoir quelle est la ville qui vous convient le mieux en fonction de vos besoins ? Essayez notre Quiz de la meilleure ville de travail !",
       "link": "https://bestworkcity.ca/"
     },
-    {
-      "title": "What's up with work lately?",
-      "dataset": "Survey | Preview",
-      "date": "2024",
-      "type": "",
-      "desc": "Preview initial findings from the What's up with work lately? survey performed by Youthful Cities as part of the DEVlab project.",
-      "link": "/insights/survey"
-    },
+
     {
       "title": "YDL Chatbot",
       "titlefr": "Chatbot",

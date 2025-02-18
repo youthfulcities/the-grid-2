@@ -22,7 +22,6 @@ const Container: React.FC<ContainerProps> = ({
   const { tokens } = useTheme();
   const backgroundColor = tokens.colors.background.primary.value;
 
-  console.log(backgroundColor);
   return (
     <Background $background={backgroundColor} $noOverflow={noOverflow}>
       {children}

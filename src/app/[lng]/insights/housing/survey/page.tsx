@@ -120,7 +120,7 @@ const HousingSurvey = () => {
     minWidth: 0,
   });
 
-  const isMobile = useBreakpointValue({
+  const ismobile = useBreakpointValue({
     base: true,
     small: true,
     medium: true,
@@ -225,7 +225,7 @@ const HousingSurvey = () => {
         <View ref={containerRef}>
           <Text marginBottom='0'>Select a topic</Text>
           <ToggleButtonGroup
-            direction={isMobile ? 'column' : 'row'}
+            direction={ismobile ? 'column' : 'row'}
             alignItems='stretch'
             value={currentTopic}
             onChange={(value) => setCurrentTopic(value as string)}
@@ -235,7 +235,7 @@ const HousingSurvey = () => {
             <StyledToggleButton
               defaultPressed
               isDisabled={currentTopic === 'situation'}
-              marginLeft={isMobile ? '-3px' : '0'}
+              marginLeft={ismobile ? '-3px' : '0'}
               value='situation'
             >
               Living Situation

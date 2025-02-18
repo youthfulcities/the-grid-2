@@ -68,12 +68,6 @@ const newColors = [
   '#af6860',
 ];
 
-const saturatedColors = colors.map((color) => {
-  const hsl = d3.hsl(color);
-  hsl.s = Math.min(1, hsl.s * 1.5); // Increase saturation by 50%
-  return hsl.formatHex(); // Return the new color in hex format
-});
-
 const BarChart: React.FC<BarProps> = ({
   width,
   tooltipState,
@@ -175,8 +169,6 @@ const BarChart: React.FC<BarProps> = ({
       setLeftMargin(estimatedLabelWidth);
     } else setLeftMargin(truncateThreshold * 5);
   }, [data]);
-
-  console.log(leftMargin);
 
   useEffect(() => {
     if (

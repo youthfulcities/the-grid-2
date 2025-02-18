@@ -325,7 +325,13 @@ const Survey: React.FC = () => {
               </StyledSelect> */}
               {currentData && (
                 <>
-                  <Heading level={3} textAlign='center' color='font.inverse'>
+                  <Heading
+                    level={3}
+                    textAlign='center'
+                    color='font.inverse'
+                    marginTop='xxl'
+                    marginBottom='xl'
+                  >
                     {currentQuestion?.replace(regex, '').trim()}
                   </Heading>
                   {/* <Heading level={5} textAlign='center' color='font.inverse'>
@@ -335,7 +341,7 @@ const Survey: React.FC = () => {
               )}
               <BarChart
                 data={currentData || []}
-                width={width > 800 ? 800 : width}
+                width={width}
                 tooltipState={tooltipState}
                 setTooltipState={setTooltipState}
               >

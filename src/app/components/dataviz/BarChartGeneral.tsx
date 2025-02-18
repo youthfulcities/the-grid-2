@@ -89,7 +89,7 @@ const BarChart: React.FC<BarChartProps> = ({
     const storedOptions = sessionStorage.getItem('selectedAnswers');
     if (storedOptions && storedOptions.length > 2) {
       setSelectedAnswers(JSON.parse(storedOptions));
-    } else setSelectedAnswers(answers.slice(0, answers.length));
+    } else setSelectedAnswers(answers.slice(0, answers.length)); // change me to show more or less answers at one time
 
     // Get the length of the longest item in allOptions using lodash
     const maxLength = _.get(_.maxBy(answers, 'length'), 'length', 0);

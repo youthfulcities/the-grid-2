@@ -161,7 +161,7 @@ const BarChart: React.FC<BarChartProps> = ({
       .attr('y', height - 5)
       .attr('text-anchor', 'middle')
       .attr('fill', 'white')
-      .attr('font-family', 'Gotham Narrow Book, Raleway, sans-serif')
+      .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
       .attr('font-weight', '400')
       .text('Percent');
 

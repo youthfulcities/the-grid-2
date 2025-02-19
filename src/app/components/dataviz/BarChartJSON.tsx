@@ -7,6 +7,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Customize from './Customize';
 import Legend from './Legend';
+import SaveAsImg from './SaveAsImg';
 
 interface DataItem {
   option_en: string;
@@ -241,6 +242,7 @@ const BarChart: React.FC<BarProps> = ({
       .attr('y', height - 5)
       .attr('text-anchor', 'middle')
       .attr('fill', 'white')
+      .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
       .text('Percent');
 
     // y-axis
@@ -349,6 +351,7 @@ const BarChart: React.FC<BarProps> = ({
         setSelectedOptions={setSelectedAnswers}
         allOptions={allOptions}
       />
+      <SaveAsImg svgRef={ref} />
     </>
   );
 };

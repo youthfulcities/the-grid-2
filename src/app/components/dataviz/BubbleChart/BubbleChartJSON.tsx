@@ -1,7 +1,9 @@
 import shouldUseWhiteText from '@/lib/shouldUseWhiteText';
 import truncateText from '@/lib/truncateText';
+import { View } from '@aws-amplify/ui-react';
 import * as d3 from 'd3';
 import React, { useEffect, useRef } from 'react';
+import SaveAsImg from '../SaveAsImg';
 import { TooltipState } from './types';
 
 interface CustomNode extends d3.SimulationNodeDatum {
@@ -244,7 +246,12 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     };
   }, [data, width, setCode, setIsDrawerOpen, setTooltipState]);
 
-  return <svg ref={svgRef} />;
+  return (
+    <View>
+      <svg ref={svgRef} />
+      <SaveAsImg svgRef={svgRef} />
+    </View>
+  );
 };
 
 export default BubbleChart;

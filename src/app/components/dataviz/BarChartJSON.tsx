@@ -7,6 +7,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Customize from './Customize';
 import Legend from './Legend';
+import SaveAsImg from './SaveAsImg';
 
 interface DataItem {
   option_en: string;
@@ -84,7 +85,7 @@ const BarChart: React.FC<BarProps> = ({
   const [validSegmentOptions, setValidSegmentOptions] = useState<string[]>([]);
   const [leftMargin, setLeftMargin] = useState(10);
   const [dataToDisplay, setDataToDisplay] = useState<ResponseGroup[]>([]);
-  const height = width;
+  const height = 800;
   const margin = { left: leftMargin, right: 10, top: 0, bottom: 60 };
   const duration = 1000;
   const sampleCutoff = 50;
@@ -161,7 +162,6 @@ const BarChart: React.FC<BarProps> = ({
 
     // Get the length of the longest item in allOptions using lodash
     const maxLength = _.get(_.maxBy(answers, 'length'), 'length', 0);
-    console.log(maxLength);
 
     if (maxLength * 8 < truncateThreshold * 5) {
       // Update the left margin based on the max label length
@@ -242,6 +242,7 @@ const BarChart: React.FC<BarProps> = ({
       .attr('y', height - 5)
       .attr('text-anchor', 'middle')
       .attr('fill', 'white')
+      .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
       .text('Percent');
 
     // y-axis
@@ -350,6 +351,7 @@ const BarChart: React.FC<BarProps> = ({
         setSelectedOptions={setSelectedAnswers}
         allOptions={allOptions}
       />
+      <SaveAsImg svgRef={ref} />
     </>
   );
 };

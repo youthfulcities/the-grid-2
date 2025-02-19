@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Customize from './Customize';
+import SaveAsImg from './SaveAsImg';
 
 interface DataItem {
   option_en: string;
@@ -53,13 +54,12 @@ const colors = [
 
 const BarChart: React.FC<BarChartProps> = ({
   width,
-  tooltipState,
   setTooltipState,
   data,
   children,
 }) => {
   const ref = useRef<SVGSVGElement>(null);
-  const height = width * 0.7; // Keep height proportional to width
+  const height = 800;
   const [leftMargin, setLeftMargin] = useState(10);
   const margin = { left: leftMargin, right: 10, top: 0, bottom: 80 };
   const duration = 1000;
@@ -161,6 +161,8 @@ const BarChart: React.FC<BarChartProps> = ({
       .attr('y', height - 5)
       .attr('text-anchor', 'middle')
       .attr('fill', 'white')
+      .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
+      .attr('font-weight', '400')
       .text('Percent');
 
     // y-axis
@@ -222,6 +224,7 @@ const BarChart: React.FC<BarChartProps> = ({
         setSelectedOptions={setSelectedAnswers}
         allOptions={allOptions}
       />
+      {width > 0 && <SaveAsImg svgRef={ref} />}
     </>
   );
 };

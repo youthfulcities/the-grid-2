@@ -1,3 +1,4 @@
+import datasetCards from '@/data/dataset-cards.json';
 import { Flex, Heading, Text, View, useTheme } from '@aws-amplify/ui-react';
 import styled from 'styled-components';
 import useTranslation from '../i18n/client';
@@ -19,8 +20,8 @@ const OutlineText = styled(Text)<{
   color: ${(props) => props.$outlineColor};
   font-family: 'Gotham Narrow Black';
   font-style: normal;
-  font-size: 6rem;
-  line-height: 6.5rem;
+  font-size: 5rem;
+  line-height: 5.5rem;
   -webkit-text-fill-color: ${(props) => props.$innerColor};
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: ${(props) => props.$outlineColor};
@@ -54,7 +55,7 @@ const Banner: React.FC<{ lng: string }> = ({ lng }) => {
             $innerColor={tokens.colors.primary[60].value}
             $outlineColor={tokens.colors.font.primary.value}
           >
-            31
+            {datasetCards.datasetCards.length}
           </OutlineText>
         </Fact>
         <Fact $space={tokens.space.medium.value}>
@@ -66,7 +67,7 @@ const Banner: React.FC<{ lng: string }> = ({ lng }) => {
             $innerColor={tokens.colors.primary[60].value}
             $outlineColor={tokens.colors.font.primary.value}
           >
-            31,000+
+            31 000
           </OutlineText>
         </Fact>
         <Fact $space={tokens.space.medium.value}>
@@ -78,7 +79,7 @@ const Banner: React.FC<{ lng: string }> = ({ lng }) => {
             $innerColor={tokens.colors.primary[60].value}
             $outlineColor={tokens.colors.font.primary.value}
           >
-            400,000+
+            400 000
           </OutlineText>
         </Fact>
       </Flex>

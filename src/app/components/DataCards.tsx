@@ -42,7 +42,6 @@ interface DatasetCard {
 }
 
 const StyledCard = styled(Card)<{ $background: string; $font: string }>`
-  height: 550px;
   position: relative;
   display: flex;
   background-color: ${(props) => props.$background};
@@ -222,7 +221,7 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
           justifyContent='space-between'
           height='100%'
         >
-          <View>
+          <View marginBottom='xxxl'>
             <Heading level={3} fontSize='xl' color={getColor(index).titleFont}>
               {lng === 'fr' ? card.titlefr : card.title}
             </Heading>

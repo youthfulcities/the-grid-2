@@ -6,6 +6,7 @@ import BubbleChart from '@/app/components/dataviz/BubbleChart/BubbleChart';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import Drawer from '@/app/components/Drawer';
 import Quote from '@/app/components/Quote';
+import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
 import {
   Button,
@@ -21,7 +22,9 @@ import { Amplify } from 'aws-amplify';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { ReactNode, useEffect, useRef, useState } from 'react';
+import { Trans } from 'react-i18next/TransWithoutContext';
 
 Amplify.configure(config);
 
@@ -45,6 +48,9 @@ const fetchData = async (city: string, code: string) => {
 };
 
 const Interview = () => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'WUWWL_interview');
+
   const containerRef = useRef<HTMLDivElement>(null);
   const quotesRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -161,36 +167,25 @@ const Interview = () => {
     <Container>
       <View className='container padding' ref={containerRef}>
         <Heading level={1}>
-          What’s up with <span className='highlight'>work lately?</span>
+          <Trans
+            t={t}
+            i18nKey='title'
+            components={{ span: <span className='highlight' /> }}
+          />
         </Heading>
         <div className='inner-container'>
-          <Heading level={3} color='font.inverse'>
-            Youth Cite
+          <Heading marginBottom='xl' level={3} color='font.inverse'>
+            {t('youth_cite')}
           </Heading>
-          <Heading level={3} color='font.inverse' marginBottom='xl' />
-          <Text>
-            Explore over 300 interviews with youth and industry leaders on the
-            challenges, skills, and workplace expectations shaping young
-            people’s experiences in Canada. This interactive visualization
-            reveals key themes from more than 11,000 minutes of conversations:
-            from preparing for the job market to adapting workplaces for youth.
-            Larger circles highlight themes with more discussion, while
-            branching nodes show subtopics and related insights.
-          </Text>
-          <Text>
-            Use this tool to dive into what matters most to youth, uncover
-            trends, and get the full story behind our data. Explore firsthand
-            perspectives to understand how youth envision change across
-            education, employment, and social accountability in cities.
-          </Text>
         </div>
+        <Trans t={t} i18nKey='blurb' components={{ p: <Text /> }} />
         <Tabs.Container
           defaultValue='1'
           value={tab}
           onValueChange={(newTab) => changeTab(newTab)}
         >
           <Tabs.List style={{ overflowX: 'auto', overflowY: 'hidden' }}>
-            <Tabs.Item value='ALL'>National</Tabs.Item>
+            <Tabs.Item value='ALL'>{t('national')}</Tabs.Item>
             <Tabs.Item value='TO'>Toronto</Tabs.Item>
             <Tabs.Item value='CAL'>Calgary</Tabs.Item>
             <Tabs.Item value='MTL'>Montréal</Tabs.Item>
@@ -204,34 +199,16 @@ const Interview = () => {
             <Text />
           </Tabs.Panel>
           <Tabs.Panel value='TO'>
-            <Text>
-              Toronto youth are highly educated, diverse, seeking good work
-              environments and opportunities for growth. They value resource
-              accessibility, affordability, connectedness.
-            </Text>
+            <Text>{t('toronto_profile')}</Text>
           </Tabs.Panel>
           <Tabs.Panel value='CAL'>
-            <Text>
-              Calgary youth are adaptive and highly educated, leading in trades,
-              rising in entrepreneurship, and gaining increased opportunities to
-              connect across diverse networks.
-            </Text>
+            <Text>{t('calgary_profile')}</Text>
           </Tabs.Panel>
           <Tabs.Panel value='MTL'>
-            <Text>
-              Montréal youth are versatile, value connectedness, environmental
-              sustainability, and work-life balance. They value flexibility, and
-              young people are able to leverage experiential learning and
-              bilingualism to connect with more good youth jobs.
-            </Text>
+            <Text>{t('montreal_profile')}</Text>
           </Tabs.Panel>
           <Tabs.Panel value='VAN'>
-            <Text>
-              Vancouver youth are sustainability conscious and focused,
-              interested in positive work environments that align with their
-              values. They are keen on mentorship, entrepreneurial pathways, and
-              holistic benefits.
-            </Text>
+            <Text>{t('vancouver_profile')}</Text>
           </Tabs.Panel>
           <Tabs.Panel value='MON'>
             <Text />
@@ -254,67 +231,61 @@ const Interview = () => {
           setTooltipState={setTooltipState}
           onBubbleClick={onBubbleClick}
         />
-        <Text>
-          What to query quotes across all cities? Use the YDL Chatbot.
-        </Text>
+        <Heading level={2} marginTop='xxl'>
+          {t('theme_title')}
+        </Heading>
+        <Heading level={3} color='secondary.60'>
+          {t('theme_ecosystems_title')}
+        </Heading>
+        <Trans
+          t={t}
+          i18nKey='theme_ecosystems_content'
+          components={{ p: <Text /> }}
+        />
+        <Heading level={3} marginTop='large' color='secondary.60'>
+          {t('theme_future_title')}
+        </Heading>
+        <Trans
+          t={t}
+          i18nKey='theme_future_content'
+          components={{ p: <Text /> }}
+        />
+        <Heading level={3} marginTop='large' color='secondary.60'>
+          {t('theme_transition_title')}
+        </Heading>
+        <Trans
+          t={t}
+          i18nKey='theme_transition_content'
+          components={{ p: <Text /> }}
+        />
+        <Heading level={3} marginTop='large' color='secondary.60'>
+          {t('theme_org_title')}
+        </Heading>
+        <Trans t={t} i18nKey='theme_org_content' components={{ p: <Text /> }} />
+        <Text marginTop='xl'>{t('chatbot_text')}</Text>
         <Link href='/chatbot' target='_blank'>
-          <Button variation='primary' marginTop='small' marginBottom='xl'>
-            Go to YDL Chatbot
+          <Button variation='primary' marginTop='xs' marginBottom='xl'>
+            {t('chatbot_button')}
           </Button>
         </Link>
         <Heading level={3} color='font.inverse'>
-          Data Details
+          {t('data_details_title')}
         </Heading>
-        <Text>
-          Tool data comes from interviews with over 300 youth and industry
-          professionals which took place as part of the{' '}
-          <a href='https://www.youthfulcities.com/devlab/' target='_blank'>
-            DEVlab
-          </a>{' '}
-          research project. Some questions Youthful Cities representatives asked
-          included:
-        </Text>
-        <ul>
-          <li>
-            How can educational institutions better prepare students for the
-            skills needed in the current job market?
-          </li>
-          <li>
-            What challenges have you personally faced in your skills development
-            journey, whether through education or on the job?
-          </li>
-          <li>
-            How would you explain the mismatch between employers’ expectations
-            and those of young people in relation to skills? and in relation to
-            work behaviors?
-          </li>
-          <li>
-            What are some actionable steps to make youth more comfortable in the
-            workplace and manage employers’ expectations?
-          </li>
-          <li>
-            In your opinion, what are the main
-            attributes/qualities/characteristics that young people look for in
-            organizations when seeking employment? What would push an
-            organization to acquire such attributes?
-          </li>
-          <li>
-            From your perspective, to what extent should organizations be
-            socially accountable?
-          </li>
-          <li>
-            How can cities be more responsive to the needs of young people and
-            specifically those transitioning into the workforce?
-          </li>
-          <li>
-            What are your expectations for the future of work and education in
-            Canada, particularly for young people?
-          </li>
-        </ul>
-        <Text>
-          We then found and categorized common themes across over 11,000 minutes
-          of interview transcripts.
-        </Text>
+        <Trans
+          t={t}
+          i18nKey='data_details'
+          components={{
+            p: <Text />,
+            a: (
+              <a
+                href='https://www.youthfulcities.com/devlab/'
+                target='_blank'
+              />
+            ),
+            ul: <ul />,
+            li: <li />,
+          }}
+        />
       </View>
       <Drawer
         isopen={isDrawerOpen}
@@ -322,13 +293,13 @@ const Interview = () => {
         onClose={() => {
           setIsDrawerOpen(false);
         }}
-        tabText='Quotes'
+        tabText={t('drawer_tab')}
         maxWidth={quoteSize as number}
       >
         {visibleQuotes.length > 0 ? (
           <Flex direction='column' paddingTop='xxl' paddingBottom='xxl'>
             <Heading level={3} color='font.inverse' marginBottom={0}>
-              Quotes tagged with theme {code}
+              <Trans t={t} i18nKey='drawer_heading' values={{ code }} />
             </Heading>
             <View ref={quotesRef}>
               {visibleQuotes &&
@@ -351,24 +322,20 @@ const Interview = () => {
                 ))}
             </View>
             {loading && <Loader />}
-            <Text marginTop='xl'>
-              What to query quotes across all cities? Use the YDL Chatbot.
-            </Text>
+            <Text marginTop='xl'>{t('chatbot_text')}</Text>
             <Link href='/chatbot' target='_blank'>
               <Button variation='primary' marginBottom='xl'>
-                Go to YDL Chatbot
+                {t('chatbot_button')}
               </Button>
             </Link>
           </Flex>
         ) : (
           <>
-            <Text>Please click on a theme node to view quotes.</Text>{' '}
-            <Text marginTop='xl'>
-              What to query quotes across all cities? Use the YDL Chatbot.
-            </Text>
+            <Text>{t('quotes_empty')}</Text>{' '}
+            <Text marginTop='xl'>{t('chatbot_text')}</Text>
             <Link href='/chatbot' target='_blank'>
               <Button variation='primary' marginBottom='xl'>
-                Go to YDL Chatbot
+                {t('chatbot_button')}
               </Button>
             </Link>
           </>

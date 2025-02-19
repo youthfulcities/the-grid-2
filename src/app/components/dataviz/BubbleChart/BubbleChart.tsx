@@ -1,8 +1,10 @@
 import shouldUseWhiteText from '@/lib/shouldUseWhiteText';
 import truncateText from '@/lib/truncateText';
+import { View } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import React, { useEffect, useRef, useState } from 'react';
+import SaveAsImg from '../SaveAsImg';
 import { TooltipState } from './types';
 
 interface DataItem {
@@ -464,17 +466,17 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     width: 100%; 
     height: 100%;
     display: flex;
-    padding: 5px;
     flex-wrap: wrap;
     align-items: center; 
     justify-content: center; 
     text-align: center; 
     overflow-wrap: anywhere;
+    font-family: Gotham Narrow Book, Arial, sans-serif;
     white-space: normal;`
       )
       .html(
         (d: CustomHierarchyNode) =>
-          `<span style="font-size: ${Math.min(radiusScale(d.value ?? 0) / 4, 14)}px; color: ${shouldUseWhiteText(d.color ?? 'grey') ? 'white' : 'black'};">${truncateText(d.data.name, 50)}</span>`
+          `<span style="padding: 5px; font-size: ${Math.min(radiusScale(d.value ?? 0) / 4, 14)}px; color: ${shouldUseWhiteText(d.color ?? 'grey') ? 'white' : 'black'};">${truncateText(d.data.name, 50)}</span>`
       );
 
     // Update the simulation on tick to reposition nodes and links
@@ -496,7 +498,12 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
     };
   }, [parsedData, width, city, linkData]);
 
-  return <svg ref={svgRef} />;
+  return (
+    <View>
+      <svg ref={svgRef} />
+      {parsedData && <SaveAsImg svgRef={svgRef} />}
+    </View>
+  );
 };
 
 export default BubbleChart;

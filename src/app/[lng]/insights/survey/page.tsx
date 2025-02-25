@@ -1,16 +1,21 @@
 'use client';
 
 import Container from '@/app/components/Background';
+import CrosslinkCard from '@/app/components/CrosslinkCard';
 import Drawer from '@/app/components/Drawer';
 import BarChart from '@/app/components/dataviz/BarChartGeneral';
 import Clusters from '@/app/components/dataviz/Clusters';
 import Demographics from '@/app/components/dataviz/Demographics';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import { useWUWWLSurvey } from '@/app/context/WUWWLSurveyContext';
+import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
+import useFilteredPosts from '@/hooks/useFilteredPosts';
 import fetchData from '@/lib/fetchData';
 import {
+  Grid,
   Heading,
+  Placeholder,
   SelectField,
   Text,
   ToggleButton,
@@ -21,6 +26,7 @@ import {
 import { Amplify } from 'aws-amplify';
 import * as d3 from 'd3';
 import _ from 'lodash';
+import { useParams } from 'next/navigation';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import config from '../../../../amplifyconfiguration.json';
@@ -121,12 +127,14 @@ const Survey: React.FC = () => {
     currentTopic,
     setCurrentTopic,
   } = useWUWWLSurvey();
-
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'housing');
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
   const { width } = useDimensions(containerRef);
   const [currentCluster, setCurrentCluster] = useState('all');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
   const [tooltipState, setTooltipState] = useState<{
     position: { x: number; y: number } | null;
     value?: number | null;
@@ -148,6 +156,7 @@ const Survey: React.FC = () => {
   const [questions, setQuestions] = useState<string[]>([]);
   const [segments, setSegments] = useState<string[]>([]);
   const [currentData, setCurrentData] = useState<SurveyData>(null);
+  const posts = useFilteredPosts(47, lng);
 
   const ismobile = useBreakpointValue({
     base: true,
@@ -256,47 +265,50 @@ const Survey: React.FC = () => {
           </Heading>
         </View>
         <div ref={containerRef}>
-          <Text marginBottom='0'>Select a topic</Text>
-          <ToggleButtonGroup
-            direction={ismobile ? 'column' : 'row'}
-            alignItems='stretch'
-            value={currentTopic}
-            onChange={(value) => setCurrentTopic(value as string)}
-            isExclusive
-            marginBottom='medium'
-          >
-            <StyledToggleButton
-              defaultPressed
-              isDisabled={currentTopic === 'future'}
-              marginLeft={ismobile ? '-3px' : '0'}
-              value='future'
-            >
-              Paving the way for the future of work in cities
-            </StyledToggleButton>
-            <StyledToggleButton
-              isDisabled={currentTopic === 'pandemic'}
-              value='pandemic'
-            >
-              Engaging with post-pandemic work ecosystems
-            </StyledToggleButton>
-            <StyledToggleButton isDisabled={currentTopic === 'org'} value='org'>
-              Envisioning an ideal organization
-            </StyledToggleButton>
-            <StyledToggleButton
-              isDisabled={currentTopic === 'transition'}
-              value='transition'
-            >
-              Navigating the transition from education to work
-            </StyledToggleButton>
-            <StyledToggleButton
-              isDisabled={currentTopic === 'other'}
-              value='other'
-            >
-              Other
-            </StyledToggleButton>
-          </ToggleButtonGroup>
-          {data && (
+          {data ? (
             <>
+              <Text marginBottom='0'>Select a topic</Text>
+              <ToggleButtonGroup
+                direction={ismobile ? 'column' : 'row'}
+                alignItems='stretch'
+                value={currentTopic}
+                onChange={(value) => setCurrentTopic(value as string)}
+                isExclusive
+                marginBottom='medium'
+              >
+                <StyledToggleButton
+                  defaultPressed
+                  isDisabled={currentTopic === 'future'}
+                  marginLeft={ismobile ? '-3px' : '0'}
+                  value='future'
+                >
+                  Paving the way for the future of work in cities
+                </StyledToggleButton>
+                <StyledToggleButton
+                  isDisabled={currentTopic === 'pandemic'}
+                  value='pandemic'
+                >
+                  Engaging with post-pandemic work ecosystems
+                </StyledToggleButton>
+                <StyledToggleButton
+                  isDisabled={currentTopic === 'org'}
+                  value='org'
+                >
+                  Envisioning an ideal organization
+                </StyledToggleButton>
+                <StyledToggleButton
+                  isDisabled={currentTopic === 'transition'}
+                  value='transition'
+                >
+                  Navigating the transition from education to work
+                </StyledToggleButton>
+                <StyledToggleButton
+                  isDisabled={currentTopic === 'other'}
+                  value='other'
+                >
+                  Other
+                </StyledToggleButton>
+              </ToggleButtonGroup>
               <StyledSelect
                 marginBottom='large'
                 label='Select a question'
@@ -353,6 +365,8 @@ const Survey: React.FC = () => {
                 </Text> */}
               </BarChart>
             </>
+          ) : (
+            <Placeholder height='1000px' />
           )}
         </div>
         <Heading level={2} marginTop='xxxl'>
@@ -368,6 +382,34 @@ const Survey: React.FC = () => {
           tooltipState={tooltipState}
           setTooltipState={setTooltipState}
         />
+        <Heading
+          level={4}
+          color='secondary.60'
+          marginBottom='xs'
+          marginTop='xl'
+        >
+          Data Stories
+        </Heading>
+        <Grid
+          columnGap='small'
+          rowGap='small'
+          templateColumns={{
+            base: '1fr',
+            medium: '1fr 1fr',
+            xl: '1fr 1fr 1fr fr',
+          }}
+        >
+          {posts?.length > 0 &&
+            posts.map((post) => (
+              <CrosslinkCard
+                key={post?.id}
+                heading={post?.title?.rendered}
+                link={post?.link}
+                src={post?.yoast_head_json?.og_image[0].url}
+                alt={post?.yoast_head_json?.og_description}
+              />
+            ))}
+        </Grid>
         <Heading level={2} marginTop='xxxl'>
           Methodology
         </Heading>

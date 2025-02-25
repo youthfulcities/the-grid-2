@@ -2,15 +2,19 @@
 
 import config from '@/amplifyconfiguration.json';
 import Container from '@/app/components/Background';
+import CrosslinkCard from '@/app/components/CrosslinkCard';
 import BubbleChart from '@/app/components/dataviz/BubbleChart/BubbleChart';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import Drawer from '@/app/components/Drawer';
 import Quote from '@/app/components/Quote';
 import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
+import useDownloadFile from '@/hooks/useDownloadFile';
+import useFilteredPosts from '@/hooks/useFilteredPosts';
 import {
   Button,
   Flex,
+  Grid,
   Heading,
   Loader,
   Tabs,
@@ -29,6 +33,7 @@ import { Trans } from 'react-i18next/TransWithoutContext';
 Amplify.configure(config);
 
 const colors = ['red', 'green', 'yellow', 'pink', 'blue'];
+const filename = 'DEV_WUWWL_2024_Full_National.xlsx';
 
 const parseCSVData = (csvString: string) => {
   const parsed = d3.csvParse(csvString);
@@ -89,6 +94,7 @@ const Interview = () => {
     large: 60,
     xl: 40,
   });
+  const posts = useFilteredPosts(47, lng);
 
   const batchSize = 10;
 
@@ -116,7 +122,6 @@ const Interview = () => {
       code_parent === 'Root' ? code_child : code_parent
     );
     const parsedData = parseCSVData(fetchedData as string);
-    console.log(code_parent, code_child);
     if (code_parent === 'Root') {
       const filteredData = parsedData.filter((quote) => quote.code_2 === '');
       const finalData = filteredData.length > 0 ? filteredData : parsedData;
@@ -149,7 +154,6 @@ const Interview = () => {
     if (observerRef.current) observerRef.current.disconnect();
 
     observerRef.current = new IntersectionObserver((entries) => {
-      console.log(entries[0]);
       if (entries[0].isIntersecting) {
         fetchMoreQuotes();
       }
@@ -262,13 +266,60 @@ const Interview = () => {
           {t('theme_org_title')}
         </Heading>
         <Trans t={t} i18nKey='theme_org_content' components={{ p: <Text /> }} />
-        <Text marginTop='xl'>{t('chatbot_text')}</Text>
+        <Heading level={2} marginTop='xxl'>
+          {t('dig_deeper')}
+        </Heading>
+        <Heading level={4} color='secondary.60' marginBottom='xs'>
+          {t('stories_heading')}
+        </Heading>
+        <Grid
+          columnGap='small'
+          rowGap='small'
+          templateColumns={{
+            base: '1fr',
+            medium: '1fr 1fr',
+            large: '1fr 1fr 1fr 1fr',
+            xl: '1fr 1fr 1fr 1fr',
+          }}
+        >
+          {posts?.length > 0 &&
+            posts.map((post) => (
+              <CrosslinkCard
+                key={post?.id}
+                heading={post?.title?.rendered}
+                link={post?.link}
+                src={post?.yoast_head_json?.og_image[0].url}
+                alt={post?.yoast_head_json?.og_description}
+              />
+            ))}
+        </Grid>
+        <Heading
+          level={4}
+          color='secondary.60'
+          marginTop='xxl'
+          marginBottom='xs'
+        >
+          {t('download')}
+        </Heading>
+        <Text>{t('download_desc')}</Text>
+        <Button variation='primary' onClick={useDownloadFile(filename)}>
+          {t('download_button')}
+        </Button>
+        <Heading
+          level={4}
+          color='secondary.60'
+          marginTop='xxl'
+          marginBottom='xs'
+        >
+          {t('chatbot_title')}
+        </Heading>
+        <Text>{t('chatbot_text')}</Text>
         <Link href='/chatbot' target='_blank'>
           <Button variation='primary' marginTop='xs' marginBottom='xl'>
             {t('chatbot_button')}
           </Button>
         </Link>
-        <Heading level={3} color='font.inverse'>
+        <Heading level={2} marginTop='xxl' marginBottom='xs'>
           {t('data_details_title')}
         </Heading>
         <Trans

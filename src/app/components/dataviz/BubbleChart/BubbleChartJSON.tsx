@@ -1,6 +1,6 @@
 import shouldUseWhiteText from '@/lib/shouldUseWhiteText';
 import truncateText from '@/lib/truncateText';
-import { View } from '@aws-amplify/ui-react';
+import { Placeholder, View } from '@aws-amplify/ui-react';
 import * as d3 from 'd3';
 import React, { useEffect, useRef } from 'react';
 import SaveAsImg from '../SaveAsImg';
@@ -248,8 +248,14 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
 
   return (
     <View>
-      <svg ref={svgRef} />
-      <SaveAsImg svgRef={svgRef} />
+      {!width || !data ? (
+        <Placeholder height='800px' />
+      ) : (
+        <>
+          <svg ref={svgRef} />
+          <SaveAsImg svgRef={svgRef} />
+        </>
+      )}
     </View>
   );
 };

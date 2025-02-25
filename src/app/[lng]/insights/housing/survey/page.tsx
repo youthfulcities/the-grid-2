@@ -8,6 +8,7 @@ import { useHousingSurvey } from '@/app/context/HousingSurveyContext';
 import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
 import useDownloadFile from '@/hooks/useDownloadFile';
+import useFilteredPosts from '@/hooks/useFilteredPosts';
 import fetchData from '@/lib/fetchData';
 import {
   Button,
@@ -106,7 +107,6 @@ const HousingSurvey = () => {
   } = useHousingSurvey();
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const [loading, setLoading] = useState(false);
   const { width } = useDimensions(containerRef);
   const [questions, setQuestions] = useState<string[]>([]);
   const [segments, setSegments] = useState<string[]>([]);
@@ -119,6 +119,7 @@ const HousingSurvey = () => {
     child: null,
     minWidth: 0,
   });
+  const posts = useFilteredPosts(50, lng);
 
   const ismobile = useBreakpointValue({
     base: true,
@@ -133,11 +134,9 @@ const HousingSurvey = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      setLoading(true);
       const text = await fetchData(path, activeFile);
       const jsonData = JSON.parse(text as string);
       setData(jsonData);
-      setLoading(false);
     };
     loadData();
   }, []);
@@ -312,7 +311,7 @@ const HousingSurvey = () => {
                     ? data[currentQuestion][currentSegment]
                     : null
                 }
-                width={width > 800 ? 800 : width}
+                width={width}
                 tooltipState={tooltipState}
                 setTooltipState={setTooltipState}
               >
@@ -555,66 +554,19 @@ const HousingSurvey = () => {
             templateColumns={{
               base: '1fr',
               medium: '1fr 1fr',
-              large: '1fr 1fr 1fr',
+              xl: '1fr 1fr 1fr fr',
             }}
           >
-            <CrosslinkCard
-              heading={t('blog_title')}
-              buttonText={t('blog_button')}
-              link={
-                lng === 'fr'
-                  ? 'https://www.youthfulcities.com/blog/2024/12/13/le-prix-a-payer-letat-du-logement-des-jeunes-dans-les-centres-urbains-du-canada/'
-                  : 'https://www.youthfulcities.com/blog/2024/12/12/priced-out-the-state-of-youth-housing-in-canadas-urban-centres/'
-              }
-              src={
-                lng === 'fr'
-                  ? 'https://www.youthfulcities.com/wp-content/uploads/2024/12/Episode-1-titre-FR.png'
-                  : 'https://www.youthfulcities.com/wp-content/uploads/2024/12/HousingSurvey-Episode1-blogtitle.png'
-              }
-              alt={t('blog_alt')}
-              r={183}
-              g={152}
-              b={182}
-              inverse={false}
-            />
-            <CrosslinkCard
-              heading={t('blog_title_2')}
-              buttonText={t('blog_button')}
-              link={
-                lng === 'fr'
-                  ? 'https://www.youthfulcities.com/blog/2025/01/03/les-jeunes-lequite-et-la-crise-du-logement-qui-peut-devenir-proprietaire/'
-                  : 'https://www.youthfulcities.com/blog/2025/01/02/youth-equity-and-the-housing-crisis-who-gets-to-own/'
-              }
-              src={
-                lng === 'fr'
-                  ? 'https://www.youthfulcities.com/wp-content/uploads/2025/01/Episode-2-blog-titre-FR.png'
-                  : 'https://www.youthfulcities.com/wp-content/uploads/2024/12/The-state-of-housing-for-youth-in-Canada-Episode-2-title.png'
-              }
-              alt={t('blog_alt_2')}
-              r={183}
-              g={152}
-              b={182}
-              inverse={false}
-            />
-            <CrosslinkCard
-              heading={t('blog_title_3')}
-              buttonText={t('blog_button')}
-              link={
-                lng === 'fr'
-                  ? 'https://www.youthfulcities.com/blog/2025/01/10/experiences-vecues-par-les-jeunes-naviguer-dans-le-domaine-du-logement-au-canada/'
-                  : 'https://www.youthfulcities.com/blog/2025/01/09/youth-lived-experiences-navigating-housing-in-canada/'
-              }
-              src={
-                lng === 'fr'
-                  ? 'https://www.youthfulcities.com/wp-content/uploads/2025/01/Episode-blog-titre-FR.png'
-                  : 'https://www.youthfulcities.com/wp-content/uploads/2025/01/Episode-3-blog-title.png'
-              }
-              alt={t('blog_alt_3')}
-              r={183}
-              g={152}
-              b={182}
-              inverse={false}
-            />
+            {posts?.length > 0 &&
+              posts.map((post) => (
+                <CrosslinkCard
+                  key={post?.id}
+                  heading={post?.title?.rendered}
+                  link={post?.link}
+                  src={post?.yoast_head_json?.og_image[0].url}
+                  alt={post?.yoast_head_json?.og_description}
+                />
+              ))}
           </Grid>
           <Heading
             level={4}

@@ -1,10 +1,15 @@
+import useTranslation from '@/app/i18n/client';
 import { Button } from '@aws-amplify/ui-react';
+import { useParams } from 'next/navigation';
 
 interface SvgToImageProps {
   svgRef: React.RefObject<SVGSVGElement>;
 }
 
 const SaveAsImg: React.FC<SvgToImageProps> = ({ svgRef }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'translation');
+
   // **Extract & Inline CSS Styles**
   const inlineStyles = (svgElement: SVGSVGElement) => {
     let css = '';
@@ -89,7 +94,7 @@ const SaveAsImg: React.FC<SvgToImageProps> = ({ svgRef }) => {
       variation='primary'
       onClick={() => downloadSVGAsImage('png')}
     >
-      Download as PNG
+      {t('download_png')}
     </Button>
   );
 };

@@ -1,6 +1,6 @@
 import shouldUseWhiteText from '@/lib/shouldUseWhiteText';
 import truncateText from '@/lib/truncateText';
-import { View } from '@aws-amplify/ui-react';
+import { Placeholder, View } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import React, { useEffect, useRef, useState } from 'react';
@@ -170,7 +170,6 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
 }) => {
   const [parsedData, setParsedData] = useState<DataItem[]>([]);
   const [linkData, setLinkData] = useState<DataItem[]>([]);
-  const [isRendering, setIsRendering] = useState(true);
   const rawData = useFetchCityData(city);
   const rawLinkData = useFetchAdditionalLinks(city);
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -190,7 +189,6 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
 
   useEffect(() => {
     if (!parsedData || !width) return;
-    setIsRendering(true);
     const height = width;
     const allData = parsedData;
     const maxNodes = 50;
@@ -283,7 +281,6 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
 
     nodes.forEach((node: CustomHierarchyNode) => {
       const topLevelTheme = getTopLevelTheme(node) as ThemeKey;
-      console.log(topLevelTheme);
       const colorScale =
         themeColorScales[topLevelTheme] ??
         d3.scaleSequential(d3.interpolateBlues);
@@ -500,8 +497,14 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
 
   return (
     <View>
-      <svg ref={svgRef} />
-      {parsedData && <SaveAsImg svgRef={svgRef} />}
+      {!rawData || !parsedData || !width || !linkData ? (
+        <Placeholder isLoaded={false} width='100%' minHeight='800px' />
+      ) : (
+        <View minHeight={width || '800px'}>
+          <svg ref={svgRef} />
+          <SaveAsImg svgRef={svgRef} />
+        </View>
+      )}
     </View>
   );
 };

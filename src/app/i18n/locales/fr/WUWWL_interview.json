@@ -10,8 +10,8 @@
   "calgary_profile": "Les jeunes de Calgary s'adaptent et ont un niveau d'éducation élevé, ils sont leaders dans les métiers, se développent dans l'entreprenariat et ont de plus en plus d'occasions de se connecter à des réseaux divers.",
   "vancouver_profile": "Les jeunes de Vancouver sont soucieux de la durabilité et s'intéressent aux environnements de travail positifs qui correspondent à leurs valeurs. Ils sont friands de mentorat, de parcours entrepreneuriaux et d'avantages holistiques.",
   "montreal_profile": "Les jeunes de Montréal sont polyvalents, apprécient la connectivité, la durabilité environnementale et l'équilibre entre le travail et la vie privée. Ils apprécient la flexibilité, et les jeunes sont en mesure de tirer parti de l'apprentissage par l'expérience et du bilinguisme pour accéder à un plus grand nombre de bons emplois pour les jeunes.",
-  "chatbot_text": "Que faire pour demander des devis dans toutes les villes ? Utilisez le Chatbot de l'YDL.",
-  "chatbot_button": "Aller au Chatbot de l'YDL",
+  "chatbot_text": "Que faire pour demander des devis dans toutes les villes ? Utilisez le Chatbot de l'LDJ.",
+  "chatbot_button": "Aller au Chatbot de l'LDJ",
   "drawer_heading": "Citations étiquetées avec le thème {{code}}",
   "theme_title": "Quels sont les principaux thèmes que nous avons découverts ?",
   "theme_ecosystems_title": "Naviguer dans les écosystèmes de travail post-pandémiques",
@@ -24,5 +24,15 @@
   "theme_org_content": "<p>Les jeunes ont parlé de « bons emplois pour les jeunes » comme comprenant la flexibilité, un environnement de travail favorable, une rémunération et des avantages équitables, un équilibre entre vie professionnelle et vie privée, et des opportunités de croissance. Dans l'organisation idéale, les jeunes valorisent la communication ouverte, le mentorat et l'inclusivité. Ils soulignent également l'importance pour les organisations d'incarner les valeurs de la diversité, de la transparence et de la responsabilité, en plaidant pour des lieux de travail qui favorisent le bien social, comme la durabilité environnementale.</p><p>En réponse à la question de savoir si les organisations devraient être socialement responsables, les jeunes ont donné un éventail de points de vue sur ce sujet : Certains jeunes ont souligné la nécessité pour les entreprises d'assumer leur responsabilité sociale, en particulier en matière de justice et d'inclusion. Ils ont noté qu'il était important que les organisations fassent preuve d'engagement envers ces valeurs. D'autres ont souligné la complexité des organisations qui prennent des positions fermes sur des questions sociales et politiques. En outre, les jeunes apprécient le mentorat pour les conseils et le soutien qu'il leur apporte sur le lieu de travail, ce qui les aide à surmonter les difficultés et à renforcer leur confiance en eux. Les opportunités de croissance sont très importantes pour eux, car ils les considèrent comme des voies vers l'amélioration des compétences, l'expérience pratique et l'amélioration de leur développement professionnel.</p>",
   "download": "Télécharger des extraits d'interviews",
   "quotes_empty": "Veuillez cliquer sur un nœud thématique pour voir les citations associées.",
-  "drawer_tab": "Citations"
+  "drawer_tab": "Citations",
+  "dig_deeper": "Approfondir",
+  "stories_heading": "Lire les histoires qui se cachent derrière les données",
+  "blog_title": "Le décalage entre l'éducation et le travail : Pourquoi les jeunes sont en difficulté et comment nous pouvons y remédier",
+  "blog_button": "Lire l'article du blog",
+  "blog_title_2": "Des données à la découverte : Des outils pour comprendre les jeunes dans les villes canadiennes",
+  "download_title": "Télécharger les données brutes",
+  "download_desc": "Créez un compte ou connectez-vous pour télécharger l'ensemble des données.",
+  "download_button": "Télécharger",
+  "chatbot_title": "Chatbot de l'LDJ",
+  "chatbot_desc": "Que faire pour demander des devis dans toutes les villes ? Utilisez le Chatbot de l'LDJ."
 }

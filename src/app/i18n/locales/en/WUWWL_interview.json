@@ -24,5 +24,15 @@
   "theme_org_content": "<p>Youth discussed \"good youth jobs\" as including flexibility, a supportive work environment, fair compensation and benefits, work-life balance, and growth opportunities. As part of the ideal organization, young people value open communication, mentorship, and inclusivity. They also highlight the importance of organizations embodying the values of diversity, transparency, and accountability, advocating for workplaces that enable social good, such as environmental sustainability.</p><p>In response to whether organizations should be socially accountable, young people provided a spectrum of perspectives on this subject: Some youth emphasized the necessity for companies to take social accountability, especially regarding justice and inclusion. They noted it was important for organizations that demonstrate commitment to these values. Others noted the complexities of organizations taking firm positions on social and political issues. Additionally, young people value mentorship for guidance and support in the workplace, which helps in overcoming challenges and bolstering confidence. Growth opportunities matter greatly to them, as they view these as pathways towards improved skills, practical experience, and enhancing their professional development.</p>",
   "download": "Download interview excerpts",
   "quotes_empty": "Please click on a theme node to view associated quotes.",
-  "drawer_tab": "Quotes"
+  "drawer_tab": "Quotes",
+  "dig_deeper": "Dig Deeper",
+  "stories_heading": "Read the stories behind the data",
+  "blog_title": "The education-to-work gap: Why youth are struggling & how we can fix it",
+  "blog_button": "Read More",
+  "blog_title_2": "From data to discovery: Tools for understanding youth in Canadian cities",
+  "download_title": "Download Raw Data",
+  "download_desc": "Create an account or sign in to download the dataset.",
+  "download_button": "Download",
+  "chatbot_title": "YDL Chatbot",
+  "chatbot_desc": "What to query quotes across all cities? Use the YDL Chatbot."
 }

@@ -19,7 +19,7 @@
       "dataset": "Youth Chart",
       "datasetfr": "Tableau jeunesse",
       "date": "April 2024",
-      "type": "avril 2024",
+      "datefr": "avril 2024",
       "desc": "Findings from the What's up with work lately? survey performed by Youthful Cities as part of the DEVlab project.",
       "descfr": "Résultats de l'enquête « Quoi de neuf au travail, dernièrement ? » réalisée par Youthful Cities dans le cadre du projet DEVlab.",
       "link": "/insights/survey",
@@ -87,7 +87,7 @@
 
     {
       "title": "YDL Chatbot",
-      "titlefr": "Chatbot",
+      "titlefr": "Chatbot LDJ",
       "dataset": "",
       "datasetfr": "",
       "date": "2024",

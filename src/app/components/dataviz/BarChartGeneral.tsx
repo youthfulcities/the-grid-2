@@ -1,6 +1,7 @@
 'use client';
 
 import truncateText from '@/lib/truncateText';
+import { Placeholder, View } from '@aws-amplify/ui-react';
 import * as d3 from 'd3';
 import _ from 'lodash';
 import { ReactNode, useEffect, useRef, useState } from 'react';
@@ -59,7 +60,7 @@ const BarChart: React.FC<BarChartProps> = ({
   children,
 }) => {
   const ref = useRef<SVGSVGElement>(null);
-  const height = 800;
+  const height = 600;
   const [leftMargin, setLeftMargin] = useState(10);
   const margin = { left: leftMargin, right: 10, top: 0, bottom: 80 };
   const duration = 1000;
@@ -214,18 +215,24 @@ const BarChart: React.FC<BarChartProps> = ({
   }, [dataToDisplay, width, height, leftMargin]);
 
   return (
-    <>
-      <ChartContainer>
-        <svg ref={ref} />
-      </ChartContainer>
-      {children}
-      <Customize
-        selectedOptions={selectedAnswers}
-        setSelectedOptions={setSelectedAnswers}
-        allOptions={allOptions}
-      />
-      {width > 0 && <SaveAsImg svgRef={ref} />}
-    </>
+    <View>
+      {!width || !dataToDisplay ? (
+        <Placeholder isLoaded={false} width='100%' minHeight='600px' />
+      ) : (
+        <>
+          <ChartContainer>
+            <svg ref={ref} />
+          </ChartContainer>
+          {children}
+          <Customize
+            selectedOptions={selectedAnswers}
+            setSelectedOptions={setSelectedAnswers}
+            allOptions={allOptions}
+          />
+          {width > 0 && <SaveAsImg svgRef={ref} />}
+        </>
+      )}
+    </View>
   );
 };
 

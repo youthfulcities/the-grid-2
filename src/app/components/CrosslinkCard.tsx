@@ -1,3 +1,8 @@
+import useTranslation from '@/app/i18n/client';
+import shouldUseWhiteText from '@/lib/shouldUseWhiteText';
+import Color from 'color-thief-react';
+import { useParams } from 'next/navigation';
+
 import {
   Button,
   Flex,
@@ -11,12 +16,8 @@ import styled from 'styled-components';
 interface CrosslinkCardProps {
   src: string;
   alt: string;
-  r?: number;
-  g?: number;
-  b?: number;
-  inverse?: boolean;
   heading: string;
-  buttonText: string;
+  buttonText?: string;
   link: string;
 }
 
@@ -26,24 +27,22 @@ const CardContainer = styled(Flex)<{ $width: number }>`
 
 const CardOverlay = styled(Flex)<{
   ismobile: boolean;
-  r: number;
-  g: number;
-  b: number;
+  color: string;
 }>`
   position: ${({ ismobile }) => (ismobile ? 'relative' : 'absolute')};
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 0;
   bottom: 0;
   width: 100%;
   height: 100%;
 
-  background: ${({ ismobile, r, g, b }) =>
+  background: ${({ ismobile, color }) =>
     ismobile
-      ? `rgba(${r}, ${g}, ${b}, 1)`
+      ? color
       : `linear-gradient(
       0deg,
-      rgba(${r}, ${g}, ${b}, 1) 20%,
+      ${color},
       rgba(0, 0, 0, 0) 50%
     )`};
 
@@ -55,14 +54,13 @@ const CardOverlay = styled(Flex)<{
 const CrosslinkCard: React.FC<CrosslinkCardProps> = ({
   src,
   alt,
-  r = 0,
-  g = 0,
-  b = 0,
-  inverse = true,
   heading,
-  buttonText = 'Read the blog post',
+  buttonText,
   link,
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'translation');
+
   const ismobile = useBreakpointValue({
     base: true,
     small: true,
@@ -85,20 +83,30 @@ const CrosslinkCard: React.FC<CrosslinkCardProps> = ({
       $width={dynamicWidth as number}
     >
       <img src={src} alt={alt} width='100%' />
-      <CardOverlay
-        padding='medium'
-        ismobile={ismobile as boolean}
-        r={r}
-        g={g}
-        b={b}
-      >
-        <Heading level={3} color='neutral.100'>
-          {heading}
-        </Heading>
-        <Link href={link} target='_blank'>
-          <Button variation='primary'>{buttonText}</Button>
-        </Link>
-      </CardOverlay>
+      <Color src={src} format='rgbString' crossOrigin='youthfulcities.com'>
+        {({ data, loading, error }) => (
+          <CardOverlay
+            padding='medium'
+            ismobile={ismobile as boolean}
+            color={data || 'rgb(0, 0, 0)'}
+          >
+            <Heading
+              level={3}
+              color={
+                shouldUseWhiteText(data || 'rgb(0,0,0)')
+                  ? 'neutral.10'
+                  : 'neutral.100'
+              }
+              dangerouslySetInnerHTML={{ __html: heading }}
+            />
+            <Link href={link} target='_blank'>
+              <Button variation='primary'>
+                {buttonText || t('blog_button')}
+              </Button>
+            </Link>
+          </CardOverlay>
+        )}
+      </Color>
     </CardContainer>
   );
 };

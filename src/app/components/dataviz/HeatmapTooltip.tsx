@@ -6,6 +6,7 @@ const SmallText = styled.div`
   color: var(--amplify-colors-font-inverse);
   font-weight: 400;
   font-size: var(--amplify-font-sizes-small);
+  pointer-events: none;
 `;
 
 interface HeatmapTooltipProps {

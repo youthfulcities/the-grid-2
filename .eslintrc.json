@@ -21,6 +21,7 @@
   "plugins": ["react", "prettier", "json"],
   "rules": {
     "import/no-extraneous-dependencies": "warn",
+    "max-classes-per-file": "warn",
     "react/jsx-no-useless-fragment": "warn",
     "prefer-template": "warn",
     "react/require-default-props": "off",

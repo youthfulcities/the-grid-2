@@ -60,6 +60,8 @@ const PieChartComponent: React.FC<PieChartProps> = ({
   }, [cluster, type]);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchData = async (filename: string) => {
       if (Object.prototype.hasOwnProperty.call(rawData, filename)) return;
 
@@ -68,7 +70,9 @@ const PieChartComponent: React.FC<PieChartProps> = ({
           path: `public/${filename}`,
         }).result;
         const text = await downloadResult.body.text();
-        setRawData({ ...rawData, [filename]: text });
+        if (isMounted) {
+          setRawData({ ...rawData, [filename]: text });
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -86,13 +90,17 @@ const PieChartComponent: React.FC<PieChartProps> = ({
         });
         return row;
       });
-
-      setParsedData({ ...parsedData, [filename]: parsed });
+      if (isMounted) {
+        setParsedData({ ...parsedData, [filename]: parsed });
+      }
     };
 
     fetchData(activeFile);
     if (rawData[activeFile])
       parseDynamicCSVData(activeFile, rawData[activeFile]);
+    return () => {
+      isMounted = false; // Cleanup function to avoid setting state on unmounted component
+    };
   }, [activeFile, rawData, parsedData]);
 
   useEffect(() => {
@@ -182,7 +190,7 @@ const PieChartComponent: React.FC<PieChartProps> = ({
         }));
       })
       .on('mouseout', () => {
-        setTooltipState({ ...tooltipState, position: null });
+        setTooltipState({ position: null });
       });
   }, [parsedData, width, height, activeFile]);
 
@@ -196,7 +204,7 @@ const PieChartComponent: React.FC<PieChartProps> = ({
       >
         {title || type}
       </StyledHeading>
-      <div id={`pie-chart-${type}`} />
+      <div data-testid='pie-chart' id={`pie-chart-${type}`} />
       <Legend data={legendData} />
     </Flex>
   );

@@ -1,4 +1,4 @@
-## Styling Guidelines
+Styling Guidelines
 
 Global styles found in `global.css` include typography styles, containers, and shadows. Some of these are legacy styles from the original site on Opendatasoft. Eventually, we want to pull out as many css classess as possible out of `global.css` into components, but this can be done on a gradual basis.
 
@@ -15,10 +15,7 @@ Sections currently follow this pattern of styling:
     </div>
   </section>
 <Container>
-
 ```
-
-Shadows: `.soft-shadow`
 
 When possible, use components from [Amplify UI Components](https://ui.docs.amplify.aws/react/components)
 
@@ -58,23 +55,31 @@ The "pure" version of a colour will have a value of 60. Values 80, 90, 100 are s
 [YC Brand Guidelines](https://drive.google.com/file/d/16C9ISbyFnl8P_tc3L69w4G8JfN-CjIFM/view?usp=drive_link)
 [THE GRID Brand Guidelines](https://drive.google.com/file/d/1BN1ssQV3_dpYDcpgx0jLPb7QHRHzeR-i/view?usp=drive_link)
 
-Red = "Strawberry" = #F2695D = `tokens.colors.red[60].value` = `--amplify-colors-red-60``
-Orange = "Pecan" = #673934 = `tokens.colors.orange[60].value`= `--amplify-colors-orange-60`
-Yellow = "Daisy" = #FBD166 =`tokens.colors.yellow[60].value`=`--amplify-colors-yellow-60`
-Green = "Matcha" = #B8D98D =`tokens.colors.green[60].value`=`--amplify-colors-green-60`
-Teal = "Blue" = #5125E8 =`tokens.colors.teal[60].value`=`--amplify-colors-teal-60`
-Blue = "Berry" = #253D88 =`tokens.colors.blue[60].value`=`--amplify-colors-blue-60`
-Purple = "Plum" = #550D35 =`tokens.colors.plum[60].value` `--amplify-colors-plum-60`
-Pink = "Blush" = #F6D9D7 =`tokens.colors.pink[60].value`=`--amplify-colors-pink-60`
+Red = "Strawberry" = #F2695D = `tokens.colors.red[60].value` = `--amplify-colors-red-60`
+
+Orange = "Pecan" = #673934 = `tokens.colors.orange[60].value `= `--amplify-colors-orange-60 `
+
+Yellow = "Daisy" = #FBD166 =`tokens.colors.yellow[60].value `=`--amplify-colors-yellow-60 `
+
+Green = "Matcha" = #B8D98D =`tokens.colors.green[60].value `=`--amplify-colors-green-60 `
+
+Teal = "Blue" = #5125E8 =`tokens.colors.teal[60].value `=`--amplify-colors-teal-60 `
+
+Blue = "Berry" = #253D88 =`tokens.colors.blue[60].value `=`--amplify-colors-blue-60 `
+
+Purple = "Plum" = #550D35 =`tokens.colors.plum[60].value ` `--amplify-colors-plum-60 `
+
+Pink = "Blush" = #F6D9D7 =`tokens.colors.pink[60].value `=`--amplify-colors-pink-60`
 
 Primary colour = #F2695D = `tokens.colors.primary[60].value` = `--amplify-colors-primary-60`
+
 Secondary colour = #FBD166 = `tokens.colors.secondary[60].value`= `--amplify-colors-secondary-60`
 
 Main text colour for light background (#000): `tokens.colors.font.primary.value` = `--amplify-colors-font-primary`
 
 Main text colour for dark background (#fff): `tokens.colors.font.inverse.value` = `--amplify-colors-font-inverse`
 
-All accessible colours:
+###### All accessible colours:
 
 ```
 tokens: {
@@ -258,36 +263,36 @@ tokens: {
 
 ##### Pixels to REM
 
-1px 0.0625rem
-2px 0.125rem
-3px 0.1875rem
-4px 0.25rem
-5px 0.3125rem
-6px 0.375rem
-8px 0.5rem
-10px 0.625rem
-12px 0.75rem
-14px 0.875rem
-15px 0.9375rem
-16px 1rem
-18px 1.125rem
-20px 1.25rem
-24px 1.5rem
-25px 1.5625rem
-28px 1.75rem
-32px 2rem
-36px 2.25rem
-40px 2.5rem
-44px 2.75rem
-48px 3rem
-50px 3.125rem
-56px 3.5rem
-64px 4rem
-72px 4.5rem
-75px 4.6875rem
-80px 5rem
-90px 5.625rem
-100px 6.25rem
+1px = 0.0625rem
+2px = 0.125rem
+3px = 0.1875rem
+4px = 0.25rem
+5px = 0.3125rem
+6px = 0.375rem
+8px = 0.5rem
+10px = 0.625rem
+12px = 0.75rem
+14px = 0.875rem
+15px = 0.9375rem
+16px = 1rem
+18px = 1.125rem
+20px = 1.25rem
+24px = 1.5rem
+25px = 1.5625rem
+28px = 1.75rem
+32px = 2rem
+36px = 2.25rem
+40px =.5rem
+44px = 2.75rem
+48px = 3rem
+50px = 3.125rem
+56px = 3.5rem
+64px = 4rem
+72px = 4.5rem
+75px = 4.6875rem
+80px = 5rem
+90px = 5.625rem
+100px = 6.25rem
 
 #### Other useful tokens
 
@@ -434,6 +439,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+
+## Testing
+
+This application uses jest for the testing library.
+
+Quirks:
 
 ## Learn More
 

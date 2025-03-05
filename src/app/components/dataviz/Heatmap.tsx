@@ -80,6 +80,8 @@ const Heatmap: React.FC<HeatmapProps> = ({
   const innerHeight = height - margin.top - margin.bottom;
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchData = async (filename: string) => {
       if (Object.prototype.hasOwnProperty.call(rawData, filename)) return;
       try {
@@ -88,7 +90,9 @@ const Heatmap: React.FC<HeatmapProps> = ({
           path: `public/${filename}`,
         }).result;
         const text = await downloadResult.body.text();
-        setRawData({ ...rawData, [filename]: text });
+        if (isMounted) {
+          setRawData((prev) => ({ ...prev, [filename]: text }));
+        }
       } catch (error) {
         console.log('Error:', error);
       }
@@ -105,12 +109,18 @@ const Heatmap: React.FC<HeatmapProps> = ({
         };
         return row;
       });
-      setParsedData({ ...parsedData, [filename]: parsed });
+      if (isMounted) {
+        setParsedData((prev) => ({ ...prev, [filename]: parsed }));
+      }
     };
 
     fetchData(activeFile);
     if (rawData[activeFile])
       parseDynamicCSVData(activeFile, rawData[activeFile]);
+
+    return () => {
+      isMounted = false; // Cleanup function to avoid setting state on unmounted component
+    };
   }, [activeFile, rawData, parsedData]);
 
   useEffect(() => {
@@ -124,15 +134,26 @@ const Heatmap: React.FC<HeatmapProps> = ({
         ...new Set(data.map((d) => d.Topic.toString())),
       ];
 
+      const mouseleave = () => {
+        setTooltipState({
+          position: null,
+        });
+      };
+
       const svg = d3
         .select(ref.current)
         .attr('width', width)
-        .attr('height', height);
+        .attr('height', height)
+        .on('mouseout', mouseleave)
+        .on('mouseleave', mouseleave);
+
       svg.selectAll('*').remove();
 
       const g = svg
         .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);
+        .attr('transform', `translate(${margin.left},${margin.top})`)
+        .on('mouseout', mouseleave)
+        .on('mouseleave', mouseleave);
 
       g.append('text')
         .attr('x', innerWidth / 2)
@@ -192,7 +213,8 @@ const Heatmap: React.FC<HeatmapProps> = ({
         .attr('width', legendWidth)
         .attr('height', chunkHeight)
         .style('fill', (d) => colorScale(d))
-        .style('stroke', 'black');
+        .style('stroke', 'black')
+        .on('mouseout', mouseleave);
 
       legend
         .append('g')
@@ -208,7 +230,8 @@ const Heatmap: React.FC<HeatmapProps> = ({
             })
         )
         .selectAll('text')
-        .style('fill', 'white');
+        .style('fill', 'white')
+        .on('mouseout', mouseleave);
 
       const mouseover = (event: MouseEvent, d: DataItem) => {
         const xPos = event.pageX;
@@ -250,18 +273,6 @@ const Heatmap: React.FC<HeatmapProps> = ({
         }));
       };
 
-      const mouseleave = () => {
-        setTooltipState({
-          position: null,
-          value: null,
-          content: '',
-          group: '',
-          topic: '',
-          child: null,
-          minWidth: 0,
-        });
-      };
-
       g.selectAll()
         .data(data, (d) =>
           d ? `${d.Cluster as string}:${d.Topic as string}` : ''
@@ -276,7 +287,8 @@ const Heatmap: React.FC<HeatmapProps> = ({
         .style('stroke', 'none')
         .on('mouseover', mouseover)
         .on('mousemove', mousemove)
-        .on('mouseout', mouseleave);
+        .on('mouseout', mouseleave)
+        .on('mouseleave', mouseleave);
 
       g.selectAll('.bar-label')
         .data(data)
@@ -300,8 +312,7 @@ const Heatmap: React.FC<HeatmapProps> = ({
         .style('text-anchor', 'middle')
         .style('font-size', '14px')
         .on('mouseover', mouseover)
-        .on('mousemove', mousemove)
-        .on('mouseout', mouseleave);
+        .on('mousemove', mousemove);
     }
     requestAnimationFrame(() => {
       setLoading(false);
@@ -321,7 +332,7 @@ const Heatmap: React.FC<HeatmapProps> = ({
     <>
       <Placeholder height={height} isLoaded={!loading || false} />
       <ChartContainer>
-        <svg ref={ref} />
+        <svg ref={ref} data-testid='heatmap' />
       </ChartContainer>
     </>
   );

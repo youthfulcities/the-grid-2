@@ -8,6 +8,20 @@ interface IndexHeatmapProps {
   }) => void;
 }
 
+//this mock doesn't work in the __mocks__ folder or setupTests and has to be in the individual test files
+jest.mock(
+  '../../../../amplifyconfiguration.json',
+  () => ({
+    aws_project_region: 'mock-region',
+    aws_cognito_identity_pool_id: 'mock-identity-pool-id',
+    aws_cognito_region: 'mock-region',
+    aws_user_pools_id: 'mock-user-pools-id',
+    aws_user_pools_web_client_id: 'mock-client-id',
+    oauth: {},
+  }),
+  { virtual: true }
+);
+
 jest.mock('@/app/components/dataviz/Map', () => () => (
   <div>Mocked CustomMap</div>
 ));

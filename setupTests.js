@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import 'isomorphic-fetch';
 import 'jest-styled-components';
 
-//this mock doesn't work in the __mocks__ folder
+//this mock doesn't work in the __mocks__ folder or setupTests and has to be in the individual test files
 jest.mock(
   '../../../../amplifyconfiguration.json',
   () => ({

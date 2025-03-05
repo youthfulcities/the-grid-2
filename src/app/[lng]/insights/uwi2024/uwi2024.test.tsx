@@ -1,7 +1,4 @@
-import useTranslation from '@/app/i18n/client';
-import { useDimensions } from '@/hooks/useDimensions';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { useParams } from 'next/navigation';
 import Index from './page';
 
 interface IndexHeatmapProps {
@@ -10,38 +7,6 @@ interface IndexHeatmapProps {
     content: string;
   }) => void;
 }
-
-jest.mock(
-  '../../../../amplifyconfiguration.json',
-  () => ({
-    aws_project_region: 'mock-region',
-    aws_cognito_identity_pool_id: 'mock-identity-pool-id',
-    aws_cognito_region: 'mock-region',
-    aws_user_pools_id: 'mock-user-pools-id',
-    aws_user_pools_web_client_id: 'mock-client-id',
-    oauth: {},
-  }),
-  { virtual: true }
-);
-
-// Mock the useTranslation hook
-jest.mock('@/app/i18n/client', () => ({
-  useTranslation: jest.fn(),
-}));
-
-// Mock hooks and components
-jest.mock('@/hooks/useDimensions', () => ({
-  useDimensions: jest.fn(),
-}));
-
-jest.mock('next/navigation', () => ({
-  useParams: jest.fn(),
-}));
-
-jest.mock('@/app/i18n/client', () => ({
-  __esModule: true,
-  default: jest.fn(),
-}));
 
 jest.mock('@/app/components/dataviz/Map', () => () => (
   <div>Mocked CustomMap</div>
@@ -67,15 +32,6 @@ jest.mock('@/app/components/dataviz/TooltipChart', () => () => (
 ));
 
 describe('Index Component', () => {
-  beforeEach(() => {
-    (useDimensions as jest.Mock).mockReturnValue({ width: 1000 });
-    (useParams as jest.Mock).mockReturnValue({ lng: 'en' });
-    (useTranslation as jest.Mock).mockReturnValue({
-      t: (key: string) => key, // Mock translation function
-    });
-    jest.clearAllMocks();
-  });
-
   test('renders Index component with headings and map', () => {
     render(<Index />);
 

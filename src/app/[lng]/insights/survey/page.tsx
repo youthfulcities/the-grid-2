@@ -172,7 +172,8 @@ const Survey: React.FC = () => {
     const loadData = async () => {
       setLoading(true);
       try {
-        const csvText = await fetchData(path, activeFile); // Fetch CSV as text
+        const csvText = await fetchData(path, activeFile); //
+        // Fetch CSV as text
         if (csvText) {
           const parsedData = d3.csvParse(csvText); // Parse CSV string to JSON
           // Convert count_Total and percentage_Total to numbers
@@ -264,7 +265,12 @@ const Survey: React.FC = () => {
             Youth Chart
           </Heading>
         </View>
-        <div ref={containerRef}>
+        <Text marginBottom='xl'>
+          Discover how young people view their work-life dynamics, their
+          employability, the resources provided by their cities, and the skills
+          needed to succeed in the current and future job markets.
+        </Text>
+        <div ref={containerRef} data-testid='survey-container'>
           {data ? (
             <>
               <Text marginBottom='0'>Select a topic</Text>
@@ -366,7 +372,10 @@ const Survey: React.FC = () => {
               </BarChart>
             </>
           ) : (
-            <Placeholder height='1000px' />
+            <Placeholder
+              height='1000px'
+              data-testid='survey-page-placeholder'
+            />
           )}
         </div>
         <Heading level={2} marginTop='xxxl'>

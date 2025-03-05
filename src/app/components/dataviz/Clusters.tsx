@@ -95,6 +95,8 @@ const Clusters: React.FC<ClusterProps> = ({
   const width = containerWidth - 60;
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchData = async (filename: string) => {
       if (Object.prototype.hasOwnProperty.call(rawData, filename)) return;
 
@@ -104,7 +106,9 @@ const Clusters: React.FC<ClusterProps> = ({
           path: `public/${filename}`,
         }).result;
         const text = await downloadResult.body.text();
-        setRawData({ ...rawData, [filename]: text });
+        if (isMounted) {
+          setRawData({ ...rawData, [filename]: text });
+        }
       } catch (error) {
         console.log('Error:', error);
       }
@@ -128,13 +132,18 @@ const Clusters: React.FC<ClusterProps> = ({
 
         return row;
       });
-
-      setParsedData({ ...parsedData, [filename]: parsed });
+      if (isMounted) {
+        setParsedData({ ...parsedData, [filename]: parsed });
+      }
     };
 
     fetchData(activeFile);
     if (rawData[activeFile])
       parseDynamicCSVData(activeFile, rawData[activeFile]);
+
+    return () => {
+      isMounted = false; // Cleanup function to avoid setting state on unmounted component
+    };
   }, [activeFile, rawData, parsedData]);
 
   useEffect(() => {
@@ -239,7 +248,7 @@ const Clusters: React.FC<ClusterProps> = ({
           })
           .on('mouseout', (event) => {
             d3.select(event.currentTarget).classed('hover-cursor', false);
-            setTooltipState({ ...tooltipState, position: null });
+            setTooltipState({ position: null });
           })
           .on('click', (event, d) => {
             event.stopPropagation();
@@ -290,7 +299,7 @@ const Clusters: React.FC<ClusterProps> = ({
       </Text>
       <ChartContainer>
         <Placeholder height={height} isLoaded={!loading || false} />
-        <div id='chart' />
+        <div id='chart' data-testid='cluster-chart' />
         <Legend data={legendData} position='absolute' />
       </ChartContainer>
       <Heading level={4} color='primary.60' marginTop='xl' marginBottom='large'>

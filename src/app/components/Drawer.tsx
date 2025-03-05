@@ -152,8 +152,6 @@ const Drawer: React.FC<DrawerProps> = ({
         const drawerRect = drawerRef.current.getBoundingClientRect();
         setTabOffset(drawerRect.width); // Position the tab offset by the drawer's width
       }
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -162,7 +160,13 @@ const Drawer: React.FC<DrawerProps> = ({
 
   return (
     <>
-      {!noOverlay && <Overlay isopen={isopen} onClick={onClose} />}
+      {!noOverlay && (
+        <Overlay
+          data-testid='drawer-overlay'
+          isopen={isopen}
+          onClick={onClose}
+        />
+      )}
       <DrawerContainer
         $translate={translate}
         id={id}

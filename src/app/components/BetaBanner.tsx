@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components'; // Import styled-components
 import { Flex, Text } from '@aws-amplify/ui-react';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components'; // Import styled-components
 
 // Create a styled button with hover effect
 const DismissButton = styled.button`
@@ -15,18 +15,19 @@ const DismissButton = styled.button`
   padding: 0.5rem 1rem;
   cursor: pointer;
   position: absolute;
-  right: 13.7%; 
-  top: 50%; 
-  transform: translateY(-50%); 
-  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  right: 13.7%;
+  top: 50%;
+  transform: translateY(-50%);
+  transition:
+    background-color 0.3s ease-in-out,
+    transform 0.3s ease-in-out;
   text-transform: uppercase;
   display: inline-block;
   overflow: hidden;
 
-  
   &:hover {
     background-color: var(--amplify-colors-brand-primary-70);
-    transform: translateY(-55%); 
+    transform: translateY(-55%);
   }
 
   // Hover effect for the underline
@@ -54,13 +55,13 @@ const DismissButton = styled.button`
 
   // Responsive styles for smaller screens
   @media (max-width: 768px) {
-    position: static; 
-    margin-top: 1rem; 
-    transform: none; 
+    position: static;
+    margin-top: 1rem;
+    transform: none;
     font-size: 14px;
     padding: 0.4rem 0.8rem;
 
-    text-align: center; 
+    text-align: center;
   }
 
   @media (max-width: 480px) {
@@ -74,30 +75,30 @@ const BannerContainer = styled(Flex)`
   background-color: var(--amplify-colors-brand-primary-60);
   padding: 1rem 2rem;
   color: white;
-  position: relative; 
+  position: relative;
   width: 100%;
   z-index: 1000;
-  align-items: center; 
-  justify-content: center; 
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  flex-direction: row; 
+  flex-direction: row;
 
   @media (max-width: 768px) {
-    flex-direction: column; 
+    flex-direction: column;
   }
 `;
 
 // Text container to move independently
 const TextContainer = styled(Flex)`
   flex-grow: 1;
-  justify-content: center; 
+  justify-content: center;
   text-align: center;
 `;
 
 // Styled text with responsive adjustments
 const StyledText = styled(Text)`
   font-size: 1rem;
-  margin: 0 auto; 
+  margin: 0 auto;
   text-align: center;
 
   @media (max-width: 768px) {
@@ -134,11 +135,11 @@ const Banner: React.FC = () => {
       {/* Independent TextContainer */}
       <TextContainer>
         <StyledText>
-          This is a beta version of the site.{' '}
+          Youth Data Lab is still in the early stages of development.{' '}
           <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSfHIROUECzTKQ4kNSoAXgh82QhBYM2vIlRngokMlq8QhNdVNA/viewform?pli=1"
-            target="_blank"
-            rel="noopener noreferrer"
+            href='https://www.surveymonkey.com/r/2VDFCKM'
+            target='_blank'
+            rel='noopener noreferrer'
             style={{ color: 'white', textDecoration: 'underline' }}
           >
             Your feedback is appreciated!

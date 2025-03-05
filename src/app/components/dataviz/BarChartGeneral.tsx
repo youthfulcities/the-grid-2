@@ -94,7 +94,6 @@ const BarChart: React.FC<BarChartProps> = ({
 
     // Get the length of the longest item in allOptions using lodash
     const maxLength = _.get(_.maxBy(answers, 'length'), 'length', 0);
-    console.log(maxLength);
 
     if (maxLength * 10 < truncateThreshold * 5) {
       // Update the left margin based on the max label length
@@ -113,7 +112,8 @@ const BarChart: React.FC<BarChartProps> = ({
   }, [selectedAnswers]);
 
   useEffect(() => {
-    if (!dataToDisplay || !selectedAnswers || !width || !height) return;
+    if (!ref.current || !dataToDisplay || !selectedAnswers || !width || !height)
+      return;
 
     const svg = d3
       .select(ref.current)
@@ -139,7 +139,6 @@ const BarChart: React.FC<BarChartProps> = ({
     const colorScale = d3.scaleOrdinal().range(colors);
 
     // Axes
-
     // x-axis
     svg
       .append('g')
@@ -188,6 +187,7 @@ const BarChart: React.FC<BarChartProps> = ({
       .data(dataToDisplay)
       .join('rect')
       .attr('class', 'bar')
+      .attr('data-testid', 'bar')
       .attr('x', xScale(0))
       .attr('y', (d) => yScale(d.option_en) as number)
       .attr('width', 0)
@@ -217,11 +217,16 @@ const BarChart: React.FC<BarChartProps> = ({
   return (
     <View>
       {!width || !dataToDisplay ? (
-        <Placeholder isLoaded={false} width='100%' minHeight='600px' />
+        <Placeholder
+          isLoaded={false}
+          width='100%'
+          minHeight='600px'
+          data-testid='bar-chart-general-placeholder'
+        />
       ) : (
         <>
           <ChartContainer>
-            <svg ref={ref} />
+            <svg ref={ref} data-testid='bar-chart-general' />
           </ChartContainer>
           {children}
           <Customize

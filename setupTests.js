@@ -4,6 +4,20 @@ import '@testing-library/jest-dom';
 import 'isomorphic-fetch';
 import 'jest-styled-components';
 
+//this mock doesn't work in the __mocks__ folder
+jest.mock(
+  '../../../../amplifyconfiguration.json',
+  () => ({
+    aws_project_region: 'mock-region',
+    aws_cognito_identity_pool_id: 'mock-identity-pool-id',
+    aws_cognito_region: 'mock-region',
+    aws_user_pools_id: 'mock-user-pools-id',
+    aws_user_pools_web_client_id: 'mock-client-id',
+    oauth: {},
+  }),
+  { virtual: true }
+);
+
 // Mock AWS Amplify
 jest.mock('aws-amplify', () => ({
   __esModule: true,
@@ -39,20 +53,6 @@ jest.mock('aws-amplify/storage', () => ({
   remove: jest.fn().mockResolvedValue({ key: 'mock-key' }),
   list: jest.fn().mockResolvedValue({ results: [] }),
 }));
-
-//this mock doesn't work in the __mocks__ folder
-jest.mock(
-  '../../../../amplifyconfiguration.json',
-  () => ({
-    aws_project_region: 'mock-region',
-    aws_cognito_identity_pool_id: 'mock-identity-pool-id',
-    aws_cognito_region: 'mock-region',
-    aws_user_pools_id: 'mock-user-pools-id',
-    aws_user_pools_web_client_id: 'mock-client-id',
-    oauth: {},
-  }),
-  { virtual: true }
-);
 
 //for some reason mocking d3 functions in this file works but not in the __mocks__ folder
 //all the d3 functions used need to be explicitly defined here

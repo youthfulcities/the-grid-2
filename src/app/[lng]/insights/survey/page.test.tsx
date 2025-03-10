@@ -42,7 +42,7 @@ describe('Survey Component', () => {
         </WUWWLSurveyProvider>
       );
     });
-    expect(screen.getByText('work lately?')).toBeInTheDocument();
+    expect(screen.getByText('title')).toBeInTheDocument();
   });
 
   it('loads data on mount', async () => {
@@ -77,7 +77,7 @@ describe('Survey Component', () => {
       );
     });
 
-    expect(await screen.findByText('Select a topic')).toBeInTheDocument();
+    expect(await screen.findByText('select_title')).toBeInTheDocument();
   });
 
   it('displays chart after loading', async () => {
@@ -127,7 +127,7 @@ describe('Survey Component', () => {
         </WUWWLSurveyProvider>
       );
     });
-    const button = screen.getByRole('button', { name: 'Other' });
+    const button = screen.getByRole('button', { name: 'select_other' });
     expect(button).toBeInTheDocument();
     expect(button).toBeVisible();
     expect(button).not.toBeDisabled();
@@ -143,9 +143,9 @@ describe('Survey Component', () => {
         </WUWWLSurveyProvider>
       );
     });
-    const button = screen.getByRole('button', { name: 'Other' });
+    const button = screen.getByRole('button', { name: 'select_other' });
     await userEvent.click(button);
-    fireEvent.change(screen.getByLabelText('Select a question'), {
+    fireEvent.change(screen.getByLabelText('select_question'), {
       target: { value: 'Question 2' },
     });
     expect(await screen.findByText('Option 2')).toBeInTheDocument();

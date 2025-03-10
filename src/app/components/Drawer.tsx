@@ -1,5 +1,5 @@
 import { useDimensions } from '@/hooks/useDimensions';
-import { Text } from '@aws-amplify/ui-react';
+import { Text, useBreakpointValue } from '@aws-amplify/ui-react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 import { FaAngleRight, FaX } from 'react-icons/fa6';
@@ -16,7 +16,6 @@ interface DrawerProps {
   noClickOutside?: boolean;
   translate?: number;
   id?: string;
-  maxWidth?: number;
 }
 
 const DrawerContainer = styled(motion.div)<{
@@ -99,12 +98,17 @@ const Drawer: React.FC<DrawerProps> = ({
   noClickOutside,
   translate = 0,
   id = 'drawer-content',
-  maxWidth = 50,
 }) => {
   const drawerRef = useRef<HTMLDivElement>(null);
   const tabRef = useRef<HTMLDivElement>(null);
   const [tabOffset, setTabOffset] = useState<number>(0);
   const { width } = useDimensions(drawerRef, isopen);
+  const maxWidth = useBreakpointValue({
+    base: 90,
+    small: 90,
+    medium: 50,
+    large: 30,
+  });
 
   // Scroll to top when the drawer is opened
   useEffect(() => {
@@ -113,23 +117,19 @@ const Drawer: React.FC<DrawerProps> = ({
     }
   }, [isopen]);
 
-  // Expose the drawerRef to parent components via ref
+  // Expose the drawerRef to parent coffmponents via ref
   useEffect(() => {
-    if (drawerRef.current) {
-      const resizeObserver = new ResizeObserver(() => {
-        if (drawerRef.current) {
-          const drawerRect = drawerRef.current.getBoundingClientRect();
-          setTabOffset(drawerRect.width); // Update tabOffset when drawer's width changes
-        }
-      });
+    if (!drawerRef.current) return;
+    const resizeObserver = new ResizeObserver(() => {
+      if (drawerRef.current) {
+        setTabOffset(drawerRef.current.getBoundingClientRect().width);
+      }
+    });
 
-      resizeObserver.observe(drawerRef.current);
+    resizeObserver.observe(drawerRef.current);
 
-      return () => {
-        resizeObserver.disconnect();
-      };
-    }
-  }, []);
+    return () => resizeObserver.disconnect();
+  }, [drawerRef]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -158,6 +158,8 @@ const Drawer: React.FC<DrawerProps> = ({
     };
   }, [isopen]);
 
+  console.log(width, maxWidth);
+
   return (
     <>
       {!noOverlay && (
@@ -174,7 +176,7 @@ const Drawer: React.FC<DrawerProps> = ({
         ref={drawerRef}
         isopen={isopen}
         $absolute={absolute || false}
-        $maxWidth={maxWidth}
+        $maxWidth={maxWidth as number}
       >
         {width !== undefined &&
           React.Children.map(children, (child) =>

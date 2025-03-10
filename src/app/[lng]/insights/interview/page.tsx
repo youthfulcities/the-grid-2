@@ -345,7 +345,6 @@ const Interview = () => {
           setIsDrawerOpen(false);
         }}
         tabText={t('drawer_tab')}
-        maxWidth={quoteSize as number}
       >
         {visibleQuotes.length > 0 ? (
           <Flex direction='column' paddingTop='xxl' paddingBottom='xxl'>

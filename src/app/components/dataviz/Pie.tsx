@@ -1,6 +1,8 @@
+import useTranslation from '@/app/i18n/client';
 import { Flex, Heading } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
+import { useParams } from 'next/navigation';
 import { ReactNode, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Legend from './Legend';
@@ -50,13 +52,23 @@ const PieChartComponent: React.FC<PieChartProps> = ({
   tooltipState,
   setTooltipState,
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'WUWWL_survey');
   const [rawData, setRawData] = useState<Record<string, string>>({});
   const [parsedData, setParsedData] = useState<Record<string, DataItem[]>>({});
-  const [activeFile, setActiveFile] = useState(`${type}-${cluster}.csv`);
+  const [activeFile, setActiveFile] = useState(`${type}-all.csv`);
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
 
   useEffect(() => {
-    setActiveFile(`${type}-${cluster}.csv`);
+    if (cluster === t('cluster_economic')) {
+      setActiveFile(`${type}-affordability.csv`);
+    } else if (cluster === t('cluster_forming')) {
+      setActiveFile(`${type}-forming.csv`);
+    } else if (cluster === t('cluster_social')) {
+      setActiveFile(`${type}-social.csv`);
+    } else {
+      setActiveFile(`${type}-all.csv`);
+    }
   }, [cluster, type]);
 
   useEffect(() => {
@@ -167,7 +179,7 @@ const PieChartComponent: React.FC<PieChartProps> = ({
       .attr('fill', (d) => getColor(d.data[Object.keys(d.data)[0]] as string))
       .attrTween('d', (d) => {
         const interpolate = d3.interpolate({ startAngle: 0, endAngle: 0 }, d);
-        return (t) => arcGenerator(interpolate(t))!;
+        return (angle) => arcGenerator(interpolate(angle))!;
       });
 
     arcs

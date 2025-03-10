@@ -49,7 +49,7 @@ describe('Index Component', () => {
   test('renders Index component with headings and map', () => {
     render(<Index />);
 
-    expect(screen.getByText(/title/i)).toBeInTheDocument();
+    expect(screen.getByText('title')).toBeInTheDocument();
     expect(screen.getByText(/map_heading/i)).toBeInTheDocument();
     expect(screen.getByText('Mocked CustomMap')).toBeInTheDocument();
   });

@@ -22,5 +22,9 @@
   "login": "Login",
   "login_info": "Access the chatbot and download datasets with a free account. Creating an account helps us improve the tool and keep Youth Data Lab free for everyone. By creating an account you agree we can use your data to improve the platform (<a>full terms and conditions</a>).",
   "download_png": "Download as PNG",
-  "blog_button": "Read the blog post"
+  "blog_button": "Read the blog post",
+  "customize": "Customize chart",
+  "select_other": "Other",
+  "select_question": "Select a question",
+  "percent": "Percent"
 }

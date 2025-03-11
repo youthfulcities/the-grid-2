@@ -1,3 +1,4 @@
+import useTranslation from '@/app/i18n/client';
 import datasetCards from '@/data/dataset-cards.json';
 import useDimension from '@/hooks/useDimensions';
 import {
@@ -14,7 +15,6 @@ import { useParams, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-import useTranslation from '../i18n/client';
 import CardAccordion from './CardAccordion';
 import DataCardButton from './DataCardButton';
 

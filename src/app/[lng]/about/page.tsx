@@ -1,10 +1,10 @@
 'use client';
 
+import Container from '@/app/components/Background';
+import useTranslation from '@/app/i18n/client';
 import { Flex, Heading, Text, View } from '@aws-amplify/ui-react';
 import { useParams } from 'next/navigation';
 import { Trans } from 'react-i18next/TransWithoutContext';
-import Container from '../../components/Background';
-import useTranslation from '../../i18n/client';
 
 const About = () => {
   const { lng } = useParams<{ lng: string }>();

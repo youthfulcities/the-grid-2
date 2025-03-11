@@ -1,5 +1,8 @@
 'use client';
 
+import Container from '@/app/components/Background';
+import DataCard from '@/app/components/DataCards';
+import useTranslation from '@/app/i18n/client';
 import {
   Flex,
   Heading,
@@ -7,21 +10,18 @@ import {
   View,
   useAuthenticator,
 } from '@aws-amplify/ui-react';
-import { Amplify } from 'aws-amplify';
+// import { Amplify } from 'aws-amplify';
 import { getProperties, getUrl } from 'aws-amplify/storage';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
-import config from '../../../amplifyconfiguration.json';
-import Container from '../../components/Background';
-import DataCard from '../../components/DataCards';
-import useTranslation from '../../i18n/client';
+// import config from '../../../amplifyconfiguration.json';
 
 interface RootLayoutProps {
   params: { lng: string };
 }
 
-Amplify.configure(config);
+// Amplify.configure(config);
 
 const Datasets: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
   const { user } = useAuthenticator((context) => [context.user]);

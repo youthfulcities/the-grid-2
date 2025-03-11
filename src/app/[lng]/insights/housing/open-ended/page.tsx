@@ -1,6 +1,6 @@
 'use client';
 
-import config from '@/amplifyconfiguration.json';
+// import config from '@/amplifyconfiguration.json';
 import Container from '@/app/components/Background';
 import CrosslinkCard from '@/app/components/CrosslinkCard';
 import BubbleChartJSON from '@/app/components/dataviz/BubbleChart/BubbleChartJSON';
@@ -20,13 +20,13 @@ import {
   useBreakpointValue,
   View,
 } from '@aws-amplify/ui-react';
-import { Amplify } from 'aws-amplify';
+// import { Amplify } from 'aws-amplify';
 import { downloadData } from 'aws-amplify/storage';
 import { useParams } from 'next/navigation';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
 
-Amplify.configure(config);
+// Amplify.configure(config);
 
 interface DataItem {
   nodes: Array<{
@@ -276,7 +276,6 @@ const Interview = () => {
         </View>
         <Drawer
           isopen={isDrawerOpen}
-          maxWidth={quoteSize as number}
           onOpen={() => setIsDrawerOpen(true)}
           onClose={() => {
             setIsDrawerOpen(false);

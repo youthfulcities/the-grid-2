@@ -1,4 +1,4 @@
-import { HousingSurveyProvider } from '@/app/context/HousingSurveyContext';
+import { HousingSurveyProvider } from '@/app/[lng]/insights/housing/survey/context/HousingSurveyContext';
 import HousingSurvey from './page';
 
 const Survey = () => (

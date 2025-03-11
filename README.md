@@ -1,4 +1,44 @@
-Styling Guidelines
+## Getting Started
+
+This is a Next.js (App router) Typescript application with AWS Amplify.
+
+Note: The name of the portal has been changed to "Youth Data Lab" but is referred to on Github as the-grid-2.
+
+To run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Organization
+
+If you havent worked with Next.js (App router) before, take some time to familiarize yourself with its unique structure: [https://nextjs.org/docs/13/app/building-your-application/routing/colocation]().
+
+Basically, the folder structure determines the routing paths, and any folder in the app directory with a `page.tsx` file will be routable. `layout.tsx` automatically wrap `page.tsx` files. This is a multilingual app facilitated by `react-i18next`. All routeable pages are found in the `[lng]` directory. Therefore, the equivalent of an `index.js` file would be `@/app/[lng]/page.tsx`.
+
+Components which are **tightly coupled** with a specific page (i.e., they are not reused in multiple components) should be co-located in that page's folder.
+
+The `@/app/[lng]/components` folder is for components unique to `@/app/[lng]/page.tsx `and `@/app/[lng]/layout.tsx.`
+
+The `@/app/components` folder is for reusable components used in multiple pages.
+
+The `@/app/api` folder is a Next.js specific folder for managing api routes. [https://nextjs.org/docs/13/app/building-your-application/routing/route-handlers]().
+
+The `@/app/i18n` folder is where all the text/coy is stored for English and French.
+
+Everything else is stored in src directory.
+
+`@/data` is for small jsons mapping to component data.
+
+`@/hooks` is for reusable React hooks.
+
+`@/lib` is for other helper reusable helper functions.
+
+## Styling Guidelines
 
 Global styles found in `global.css` include typography styles, containers, and shadows. Some of these are legacy styles from the original site on Opendatasoft. Eventually, we want to pull out as many css classess as possible out of `global.css` into components, but this can be done on a gradual basis.
 
@@ -418,33 +458,15 @@ tokens: {
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
-
-Note: The name of the portal has been changed to "Youth Data Lab" but is referred to on github as the-grid-2.
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
 ## Testing
 
-This application uses jest for the testing library.
+This application uses Jest for the testing library.
+
+Run `npm test -- --watch --silent --coverage` to run the test environment and pass flags to Jest.
 
 Quirks:
+
+Most mocks for SSR and hooks are global and found in `setupTests.js`. However, the `amplifyconfiguration.json` mock does not work unless it's imported into each test file that calls it. It will work in your local environment but not in a virutal environment since the `amplifyconfiguration.json` is not commited to source control. Using a relative path for this file does not work.
 
 ## Learn More
 

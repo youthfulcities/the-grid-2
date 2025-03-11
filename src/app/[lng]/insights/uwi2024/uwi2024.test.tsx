@@ -26,7 +26,7 @@ jest.mock('@/app/components/dataviz/Map', () => () => (
   <div>Mocked CustomMap</div>
 ));
 
-jest.mock('@/app/components/dataviz/IndexHeatmap', () => {
+jest.mock('./components/IndexHeatmap', () => {
   return ({ setTooltipState }: IndexHeatmapProps) => (
     <div
       onMouseEnter={() =>

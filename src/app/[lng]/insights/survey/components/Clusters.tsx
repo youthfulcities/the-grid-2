@@ -24,8 +24,8 @@ import {
 import { Trans } from 'react-i18next/TransWithoutContext';
 import { FaBrain, FaBriefcase, FaDollarSign } from 'react-icons/fa6';
 import styled from 'styled-components';
+import Legend from '../../../../components/dataviz/Legend';
 import Heatmap from './Heatmap';
-import Legend from './Legend';
 
 interface DataItem {
   [key: string]: string | number;

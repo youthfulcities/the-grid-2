@@ -1,18 +1,20 @@
 'use client';
 
+import Clusters from '@/app/[lng]/insights/survey/components/Clusters';
+import Demographics from '@/app/[lng]/insights/survey/components/Demographics';
+import { useWUWWLSurvey } from '@/app/[lng]/insights/survey/context/WUWWLSurveyContext';
 import Container from '@/app/components/Background';
 import CrosslinkCard from '@/app/components/CrosslinkCard';
 import Drawer from '@/app/components/Drawer';
 import BarChart from '@/app/components/dataviz/BarChartGeneral';
-import Clusters from '@/app/components/dataviz/Clusters';
-import Demographics from '@/app/components/dataviz/Demographics';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
-import { useWUWWLSurvey } from '@/app/context/WUWWLSurveyContext';
 import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
+import useDownloadFile from '@/hooks/useDownloadFile';
 import useFilteredPosts from '@/hooks/useFilteredPosts';
 import fetchData from '@/lib/fetchData';
 import {
+  Button,
   Grid,
   Heading,
   Placeholder,
@@ -23,18 +25,17 @@ import {
   useBreakpointValue,
   View,
 } from '@aws-amplify/ui-react';
-import { Amplify } from 'aws-amplify';
 import * as d3 from 'd3';
 import _ from 'lodash';
 import { useParams } from 'next/navigation';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
 import styled from 'styled-components';
-import config from '../../../../amplifyconfiguration.json';
+// import config from '../../../../amplifyconfiguration.json';
 
-Amplify.configure(config, {
-  ssr: true,
-});
+// Amplify.configure(config, {
+//   ssr: true,
+// });
 
 interface DataItem {
   option_en: string;
@@ -146,6 +147,10 @@ const Survey: React.FC = () => {
 
   const activeFile = 'WUWWL_Full_National_ONLY - Questions.csv';
   const path = 'internal/DEV/survey';
+
+  useEffect(() => {
+    setCurrentCluster(t('cluster_all'));
+  }, [lng]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -397,6 +402,18 @@ const Survey: React.FC = () => {
             ))}
           </Grid>
         )}
+        <Heading
+          level={4}
+          color='secondary.60'
+          marginTop='xxl'
+          marginBottom='xs'
+        >
+          {t('download')}
+        </Heading>
+        <Text>{t('download_desc')}</Text>
+        <Button variation='primary' onClick={useDownloadFile(activeFile)}>
+          {t('download_button')}
+        </Button>
         <Heading level={2} marginTop='xxxl'>
           {t('method_title')}
         </Heading>

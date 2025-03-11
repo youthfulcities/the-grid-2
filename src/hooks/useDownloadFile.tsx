@@ -1,15 +1,15 @@
 import fetchUrl from '@/lib/fetchUrl';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { Amplify } from 'aws-amplify';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import config from '../amplifyconfiguration.json';
+// import config from '../amplifyconfiguration.json';
 
-Amplify.configure(config);
+// Amplify.configure(config);
 
 const useDownloadFile = (filename: string) => {
   const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleDownload = async (file: string) => {
     try {
@@ -24,23 +24,28 @@ const useDownloadFile = (filename: string) => {
       console.error('Error downloading file:', error);
     }
   };
-
   useEffect(() => {
-    // Check for post-login download intent
-    const storedFilename = sessionStorage.getItem('downloadFilename');
-    if (authStatus === 'authenticated' && storedFilename) {
-      sessionStorage.removeItem('downloadFilename'); // Clear the stored intent
-      handleDownload(storedFilename); // Trigger the download
+    if (authStatus === 'authenticated') {
+      const storedFilename = sessionStorage.getItem('downloadFilename');
+      const storedRedirect = sessionStorage.getItem('postLoginRedirect');
+
+      if (storedFilename) {
+        sessionStorage.removeItem('downloadFilename');
+        handleDownload(storedFilename);
+      }
+      if (storedRedirect) {
+        sessionStorage.removeItem('postLoginRedirect');
+        router.push(storedRedirect);
+      }
     }
   }, [authStatus]);
 
   const downloadFile = () => {
-    const redirectPath = '/insights/housing/open-ended';
-
     if (authStatus !== 'authenticated') {
       console.error('User is not authenticated.');
-      sessionStorage.setItem('postLoginRedirect', redirectPath);
-      sessionStorage.setItem('downloadFilename', filename); // Save the download intent
+      sessionStorage.setItem('postLoginRedirect', pathname);
+      sessionStorage.setItem('downloadFilename', filename);
+
       router.push('/authentication');
       return;
     }

@@ -23,7 +23,7 @@ import {
 } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
 import styled from 'styled-components';
-import Drawer from '../Drawer';
+import Drawer from '../../../../components/Drawer';
 
 interface TooltipState {
   position: { x: number; y: number } | null;

@@ -1,5 +1,6 @@
 'use client';
 
+import useTranslation from '@/app/i18n/client';
 import { Flex, Heading, Text, View } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
 import { useParams } from 'next/navigation';
@@ -7,9 +8,8 @@ import React from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
 import awsExports from '../../aws-exports';
 import Container from '../components/Background';
-import Banner from '../components/Banner';
-import HomeHeader from '../components/HomeHeader';
-import useTranslation from '../i18n/client';
+import Banner from './components/Banner';
+import HomeHeader from './components/HomeHeader';
 
 Amplify.configure(awsExports);
 

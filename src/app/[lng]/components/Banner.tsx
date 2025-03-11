@@ -1,7 +1,7 @@
+import useTranslation from '@/app/i18n/client';
 import datasetCards from '@/data/dataset-cards.json';
 import { Flex, Heading, Text, View, useTheme } from '@aws-amplify/ui-react';
 import styled from 'styled-components';
-import useTranslation from '../i18n/client';
 
 const BarBackground = styled(View)<{ $background: string; $space: string }>`
   width: 100%;

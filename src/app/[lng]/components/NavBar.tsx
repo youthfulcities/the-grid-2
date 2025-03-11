@@ -1,6 +1,8 @@
 'use client';
 
-import config from '@/amplifyconfiguration.json';
+// import config from '@/amplifyconfiguration.json';
+import { useThemeContext } from '@/app/context/ThemeContext';
+import useTranslation from '@/app/i18n/client';
 import {
   Button,
   Flex,
@@ -13,16 +15,14 @@ import {
   useBreakpointValue,
   useTheme,
 } from '@aws-amplify/ui-react';
-import { Amplify } from 'aws-amplify';
+// import { Amplify } from 'aws-amplify';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { FaBars, FaMoon, FaRegMoon, FaRegSun, FaSun } from 'react-icons/fa6';
 import styled from 'styled-components';
-import { useThemeContext } from '../context/ThemeContext';
-import useTranslation from '../i18n/client';
 import AuthLink from './AuthLink';
 
-Amplify.configure(config);
+// Amplify.configure(config);
 
 const StyledFlex = styled(Flex)`
   display: flex;

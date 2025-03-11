@@ -60,6 +60,11 @@ jest.mock('@/hooks/useDimensions', () => ({
   useDimensions: jest.fn(() => ({ width: 1000, height: 800 })), // Mock width & height
 }));
 
+jest.mock('@/hooks/useDownloadFile', () => ({
+  __esModule: true,
+  default: jest.fn(() => jest.fn()), // Returns a function
+}));
+
 jest.mock('@/app/i18n/client', () => ({
   __esModule: true,
   default: jest.fn(() => ({

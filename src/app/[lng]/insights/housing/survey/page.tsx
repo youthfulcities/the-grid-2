@@ -1,10 +1,10 @@
 'use client';
 
+import { useHousingSurvey } from '@/app/[lng]/insights/housing/survey/context/HousingSurveyContext';
 import Background from '@/app/components/Background';
 import CrosslinkCard from '@/app/components/CrosslinkCard';
 import BarChart from '@/app/components/dataviz/BarChartJSON';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
-import { useHousingSurvey } from '@/app/context/HousingSurveyContext';
 import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
 import useDownloadFile from '@/hooks/useDownloadFile';

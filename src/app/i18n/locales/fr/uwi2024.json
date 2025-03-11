@@ -12,7 +12,7 @@
   "customize_tab": "Personnaliser les résultats",
   "customize_blurb": "Ajustez la pondération de chaque sujet selon son importance pour vous et observez le changement de classement sur la carte thermique. Une pondération de 100 correspond à « extrêmement important » et une pondération de 0 à « non prioritaire ».",
   "best_city": "Actuellement, la ville qui vous convient le mieux est <strong>{{city}}</strong>.",
-  "cutomize_blurb2": "Les pondérations par défaut sont basées sur les notes d'importance moyennes attribuées à chaque sujet par plus de 1 500 répondants à l'enquête « Quoi de neuf au travail, dernièrement ? » 2024. Ces pondérations influencent la contribution proportionnelle de chaque sujet au score final pour déterminer la meilleure ville où travailler.",
+  "cutomize_blurb2": "Les pondérations par défaut sont basées sur les notes d'importance moyennes attribuées à chaque sujet par plus de 1 500 répondants à l'enquête « Que se passe-t-il au travail ces temps-ci? » 2024. Ces pondérations influencent la contribution proportionnelle de chaque sujet au score final pour déterminer la meilleure ville où travailler.",
   "more_heading": "Approfondir",
   "chatbot_heading": "Chatbot",
   "chatbot_blurb": "Essayez ces questions pour mieux comprendre l'écosystème du travail à Toronto, Montréal, Calgary et Vancouver, ou posez vos propres questions.",

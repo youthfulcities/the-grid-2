@@ -8,15 +8,15 @@ const RedirectAfterAuth = () => {
   const router = useRouter();
   const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   // Retrieve the redirect URL from session storage or set a default
-  const redirectUrl = sessionStorage.getItem('postLoginRedirect') || '/';
 
   useEffect(() => {
+    const redirectUrl = sessionStorage.getItem('postLoginRedirect') || '/';
     // Check if there is a user object, which indicates a successful login
     if (authStatus === 'authenticated') {
       sessionStorage.removeItem('postLoginRedirect');
       router.push(redirectUrl); // Redirect to the intended URL or home
     }
-  }, [authStatus, router, redirectUrl]);
+  }, [authStatus, router]);
 
   return null;
 };

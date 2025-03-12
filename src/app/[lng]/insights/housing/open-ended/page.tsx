@@ -2,7 +2,7 @@
 
 // import config from '@/amplifyconfiguration.json';
 import Container from '@/app/components/Background';
-import CrosslinkCard from '@/app/components/CrosslinkCard';
+import CrosslinkCards from '@/app/components/CrosslinkCards';
 import BubbleChartJSON from '@/app/components/dataviz/BubbleChart/BubbleChartJSON';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import Drawer from '@/app/components/Drawer';
@@ -14,7 +14,6 @@ import useFilteredPosts from '@/hooks/useFilteredPosts';
 import {
   Button,
   Flex,
-  Grid,
   Heading,
   Text,
   useBreakpointValue,
@@ -92,6 +91,7 @@ const Interview = () => {
   const [visibleQuotes, setVisibleQuotes] = useState<string[]>([]);
   const posts = useFilteredPosts(49, lng);
   const filename = 'Housing Survey Open-Ended Responses.csv';
+  const { downloadFile } = useDownloadFile();
 
   const batchSize = 10;
   const quoteSize = useBreakpointValue({
@@ -215,27 +215,7 @@ const Interview = () => {
             >
               {t('stories_heading')}
             </Heading>
-            <Grid
-              columnGap='small'
-              rowGap='small'
-              templateColumns={{
-                base: '1fr',
-                medium: '1fr 1fr',
-                large: '1fr 1fr',
-                xl: '1fr 1fr 1fr 1fr',
-              }}
-            >
-              {posts?.length > 0 &&
-                posts.map((post) => (
-                  <CrosslinkCard
-                    key={post?.id}
-                    heading={post?.title?.rendered}
-                    link={post?.link}
-                    src={post?.yoast_head_json?.og_image[0].url}
-                    alt={post?.yoast_head_json?.og_description}
-                  />
-                ))}
-            </Grid>
+            {posts.length > 0 && <CrosslinkCards posts={posts} />}
             <Heading
               level={4}
               color='secondary.60'
@@ -269,7 +249,7 @@ const Interview = () => {
               Download Raw Data
             </Heading>
             <Text>Create an account or sign in to download the dataset.</Text>
-            <Button variation='primary' onClick={useDownloadFile(filename)}>
+            <Button variation='primary' onClick={() => downloadFile(filename)}>
               Download
             </Button>
           </View>

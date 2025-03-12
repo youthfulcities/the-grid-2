@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.55% </span>
+                <span class="strong">96.59% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>84/87</span>
+                <span class='fraction'>85/88</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">89.47% </span>
+                <span class="strong">90% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>17/19</span>
+                <span class='fraction'>18/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.29% </span>
+                <span class="strong">96.34% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>78/81</span>
+                <span class='fraction'>79/82</span>
             </div>
         
             
@@ -503,9 +503,7 @@
 <a name='L438'></a><a href='#L438'>438</a>
 <a name='L439'></a><a href='#L439'>439</a>
 <a name='L440'></a><a href='#L440'>440</a>
-<a name='L441'></a><a href='#L441'>441</a>
-<a name='L442'></a><a href='#L442'>442</a>
-<a name='L443'></a><a href='#L443'>443</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L441'></a><a href='#L441'>441</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -519,6 +517,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -536,10 +535,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -653,6 +651,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">46x</span>
 <span class="cline-any cline-yes">46x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">46x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">46x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">46x</span>
 <span class="cline-any cline-yes">10x</span>
@@ -893,15 +897,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -950,19 +946,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use client';
 &nbsp;
 import Clusters from '@/app/[lng]/insights/survey/components/Clusters';
+import Demographics from '@/app/[lng]/insights/survey/components/Demographics';
+import { useWUWWLSurvey } from '@/app/[lng]/insights/survey/context/WUWWLSurveyContext';
 import Container from '@/app/components/Background';
-import CrosslinkCard from '@/app/components/CrosslinkCard';
+import CrosslinkCards from '@/app/components/CrosslinkCards';
 import Drawer from '@/app/components/Drawer';
 import BarChart from '@/app/components/dataviz/BarChartGeneral';
-import Demographics from '@/app/components/dataviz/Demographics';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
-import { useWUWWLSurvey } from '@/app/context/WUWWLSurveyContext';
 import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
+import useDownloadFile from '@/hooks/useDownloadFile';
 import useFilteredPosts from '@/hooks/useFilteredPosts';
 import fetchData from '@/lib/fetchData';
 import {
-  Grid,
+  Button,
   Heading,
   Placeholder,
   SelectField,
@@ -972,18 +969,17 @@ import {
   useBreakpointValue,
   View,
 } from '@aws-amplify/ui-react';
-import { Amplify } from 'aws-amplify';
 import * as d3 from 'd3';
 import _ from 'lodash';
 import { useParams } from 'next/navigation';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
 import styled from 'styled-components';
-import config from '../../../../amplifyconfiguration.json';
+// import config from '../../../../amplifyconfiguration.json';
 &nbsp;
-Amplify.configure(config, {
-  ssr: true,
-});
+// Amplify.configure(config, {
+//   ssr: true,
+// });
 &nbsp;
 interface DataItem {
   option_en: string;
@@ -1095,6 +1091,12 @@ const Survey: React.FC = () =&gt; {
 &nbsp;
   const activeFile = 'WUWWL_Full_National_ONLY - Questions.csv';
   const path = 'internal/DEV/survey';
+&nbsp;
+  const { downloadFile } = useDownloadFile();
+&nbsp;
+  useEffect(() =&gt; {
+    setCurrentCluster(t('cluster_all'));
+  }, [lng]);
 &nbsp;
   useEffect(() =&gt; {
     const loadData = async () =&gt; {
@@ -1325,27 +1327,19 @@ const Survey: React.FC = () =&gt; {
         &gt;
           {t('stories_title')}
         &lt;/Heading&gt;
-        {posts?.length &gt; 0 &amp;&amp; (
-          &lt;Grid
-            columnGap='small'
-            rowGap='small'
-            templateColumns={{
-              base: '1fr',
-              medium: '1fr 1fr',
-              xl: '1fr 1fr 1fr fr',
-            }}
-          &gt;
-            {posts.map(<span class="fstat-no" title="function not covered" >(p</span>ost) =&gt; (
-<span class="cstat-no" title="statement not covered" >              &lt;CrosslinkCard</span>
-                key={post?.id}
-                heading={post?.title?.rendered}
-                link={post?.link}
-                src={post?.yoast_head_json?.og_image[0].url}
-                alt={post?.yoast_head_json?.og_description}
-              /&gt;
-            ))}
-          &lt;/Grid&gt;
-        )}
+        {posts?.length &gt; 0 &amp;&amp; &lt;CrosslinkCards posts={posts} /&gt;}
+        &lt;Heading
+          level={4}
+          color='secondary.60'
+          marginTop='xxl'
+          marginBottom='xs'
+        &gt;
+          {t('download')}
+        &lt;/Heading&gt;
+        &lt;Text&gt;{t('download_desc')}&lt;/Text&gt;
+        &lt;Button variation='primary' onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >d</span>ownloadFile(activeFile)}&gt;</span>
+          {t('download_button')}
+        &lt;/Button&gt;
         &lt;Heading level={2} marginTop='xxxl'&gt;
           {t('method_title')}
         &lt;/Heading&gt;
@@ -1396,7 +1390,7 @@ export default Survey;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-11T15:16:26.036Z
+                at 2025-03-12T22:24:53.163Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -58,8 +58,6 @@ interface SideNavProps {
 
 const SideNav: React.FC<SideNavProps> = ({ sections }) => {
   const [activeSection, setActiveSection] = useState<string>('');
-  console.log(activeSection);
-
   useEffect(() => {
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {

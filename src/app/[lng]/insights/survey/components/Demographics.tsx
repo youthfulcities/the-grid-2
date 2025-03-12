@@ -33,7 +33,6 @@ const Demographics: React.FC<DemographicProps> = ({
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'WUWWL_survey');
   const containerRef = useRef<HTMLDivElement>(null);
-  console.log(drawerwidth);
   return (
     <>
       <Heading marginTop='xl' level={4} color='font.inverse'>

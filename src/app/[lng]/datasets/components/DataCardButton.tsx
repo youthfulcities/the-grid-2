@@ -1,10 +1,6 @@
-import {
-  Button,
-  useAuthenticator,
-  useTheme,
-  View,
-} from '@aws-amplify/ui-react';
-import { useRouter } from 'next/navigation';
+import Tooltip from '@/app/components/Tooltip';
+import useDownloadFile from '@/hooks/useDownloadFile';
+import { Button, useTheme, View } from '@aws-amplify/ui-react';
 import { useState } from 'react';
 import { IconType } from 'react-icons';
 import {
@@ -21,7 +17,6 @@ import {
   FaWrench,
 } from 'react-icons/fa6';
 import styled from 'styled-components';
-import Tooltip from './Tooltip';
 
 const StyledButton = styled(Button)<{ $background: string; $inverse: string }>`
   justify-content: center;
@@ -75,25 +70,7 @@ const DataCardButton = ({
 }: AppProps) => {
   const { tokens } = useTheme();
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
-  const router = useRouter();
-  const { user } = useAuthenticator((context) => [context.user]);
-
-  const download = async (currentFile: string) => {
-    if (!user) {
-      sessionStorage.setItem('postLoginRedirect', '/datasets');
-      sessionStorage.setItem('fileToDownload', currentFile);
-      router.push('/authentication');
-      return;
-    }
-
-    try {
-      const getUrlResult: { url: URL; expiresAt: Date } | null =
-        await fetchUrl(currentFile);
-      window.open(getUrlResult?.url.href);
-    } catch (error) {
-      console.error('Error downloading file:', error);
-    }
-  };
+  const { downloadFile } = useDownloadFile();
 
   // Define a mapping from type to icon component
   const typeToIconMap: { [key: string]: IconType } = {
@@ -115,7 +92,7 @@ const DataCardButton = ({
   const Icon = checkType(type);
 
   return (
-    <>
+    <div>
       {type === 'link' ? (
         <StyledLink href={link} target='_blank'>
           <TooltipWrapper>
@@ -144,8 +121,7 @@ const DataCardButton = ({
             <StyledButton
               $background={getColor(index).button}
               $inverse={getColor(index).buttonInverse}
-              variation='primary'
-              onClick={() => download(file || '')}
+              onClick={() => downloadFile(file || '')}
               onMouseEnter={() => setShowTooltip(true)}
               onMouseLeave={() => setShowTooltip(false)}
               onFocus={() => setShowTooltip(true)}
@@ -156,7 +132,7 @@ const DataCardButton = ({
           </Tooltip>
         </TooltipWrapper>
       )}
-    </>
+    </div>
   );
 };
 

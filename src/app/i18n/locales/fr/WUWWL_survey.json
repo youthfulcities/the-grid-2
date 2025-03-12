@@ -39,5 +39,8 @@
   "button_png": "Télécharger au format PNG",
   "demo_economic_desc": "Le groupe « Priorité économique » est composé de jeunes qui pensent que l'amélioration des villes canadiennes passe par l'abordabilité, la création de bons emplois pour les jeunes, la croissance de l'économie locale, la santé mentale et les transports.",
   "demo_social_desc": "Le groupe « Bien social » comprend les jeunes qui ont désigné l'abordabilité, la santé mentale, la culture autochtone, la vérité et la réconciliation, et le changement climatique comme étant les principaux domaines d'intervention pour améliorer la performance des villes canadiennes à l'échelle du pays.",
-  "demo_forming_desc": "Le groupe « Se forger une opinion » comprend les jeunes qui croient que l'abordabilité est le facteur le plus important pour améliorer la performance des villes canadiennes à l'échelle nationale. Le groupe n'a pas d'opinion définitive sur l'importance relative des autres sujets."
+  "demo_forming_desc": "Le groupe « Se forger une opinion » comprend les jeunes qui croient que l'abordabilité est le facteur le plus important pour améliorer la performance des villes canadiennes à l'échelle nationale. Le groupe n'a pas d'opinion définitive sur l'importance relative des autres sujets.",
+  "download_title": "Télécharger les données brutes",
+  "download_desc": "Créez un compte ou connectez-vous pour télécharger l'ensemble des données.",
+  "download_button": "Télécharger"
 }

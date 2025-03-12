@@ -468,6 +468,17 @@ Quirks:
 
 Most mocks for SSR and hooks are global and found in `setupTests.js`. However, the `amplifyconfiguration.json` mock does not work unless it's imported into each test file that calls it. It will work in your local environment but not in a virutal environment since the `amplifyconfiguration.json` is not commited to source control. Using a relative path for this file does not work.
 
+## Gotchas
+
+If you get an error like this:
+
+```
+./node_modules/@aws-amplify/ui-react-core/dist/esm/components/FormCore/FormProvider.mjs
+Attempted import error: 'useForm' is not exported from 'react-hook-form' (imported as 'useForm').
+```
+
+It probably means your component needs `'use client'` at the top.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

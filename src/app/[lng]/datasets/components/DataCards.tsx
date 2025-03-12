@@ -1,6 +1,8 @@
+import CardAccordion from '@/app/components/CardAccordion';
 import useTranslation from '@/app/i18n/client';
 import datasetCards from '@/data/dataset-cards.json';
 import useDimension from '@/hooks/useDimensions';
+import useDownloadFile from '@/hooks/useDownloadFile';
 import {
   Button,
   Card,
@@ -11,11 +13,10 @@ import {
   useTheme,
 } from '@aws-amplify/ui-react';
 import _ from 'lodash';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-import CardAccordion from './CardAccordion';
 import DataCardButton from './DataCardButton';
 
 interface Download {
@@ -105,7 +106,7 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
   const { tokens } = useTheme();
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'datasets');
-  const router = useRouter();
+  const { downloadFile } = useDownloadFile();
 
   const sortedDatasetCards = _.orderBy(
     datasetCards.datasetCards,
@@ -186,10 +187,6 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
     }
   };
 
-  const handleRequestMoreData = () => {
-    router.push(`/contact`);
-  };
-
   const containerRef = useRef<HTMLDivElement>(null);
   const { width, height } = useDimension(containerRef);
 
@@ -264,7 +261,7 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
           $inverse={getColor(index).button}
           $fullWidth={!hasAdditionalButtons}
           onClick={() =>
-            handleDownload((lng === 'fr' && card.filefr) || card.file)
+            downloadFile((lng === 'fr' && card.filefr) || card.file || '')
           }
         >
           Download File

@@ -39,5 +39,8 @@
   "demo_ability": "[Dis]Ability",
   "demo_economic_desc": "The “Economic focus” cluster represents young people who identify affordability, good youth jobs, local economic growth, mental health and transportation as the key areas of focus to improve the performance of Canadian cities nationwide.",
   "demo_social_desc": "The “Social good” cluster represents young people who identified affordability, mental health, Indigenous culture, truth & reconciliation, and climate change as the key areas of focus to improve the performance of Canadian cities nationwide.",
-  "demo_forming_desc": "The “Forming opinions” cluster represents young people who felt that affordability is the single most important focus to improve the performance of Canadian cities nationwide. They do not currently have strong opinions on the relative importance of the remaining topics."
+  "demo_forming_desc": "The “Forming opinions” cluster represents young people who felt that affordability is the single most important focus to improve the performance of Canadian cities nationwide. They do not currently have strong opinions on the relative importance of the remaining topics.",
+  "download_title": "Download Raw Data",
+  "download_desc": "Create an account or sign in to download the dataset.",
+  "download_button": "Download"
 }

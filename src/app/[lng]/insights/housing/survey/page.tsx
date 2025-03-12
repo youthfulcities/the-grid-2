@@ -2,7 +2,7 @@
 
 import { useHousingSurvey } from '@/app/[lng]/insights/housing/survey/context/HousingSurveyContext';
 import Background from '@/app/components/Background';
-import CrosslinkCard from '@/app/components/CrosslinkCard';
+import CrosslinkCards from '@/app/components/CrosslinkCards';
 import BarChart from '@/app/components/dataviz/BarChartJSON';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import useTranslation from '@/app/i18n/client';
@@ -12,7 +12,6 @@ import useFilteredPosts from '@/hooks/useFilteredPosts';
 import fetchData from '@/lib/fetchData';
 import {
   Button,
-  Grid,
   Heading,
   SelectField,
   Text,
@@ -131,6 +130,7 @@ const HousingSurvey = () => {
   const activeFile = 'survey_results_processed_weighted.json';
   const path = 'internal/HOM/survey/quant';
   const filename = 'YC Housing Survey Analysis Totals.csv';
+  const { downloadFile } = useDownloadFile();
 
   useEffect(() => {
     const loadData = async () => {
@@ -548,26 +548,7 @@ const HousingSurvey = () => {
           >
             {t('stories_heading')}
           </Heading>
-          <Grid
-            columnGap='small'
-            rowGap='small'
-            templateColumns={{
-              base: '1fr',
-              medium: '1fr 1fr',
-              xl: '1fr 1fr 1fr fr',
-            }}
-          >
-            {posts?.length > 0 &&
-              posts.map((post) => (
-                <CrosslinkCard
-                  key={post?.id}
-                  heading={post?.title?.rendered}
-                  link={post?.link}
-                  src={post?.yoast_head_json?.og_image[0].url}
-                  alt={post?.yoast_head_json?.og_description}
-                />
-              ))}
-          </Grid>
+          {posts.length > 0 && <CrosslinkCards posts={posts} />}
           <Heading
             level={4}
             color='secondary.60'
@@ -593,7 +574,7 @@ const HousingSurvey = () => {
             Download Raw Data
           </Heading>
           <Text>Create an account or sign in to download the dataset.</Text>
-          <Button variation='primary' onClick={useDownloadFile(filename)}>
+          <Button variation='primary' onClick={() => downloadFile(filename)}>
             Download
           </Button>
           <Heading

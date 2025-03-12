@@ -158,8 +158,6 @@ const Drawer: React.FC<DrawerProps> = ({
     };
   }, [isopen]);
 
-  console.log(width, maxWidth);
-
   return (
     <>
       {!noOverlay && (

@@ -18,14 +18,14 @@ const AccordionContent = styled(motion.div)<{
   padding: boolean;
 }>`
   overflow: hidden;
-  ${(props) => props.padding && `padding: var(--amplify-space-large);`}
+  padding: 0 var(--amplify-space-large);
   ${(props) =>
     props.border &&
     `
   border-width: var(--amplify-border-widths-small);
   border-color: var(--amplify-colors-brand-primary-60);
   border-style: solid;
-  border - top: 0;`}
+  border-top: 0;`}
 `;
 
 const CustomizeButton = styled(Button)<{ border: boolean }>`
@@ -80,12 +80,20 @@ const Accordion: React.FC<AccordionProps> = ({
             padding={padding}
             border={border}
             key='content'
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
+            initial={{
+              height: 0,
+              opacity: 1,
+            }}
+            animate={{
+              height: 'auto',
+              opacity: 1,
+            }}
+            exit={{
+              height: 0,
+              opacity: 1,
+            }}
             transition={{
               height: { duration: 0.5, ease: 'easeInOut' },
-              opacity: { duration: 0.5, ease: 'easeInOut' },
             }}
             isAnimating={isAnimating}
             onAnimationStart={() => setIsAnimating(true)}

@@ -8,12 +8,14 @@ import Script from 'next/script';
 import React from 'react';
 // import config from '../../amplifyconfiguration.json';
 import StyledComponentsRegistry from '../../lib/registry';
+import { LoadingProvider } from '../context/LoadingContext';
 import { ThemeProvider } from '../context/ThemeContext';
 import { languages } from '../i18n/settings';
 import AWSThemeProvider from './aws-theme-provider';
 import AutheticatorProvider from './components/AuthenticatorProvider';
 import Banner from './components/BetaBanner';
 import Footer from './components/Footer';
+import LoadingBar from './components/LoadingBar';
 import NavBar from './components/NavBar';
 import './global.css';
 
@@ -144,19 +146,22 @@ const RootLayout: React.FC<RootLayoutProps> = ({
           <AutheticatorProvider>
             <ThemeProvider>
               <AWSThemeProvider>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    minHeight: '100vh',
-                    height: '100%',
-                  }}
-                >
-                  <Banner />
-                  <NavBar />
-                  {children}
-                  <Footer />
-                </div>
+                <LoadingProvider>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      minHeight: '100vh',
+                      height: '100%',
+                    }}
+                  >
+                    <Banner />
+                    <LoadingBar />
+                    <NavBar />
+                    {children}
+                    <Footer />
+                  </div>
+                </LoadingProvider>
               </AWSThemeProvider>
             </ThemeProvider>
           </AutheticatorProvider>

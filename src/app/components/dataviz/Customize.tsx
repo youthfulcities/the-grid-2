@@ -40,19 +40,17 @@ const Customize: React.FC<CustomizeProps> = ({
   };
 
   return (
-    <View>
-      <Accordion title={t('customize')}>
-        {allOptions.map((option) => (
-          <StyledCheckbox
-            key={option}
-            name={option}
-            label={option}
-            checked={selectedOptions.includes(option)}
-            onChange={() => toggleOption(option)}
-          />
-        ))}
-      </Accordion>
-    </View>
+    <Accordion title={t('customize')}>
+      {allOptions.map((option) => (
+        <StyledCheckbox
+          key={option}
+          name={option}
+          label={option}
+          checked={selectedOptions.includes(option)}
+          onChange={() => toggleOption(option)}
+        />
+      ))}
+    </Accordion>
   );
 };
 

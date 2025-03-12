@@ -1,29 +1,72 @@
+import { useLoading } from '@/app/context/LoadingContext';
 import fetchUrl from '@/lib/fetchUrl';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-// import config from '../amplifyconfiguration.json';
 
-// Amplify.configure(config);
-
-const useDownloadFile = (filename: string) => {
+const useDownloadFile = () => {
   const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   const router = useRouter();
   const pathname = usePathname();
+  const { setDownloadProgress } = useLoading();
 
   const handleDownload = async (file: string) => {
     try {
-      const getUrlResult = await fetchUrl(file);
+      setDownloadProgress(0);
 
-      if (getUrlResult?.url) {
-        window.open(getUrlResult.url.href, '_blank');
-      } else {
-        console.error('Failed to retrieve URL for the file.');
+      const getUrlResult = await fetchUrl(file);
+      if (!getUrlResult?.url) {
+        throw new Error('Failed to retrieve URL for the file.');
       }
+
+      const response = await fetch(getUrlResult.url.href);
+      if (!response.body) {
+        throw new Error('Response body is null.');
+      }
+
+      const contentLength = response.headers.get('content-length');
+      if (!contentLength) {
+        window.open(getUrlResult.url.href, '_blank');
+        setDownloadProgress(null);
+        return;
+      }
+
+      const totalSize = parseInt(contentLength, 10);
+      let loadedSize = 0;
+
+      const reader = response.body.getReader();
+      const chunks: Uint8Array[] = [];
+
+      const readStream = async () => {
+        const { done, value } = await reader.read();
+        if (done) return;
+
+        chunks.push(value);
+        loadedSize += value.length;
+        setDownloadProgress(Math.round((loadedSize / totalSize) * 100));
+        await readStream();
+      };
+
+      await readStream();
+
+      // Create Blob and trigger download
+      const blob = new Blob(chunks);
+      const blobUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = file;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(blobUrl);
+
+      setDownloadProgress(null);
     } catch (error) {
       console.error('Error downloading file:', error);
+      setDownloadProgress(null);
     }
   };
+
   useEffect(() => {
     if (authStatus === 'authenticated') {
       const storedFilename = sessionStorage.getItem('downloadFilename');
@@ -40,21 +83,19 @@ const useDownloadFile = (filename: string) => {
     }
   }, [authStatus]);
 
-  const downloadFile = () => {
+  const downloadFile = (filename: string) => {
     if (authStatus !== 'authenticated') {
       console.error('User is not authenticated.');
       sessionStorage.setItem('postLoginRedirect', pathname);
       sessionStorage.setItem('downloadFilename', filename);
-
       router.push('/authentication');
       return;
     }
 
-    // Proceed with download for authenticated users
     handleDownload(filename);
   };
 
-  return downloadFile;
+  return { downloadFile };
 };
 
 export default useDownloadFile;

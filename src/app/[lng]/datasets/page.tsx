@@ -1,7 +1,7 @@
 'use client';
 
+import DataCard from '@/app/[lng]/datasets/components/DataCards';
 import Container from '@/app/components/Background';
-import DataCard from '@/app/components/DataCards';
 import useTranslation from '@/app/i18n/client';
 import {
   Flex,

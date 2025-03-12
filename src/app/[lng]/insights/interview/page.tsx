@@ -2,7 +2,7 @@
 
 // import config from '@/amplifyconfiguration.json';
 import Container from '@/app/components/Background';
-import CrosslinkCard from '@/app/components/CrosslinkCard';
+import CrosslinkCards from '@/app/components/CrosslinkCards';
 import BubbleChart from '@/app/components/dataviz/BubbleChart/BubbleChart';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import Drawer from '@/app/components/Drawer';
@@ -14,7 +14,6 @@ import useFilteredPosts from '@/hooks/useFilteredPosts';
 import {
   Button,
   Flex,
-  Grid,
   Heading,
   Loader,
   Tabs,
@@ -86,6 +85,7 @@ const Interview = () => {
   const [visibleQuotes, setVisibleQuotes] = useState<d3.DSVRowString<string>[]>(
     []
   );
+  const { downloadFile } = useDownloadFile();
   const quoteSize = useBreakpointValue({
     base: 90,
     small: 90,
@@ -271,27 +271,7 @@ const Interview = () => {
         <Heading level={4} color='secondary.60' marginBottom='xs'>
           {t('stories_heading')}
         </Heading>
-        {posts?.length > 0 && (
-          <Grid
-            columnGap='small'
-            rowGap='small'
-            templateColumns={{
-              base: '1fr',
-              medium: '1fr 1fr',
-              xl: '1fr 1fr 1fr 1fr',
-            }}
-          >
-            {posts.map((post) => (
-              <CrosslinkCard
-                key={post?.id}
-                heading={post?.title?.rendered}
-                link={post?.link}
-                src={post?.yoast_head_json?.og_image[0].url}
-                alt={post?.yoast_head_json?.og_description}
-              />
-            ))}
-          </Grid>
-        )}
+        {posts?.length > 0 && <CrosslinkCards posts={posts} />}
         <Heading
           level={4}
           color='secondary.60'
@@ -301,7 +281,7 @@ const Interview = () => {
           {t('download')}
         </Heading>
         <Text>{t('download_desc')}</Text>
-        <Button variation='primary' onClick={useDownloadFile(filename)}>
+        <Button variation='primary' onClick={() => downloadFile(filename)}>
           {t('download_button')}
         </Button>
         <Heading

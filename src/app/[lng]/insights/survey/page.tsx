@@ -4,7 +4,7 @@ import Clusters from '@/app/[lng]/insights/survey/components/Clusters';
 import Demographics from '@/app/[lng]/insights/survey/components/Demographics';
 import { useWUWWLSurvey } from '@/app/[lng]/insights/survey/context/WUWWLSurveyContext';
 import Container from '@/app/components/Background';
-import CrosslinkCard from '@/app/components/CrosslinkCard';
+import CrosslinkCards from '@/app/components/CrosslinkCards';
 import Drawer from '@/app/components/Drawer';
 import BarChart from '@/app/components/dataviz/BarChartGeneral';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
@@ -15,7 +15,6 @@ import useFilteredPosts from '@/hooks/useFilteredPosts';
 import fetchData from '@/lib/fetchData';
 import {
   Button,
-  Grid,
   Heading,
   Placeholder,
   SelectField,
@@ -147,6 +146,8 @@ const Survey: React.FC = () => {
 
   const activeFile = 'WUWWL_Full_National_ONLY - Questions.csv';
   const path = 'internal/DEV/survey';
+
+  const { downloadFile } = useDownloadFile();
 
   useEffect(() => {
     setCurrentCluster(t('cluster_all'));
@@ -381,27 +382,7 @@ const Survey: React.FC = () => {
         >
           {t('stories_title')}
         </Heading>
-        {posts?.length > 0 && (
-          <Grid
-            columnGap='small'
-            rowGap='small'
-            templateColumns={{
-              base: '1fr',
-              medium: '1fr 1fr',
-              xl: '1fr 1fr 1fr fr',
-            }}
-          >
-            {posts.map((post) => (
-              <CrosslinkCard
-                key={post?.id}
-                heading={post?.title?.rendered}
-                link={post?.link}
-                src={post?.yoast_head_json?.og_image[0].url}
-                alt={post?.yoast_head_json?.og_description}
-              />
-            ))}
-          </Grid>
-        )}
+        {posts?.length > 0 && <CrosslinkCards posts={posts} />}
         <Heading
           level={4}
           color='secondary.60'
@@ -411,7 +392,7 @@ const Survey: React.FC = () => {
           {t('download')}
         </Heading>
         <Text>{t('download_desc')}</Text>
-        <Button variation='primary' onClick={useDownloadFile(activeFile)}>
+        <Button variation='primary' onClick={() => downloadFile(activeFile)}>
           {t('download_button')}
         </Button>
         <Heading level={2} marginTop='xxxl'>

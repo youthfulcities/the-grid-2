@@ -2,7 +2,7 @@
   "cards": [
     {
       "title": "What's up with work lately?",
-      "titlefr": "Quoi de neuf au travail, dernièrement?",
+      "titlefr": "Que se passe-t-il au travail ces temps-ci?",
       "dataset": "Youth Cite",
       "datasetfr": "Cite Jeunesse",
       "date": "April 2024",
@@ -15,13 +15,13 @@
     },
     {
       "title": "What's up with work lately?",
-      "titlefr": "Quoi de neuf au travail, dernièrement?",
+      "titlefr": "Que se passe-t-il au travail ces temps-ci?",
       "dataset": "Youth Chart",
       "datasetfr": "Tableau jeunesse",
       "date": "April 2024",
       "datefr": "avril 2024",
       "desc": "Findings from the What's up with work lately? survey performed by Youthful Cities as part of the DEVlab project.",
-      "descfr": "Résultats de l'enquête « Quoi de neuf au travail, dernièrement ? » réalisée par Youthful Cities dans le cadre du projet DEVlab.",
+      "descfr": "Résultats de l'enquête « Que se passe-t-il au travail ces temps-ci? » réalisée par Youthful Cities dans le cadre du projet DEVlab.",
       "link": "/insights/survey",
       "priority": 1
     },

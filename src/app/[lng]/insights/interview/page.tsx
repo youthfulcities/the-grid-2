@@ -1,6 +1,6 @@
 'use client';
 
-import config from '@/amplifyconfiguration.json';
+// import config from '@/amplifyconfiguration.json';
 import Container from '@/app/components/Background';
 import CrosslinkCard from '@/app/components/CrosslinkCard';
 import BubbleChart from '@/app/components/dataviz/BubbleChart/BubbleChart';
@@ -22,7 +22,6 @@ import {
   View,
   useBreakpointValue,
 } from '@aws-amplify/ui-react';
-import { Amplify } from 'aws-amplify';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import Link from 'next/link';
@@ -30,7 +29,7 @@ import { useParams } from 'next/navigation';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
 
-Amplify.configure(config);
+// Amplify.configure(config);
 
 const colors = ['red', 'green', 'yellow', 'pink', 'blue'];
 const filename = 'DEV_WUWWL_2024_Full_National.xlsx';
@@ -272,18 +271,17 @@ const Interview = () => {
         <Heading level={4} color='secondary.60' marginBottom='xs'>
           {t('stories_heading')}
         </Heading>
-        <Grid
-          columnGap='small'
-          rowGap='small'
-          templateColumns={{
-            base: '1fr',
-            medium: '1fr 1fr',
-            large: '1fr 1fr 1fr 1fr',
-            xl: '1fr 1fr 1fr 1fr',
-          }}
-        >
-          {posts?.length > 0 &&
-            posts.map((post) => (
+        {posts?.length > 0 && (
+          <Grid
+            columnGap='small'
+            rowGap='small'
+            templateColumns={{
+              base: '1fr',
+              medium: '1fr 1fr',
+              xl: '1fr 1fr 1fr 1fr',
+            }}
+          >
+            {posts.map((post) => (
               <CrosslinkCard
                 key={post?.id}
                 heading={post?.title?.rendered}
@@ -292,7 +290,8 @@ const Interview = () => {
                 alt={post?.yoast_head_json?.og_description}
               />
             ))}
-        </Grid>
+          </Grid>
+        )}
         <Heading
           level={4}
           color='secondary.60'
@@ -345,7 +344,6 @@ const Interview = () => {
           setIsDrawerOpen(false);
         }}
         tabText={t('drawer_tab')}
-        maxWidth={quoteSize as number}
       >
         {visibleQuotes.length > 0 ? (
           <Flex direction='column' paddingTop='xxl' paddingBottom='xxl'>

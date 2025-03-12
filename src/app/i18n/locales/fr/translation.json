@@ -23,5 +23,8 @@
   "login": "Connexion",
   "login_info": "Accédez au chatbot et téléchargez des ensembles de données avec un compte gratuit. La création d'un compte nous aide à améliorer l'outil et à faire en sorte que le Labo Data Jeunesse reste gratuit pour tous. En créant un compte, vous acceptez que nous utilisions vos données pour améliorer la plateforme (<a>conditions générales complètes</a>)..",
   "download_png": "Télécharger au format PNG",
-  "blog_button": "Lire l'article du blog"
+  "blog_button": "Lire l'article du blog",
+  "percent": "Pourcentage",
+  "select_other": "Autres",
+  "customize": "Personnaliser le graphique"
 }

@@ -2,11 +2,11 @@
   "datasetCards": [
     {
       "title": "What’s up with work lately? — Survey",
-      "titlefr": "Quoi de neuf au travail, dernièrement? - Enquête",
+      "titlefr": "Que se passe-t-il au travail ces temps-ci? - Enquête",
       "date": "2024",
       "type": "survey",
       "desc": "Download aggregated responses from the What's up with work lately? survey run in April 2024.It covers themes of work preferences, education, and the impact of the COVID-19 pandemic.",
-      "descfr": "Téléchargez les réponses agrégées de l'enquête What's up with work lately ? menée en avril 2024, qui couvre les thèmes des préférences professionnelles, de l'éducation et de l'impact de la pandémie de COVID-19.",
+      "descfr": "Téléchargez les réponses agrégées de l'enquête « Que se passe-t-il au travail ces temps-ci? » menée en avril 2024, qui couvre les thèmes des préférences professionnelles, de l'éducation et de l'impact de la pandémie de COVID-19.",
       "className": "image-card-youth-employment",
       "file": "DEV_WUWWL_2024_Full_National.xlsx",
       "link": "https://youthdatalab.youthfulcities.com/en/insights/survey",
@@ -14,7 +14,7 @@
     },
     {
       "title": "What’s up with work lately? — Interview excerpts",
-      "titlefr": "Quoi de neuf au travail, dernièrement? - Extraits d'interviews",
+      "titlefr": "Que se passe-t-il au travail ces temps-ci? - Extraits d'interviews",
       "date": "2024",
       "type": "interview",
       "desc": "Download thematic coded excerpts from 11,000 minutes of interviews we conducted as part of the DEVLab project. It covers themes of work preferences, education, and the impact of the COVID-19 pandemic.",

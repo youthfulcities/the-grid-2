@@ -1,10 +1,10 @@
 'use client';
 
+import useTranslation from '@/app/i18n/client';
 import { Alert, Button, Flex, Loader, TextField } from '@aws-amplify/ui-react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import useTranslation from '../i18n/client';
 
 interface NewsletterProps {
   lng: string;

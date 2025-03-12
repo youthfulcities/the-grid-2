@@ -1,9 +1,8 @@
-import config from '@/amplifyconfiguration.json';
-import { Amplify } from 'aws-amplify';
+// import config from '@/amplifyconfiguration.json';
 import axios from 'axios'; // Import Axios
 import { useEffect, useState } from 'react';
 
-Amplify.configure(config);
+// Amplify.configure(config);
 
 const MyComponent = () => {
   const [data, setData] = useState(null);

@@ -1,18 +1,20 @@
 'use client';
 
+import Clusters from '@/app/[lng]/insights/survey/components/Clusters';
+import Demographics from '@/app/[lng]/insights/survey/components/Demographics';
+import { useWUWWLSurvey } from '@/app/[lng]/insights/survey/context/WUWWLSurveyContext';
 import Container from '@/app/components/Background';
 import CrosslinkCard from '@/app/components/CrosslinkCard';
 import Drawer from '@/app/components/Drawer';
 import BarChart from '@/app/components/dataviz/BarChartGeneral';
-import Clusters from '@/app/components/dataviz/Clusters';
-import Demographics from '@/app/components/dataviz/Demographics';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
-import { useWUWWLSurvey } from '@/app/context/WUWWLSurveyContext';
 import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
+import useDownloadFile from '@/hooks/useDownloadFile';
 import useFilteredPosts from '@/hooks/useFilteredPosts';
 import fetchData from '@/lib/fetchData';
 import {
+  Button,
   Grid,
   Heading,
   Placeholder,
@@ -23,17 +25,17 @@ import {
   useBreakpointValue,
   View,
 } from '@aws-amplify/ui-react';
-import { Amplify } from 'aws-amplify';
 import * as d3 from 'd3';
 import _ from 'lodash';
 import { useParams } from 'next/navigation';
 import { ReactNode, useEffect, useRef, useState } from 'react';
+import { Trans } from 'react-i18next/TransWithoutContext';
 import styled from 'styled-components';
-import config from '../../../../amplifyconfiguration.json';
+// import config from '../../../../amplifyconfiguration.json';
 
-Amplify.configure(config, {
-  ssr: true,
-});
+// Amplify.configure(config, {
+//   ssr: true,
+// });
 
 interface DataItem {
   option_en: string;
@@ -46,19 +48,6 @@ interface DataItem {
 type SurveyData = DataItem[] | null;
 
 type QuestionRange = { start: number; end: number };
-
-const clusterMap: {
-  'Social good focus': string;
-  'Forming opinions': string;
-  'Economic focus': string;
-  All: string;
-  [key: string]: string; // Index signature
-} = {
-  'Social good focus': 'social',
-  'Forming opinions': 'forming',
-  'Economic focus': 'affordability',
-  All: 'all',
-};
 
 const StyledSelect = styled(SelectField)`
   select: {
@@ -77,12 +66,6 @@ const StyledToggleButton = styled(ToggleButton)`
     border-color: var(--amplify-colors-secondary-60);
   }
 `;
-
-// Function to get key from value
-const getKeyFromValue = (value: string): string | null => {
-  const entry = Object.entries(clusterMap).find(([key, val]) => val === value);
-  return entry ? entry[0] : null; // Return the key if found, otherwise null
-};
 
 const questionRanges: Record<string, QuestionRange[]> = {
   future: [
@@ -122,17 +105,15 @@ const Survey: React.FC = () => {
     setData,
     currentQuestion,
     setCurrentQuestion,
-    currentSegment,
-    setCurrentSegment,
     currentTopic,
     setCurrentTopic,
   } = useWUWWLSurvey();
   const { lng } = useParams<{ lng: string }>();
-  const { t } = useTranslation(lng, 'housing');
+  const { t } = useTranslation(lng, 'WUWWL_survey');
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
   const { width } = useDimensions(containerRef);
-  const [currentCluster, setCurrentCluster] = useState('all');
+  const [currentCluster, setCurrentCluster] = useState(t('cluster_all'));
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const [tooltipState, setTooltipState] = useState<{
@@ -154,7 +135,6 @@ const Survey: React.FC = () => {
     minWidth: 0,
   });
   const [questions, setQuestions] = useState<string[]>([]);
-  const [segments, setSegments] = useState<string[]>([]);
   const [currentData, setCurrentData] = useState<SurveyData>(null);
   const posts = useFilteredPosts(47, lng);
 
@@ -167,6 +147,10 @@ const Survey: React.FC = () => {
 
   const activeFile = 'WUWWL_Full_National_ONLY - Questions.csv';
   const path = 'internal/DEV/survey';
+
+  useEffect(() => {
+    setCurrentCluster(t('cluster_all'));
+  }, [lng]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -258,22 +242,22 @@ const Survey: React.FC = () => {
     <Container>
       <View className='container padding'>
         <Heading level={1}>
-          What’s up with <span className='highlight'>work lately?</span>
+          <Trans
+            t={t}
+            i18nKey='title'
+            components={{ span: <span className='highlight' /> }}
+          />
         </Heading>
         <View className='inner-container'>
           <Heading level={3} marginBottom='xl'>
-            Youth Chart
+            {t('subtitle')}
           </Heading>
         </View>
-        <Text marginBottom='xl'>
-          Discover how young people view their work-life dynamics, their
-          employability, the resources provided by their cities, and the skills
-          needed to succeed in the current and future job markets.
-        </Text>
+        <Text marginBottom='xl'>{t('desc')}</Text>
         <div ref={containerRef} data-testid='survey-container'>
           {data ? (
             <>
-              <Text marginBottom='0'>Select a topic</Text>
+              <Text marginBottom='0'>{t('select_title')}</Text>
               <ToggleButtonGroup
                 direction={ismobile ? 'column' : 'row'}
                 alignItems='stretch'
@@ -288,36 +272,36 @@ const Survey: React.FC = () => {
                   marginLeft={ismobile ? '-3px' : '0'}
                   value='future'
                 >
-                  Paving the way for the future of work in cities
+                  {t('select_future')}
                 </StyledToggleButton>
                 <StyledToggleButton
                   isDisabled={currentTopic === 'pandemic'}
                   value='pandemic'
                 >
-                  Engaging with post-pandemic work ecosystems
+                  {t('select_pandemic')}
                 </StyledToggleButton>
                 <StyledToggleButton
                   isDisabled={currentTopic === 'org'}
                   value='org'
                 >
-                  Envisioning an ideal organization
+                  {t('select_org')}
                 </StyledToggleButton>
                 <StyledToggleButton
                   isDisabled={currentTopic === 'transition'}
                   value='transition'
                 >
-                  Navigating the transition from education to work
+                  {t('select_trans')}
                 </StyledToggleButton>
                 <StyledToggleButton
                   isDisabled={currentTopic === 'other'}
                   value='other'
                 >
-                  Other
+                  {t('select_other')}
                 </StyledToggleButton>
               </ToggleButtonGroup>
               <StyledSelect
                 marginBottom='large'
-                label='Select a question'
+                label={t('select_question')}
                 color='font.inverse'
                 value={currentQuestion}
                 onChange={(e) => setCurrentQuestion(e.target.value)}
@@ -379,13 +363,11 @@ const Survey: React.FC = () => {
           )}
         </div>
         <Heading level={2} marginTop='xxxl'>
-          Dig Deeper
+          {t('deeper_title')}
         </Heading>
         <Clusters
-          getKeyFromValue={getKeyFromValue}
           currentCluster={currentCluster}
           setCurrentCluster={setCurrentCluster}
-          clusterMap={clusterMap}
           isDrawerOpen={isDrawerOpen}
           setIsDrawerOpen={setIsDrawerOpen}
           tooltipState={tooltipState}
@@ -397,19 +379,19 @@ const Survey: React.FC = () => {
           marginBottom='xs'
           marginTop='xl'
         >
-          Data Stories
+          {t('stories_title')}
         </Heading>
-        <Grid
-          columnGap='small'
-          rowGap='small'
-          templateColumns={{
-            base: '1fr',
-            medium: '1fr 1fr',
-            xl: '1fr 1fr 1fr fr',
-          }}
-        >
-          {posts?.length > 0 &&
-            posts.map((post) => (
+        {posts?.length > 0 && (
+          <Grid
+            columnGap='small'
+            rowGap='small'
+            templateColumns={{
+              base: '1fr',
+              medium: '1fr 1fr',
+              xl: '1fr 1fr 1fr fr',
+            }}
+          >
+            {posts.map((post) => (
               <CrosslinkCard
                 key={post?.id}
                 heading={post?.title?.rendered}
@@ -418,72 +400,44 @@ const Survey: React.FC = () => {
                 alt={post?.yoast_head_json?.og_description}
               />
             ))}
-        </Grid>
+          </Grid>
+        )}
+        <Heading
+          level={4}
+          color='secondary.60'
+          marginTop='xxl'
+          marginBottom='xs'
+        >
+          {t('download')}
+        </Heading>
+        <Text>{t('download_desc')}</Text>
+        <Button variation='primary' onClick={useDownloadFile(activeFile)}>
+          {t('download_button')}
+        </Button>
         <Heading level={2} marginTop='xxxl'>
-          Methodology
+          {t('method_title')}
         </Heading>
-        <Text marginBottom='xl'>
-          The bilingual survey investigated how Canada&apos;s youth workforce
-          and work ecosystems changed after the COVID-19 pandemic. The primary
-          objective of this survey was to collect insights from youth
-          nationally, to support the development of evidence-based solutions
-          focused on improving community-specific pathways towards skills
-          development and meaningful employment. It was designed in
-          collaboration with policy experts and local actors to ensure that the
-          questions were relevant and aligned with the project&apos;s goals. The
-          Equity, Diversity, Inclusivity, Justice and Reconciliation team
-          (EDIJR) at Tamarack Institute validated the survey design. It ensured
-          the content was inclusive and suitable for youth of different
-          identities and lived experiences.
-        </Text>
+        <Text marginBottom='xl'>{t('method_p1')}</Text>
         <Heading level={3} color='secondary.60'>
-          Sampling Design
+          {t('method_sample')}
         </Heading>
-        <Text marginBottom='xl'>
-          The survey targeted a representative sample of young people aged 16 to
-          30, reaching 1626 respondents across Canada. The sampling frame was
-          designed based on Statistics Canada Census 2021 data. Respondents were
-          identified using voluntary sampling through promotion on the Youthful
-          Cities and Tamarack Institute media channels. To align with the values
-          and scope of the DEVlab project, the sample focused on eight
-          cities—Toronto, Vancouver, Montreal, Calgary, Regina, Moncton,
-          Yellowknife, and Whitehorse—where solutions based on the findings were
-          implemented. Furthermore, the survey design prioritized increasing the
-          representation of equity-deserving groups within the sample.
-        </Text>
+        <Text marginBottom='xl'>{t('method_sample_p1')}</Text>
         <Heading level={3} color='secondary.60'>
-          Data Collection
+          {t('method_collection')}
         </Heading>
-        <Text marginBottom='xl'>
-          The survey was in the field between November 2023 and May 2024,
-          exclusively through online collection. It was hosted on Typeform, a
-          common data collection platform. The data collected through Typeform
-          is protected by leading Canadian and international cybersecurity and
-          data protection standards. While the survey was in the field, Youthful
-          Cities purchased a panel sample, totalling 1090 respondents
-          (pre-exclusion and data cleaning), from CICIC research, a Canadian,
-          Dynata-affiliated and ESOMAR-recognized market research organization.
-          The survey complied with ethical guidelines for research involving
-          human participants. All participants were provided with an informed
-          consent form detailing the purpose of the study, the voluntary nature
-          of participation, and assurances of anonymity and confidentiality.
-          Respondents were informed of their right to withdraw from the survey
-          at any point without penalty, and the data collection process was
-          designed to minimize any potential discomfort or risk to participants.
-        </Text>
+        <Text marginBottom='xl'>{t('method_collection_p1')}</Text>
       </View>
       <Drawer
         isopen={isDrawerOpen}
         onOpen={() => setIsDrawerOpen(true)}
         onClose={() => {
           setIsDrawerOpen(false);
-          setCurrentCluster('all');
+          setCurrentCluster(t('cluster_all'));
         }}
-        tabText='Demographics'
+        tabText={t('demo_tab')}
       >
         <Demographics
           currentCluster={currentCluster}
-          currentClusterName={getKeyFromValue(currentCluster)}
           tooltipState={tooltipState}
           setTooltipState={setTooltipState}
         />

@@ -2,16 +2,16 @@
 
 import { Authenticator, Flex, Text, View } from '@aws-amplify/ui-react';
 
-import config from '@/amplifyconfiguration.json';
-import RedirectAfterAuth from '@/app/components/RedirectAfterAuth';
-import { Amplify } from 'aws-amplify';
-import Container from '../../components/Background';
+// import config from '@/amplifyconfiguration.json';
+import Container from '@/app/components/Background';
+// import { Amplify } from 'aws-amplify';
 import '../global.css';
 
+import useTranslation from '@/app/i18n/client';
 import { useParams } from 'next/navigation';
 import { Trans } from 'react-i18next/TransWithoutContext';
-import useTranslation from '../../i18n/client';
-Amplify.configure(config);
+import RedirectAfterAuth from './components/RedirectAfterAuth';
+// Amplify.configure(config);
 
 const Auth = () => {
   const { lng } = useParams<{ lng: string }>();
@@ -33,12 +33,11 @@ const Auth = () => {
           <Authenticator>
             {({ signOut }) => (
               <button type='submit' onClick={signOut}>
-                Sign out
+                {t('logout')}
               </button>
             )}
           </Authenticator>
           <RedirectAfterAuth />
-          {/* This will handle the redirect after login */}
         </Flex>
       </View>
     </Container>

@@ -1,4 +1,4 @@
-import { WUWWLSurveyProvider } from '@/app/context/WUWWLSurveyContext';
+import { WUWWLSurveyProvider } from '@/app/[lng]/insights/survey/context/WUWWLSurveyContext';
 import WUWWLSurvey from './page';
 
 const Survey = () => (

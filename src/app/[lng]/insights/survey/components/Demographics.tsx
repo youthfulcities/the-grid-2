@@ -1,8 +1,10 @@
 'use client';
 
+import useTranslation from '@/app/i18n/client';
 import { Flex, Heading, Text } from '@aws-amplify/ui-react';
-import React, { useRef, ReactNode } from 'react';
-import Pie from './Pie';
+import { useParams } from 'next/navigation';
+import React, { ReactNode, useRef } from 'react';
+import Pie from '../../../../components/dataviz/Pie';
 
 interface TooltipState {
   position: { x: number; y: number } | null;
@@ -17,7 +19,6 @@ interface TooltipState {
 
 interface DemographicProps {
   currentCluster: string;
-  currentClusterName: string | null;
   drawerwidth?: number;
   tooltipState: TooltipState;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
@@ -25,40 +26,39 @@ interface DemographicProps {
 
 const Demographics: React.FC<DemographicProps> = ({
   currentCluster,
-  currentClusterName,
   drawerwidth,
   tooltipState,
   setTooltipState,
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'WUWWL_survey');
   const containerRef = useRef<HTMLDivElement>(null);
+  console.log(drawerwidth);
   return (
     <>
       <Heading marginTop='xl' level={4} color='font.inverse'>
-        Demographic breakdown
+        {t('demo_title')}
       </Heading>
-      <Text marginBottom='xl'>Current cluster: {currentClusterName}</Text>
-      {currentCluster === 'affordability' && (
+      <Text
+        marginBottom='xl'
+        dangerouslySetInnerHTML={{
+          __html: t('demo_cluster', { value: currentCluster }),
+        }}
+      />
+
+      {currentCluster === t('cluster_economic') && (
         <Text fontSize='small' marginBottom='xl'>
-          The “Economic focus” cluster represents young people who identify
-          affordability, good youth jobs, local economic growth, mental health
-          and transportation as the key areas of focus to improve the
-          performance of Canadian cities nationwide.
+          {t('demo_economic_desc')}
         </Text>
       )}
-      {currentCluster === 'social' && (
+      {currentCluster === t('cluster_social') && (
         <Text fontSize='small' marginBottom='xl'>
-          The “Social good” cluster represents young people who identified
-          affordability, mental health, Indigenous culture, truth &
-          reconciliation, and climate change as the key areas of focus to
-          improve the performance of Canadian cities nationwide.
+          {t('demo_social_desc')}
         </Text>
       )}
-      {currentCluster === 'forming' && (
+      {currentCluster === t('cluster_forming') && (
         <Text fontSize='small' marginBottom='xl'>
-          The “Forming opinions” cluster represents young people who felt that
-          affordability is the single most important focus to improve the
-          performance of Canadian cities nationwide. They do not currently have
-          strong opinions on the relative importance of the remaining topics.
+          {t('demo_forming_desc')}
         </Text>
       )}
       <Flex
@@ -72,7 +72,7 @@ const Demographics: React.FC<DemographicProps> = ({
         <Pie
           width={drawerwidth}
           type='gender'
-          title='Gender'
+          title={t('demo_gender')}
           cluster={currentCluster}
           containerRef={containerRef}
           tooltipState={tooltipState}
@@ -81,7 +81,7 @@ const Demographics: React.FC<DemographicProps> = ({
         <Pie
           width={drawerwidth}
           type='status'
-          title='Citizenship Status'
+          title={t('demo_citizen')}
           cluster={currentCluster}
           containerRef={containerRef}
           tooltipState={tooltipState}
@@ -91,7 +91,7 @@ const Demographics: React.FC<DemographicProps> = ({
           width={drawerwidth}
           type='disability'
           cluster={currentCluster}
-          title='Ability'
+          title={t('demo_ability')}
           containerRef={containerRef}
           tooltipState={tooltipState}
           setTooltipState={setTooltipState}

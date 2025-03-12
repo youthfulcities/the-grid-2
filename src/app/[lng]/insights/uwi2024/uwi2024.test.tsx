@@ -26,7 +26,7 @@ jest.mock('@/app/components/dataviz/Map', () => () => (
   <div>Mocked CustomMap</div>
 ));
 
-jest.mock('@/app/components/dataviz/IndexHeatmap', () => {
+jest.mock('./components/IndexHeatmap', () => {
   return ({ setTooltipState }: IndexHeatmapProps) => (
     <div
       onMouseEnter={() =>
@@ -49,7 +49,7 @@ describe('Index Component', () => {
   test('renders Index component with headings and map', () => {
     render(<Index />);
 
-    expect(screen.getByText(/title/i)).toBeInTheDocument();
+    expect(screen.getByText('title')).toBeInTheDocument();
     expect(screen.getByText(/map_heading/i)).toBeInTheDocument();
     expect(screen.getByText('Mocked CustomMap')).toBeInTheDocument();
   });

@@ -1,20 +1,20 @@
 import '@aws-amplify/ui-react/styles.css';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
-import { Amplify } from 'aws-amplify';
+// import { Amplify } from 'aws-amplify';
 import { configureAutoTrack } from 'aws-amplify/analytics';
 import { dir } from 'console';
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import React from 'react';
-import config from '../../amplifyconfiguration.json';
+// import config from '../../amplifyconfiguration.json';
 import StyledComponentsRegistry from '../../lib/registry';
-import AutheticatorProvider from '../components/AuthenticatorProvider';
-import Banner from '../components/BetaBanner';
-import Footer from '../components/Footer';
-import NavBar from '../components/NavBar';
 import { ThemeProvider } from '../context/ThemeContext';
 import { languages } from '../i18n/settings';
 import AWSThemeProvider from './aws-theme-provider';
+import AutheticatorProvider from './components/AuthenticatorProvider';
+import Banner from './components/BetaBanner';
+import Footer from './components/Footer';
+import NavBar from './components/NavBar';
 import './global.css';
 
 interface RootLayoutProps {
@@ -66,22 +66,22 @@ configureAutoTrack({
   },
 });
 
-Amplify.configure(config, {
-  ssr: true,
-  Storage: {
-    S3: {
-      prefixResolver: async ({ accessLevel, targetIdentityId }) => {
-        if (accessLevel === 'guest') {
-          return 'public/';
-        }
-        if (accessLevel === 'protected') {
-          return `protected/${targetIdentityId}/`;
-        }
-        return `private/${targetIdentityId}/`;
-      },
-    },
-  },
-});
+// Amplify.configure(config, {
+//   ssr: true,
+//   Storage: {
+//     S3: {
+//       prefixResolver: async ({ accessLevel, targetIdentityId }) => {
+//         if (accessLevel === 'guest') {
+//           return 'public/';
+//         }
+//         if (accessLevel === 'protected') {
+//           return `protected/${targetIdentityId}/`;
+//         }
+//         return `private/${targetIdentityId}/`;
+//       },
+//     },
+//   },
+// });
 
 export async function generateStaticParams() {
   return languages.map((lng) => ({ lng }));

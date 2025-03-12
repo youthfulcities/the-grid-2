@@ -54,108 +54,15 @@ jest.mock('aws-amplify/storage', () => ({
   list: jest.fn().mockResolvedValue({ results: [] }),
 }));
 
-//for some reason mocking d3 functions in this file works but not in the __mocks__ folder
-//all the d3 functions used need to be explicitly defined here
-// jest.mock('d3', () => ({
-//   __esModule: true,
-//   append: jest.fn(() => ({
-//     attr: jest.fn().mockReturnThis(),
-//     style: jest.fn().mockReturnThis(),
-//     call: jest.fn().mockReturnThis(),
-//   })),
-//   axisBottom: jest.fn(() => ({
-//     ticks: jest.fn().mockReturnThis(),
-//     tickFormat: jest.fn().mockReturnThis(),
-//   })),
-//   axisLeft: jest.fn(() => ({
-//     ticks: jest.fn().mockReturnThis(),
-//     tickFormat: jest.fn().mockReturnThis(),
-//   })),
-//   scaleOrdinal: jest.fn(() => ({
-//     range: jest.fn().mockReturnThis(),
-//   })),
-//   max: jest.fn(() => 100),
-//   scaleBand: jest.fn(() => {
-//     const scaleMock = jest.fn((value) => value);
-//     scaleMock.domain = jest.fn().mockReturnThis();
-//     scaleMock.range = jest.fn().mockReturnThis();
-//     scaleMock.padding = jest.fn().mockReturnThis();
-//     scaleMock.bandwidth = jest.fn().mockReturnValue(20);
-//     return scaleMock;
-//   }),
-//   scaleLinear: jest.fn(() => {
-//     const scaleMock = jest.fn((value) => value);
-//     scaleMock.domain = jest.fn().mockReturnThis();
-//     scaleMock.range = jest.fn().mockReturnThis();
-//     scaleMock.nice = jest.fn().mockReturnThis();
-//     return scaleMock;
-//   }),
-//   select: jest.fn(() => ({
-//     attr: jest.fn().mockReturnThis(),
-//     on: jest.fn().mockReturnThis(),
-//     selectAll: jest.fn(() => ({
-//       data: jest.fn(() => ({
-//         join: jest.fn(() => ({
-//           attr: jest.fn().mockReturnThis(),
-//           style: jest.fn().mockReturnThis(),
-//           on: jest.fn().mockReturnThis(),
-//           transition: jest.fn(() => ({
-//             duration: jest.fn().mockReturnThis(),
-//             delay: jest.fn().mockReturnThis(),
-//             attr: jest.fn().mockReturnThis(),
-//           })),
-//         })),
-//       })),
-//     })),
-//     append: jest.fn(() => ({
-//       text: jest.fn().mockReturnThis(),
-//       attr: jest.fn().mockReturnThis(),
-//       style: jest.fn().mockReturnThis(),
-//       call: jest.fn(() => ({
-//         selectAll: jest.fn(() => ({
-//           style: jest.fn().mockReturnThis(),
-//           attr: jest.fn().mockReturnThis(),
-//           remove: jest.fn().mockReturnThis(),
-//           on: jest.fn().mockReturnThis(),
-//           data: jest.fn((value) => value),
-//           join: jest.fn().mockReturnThis(),
-//         })),
-//       })),
-//     })),
-//     selectAll: jest.fn(() => ({
-//       on: jest.fn().mockReturnThis(),
-//       remove: jest.fn().mockReturnThis(),
-//       data: jest.fn(() => {
-//         const dataMock = jest.fn((value) => value);
-
-//         dataMock.join = jest.fn(() => ({
-//           transition: jest.fn().mockReturnThis(),
-//           duration: jest.fn().mockReturnThis(),
-//           delay: jest.fn().mockReturnThis(),
-//           on: jest.fn().mockReturnThis(),
-//           attr: jest.fn().mockReturnThis(),
-//           style: jest.fn().mockReturnThis(),
-//         }));
-
-//         dataMock.enter = jest.fn(() => ({
-//           append: jest.fn(() => ({
-//             attr: jest.fn().mockReturnThis(),
-//             style: jest.fn().mockReturnThis(),
-//             call: jest.fn().mockReturnThis(),
-//           })),
-//         }));
-//         return dataMock;
-//       }),
-//     })),
-//     remove: jest.fn().mockReturnThis(),
-//   })),
-//   csvParse: jest.fn(() => {}),
-// }));
-
 // Mock hooks and components
 jest.mock('@/hooks/useDimensions', () => ({
   __esModule: true,
   useDimensions: jest.fn(() => ({ width: 1000, height: 800 })), // Mock width & height
+}));
+
+jest.mock('@/hooks/useDownloadFile', () => ({
+  __esModule: true,
+  default: jest.fn(() => jest.fn()), // Returns a function
 }));
 
 jest.mock('@/app/i18n/client', () => ({
@@ -168,6 +75,10 @@ jest.mock('@/app/i18n/client', () => ({
     t: (key) => key, // Mock translation function
     i18n: { changeLanguage: jest.fn() },
   })),
+}));
+
+jest.mock('react-i18next/TransWithoutContext', () => ({
+  Trans: ({ i18nKey }) => i18nKey,
 }));
 
 // Mock Next.js navigation

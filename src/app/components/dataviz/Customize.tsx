@@ -1,4 +1,6 @@
+import useTranslation from '@/app/i18n/client';
 import { CheckboxField, View } from '@aws-amplify/ui-react';
+import { useParams } from 'next/navigation';
 import React from 'react';
 import styled from 'styled-components';
 import Accordion from '../Accordion';
@@ -26,6 +28,9 @@ const Customize: React.FC<CustomizeProps> = ({
   setSelectedOptions,
   allOptions,
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'translation');
+
   const toggleOption = (option: string) => {
     setSelectedOptions((prevSelected) =>
       prevSelected.includes(option)
@@ -36,7 +41,7 @@ const Customize: React.FC<CustomizeProps> = ({
 
   return (
     <View>
-      <Accordion title='Customize chart'>
+      <Accordion title={t('customize')}>
         {allOptions.map((option) => (
           <StyledCheckbox
             key={option}

@@ -1,15 +1,15 @@
 'use client';
 
-import config from '@/amplifyconfiguration.json';
+// import config from '@/amplifyconfiguration.json';
+import useTranslation from '@/app/i18n/client';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { Amplify } from 'aws-amplify';
+// import { Amplify } from 'aws-amplify';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 import styled from 'styled-components';
-import useTranslation from '../i18n/client';
 
-Amplify.configure(config);
+// Amplify.configure(config);
 
 const StyledAuthLink = styled(Link)<{
   $currentPage: boolean;
@@ -62,6 +62,7 @@ const AuthLink: React.FC<{ authStatus: string; mobile?: boolean }> = ({
   const { t } = useTranslation(lng, 'translation');
   const { signOut } = useAuthenticator((context) => [context.user]);
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleAuthAction = (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
@@ -70,7 +71,7 @@ const AuthLink: React.FC<{ authStatus: string; mobile?: boolean }> = ({
     if (authStatus === 'authenticated') {
       signOut();
     } else {
-      sessionStorage.setItem('postLoginRedirect', '/');
+      sessionStorage.setItem('postLoginRedirect', pathname);
       router.push('/authentication');
     }
   };

@@ -1,9 +1,9 @@
+import InsightCards from '@/app/components/InsightCards';
+import useTranslation from '@/app/i18n/client';
 import { Flex, View, useTheme } from '@aws-amplify/ui-react';
 import { useParams } from 'next/navigation';
 import { Trans } from 'react-i18next/TransWithoutContext';
 import styled from 'styled-components';
-import useTranslation from '../i18n/client';
-import InsightCards from './InsightCards';
 
 const HomeHeaderSection = styled(View)<{ $background: string }>`
   padding: 10% 0;

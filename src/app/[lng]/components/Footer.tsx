@@ -1,5 +1,6 @@
 'use client';
 
+import useTranslation from '@/app/i18n/client';
 import {
   Flex,
   Heading,
@@ -18,7 +19,6 @@ import {
   FaXTwitter,
 } from 'react-icons/fa6';
 import styled from 'styled-components';
-import useTranslation from '../i18n/client';
 import Newsletter from './Newsletter';
 
 const FooterBase = styled(View)<{ $background: string }>`

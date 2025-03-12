@@ -1,5 +1,6 @@
 'use client';
 
+import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
 import {
   Flex,
@@ -11,6 +12,7 @@ import {
 } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
+import { useParams } from 'next/navigation';
 import {
   Dispatch,
   ReactNode,
@@ -19,10 +21,11 @@ import {
   useRef,
   useState,
 } from 'react';
+import { Trans } from 'react-i18next/TransWithoutContext';
 import { FaBrain, FaBriefcase, FaDollarSign } from 'react-icons/fa6';
 import styled from 'styled-components';
+import Legend from '../../../../components/dataviz/Legend';
 import Heatmap from './Heatmap';
-import Legend from './Legend';
 
 interface DataItem {
   [key: string]: string | number;
@@ -44,14 +47,6 @@ interface TooltipState {
 interface ClusterProps {
   currentCluster: string;
   setCurrentCluster: (cluster: string) => void;
-  getKeyFromValue: (value: string) => string | null;
-  clusterMap: {
-    [key: string]: string;
-    'Social good focus': string;
-    'Forming opinions': string;
-    'Economic focus': string;
-    All: string;
-  };
   isDrawerOpen: boolean;
   setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
   tooltipState: TooltipState;
@@ -66,29 +61,23 @@ const ChartContainer = styled.div`
 const OverflowContainer = styled(View)`
   overflow: inherit;
 `;
-
-const clusterNames = [
-  'Social good focus',
-  'Forming opinions',
-  'Economic focus',
-];
-
 const Clusters: React.FC<ClusterProps> = ({
   currentCluster,
   setCurrentCluster,
-  getKeyFromValue,
-  clusterMap,
   isDrawerOpen,
   setIsDrawerOpen,
   tooltipState,
   setTooltipState,
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'WUWWL_survey');
   const height = 600;
   const [loading, setLoading] = useState(true);
   const [rawData, setRawData] = useState<Record<string, string>>({});
   const [parsedData, setParsedData] = useState<Record<string, DataItem[]>>({});
   const [activeFile] = useState('umap_data.csv');
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
+  const [clusterNames, setClusterNames] = useState<Array<string>>([]);
   const { tokens } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const { width: containerWidth } = useDimensions(containerRef);
@@ -96,7 +85,6 @@ const Clusters: React.FC<ClusterProps> = ({
 
   useEffect(() => {
     let isMounted = true;
-
     const fetchData = async (filename: string) => {
       if (Object.prototype.hasOwnProperty.call(rawData, filename)) return;
 
@@ -116,7 +104,6 @@ const Clusters: React.FC<ClusterProps> = ({
 
     const parseDynamicCSVData = (filename: string, csvString: string) => {
       if (parsedData[filename]) return;
-
       const parsed = d3.csvParse(csvString, (d) => {
         const row: DataItem = {};
         Object.keys(d).forEach((oldKey) => {
@@ -127,8 +114,28 @@ const Clusters: React.FC<ClusterProps> = ({
 
         // Rename cluster name
         if (row.Cluster_Label === 'Affordability focus') {
-          row.Cluster_Label = 'Economic focus';
+          row.Cluster_Label = t('cluster_economic');
         }
+
+        if (row.Cluster_Label === 'Social good focus') {
+          row.Cluster_Label = t('cluster_social');
+        }
+
+        if (row.Cluster_Label === 'Forming opinions') {
+          row.Cluster_Label = t('cluster_forming');
+        }
+        // Safeguard against undefined labels
+        const label = row.Cluster_Label
+          ? String(row.Cluster_Label)
+          : 'Unknown Cluster';
+
+        // Functional state update to prevent duplicates
+        setClusterNames((prevClusterNames) => {
+          if (!prevClusterNames.includes(label)) {
+            return [...prevClusterNames, label];
+          }
+          return prevClusterNames;
+        });
 
         return row;
       });
@@ -144,7 +151,7 @@ const Clusters: React.FC<ClusterProps> = ({
     return () => {
       isMounted = false; // Cleanup function to avoid setting state on unmounted component
     };
-  }, [activeFile, rawData, parsedData]);
+  }, [activeFile, rawData, parsedData, lng]);
 
   useEffect(() => {
     if (!width || !height || !parsedData[activeFile]) return;
@@ -188,7 +195,7 @@ const Clusters: React.FC<ClusterProps> = ({
         const colorScale = d3
           .scaleOrdinal<string>()
           .domain(clusterNames)
-          .range(['steelblue', 'orange', 'green']);
+          .range(d3.schemeCategory10);
 
         // Add contour density layer
         const densityData = d3
@@ -220,10 +227,10 @@ const Clusters: React.FC<ClusterProps> = ({
           .attr('r', 5)
           .attr('fill', (d) => colorScale(String(d.Cluster_Label)))
           .attr('opacity', (d) => {
-            if (currentCluster === 'all') {
+            if (currentCluster === t('cluster_all')) {
               return 0.9;
             }
-            if (d.Cluster_Label === getKeyFromValue(currentCluster)) {
+            if (d.Cluster_Label === currentCluster) {
               return 0.9;
             }
             return 0.2;
@@ -234,7 +241,15 @@ const Clusters: React.FC<ClusterProps> = ({
             const yPos = event.pageY;
             setTooltipState({
               position: { x: xPos, y: yPos },
-              content: `Cluster: ${d.Cluster_Label}`,
+              child: (
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: t('demo_cluster', {
+                      value: d.Cluster_Label,
+                    }),
+                  }}
+                />
+              ),
               group: '',
             });
           })
@@ -252,17 +267,17 @@ const Clusters: React.FC<ClusterProps> = ({
           })
           .on('click', (event, d) => {
             event.stopPropagation();
-            if (currentCluster === clusterMap[d.Cluster_Label]) {
-              setCurrentCluster('all'); // Reset to 'all'
+            if (currentCluster === d.Cluster_Label) {
+              setCurrentCluster(t('cluster_all')); // Reset to 'all'
               setIsDrawerOpen(!isDrawerOpen);
             } else {
-              setCurrentCluster(clusterMap[d.Cluster_Label]); // Set currentCluster to clicked Cluster_Label
+              setCurrentCluster(d.Cluster_Label as string); // Set currentCluster to clicked Cluster_Label
               setIsDrawerOpen(true);
             }
           });
 
         svg.on('click', () => {
-          setCurrentCluster('all'); // Reset to 'all' when clicking on SVG background
+          setCurrentCluster(t('cluster_all')); // Reset to 'all' when clicking on SVG background
         });
 
         const customLegendData = colorScale.domain();
@@ -279,31 +294,22 @@ const Clusters: React.FC<ClusterProps> = ({
       }
     };
     drawChart();
-  }, [parsedData, activeFile, width, currentCluster]);
+  }, [parsedData, activeFile, width, currentCluster, lng]);
 
   return (
     <OverflowContainer ref={containerRef}>
-      <Text>
-        Psychographics classify people according to their attitudes,
-        aspirations, and other psychological criteria.
-      </Text>
-      <Text>
-        Survey participants ranked the importance of affordability, education
-        and skills development, equity, diversity and inclusion, Indigenous
-        culture, truth and reconciliation, entrepreneurial spirit, local
-        economic growth, digital transformation, transportation, mental health,
-        and climate change. Then, they ranked how their cities performed in each
-        category. By clustering these importance/performance rankings, three
-        distinct groups emerged. Learn more about the clusters by clicking on
-        the data points. Each point represents a survey response.
-      </Text>
+      <Trans t={t} i18nKey='cluster_desc' components={{ p: <Text /> }} />
       <ChartContainer>
         <Placeholder height={height} isLoaded={!loading || false} />
         <div id='chart' data-testid='cluster-chart' />
         <Legend data={legendData} position='absolute' />
       </ChartContainer>
       <Heading level={4} color='primary.60' marginTop='xl' marginBottom='large'>
-        Key Takeaways — <span className='highlight'>What youth prioritize</span>
+        <Trans
+          t={t}
+          i18nKey='takeaways_title'
+          components={{ span: <span className='highlight' /> }}
+        />
       </Heading>
       <Flex
         direction='row'
@@ -311,26 +317,23 @@ const Clusters: React.FC<ClusterProps> = ({
         wrap='wrap'
         gap='medium'
       >
-        <Text>
-          Regardless of cluster, the following priorities emerged as key areas
-          to improve Canadian city performance:
-        </Text>
+        <Text>{t('takeaways_desc')}</Text>
         <Flex alignItems='center' justifyContent='flex-start'>
           <FaDollarSign size='50px' color={tokens.colors.primary[60].value} />
           <Text marginBottom='0'>
-            <strong>Affordability</strong>
+            <strong>{t('takeaways_aff')}</strong>
           </Text>
         </Flex>
         <Flex alignItems='center' justifyContent='flex-start'>
           <FaBrain size='50px' color={tokens.colors.primary[60].value} />
           <Text>
-            <strong>Mental health</strong>
+            <strong>{t('takeaways_mental')}</strong>
           </Text>
         </Flex>
         <Flex alignItems='center' justifyContent='flex-start'>
           <FaBriefcase size='50px' color={tokens.colors.primary[60].value} />
           <Text>
-            <strong>Good youth jobs</strong>
+            <strong>{t('takeaways_jobs')}</strong>
           </Text>
         </Flex>
       </Flex>
@@ -340,7 +343,7 @@ const Clusters: React.FC<ClusterProps> = ({
         height={height}
         tooltipState={tooltipState}
         setTooltipState={setTooltipState}
-        title='Economic Focus'
+        title={t('cluster_economic')}
       />
       <Heatmap
         activeFile='cluster-heatmap-forming.csv'
@@ -348,7 +351,7 @@ const Clusters: React.FC<ClusterProps> = ({
         height={height}
         tooltipState={tooltipState}
         setTooltipState={setTooltipState}
-        title='Forming Opinions'
+        title={t('cluster_forming')}
       />
       <Heatmap
         activeFile='cluster-heatmap-social.csv'
@@ -356,7 +359,7 @@ const Clusters: React.FC<ClusterProps> = ({
         height={height}
         tooltipState={tooltipState}
         setTooltipState={setTooltipState}
-        title='Social Good'
+        title={t('cluster_social')}
       />
     </OverflowContainer>
   );

@@ -1,3 +1,4 @@
+import FadeInUp from '@/app/components/FadeInUp';
 import useTranslation from '@/app/i18n/client';
 import datasetCards from '@/data/dataset-cards.json';
 import { Flex, Heading, Text, View, useTheme } from '@aws-amplify/ui-react';
@@ -50,37 +51,43 @@ const Banner: React.FC<{ lng: string }> = ({ lng }) => {
           <Heading level={4} color={tokens.colors.font.primary.value}>
             {t('datasets-literal')}
           </Heading>
-          <OutlineText
-            as='h3'
-            $innerColor={tokens.colors.primary[60].value}
-            $outlineColor={tokens.colors.font.primary.value}
-          >
-            {datasetCards.datasetCards.length}
-          </OutlineText>
+          <FadeInUp>
+            <OutlineText
+              as='h3'
+              $innerColor={tokens.colors.primary[60].value}
+              $outlineColor={tokens.colors.font.primary.value}
+            >
+              {datasetCards.datasetCards.length}
+            </OutlineText>
+          </FadeInUp>
         </Fact>
         <Fact $space={tokens.space.medium.value}>
           <Heading level={4} color={tokens.colors.font.primary.value}>
             {t('cities')}
           </Heading>
-          <OutlineText
-            as='h3'
-            $innerColor={tokens.colors.primary[60].value}
-            $outlineColor={tokens.colors.font.primary.value}
-          >
-            31 000
-          </OutlineText>
+          <FadeInUp>
+            <OutlineText
+              as='h3'
+              $innerColor={tokens.colors.primary[60].value}
+              $outlineColor={tokens.colors.font.primary.value}
+            >
+              31 000
+            </OutlineText>
+          </FadeInUp>
         </Fact>
         <Fact $space={tokens.space.medium.value}>
           <Heading level={4} color={tokens.colors.font.primary.value}>
             {t('records')}
           </Heading>
-          <OutlineText
-            as='h3'
-            $innerColor={tokens.colors.primary[60].value}
-            $outlineColor={tokens.colors.font.primary.value}
-          >
-            400 000
-          </OutlineText>
+          <FadeInUp>
+            <OutlineText
+              as='h3'
+              $innerColor={tokens.colors.primary[60].value}
+              $outlineColor={tokens.colors.font.primary.value}
+            >
+              400 000
+            </OutlineText>
+          </FadeInUp>
         </Fact>
       </Flex>
     </BarBackground>

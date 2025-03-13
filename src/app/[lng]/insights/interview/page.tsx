@@ -6,6 +6,7 @@ import CrosslinkCards from '@/app/components/CrosslinkCards';
 import BubbleChart from '@/app/components/dataviz/BubbleChart/BubbleChart';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import Drawer from '@/app/components/Drawer';
+import FadeInUp from '@/app/components/FadeInUp';
 import Quote from '@/app/components/Quote';
 import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
@@ -169,153 +170,178 @@ const Interview = () => {
   return (
     <Container>
       <View className='container padding' ref={containerRef}>
-        <Heading level={1}>
+        <FadeInUp>
+          <Heading level={1}>
+            <Trans
+              t={t}
+              i18nKey='title'
+              components={{ span: <span className='highlight' /> }}
+            />
+          </Heading>
+          <div className='inner-container'>
+            <Heading marginBottom='xl' level={3} color='font.inverse'>
+              {t('youth_cite')}
+            </Heading>
+          </div>
+          <Trans t={t} i18nKey='blurb' components={{ p: <Text /> }} />
+        </FadeInUp>
+        <FadeInUp>
+          <Tabs.Container
+            defaultValue='1'
+            value={tab}
+            onValueChange={(newTab) => changeTab(newTab)}
+          >
+            <Tabs.List style={{ overflowX: 'auto', overflowY: 'hidden' }}>
+              <Tabs.Item value='ALL'>{t('national')}</Tabs.Item>
+              <Tabs.Item value='TO'>Toronto</Tabs.Item>
+              <Tabs.Item value='CAL'>Calgary</Tabs.Item>
+              <Tabs.Item value='MTL'>Montréal</Tabs.Item>
+              <Tabs.Item value='VAN'>Vancouver</Tabs.Item>
+              <Tabs.Item value='MON'>Moncton</Tabs.Item>
+              <Tabs.Item value='REG'>Regina</Tabs.Item>
+              <Tabs.Item value='WTH'>Whitehorse</Tabs.Item>
+              <Tabs.Item value='YKN'>Yellowknife</Tabs.Item>
+            </Tabs.List>
+            <Tabs.Panel value='ALL'>
+              <Text />
+            </Tabs.Panel>
+            <Tabs.Panel value='TO'>
+              <Text>{t('toronto_profile')}</Text>
+            </Tabs.Panel>
+            <Tabs.Panel value='CAL'>
+              <Text>{t('calgary_profile')}</Text>
+            </Tabs.Panel>
+            <Tabs.Panel value='MTL'>
+              <Text>{t('montreal_profile')}</Text>
+            </Tabs.Panel>
+            <Tabs.Panel value='VAN'>
+              <Text>{t('vancouver_profile')}</Text>
+            </Tabs.Panel>
+            <Tabs.Panel value='MON'>
+              <Text />
+            </Tabs.Panel>
+            <Tabs.Panel value='REG'>
+              <Text />
+            </Tabs.Panel>
+            <Tabs.Panel value='WTH'>
+              <Text />
+            </Tabs.Panel>
+            <Tabs.Panel value='YKN'>
+              <Text />
+            </Tabs.Panel>
+          </Tabs.Container>
+          <BubbleChart
+            city={city}
+            width={width}
+            tooltipState={tooltipState}
+            setIsDrawerOpen={setIsDrawerOpen}
+            setTooltipState={setTooltipState}
+            onBubbleClick={onBubbleClick}
+          />
+        </FadeInUp>
+        <FadeInUp>
+          <Heading level={2} marginTop='xxl'>
+            {t('theme_title')}
+          </Heading>
+          <Heading level={3} color='secondary.60'>
+            {t('theme_ecosystems_title')}
+          </Heading>
           <Trans
             t={t}
-            i18nKey='title'
-            components={{ span: <span className='highlight' /> }}
+            i18nKey='theme_ecosystems_content'
+            components={{ p: <Text /> }}
           />
-        </Heading>
-        <div className='inner-container'>
-          <Heading marginBottom='xl' level={3} color='font.inverse'>
-            {t('youth_cite')}
+        </FadeInUp>
+        <FadeInUp>
+          <Heading level={3} marginTop='large' color='secondary.60'>
+            {t('theme_future_title')}
           </Heading>
-        </div>
-        <Trans t={t} i18nKey='blurb' components={{ p: <Text /> }} />
-        <Tabs.Container
-          defaultValue='1'
-          value={tab}
-          onValueChange={(newTab) => changeTab(newTab)}
-        >
-          <Tabs.List style={{ overflowX: 'auto', overflowY: 'hidden' }}>
-            <Tabs.Item value='ALL'>{t('national')}</Tabs.Item>
-            <Tabs.Item value='TO'>Toronto</Tabs.Item>
-            <Tabs.Item value='CAL'>Calgary</Tabs.Item>
-            <Tabs.Item value='MTL'>Montréal</Tabs.Item>
-            <Tabs.Item value='VAN'>Vancouver</Tabs.Item>
-            <Tabs.Item value='MON'>Moncton</Tabs.Item>
-            <Tabs.Item value='REG'>Regina</Tabs.Item>
-            <Tabs.Item value='WTH'>Whitehorse</Tabs.Item>
-            <Tabs.Item value='YKN'>Yellowknife</Tabs.Item>
-          </Tabs.List>
-          <Tabs.Panel value='ALL'>
-            <Text />
-          </Tabs.Panel>
-          <Tabs.Panel value='TO'>
-            <Text>{t('toronto_profile')}</Text>
-          </Tabs.Panel>
-          <Tabs.Panel value='CAL'>
-            <Text>{t('calgary_profile')}</Text>
-          </Tabs.Panel>
-          <Tabs.Panel value='MTL'>
-            <Text>{t('montreal_profile')}</Text>
-          </Tabs.Panel>
-          <Tabs.Panel value='VAN'>
-            <Text>{t('vancouver_profile')}</Text>
-          </Tabs.Panel>
-          <Tabs.Panel value='MON'>
-            <Text />
-          </Tabs.Panel>
-          <Tabs.Panel value='REG'>
-            <Text />
-          </Tabs.Panel>
-          <Tabs.Panel value='WTH'>
-            <Text />
-          </Tabs.Panel>
-          <Tabs.Panel value='YKN'>
-            <Text />
-          </Tabs.Panel>
-        </Tabs.Container>
-        <BubbleChart
-          city={city}
-          width={width}
-          tooltipState={tooltipState}
-          setIsDrawerOpen={setIsDrawerOpen}
-          setTooltipState={setTooltipState}
-          onBubbleClick={onBubbleClick}
-        />
-        <Heading level={2} marginTop='xxl'>
-          {t('theme_title')}
-        </Heading>
-        <Heading level={3} color='secondary.60'>
-          {t('theme_ecosystems_title')}
-        </Heading>
-        <Trans
-          t={t}
-          i18nKey='theme_ecosystems_content'
-          components={{ p: <Text /> }}
-        />
-        <Heading level={3} marginTop='large' color='secondary.60'>
-          {t('theme_future_title')}
-        </Heading>
-        <Trans
-          t={t}
-          i18nKey='theme_future_content'
-          components={{ p: <Text /> }}
-        />
-        <Heading level={3} marginTop='large' color='secondary.60'>
-          {t('theme_transition_title')}
-        </Heading>
-        <Trans
-          t={t}
-          i18nKey='theme_transition_content'
-          components={{ p: <Text /> }}
-        />
-        <Heading level={3} marginTop='large' color='secondary.60'>
-          {t('theme_org_title')}
-        </Heading>
-        <Trans t={t} i18nKey='theme_org_content' components={{ p: <Text /> }} />
-        <Heading level={2} marginTop='xxl'>
-          {t('dig_deeper')}
-        </Heading>
-        <Heading level={4} color='secondary.60' marginBottom='xs'>
-          {t('stories_heading')}
-        </Heading>
-        {posts?.length > 0 && <CrosslinkCards posts={posts} />}
-        <Heading
-          level={4}
-          color='secondary.60'
-          marginTop='xxl'
-          marginBottom='xs'
-        >
-          {t('download')}
-        </Heading>
-        <Text>{t('download_desc')}</Text>
-        <Button variation='primary' onClick={() => downloadFile(filename)}>
-          {t('download_button')}
-        </Button>
-        <Heading
-          level={4}
-          color='secondary.60'
-          marginTop='xxl'
-          marginBottom='xs'
-        >
-          {t('chatbot_title')}
-        </Heading>
-        <Text>{t('chatbot_text')}</Text>
-        <Link href='/chatbot' target='_blank'>
-          <Button variation='primary' marginTop='xs' marginBottom='xl'>
-            {t('chatbot_button')}
+          <Trans
+            t={t}
+            i18nKey='theme_future_content'
+            components={{ p: <Text /> }}
+          />
+        </FadeInUp>
+        <FadeInUp>
+          <Heading level={3} marginTop='large' color='secondary.60'>
+            {t('theme_transition_title')}
+          </Heading>
+          <Trans
+            t={t}
+            i18nKey='theme_transition_content'
+            components={{ p: <Text /> }}
+          />
+        </FadeInUp>
+        <FadeInUp>
+          <Heading level={3} marginTop='large' color='secondary.60'>
+            {t('theme_org_title')}
+          </Heading>
+          <Trans
+            t={t}
+            i18nKey='theme_org_content'
+            components={{ p: <Text /> }}
+          />
+        </FadeInUp>
+        <FadeInUp>
+          <Heading level={2} marginTop='xxl'>
+            {t('dig_deeper')}
+          </Heading>
+        </FadeInUp>
+
+        <FadeInUp>
+          <Heading level={4} color='secondary.60' marginBottom='xs'>
+            {t('stories_heading')}
+          </Heading>
+          {posts?.length > 0 && <CrosslinkCards posts={posts} />}
+        </FadeInUp>
+        <FadeInUp>
+          <Heading
+            level={4}
+            color='secondary.60'
+            marginTop='xxl'
+            marginBottom='xs'
+          >
+            {t('download')}
+          </Heading>
+          <Text>{t('download_desc')}</Text>
+          <Button variation='primary' onClick={() => downloadFile(filename)}>
+            {t('download_button')}
           </Button>
-        </Link>
-        <Heading level={2} marginTop='xxl' marginBottom='xs'>
-          {t('data_details_title')}
-        </Heading>
-        <Trans
-          t={t}
-          i18nKey='data_details'
-          components={{
-            p: <Text />,
-            a: (
-              <a
-                href='https://www.youthfulcities.com/devlab/'
-                target='_blank'
-              />
-            ),
-            ul: <ul />,
-            li: <li />,
-          }}
-        />
+          <Heading
+            level={4}
+            color='secondary.60'
+            marginTop='xxl'
+            marginBottom='xs'
+          >
+            {t('chatbot_title')}
+          </Heading>
+          <Text>{t('chatbot_text')}</Text>
+          <Link href='/chatbot' target='_blank'>
+            <Button variation='primary' marginTop='xs' marginBottom='xl'>
+              {t('chatbot_button')}
+            </Button>
+          </Link>
+        </FadeInUp>
+        <FadeInUp>
+          <Heading level={2} marginTop='xxl' marginBottom='xs'>
+            {t('data_details_title')}
+          </Heading>
+          <Trans
+            t={t}
+            i18nKey='data_details'
+            components={{
+              p: <Text />,
+              a: (
+                <a
+                  href='https://www.youthfulcities.com/devlab/'
+                  target='_blank'
+                />
+              ),
+              ul: <ul />,
+              li: <li />,
+            }}
+          />
+        </FadeInUp>
       </View>
       <Drawer
         isopen={isDrawerOpen}

@@ -34,10 +34,10 @@ const HeatmapTooltip: React.FC<HeatmapTooltipProps> = ({
       ${value > 0 ? 'dépasse ses attentes' : 'sous-performante'} dans ce domaine. Une plus grande attention portée à ${topic} iest susceptible d'avoir
       ${value < 0 ? 'un impact positif' : 'moins d’impact'} sur l'expérience globale de la vie en ville.`
         : `A ${value > 0 ? 'positive' : 'negative'} gap (${value}%) between importance
-      and performance indicates that the {cluster} cluster considers {topic} to
-      be ${value < 0 && value > -10 && ''}
-      ${value < 0 && value < -10 && 'very'}
-      ${value > 0 && 'less'} important and feels that their city is 
+      and performance indicates that the ${cluster} cluster considers ${topic} to
+      be 
+      ${(value < 0 && value < -10 && 'very') || ''}
+      ${(value > 0 && 'less') || ''} important and feels that their city is 
       ${value > 0 ? 'exceeding their expectations' : 'underperforming'} in this
       area. Increasing focus on ${topic} is likely to have
       ${value < 0 ? 'a positive' : 'less of an'} impact on overall city-living

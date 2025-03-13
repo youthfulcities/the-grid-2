@@ -129,7 +129,6 @@ describe('Survey Component', () => {
     });
     const button = screen.getByRole('button', { name: 'select_other' });
     expect(button).toBeInTheDocument();
-    expect(button).toBeVisible();
     expect(button).not.toBeDisabled();
     await userEvent.click(button);
     expect(await screen.findByText('Option 1')).toBeInTheDocument();

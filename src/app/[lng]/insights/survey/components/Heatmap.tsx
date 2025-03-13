@@ -1,5 +1,6 @@
 'use client';
 
+import FadeInUp from '@/app/components/FadeInUp';
 import { Placeholder } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
@@ -36,10 +37,11 @@ const ChartContainer = styled.div`
   position: relative;
 `;
 
-const truncateText = (text: string, maxLength: number) => {
+const margin = { top: 50, right: 80, bottom: 0, left: 30 };
+const truncateText = (text: string, width: number) => {
   const cleanedText = text.replace(/\(.*?\)/g, '').trim();
-  if (cleanedText.length > maxLength) {
-    return `${cleanedText.slice(0, maxLength)}...`;
+  if (cleanedText.length > width / 10) {
+    return `${cleanedText.slice(0, 20)}...`;
   }
   return cleanedText;
 };
@@ -75,7 +77,6 @@ const Heatmap: React.FC<HeatmapProps> = ({
   const [parsedData, setParsedData] = useState<{ [key: string]: DataItem[] }>(
     {}
   );
-  const margin = { top: 50, right: 80, bottom: 0, left: 30 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
@@ -304,7 +305,7 @@ const Heatmap: React.FC<HeatmapProps> = ({
           return yPos != null ? yPos + y.bandwidth() / 2 : 0;
         })
         .attr('dy', '.35em')
-        .text((d) => truncateText(d.Topic as string, 50))
+        .text((d) => truncateText(d.Topic as string, width))
         .style('fill', (d) => {
           const barColor = colorScale(d.Value as number);
           return shouldUseWhiteText(barColor) ? 'white' : 'black';
@@ -329,12 +330,12 @@ const Heatmap: React.FC<HeatmapProps> = ({
   ]);
 
   return (
-    <>
+    <FadeInUp>
       <Placeholder height={height} isLoaded={!loading || false} />
       <ChartContainer>
         <svg ref={ref} data-testid='heatmap' />
       </ChartContainer>
-    </>
+    </FadeInUp>
   );
 };
 

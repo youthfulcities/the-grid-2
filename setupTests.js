@@ -93,6 +93,16 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
+jest.mock('framer-motion', () => {
+  // Import the actual module so we don't mock everything
+  const actualFramerMotion = jest.requireActual('framer-motion');
+
+  return {
+    ...actualFramerMotion, // Keep all original exports
+    useInView: jest.fn(() => true), // Mock only useInView
+  };
+});
+
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
   constructor(callback) {

@@ -1,3 +1,4 @@
+import FadeInUp from '@/app/components/FadeInUp';
 import InsightCards from '@/app/components/InsightCards';
 import useTranslation from '@/app/i18n/client';
 import { Flex, View, useTheme } from '@aws-amplify/ui-react';
@@ -45,35 +46,39 @@ const HomeHeader = () => {
   return (
     <HomeHeaderSection as='section' $background={tokens.colors.blue[60].value}>
       <Flex as='div' direction='column' className='container' gap='zero'>
-        {lng === 'fr' ? (
-          <img
-            src='/assets/theme_image/YDL_white_fr.png'
-            alt='Logo du Labo Data Jeunesse'
-            width='300px'
-          />
-        ) : (
-          <img
-            src='/assets/theme_image/YDL_White.png'
-            alt='Youth Data Lab logo'
-            width='300px'
-          />
-        )}
-        <h1>
-          <Trans
-            t={t}
-            i18nKey='home-tagline'
-            components={{ span: <span className='alt-highlight' /> }}
-          />
-        </h1>
-        <Flex gap='zero' wrap='wrap' alignItems='center'>
-          <h3 className='header-subtext'>
-            <Trans t={t} i18nKey='home-sub-tagline' />
-          </h3>
-          {/* <a href='https://youthfulcities.com/' target='_blank'>
+        <FadeInUp>
+          {lng === 'fr' ? (
+            <img
+              src='/assets/theme_image/YDL_white_fr.png'
+              alt='Logo du Labo Data Jeunesse'
+              width='300px'
+            />
+          ) : (
+            <img
+              src='/assets/theme_image/YDL_White.png'
+              alt='Youth Data Lab logo'
+              width='300px'
+            />
+          )}
+          <h1>
+            <Trans
+              t={t}
+              i18nKey='home-tagline'
+              components={{ span: <span className='alt-highlight' /> }}
+            />
+          </h1>
+          <Flex gap='zero' wrap='wrap' alignItems='center'>
+            <h3 className='header-subtext'>
+              <Trans t={t} i18nKey='home-sub-tagline' />
+            </h3>
+            {/* <a href='https://youthfulcities.com/' target='_blank'>
             <Image alt='Youthful Cities logo' src={ycLogo} width={200} />
-          </a> */}
-        </Flex>
-        <InsightCards lng={lng} maxLength={4} />
+            </a> */}
+          </Flex>
+        </FadeInUp>
+        <FadeInUp>
+          <InsightCards lng={lng} maxLength={4} />
+        </FadeInUp>
       </Flex>
     </HomeHeaderSection>
   );

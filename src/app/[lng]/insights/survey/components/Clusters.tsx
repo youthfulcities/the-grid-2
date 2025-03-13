@@ -1,5 +1,6 @@
 'use client';
 
+import FadeInUp from '@/app/components/FadeInUp';
 import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
 import {
@@ -224,8 +225,13 @@ const Clusters: React.FC<ClusterProps> = ({
           .append('circle')
           .attr('cx', (d) => xScale(d.UMAP1 as number))
           .attr('cy', (d) => yScale(d.UMAP2 as number))
-          .attr('r', 5)
+          .attr('r', 0)
           .attr('fill', (d) => colorScale(String(d.Cluster_Label)))
+          .attr('opacity', 0)
+          .transition()
+          .duration(200)
+          .delay((_, i) => i * 3)
+          .attr('r', 5)
           .attr('opacity', (d) => {
             if (currentCluster === t('cluster_all')) {
               return 0.9;
@@ -234,7 +240,11 @@ const Clusters: React.FC<ClusterProps> = ({
               return 0.9;
             }
             return 0.2;
-          })
+          });
+
+        svg
+          .selectAll('circle')
+          .data(data)
           .on('mouseover', (event, d) => {
             d3.select(event.currentTarget).classed('hover-cursor', true);
             const xPos = event.pageX;
@@ -267,7 +277,7 @@ const Clusters: React.FC<ClusterProps> = ({
           })
           .on('click', (event, d) => {
             event.stopPropagation();
-            if (currentCluster === d.Cluster_Label) {
+            if (currentCluster === (d.Cluster_Label as string)) {
               setCurrentCluster(t('cluster_all')); // Reset to 'all'
               setIsDrawerOpen(!isDrawerOpen);
             } else {
@@ -298,45 +308,54 @@ const Clusters: React.FC<ClusterProps> = ({
 
   return (
     <OverflowContainer ref={containerRef}>
-      <Trans t={t} i18nKey='cluster_desc' components={{ p: <Text /> }} />
-      <ChartContainer>
-        <Placeholder height={height} isLoaded={!loading || false} />
-        <div id='chart' data-testid='cluster-chart' />
-        <Legend data={legendData} position='absolute' />
-      </ChartContainer>
-      <Heading level={4} color='primary.60' marginTop='xl' marginBottom='large'>
-        <Trans
-          t={t}
-          i18nKey='takeaways_title'
-          components={{ span: <span className='highlight' /> }}
-        />
-      </Heading>
-      <Flex
-        direction='row'
-        justifyContent='space-between'
-        wrap='wrap'
-        gap='medium'
-      >
-        <Text>{t('takeaways_desc')}</Text>
-        <Flex alignItems='center' justifyContent='flex-start'>
-          <FaDollarSign size='50px' color={tokens.colors.primary[60].value} />
-          <Text marginBottom='0'>
-            <strong>{t('takeaways_aff')}</strong>
-          </Text>
+      <FadeInUp>
+        <ChartContainer>
+          <Placeholder height={height} isLoaded={!loading || false} />
+          <div id='chart' data-testid='cluster-chart' />
+          <Legend data={legendData} position='absolute' />
+        </ChartContainer>
+      </FadeInUp>
+      <FadeInUp>
+        <Heading
+          level={4}
+          color='primary.60'
+          marginTop='xxl'
+          marginBottom='large'
+        >
+          <Trans
+            t={t}
+            i18nKey='takeaways_title'
+            components={{ span: <span className='highlight' /> }}
+          />
+        </Heading>
+        <Flex
+          direction='row'
+          justifyContent='space-between'
+          wrap='wrap'
+          gap='medium'
+          marginBottom='xl'
+        >
+          <Text>{t('takeaways_desc')}</Text>
+          <Flex alignItems='center' justifyContent='flex-start'>
+            <FaDollarSign size='50px' color={tokens.colors.primary[60].value} />
+            <Text marginBottom='0'>
+              <strong>{t('takeaways_aff')}</strong>
+            </Text>
+          </Flex>
+          <Flex alignItems='center' justifyContent='flex-start'>
+            <FaBrain size='50px' color={tokens.colors.primary[60].value} />
+            <Text>
+              <strong>{t('takeaways_mental')}</strong>
+            </Text>
+          </Flex>
+          <Flex alignItems='center' justifyContent='flex-start'>
+            <FaBriefcase size='50px' color={tokens.colors.primary[60].value} />
+            <Text>
+              <strong>{t('takeaways_jobs')}</strong>
+            </Text>
+          </Flex>
         </Flex>
-        <Flex alignItems='center' justifyContent='flex-start'>
-          <FaBrain size='50px' color={tokens.colors.primary[60].value} />
-          <Text>
-            <strong>{t('takeaways_mental')}</strong>
-          </Text>
-        </Flex>
-        <Flex alignItems='center' justifyContent='flex-start'>
-          <FaBriefcase size='50px' color={tokens.colors.primary[60].value} />
-          <Text>
-            <strong>{t('takeaways_jobs')}</strong>
-          </Text>
-        </Flex>
-      </Flex>
+      </FadeInUp>
       <Heatmap
         activeFile='cluster-heatmap-economic.csv'
         width={width}

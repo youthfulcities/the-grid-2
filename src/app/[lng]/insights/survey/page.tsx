@@ -6,6 +6,7 @@ import { useWUWWLSurvey } from '@/app/[lng]/insights/survey/context/WUWWLSurveyC
 import Container from '@/app/components/Background';
 import CrosslinkCards from '@/app/components/CrosslinkCards';
 import Drawer from '@/app/components/Drawer';
+import FadeInUp from '@/app/components/FadeInUp';
 import BarChart from '@/app/components/dataviz/BarChartGeneral';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import useTranslation from '@/app/i18n/client';
@@ -242,130 +243,135 @@ const Survey: React.FC = () => {
   return (
     <Container>
       <View className='container padding'>
-        <Heading level={1}>
-          <Trans
-            t={t}
-            i18nKey='title'
-            components={{ span: <span className='highlight' /> }}
-          />
-        </Heading>
-        <View className='inner-container'>
-          <Heading level={3} marginBottom='xl'>
-            {t('subtitle')}
+        <FadeInUp>
+          <Heading level={1}>
+            <Trans
+              t={t}
+              i18nKey='title'
+              components={{ span: <span className='highlight' /> }}
+            />
           </Heading>
-        </View>
-        <Text marginBottom='xl'>{t('desc')}</Text>
-        <div ref={containerRef} data-testid='survey-container'>
-          {data ? (
-            <>
-              <Text marginBottom='0'>{t('select_title')}</Text>
-              <ToggleButtonGroup
-                direction={ismobile ? 'column' : 'row'}
-                alignItems='stretch'
-                value={currentTopic}
-                onChange={(value) => setCurrentTopic(value as string)}
-                isExclusive
-                marginBottom='medium'
-              >
-                <StyledToggleButton
-                  defaultPressed
-                  isDisabled={currentTopic === 'future'}
-                  marginLeft={ismobile ? '-3px' : '0'}
-                  value='future'
+          <View className='inner-container'>
+            <Heading level={3} marginBottom='xl'>
+              {t('subtitle')}
+            </Heading>
+          </View>
+          <Text marginBottom='xl'>{t('desc')}</Text>
+          <div ref={containerRef} data-testid='survey-container'>
+            {data ? (
+              <>
+                <Text marginBottom='0'>{t('select_title')}</Text>
+                <ToggleButtonGroup
+                  direction={ismobile ? 'column' : 'row'}
+                  alignItems='stretch'
+                  value={currentTopic}
+                  onChange={(value) => setCurrentTopic(value as string)}
+                  isExclusive
+                  marginBottom='medium'
                 >
-                  {t('select_future')}
-                </StyledToggleButton>
-                <StyledToggleButton
-                  isDisabled={currentTopic === 'pandemic'}
-                  value='pandemic'
+                  <StyledToggleButton
+                    defaultPressed
+                    isDisabled={currentTopic === 'future'}
+                    marginLeft={ismobile ? '-3px' : '0'}
+                    value='future'
+                  >
+                    {t('select_future')}
+                  </StyledToggleButton>
+                  <StyledToggleButton
+                    isDisabled={currentTopic === 'pandemic'}
+                    value='pandemic'
+                  >
+                    {t('select_pandemic')}
+                  </StyledToggleButton>
+                  <StyledToggleButton
+                    isDisabled={currentTopic === 'org'}
+                    value='org'
+                  >
+                    {t('select_org')}
+                  </StyledToggleButton>
+                  <StyledToggleButton
+                    isDisabled={currentTopic === 'transition'}
+                    value='transition'
+                  >
+                    {t('select_trans')}
+                  </StyledToggleButton>
+                  <StyledToggleButton
+                    isDisabled={currentTopic === 'other'}
+                    value='other'
+                  >
+                    {t('select_other')}
+                  </StyledToggleButton>
+                </ToggleButtonGroup>
+                <StyledSelect
+                  marginBottom='large'
+                  label={t('select_question')}
+                  color='font.inverse'
+                  value={currentQuestion}
+                  onChange={(e) => setCurrentQuestion(e.target.value)}
                 >
-                  {t('select_pandemic')}
-                </StyledToggleButton>
-                <StyledToggleButton
-                  isDisabled={currentTopic === 'org'}
-                  value='org'
-                >
-                  {t('select_org')}
-                </StyledToggleButton>
-                <StyledToggleButton
-                  isDisabled={currentTopic === 'transition'}
-                  value='transition'
-                >
-                  {t('select_trans')}
-                </StyledToggleButton>
-                <StyledToggleButton
-                  isDisabled={currentTopic === 'other'}
-                  value='other'
-                >
-                  {t('select_other')}
-                </StyledToggleButton>
-              </ToggleButtonGroup>
-              <StyledSelect
-                marginBottom='large'
-                label={t('select_question')}
-                color='font.inverse'
-                value={currentQuestion}
-                onChange={(e) => setCurrentQuestion(e.target.value)}
-              >
-                {questions.map((question) => (
-                  <option value={question} key={question}>
-                    {question.replace(regex, '').trim()}
-                  </option>
-                ))}
-              </StyledSelect>
-              {/* <StyledSelect
+                  {questions.map((question) => (
+                    <option value={question} key={question}>
+                      {question.replace(regex, '').trim()}
+                    </option>
+                  ))}
+                </StyledSelect>
+                {/* <StyledSelect
                 marginBottom='xl'
                 label='Select a demographic segment'
                 color='font.inverse'
                 value={currentSegment}
                 onChange={(e) => setCurrentSegment(e.target.value)}
-              >
+                >
                 {segments.map((segment) => (
                   <option value={segment} key={segment}>
-                    {segment.replace(regex, '').trim()}
+                  {segment.replace(regex, '').trim()}
                   </option>
-                ))}
-              </StyledSelect> */}
-              {currentData && (
-                <>
-                  <Heading
-                    level={3}
-                    textAlign='center'
-                    color='font.inverse'
-                    marginTop='xxl'
-                    marginBottom='xl'
-                  >
-                    {currentQuestion?.replace(regex, '').trim()}
-                  </Heading>
-                  {/* <Heading level={5} textAlign='center' color='font.inverse'>
+                  ))}
+                  </StyledSelect> */}
+                {currentData && (
+                  <>
+                    <Heading
+                      level={3}
+                      textAlign='center'
+                      color='font.inverse'
+                      marginTop='xxl'
+                      marginBottom='xl'
+                    >
+                      {currentQuestion?.replace(regex, '').trim()}
+                    </Heading>
+                    {/* <Heading level={5} textAlign='center' color='font.inverse'>
                     Broken down by: {currentSegment.replace(regex, '').trim()}
-                  </Heading> */}
-                </>
-              )}
-              <BarChart
-                data={currentData || []}
-                width={width}
-                tooltipState={tooltipState}
-                setTooltipState={setTooltipState}
-              >
-                {/* <Text fontSize='xs'>
+                    </Heading> */}
+                  </>
+                )}
+                <BarChart
+                  data={currentData || []}
+                  width={width}
+                  tooltipState={tooltipState}
+                  setTooltipState={setTooltipState}
+                >
+                  {/* <Text fontSize='xs'>
                   *Note: Segments below a sample size of 50 are not displayed.
                   The dotted lined represents the national average, which
                   includes segments not displayed on the chart. Hover or click
                   on bars to reveal values.
-                </Text> */}
-              </BarChart>
-            </>
-          ) : (
-            <Placeholder
-              height='1000px'
-              data-testid='survey-page-placeholder'
-            />
-          )}
-        </div>
-        <Heading level={2} marginTop='xxxl'>
-          {t('deeper_title')}
-        </Heading>
+                  </Text> */}
+                </BarChart>
+              </>
+            ) : (
+              <Placeholder
+                height='1000px'
+                data-testid='survey-page-placeholder'
+              />
+            )}
+          </div>
+        </FadeInUp>
+        <FadeInUp>
+          <Heading level={2} marginTop='xxxl'>
+            {t('deeper_title')}
+          </Heading>
+          <Trans t={t} i18nKey='cluster_desc' components={{ p: <Text /> }} />
+        </FadeInUp>
         <Clusters
           currentCluster={currentCluster}
           setCurrentCluster={setCurrentCluster}
@@ -374,39 +380,46 @@ const Survey: React.FC = () => {
           tooltipState={tooltipState}
           setTooltipState={setTooltipState}
         />
-        <Heading
-          level={4}
-          color='secondary.60'
-          marginBottom='xs'
-          marginTop='xl'
-        >
-          {t('stories_title')}
-        </Heading>
-        {posts?.length > 0 && <CrosslinkCards posts={posts} />}
-        <Heading
-          level={4}
-          color='secondary.60'
-          marginTop='xxl'
-          marginBottom='xs'
-        >
-          {t('download')}
-        </Heading>
-        <Text>{t('download_desc')}</Text>
-        <Button variation='primary' onClick={() => downloadFile(activeFile)}>
-          {t('download_button')}
-        </Button>
-        <Heading level={2} marginTop='xxxl'>
-          {t('method_title')}
-        </Heading>
-        <Text marginBottom='xl'>{t('method_p1')}</Text>
-        <Heading level={3} color='secondary.60'>
-          {t('method_sample')}
-        </Heading>
-        <Text marginBottom='xl'>{t('method_sample_p1')}</Text>
-        <Heading level={3} color='secondary.60'>
-          {t('method_collection')}
-        </Heading>
-        <Text marginBottom='xl'>{t('method_collection_p1')}</Text>
+        <FadeInUp>
+          <Heading
+            level={4}
+            color='secondary.60'
+            marginBottom='xs'
+            marginTop='xxxl'
+          >
+            {t('stories_title')}
+          </Heading>
+          {posts?.length > 0 && <CrosslinkCards posts={posts} />}
+        </FadeInUp>
+        <FadeInUp>
+          <Heading
+            level={4}
+            color='secondary.60'
+            marginTop='xxl'
+            marginBottom='xs'
+          >
+            {t('download')}
+          </Heading>
+
+          <Text>{t('download_desc')}</Text>
+          <Button variation='primary' onClick={() => downloadFile(activeFile)}>
+            {t('download_button')}
+          </Button>
+        </FadeInUp>
+        <FadeInUp>
+          <Heading level={2} marginTop='xxxl'>
+            {t('method_title')}
+          </Heading>
+          <Text marginBottom='xl'>{t('method_p1')}</Text>
+          <Heading level={3} color='secondary.60'>
+            {t('method_sample')}
+          </Heading>
+          <Text marginBottom='xl'>{t('method_sample_p1')}</Text>
+          <Heading level={3} color='secondary.60'>
+            {t('method_collection')}
+          </Heading>
+          <Text marginBottom='xl'>{t('method_collection_p1')}</Text>
+        </FadeInUp>
       </View>
       <Drawer
         isopen={isDrawerOpen}

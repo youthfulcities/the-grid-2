@@ -275,6 +275,12 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       ),
       'Future of Work in Cities': d3.scaleSequential(d3.interpolateGreens),
       'An ideal organization': d3.scaleSequential(d3.interpolatePurples),
+      'post pandemic work ecosystems': d3.scaleSequential(d3.interpolateBlues),
+      'transition from education to work': d3.scaleSequential(
+        d3.interpolateReds
+      ),
+      'future of work in cities': d3.scaleSequential(d3.interpolateGreens),
+      'an ideal organization': d3.scaleSequential(d3.interpolatePurples),
     } as const;
 
     type ThemeKey = keyof typeof themeColorScales;

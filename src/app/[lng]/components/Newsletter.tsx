@@ -19,9 +19,11 @@ const StyledTextField = styled(TextField)`
   min-width: 200px;
   max-width: 100%;
   flex-grow: 2;
-  background-color: white;
+  background-color: #fff;
+  color: #000;
   input {
     border-color: transparent;
+    color: #000;
   }
 `;
 

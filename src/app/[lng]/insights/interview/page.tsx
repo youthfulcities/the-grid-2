@@ -32,7 +32,7 @@ import { Trans } from 'react-i18next/TransWithoutContext';
 // Amplify.configure(config);
 
 const colors = ['red', 'green', 'yellow', 'pink', 'blue'];
-const filename = 'DEV_WUWWL_2024_Full_National.xlsx';
+const filename = 'devlab-2024-interview-cleaned.csv';
 
 const parseCSVData = (csvString: string) => {
   const parsed = d3.csvParse(csvString);

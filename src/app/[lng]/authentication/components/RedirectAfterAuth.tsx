@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 const RedirectAfterAuth = () => {
   const router = useRouter();
   const { authStatus } = useAuthenticator((context) => [context.authStatus]);
+  console.log('authStatus', authStatus);
   // Retrieve the redirect URL from session storage or set a default
 
   useEffect(() => {

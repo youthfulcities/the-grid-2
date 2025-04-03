@@ -75,11 +75,15 @@
       "UnauthRoleName": "amplify-thegrid2-staging-214411-unauthRole",
       "StackName": "amplify-thegrid2-staging-214411",
       "StackId": "arn:aws:cloudformation:ca-central-1:730335589682:stack/amplify-thegrid2-staging-214411/decfab50-c081-11ee-b3f0-06af8a8a7554",
-      "AmplifyAppId": "dlnca7rtkq5g9"
+      "AmplifyAppId": "dlnca7rtkq5g9",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-thegrid2-staging-214411-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
-        "thegrid2fafc44b3": {}
+        "thegrid2fafc44b3": {
+          "googleClientId": "483064867453-qkbovj3el7ghljqfmjj3ou7892kbcd7j.apps.googleusercontent.com"
+        },
+        "userPoolGroups": {}
       },
       "storage": {
         "interviews": {
@@ -131,14 +135,44 @@
         },
         "getGroceryItems": {
           "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
-          "s3Key": "amplify-builds/getGroceryItems-5864774a4d704f527948-build.zip"
+          "s3Key": "amplify-builds/getGroceryItems-43456d38616d46595a30-build.zip"
+        },
+        "thegrid2fafc44b3DefineAuthChallenge": {
+          "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
+          "s3Key": "amplify-builds/thegrid2fafc44b3DefineAuthChallenge-6350662f4366686e3263-build.zip"
+        },
+        "thegrid2fafc44b3CreateAuthChallenge": {
+          "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
+          "s3Key": "amplify-builds/thegrid2fafc44b3CreateAuthChallenge-4f4554545944304c6e67-build.zip"
+        },
+        "thegrid2fafc44b3VerifyAuthChallengeResponse": {
+          "RECAPTCHASECRET": "6LetMAkrAAAAALsy3PIHYleWrI7nquowyicBiV-J",
+          "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
+          "s3Key": "amplify-builds/thegrid2fafc44b3VerifyAuthChallengeResponse-303663524746584c5a63-build.zip"
+        },
+        "thegrid2fafc44b3CustomMessage": {
+          "REDIRECTURL": "https://www.youthdatalab.youthfulcities.com/",
+          "EMAILSUBJECT": "Your account for Youth Data Lab has been confirmed!",
+          "EMAILMESSAGE": "You can now log into Youth Data Lab:",
+          "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
+          "s3Key": "amplify-builds/thegrid2fafc44b3CustomMessage-69765567634330453738-build.zip"
+        },
+        "thegrid2fafc44b3PostConfirmation": {
+          "GROUP": "general",
+          "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
+          "s3Key": "amplify-builds/thegrid2fafc44b3PostConfirmation-7a467272787253306f56-build.zip"
+        },
+        "AdminQueries1eae25ec": {
+          "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
+          "s3Key": "amplify-builds/AdminQueries1eae25ec-6c72725a435766394a6d-build.zip"
         }
       },
       "api": {
         "s3": {},
         "thegrid2": {},
         "interviewAll": {},
-        "grocery": {}
+        "grocery": {},
+        "AdminQueries": {}
       },
       "analytics": {
         "thegrid2": {}

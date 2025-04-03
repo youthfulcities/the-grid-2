@@ -7,6 +7,11 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "api": {
+    "AdminQueries": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
+    },
     "grocery": {
       "ApiId": "string",
       "ApiName": "string",
@@ -27,14 +32,28 @@ export type AmplifyDependentResourcesAttributes = {
     "thegrid2fafc44b3": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
+      "GoogleWebClient": "string",
+      "HostedUIDomain": "string",
       "IdentityPoolId": "string",
       "IdentityPoolName": "string",
+      "OAuthMetadata": "string",
       "UserPoolArn": "string",
       "UserPoolId": "string",
       "UserPoolName": "string"
+    },
+    "userPoolGroups": {
+      "adminGroupRole": "string",
+      "generalGroupRole": "string"
     }
   },
   "function": {
+    "AdminQueries1eae25ec": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "contactFormUploader": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
@@ -57,6 +76,41 @@ export type AmplifyDependentResourcesAttributes = {
       "Region": "string"
     },
     "interviewAll": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "thegrid2fafc44b3CreateAuthChallenge": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "thegrid2fafc44b3CustomMessage": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "thegrid2fafc44b3DefineAuthChallenge": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "thegrid2fafc44b3PostConfirmation": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "thegrid2fafc44b3VerifyAuthChallengeResponse": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",

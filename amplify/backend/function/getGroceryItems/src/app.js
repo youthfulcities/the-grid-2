@@ -81,6 +81,34 @@ app.get(path, async function (req, res) {
 });
 
 /************************************
+ * HTTP Get method to list unique objects *
+ ************************************/
+
+app.get(path + '/unique', async function (req, res) {
+  var params = {
+    TableName: tableName,
+    Select: 'ALL_ATTRIBUTES',
+  };
+
+  try {
+    const data = await ddbDocClient.send(new ScanCommand(params));
+    const uniqueItems = {};
+
+    data.Items.forEach((item) => {
+      const key = item[partitionKeyName];
+      if (!uniqueItems[key] || item.timestamp > uniqueItems[key].timestamp) {
+        uniqueItems[key] = item;
+      }
+    });
+
+    res.json(Object.values(uniqueItems));
+  } catch (err) {
+    res.statusCode = 500;
+    res.json({ error: 'Could not load items: ' + err.message });
+  }
+});
+
+/************************************
  * HTTP Get method to query objects *
  ************************************/
 
@@ -270,6 +298,29 @@ app.delete(
     }
   }
 );
+
+// Middleware to check authentication and authorization
+const authenticateAndAuthorize = (req, res, next) => {
+  const userId =
+    req.apiGateway?.event.requestContext.identity.cognitoIdentityId;
+  const userGroups =
+    req.apiGateway?.event.requestContext.authorizer?.claims['cognito:groups'];
+
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  if (!userGroups || !userGroups.includes('admin')) {
+    return res.status(403).json({ error: 'Forbidden: Admin access required' });
+  }
+
+  next();
+};
+
+// Protect specific routes
+app.use(path + '/unique', authenticateAndAuthorize);
+app.use(path + hashKeyPath, authenticateAndAuthorize);
+app.use(path + '/object' + hashKeyPath + sortKeyPath, authenticateAndAuthorize);
 
 app.listen(3000, function () {
   console.log('App started');

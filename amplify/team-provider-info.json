@@ -103,6 +103,15 @@
         "thegrid24c63f4ac": {
           "bucketName": "ycydl-staging",
           "region": "ca-central-1"
+        },
+        "groceryprices": {
+          "tableName": "grocery_prices",
+          "region": "ca-central-1",
+          "arn": "arn:aws:dynamodb:ca-central-1:730335589682:table/grocery_prices",
+          "partitionKeyName": "pk",
+          "partitionKeyType": "S",
+          "sortKeyName": "sk",
+          "sortKeyType": "S"
         }
       },
       "function": {
@@ -119,12 +128,17 @@
         "interviewAll": {
           "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
           "s3Key": "amplify-builds/interviewAll-682f63423761372b6b6f-build.zip"
+        },
+        "getGroceryItems": {
+          "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
+          "s3Key": "amplify-builds/getGroceryItems-5864774a4d704f527948-build.zip"
         }
       },
       "api": {
         "s3": {},
         "thegrid2": {},
-        "interviewAll": {}
+        "interviewAll": {},
+        "grocery": {}
       },
       "analytics": {
         "thegrid2": {}

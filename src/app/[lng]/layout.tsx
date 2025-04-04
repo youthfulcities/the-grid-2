@@ -12,7 +12,7 @@ import { LoadingProvider } from '../context/LoadingContext';
 import { ThemeProvider } from '../context/ThemeContext';
 import { languages } from '../i18n/settings';
 import AWSThemeProvider from './aws-theme-provider';
-import AutheticatorProvider from './components/AuthenticatorProvider';
+import AutheticatorProvider from '../components/AuthenticatorProvider';
 import Banner from './components/BetaBanner';
 import Footer from './components/Footer';
 import LoadingBar from './components/LoadingBar';

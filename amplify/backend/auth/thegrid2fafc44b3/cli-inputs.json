@@ -145,6 +145,6 @@
     "permissions": [
       "{\n  \"policyName\": \"AddToGroupCognito\",\n  \"trigger\": \"PostConfirmation\",\n  \"effect\": \"Allow\",\n  \"actions\": [\n    \"cognito-idp:AdminAddUserToGroup\",\n    \"cognito-idp:GetGroup\",\n    \"cognito-idp:CreateGroup\"\n  ],\n  \"resource\": {\n    \"paramType\": \"!GetAtt\",\n    \"keys\": [\n      \"UserPool\",\n      \"Arn\"\n    ]\n  }\n}"
     ],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://www.youthdatalab.youthfulcities.com/\",\"https://staging.dlnca7rtkq5g9.amplifyapp.com/\",\"http://localhost:3000/\"],\"LogoutURLs\":[\"https://www.youthdatalab.youthfulcities.com/\",\"https://staging.dlnca7rtkq5g9.amplifyapp.com/\",\"http://localhost:3000/\"]}"
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://www.youthdatalab.youthfulcities.com/redirect/\",\"https://staging.dlnca7rtkq5g9.amplifyapp.com/redirect/\",\"http://localhost:3000/redirect/\"],\"LogoutURLs\":[\"https://www.youthdatalab.youthfulcities.com/en/\",\"https://staging.dlnca7rtkq5g9.amplifyapp.com/en/\",\"http://localhost:3000/en/\"]}"
   }
 }

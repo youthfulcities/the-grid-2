@@ -182,19 +182,12 @@ a:hover {
 .highlight {
   color: var(--amplify-colors-secondary-60);
 }
-.alt-heading {
-  color: var(--plum);
-}
 .alt-highlight {
   color: var(--amplify-colors-yellow-60);
-}
-.orange-highlight {
-  color: var(--orange);
 }
 .light-heading {
   color: #fff;
 }
-
 .breadcrumbs {
   color: #000;
 }
@@ -438,50 +431,6 @@ a.outline-button:hover {
   }
 }
 
-/* Highlight bar
-========================================================================== */
-.highlight-bar {
-  width: 100%;
-  padding: 20px 0;
-  background-color: var(--blue);
-}
-.ods-widget-timer-controller {
-  display: none;
-}
-.fact {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-.outline-text {
-  color: var(--light-blue);
-  font-family: 'Gotham Narrow Black';
-  font-style: normal;
-  font-size: 6.5rem;
-  line-height: 6.5rem;
-  -webkit-text-fill-color: var(--blue);
-  -webkit-text-stroke-width: 2px;
-  -webkit-text-stroke-color: var(--light-blue);
-}
-
-.large-text {
-  color: var(--blue);
-  font-family: 'Gotham Narrow Black';
-  font-style: normal;
-  font-size: 6.5rem;
-  line-height: 6.5rem;
-}
-
-@media screen and (max-width: 992px) {
-  .outline-text {
-    font-size: 5rem;
-    line-height: 5rem;
-  }
-
-  .large-text {
-    font-size: 5rem;
-    line-height: 5rem;
-  }
-}
 /* Cards
 ========================================================================== */
 .logo-card {
@@ -1280,14 +1229,6 @@ a.outline-button:hover {
   }
 }
 
-.authenticator-container .amplify-input {
-  color: white !important; /* Only change text color for inputs within the Authenticator */
-}
-
-.authenticator-container .amplify-label {
-  color: white !important; /* Make label text color white */
-}
-
 .masonry-grid {
   display: flex;
   width: auto;
@@ -1297,4 +1238,20 @@ a.outline-button:hover {
 .masonry-grid_column {
   padding-left: 10px; /* gutter size */
   background-clip: padding-box;
+}
+
+/* OVERRIDES */
+
+.authenticator-container .amplify-input {
+  color: white !important; /* Only change text color for inputs within the Authenticator */
+}
+
+.authenticator-container .amplify-label {
+  color: white !important; /* Make label text color white */
+}
+
+.federated-sign-in-button {
+  span {
+    margin-bottom: 0;
+  }
 }

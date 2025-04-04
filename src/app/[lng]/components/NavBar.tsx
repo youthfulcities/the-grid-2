@@ -11,7 +11,6 @@ import {
   MenuItem,
   Text,
   View,
-  useAuthenticator,
   useBreakpointValue,
   useTheme,
 } from '@aws-amplify/ui-react';
@@ -136,8 +135,6 @@ const NavBar = () => {
 
   const { tokens } = useTheme();
   const { colorMode, setColorMode } = useThemeContext();
-
-  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
 
   function handleLanguageChange(locale: string) {
     const newPath = `/${locale}${pathNoLocale}`;
@@ -275,7 +272,7 @@ const NavBar = () => {
               </MobileMenuItem>
             </MobileLink>
             <MobileMenuItem>
-              <AuthLink authStatus={authStatus} mobile />
+              <AuthLink mobile />
             </MobileMenuItem>
           </Menu>
         ) : (
@@ -315,7 +312,7 @@ const NavBar = () => {
                 {t('contact')}
               </NavLink>
             </NavigationLinks>
-            <AuthLink authStatus={authStatus} />
+            <AuthLink />
           </>
         )}
       </Flex>

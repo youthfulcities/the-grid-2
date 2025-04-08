@@ -1,5 +1,5 @@
 import useTranslation from '@/app/i18n/client';
-import shouldUseWhiteText from '@/lib/shouldUseWhiteText';
+import shouldUseWhiteText from '@/utils/shouldUseWhiteText';
 import { Button, Flex, Grid, Heading } from '@aws-amplify/ui-react';
 import Color from 'color-thief-react';
 import Link from 'next/link';

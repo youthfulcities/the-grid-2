@@ -1,6 +1,6 @@
 'use client';
 
-import truncateText from '@/lib/truncateText';
+import truncateText from '@/utils/truncateText';
 import { Placeholder, View } from '@aws-amplify/ui-react';
 import * as d3 from 'd3';
 import _ from 'lodash';

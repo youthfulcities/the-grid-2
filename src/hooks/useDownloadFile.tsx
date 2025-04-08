@@ -1,5 +1,5 @@
 import { useLoading } from '@/app/context/LoadingContext';
-import fetchUrl from '@/lib/fetchUrl';
+import fetchUrl from '@/utils/fetchUrl';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';

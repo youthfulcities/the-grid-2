@@ -2,38 +2,45 @@
 
 import Container from '@/app/components/Background';
 import FadeInUp from '@/app/components/FadeInUp';
-import { View } from '@aws-amplify/ui-react';
+import { Text, View } from '@aws-amplify/ui-react';
 import React, { useEffect, useState } from 'react';
 
 interface GroceryItem {
-  quantity_unit: string;
-  quantity: number;
-  product_name: string;
-  timestamp: string;
-  brand: string;
-  postal_code: string;
-  city: string;
-  base_unit: string;
-  base_amount: number;
-  price_per_base_amount: number;
   category: string;
-  sk: string;
-  price: number;
-  pk: string;
-  prepared_in_canada: string;
+  category_average: number | null;
+  category_canada_average: number | null;
+  category_not_canada_average: number | null;
+  cities: {
+    city: string;
+    prepared_in_canada: number | null;
+    not_prepared_in_canada: number | null;
+    city_average: number | null;
+  }[];
 }
-
 const GroceryList: React.FC = () => {
   const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
+  const [errorText, setErrorText] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchGroceryItems = async () => {
+      setLoading(true);
       try {
-        const response = await fetch('/api/grocery');
-        const data = await response.json();
-        setGroceryItems(data);
-      } catch (error) {
+        const response = await fetch('/api/grocery/public/unique');
+        const result = await response.json();
+        console.log(result);
+
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to load grocery items');
+        }
+
+        setGroceryItems(result);
+        setErrorText(null);
+      } catch (error: any) {
         console.error('Error fetching grocery items:', error);
+        setErrorText(error.message || 'Something went wrong');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -43,27 +50,67 @@ const GroceryList: React.FC = () => {
   return (
     <Container>
       <View className='container padding'>
-        <h1>Grocery Items</h1>
-        <ul>
-          {groceryItems.map((item, index) => (
-            <FadeInUp key={index}>
-              <li>
-                <h2>{item.product_name}</h2>
-                <p>Brand: {item.brand}</p>
-                <p>Category: {item.category}</p>
-                <p>Price: ${item.price.toFixed(2)}</p>
-                <p>
-                  Quantity: {item.quantity} {item.quantity_unit}
-                </p>
-                <p>City: {item.city}</p>
-                <p>
-                  Prepared in Canada:{' '}
-                  {item.prepared_in_canada === 'true' ? 'Yes' : 'No'}
-                </p>
-              </li>
-            </FadeInUp>
-          ))}
-        </ul>
+        <h1>Grocery Category Averages</h1>
+
+        {loading && <Text>Loading...</Text>}
+
+        {errorText && !loading && (
+          <Text className='text-red-600 font-semibold'>{errorText}</Text>
+        )}
+
+        {!loading && groceryItems && groceryItems.length > 0 && (
+          <ul>
+            {groceryItems.map((group, index) => (
+              <FadeInUp key={group.category}>
+                <li className='mb-8'>
+                  <h2 className='text-xl font-bold mb-1'>{group.category}</h2>
+                  <p className='text-sm text-gray-600 mb-2'>
+                    Category Average: ${group.category_average?.toFixed(2)}
+                  </p>
+                  <p className='text-sm text-gray-600 mb-2'>
+                    Canadian Average: $
+                    {group.category_canada_average?.toFixed(2) ?? 'N/A'}
+                  </p>
+                  <p className='text-sm text-gray-600 mb-2'>
+                    Non-Canadian Average: $
+                    {group.category_not_canada_average?.toFixed(2) ?? 'N/A'}
+                  </p>
+                  <ul className='ml-4 space-y-2'>
+                    {/* {group.cities.map((cityData, cityIndex) => (
+                      <li key={cityIndex} className='border p-2 rounded-md'>
+                        <p className='font-semibold text-md mb-1'>
+                          {cityData.city}
+                        </p>
+
+                        <div className='text-sm'>
+                          <p>
+                            Prepared in Canada:{' '}
+                            {cityData.prepared_in_canada !== null
+                              ? `$${cityData.prepared_in_canada.toFixed(2)}`
+                              : 'N/A'}
+                          </p>
+                          <p>
+                            Not Prepared in Canada:{' '}
+                            {cityData.not_prepared_in_canada !== null
+                              ? `$${cityData.not_prepared_in_canada.toFixed(2)}`
+                              : 'N/A'}
+                          </p>
+                          <p className='font-medium'>
+                            City Average: ${cityData.city_average.toFixed(2)}
+                          </p>
+                        </div>
+                      </li>
+                    ))} */}
+                  </ul>
+                </li>
+              </FadeInUp>
+            ))}
+          </ul>
+        )}
+
+        {!loading && groceryItems?.length === 0 && !errorText && (
+          <Text>No data available.</Text>
+        )}
       </View>
     </Container>
   );

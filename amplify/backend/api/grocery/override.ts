@@ -1,12 +1,5 @@
-import {
-  AmplifyApiRestResourceStackTemplate,
-  AmplifyProjectInfo,
-} from '@aws-amplify/cli-extensibility-helper';
-
-export function override(
-  resources: AmplifyApiRestResourceStackTemplate,
-  amplifyProjectInfo: AmplifyProjectInfo
-) {
+// @ts-nocheck
+export function override(resources) {
   const authResourceName = 'thegrid2fafc44b3';
   const userPoolArnParameter = 'AuthCognitoUserPoolArn';
 

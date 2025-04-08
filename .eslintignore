@@ -3,3 +3,4 @@ src/models/models
 **.test.tsx
 src/__mocks__/*
 amplify/backend/*
+amplify/*current-cloud-backend

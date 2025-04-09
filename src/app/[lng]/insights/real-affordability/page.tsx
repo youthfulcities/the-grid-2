@@ -1,9 +1,11 @@
 'use client';
 
 import Container from '@/app/components/Background';
-import FadeInUp from '@/app/components/FadeInUp';
 import { Text, View } from '@aws-amplify/ui-react';
+import { motion } from 'framer-motion';
+import Error from 'next/error';
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 interface GroceryItem {
   category: string;
@@ -17,10 +19,68 @@ interface GroceryItem {
     city_average: number | null;
   }[];
 }
+
+const GridWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 32px;
+  padding: 2rem;
+  justify-items: center;
+`;
+
+const ImageWrapper = styled(motion.div)<{ $error: boolean }>`
+  display: ${(props) => (props.$error ? 'none' : 'block')};
+  width: 120px;
+  height: 120px;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  &:hover .info-box {
+    display: flex;
+  }
+`;
+
+const InfoBox = styled(motion.div)`
+  position: absolute;
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  z-index: 10;
+  white-space: nowrap;
+`;
+
+const getRandomOffset = () => ({
+  rotate: Math.random() * 10 - 5, // -5 to +5 degrees
+  x: Math.random() * 10 - 5, // -5 to +5 px
+  y: Math.random() * 10 - 5,
+});
+
+const removeSpecialChars = (string: string) =>
+  string.replace(/[^a-zA-Z ]/g, '').trim();
+
 const GroceryList: React.FC = () => {
   const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
-  const [errorText, setErrorText] = useState<string | null>(null);
+  const [errorText, setErrorText] = useState<
+    string | null | undefined | unknown
+  >(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [imgError, setImgError] = useState<{ [key: string]: boolean }>({});
 
   useEffect(() => {
     const fetchGroceryItems = async () => {
@@ -36,81 +96,59 @@ const GroceryList: React.FC = () => {
 
         setGroceryItems(result);
         setErrorText(null);
-      } catch (error: any) {
+      } catch (fetchError: unknown) {
+        const error = fetchError as Error;
         console.error('Error fetching grocery items:', error);
-        setErrorText(error.message || 'Something went wrong');
       } finally {
         setLoading(false);
       }
     };
-
     fetchGroceryItems();
   }, []);
 
   return (
     <Container>
       <View className='container padding'>
-        <h1>Grocery Category Averages</h1>
-
-        {loading && <Text>Loading...</Text>}
-
-        {errorText && !loading && (
-          <Text className='text-red-600 font-semibold'>{errorText}</Text>
-        )}
-
-        {!loading && groceryItems && groceryItems.length > 0 && (
-          <ul>
-            {groceryItems.map((group, index) => (
-              <FadeInUp key={group.category}>
-                <li className='mb-8'>
-                  <h2 className='text-xl font-bold mb-1'>{group.category}</h2>
-                  <p className='text-sm text-gray-600 mb-2'>
-                    Category Average: ${group.category_average?.toFixed(2)}
-                  </p>
-                  <p className='text-sm text-gray-600 mb-2'>
-                    Canadian Average: $
-                    {group.category_canada_average?.toFixed(2) ?? 'N/A'}
-                  </p>
-                  <p className='text-sm text-gray-600 mb-2'>
-                    Non-Canadian Average: $
-                    {group.category_not_canada_average?.toFixed(2) ?? 'N/A'}
-                  </p>
-                  <ul className='ml-4 space-y-2'>
-                    {/* {group.cities.map((cityData, cityIndex) => (
-                      <li key={cityIndex} className='border p-2 rounded-md'>
-                        <p className='font-semibold text-md mb-1'>
-                          {cityData.city}
-                        </p>
-
-                        <div className='text-sm'>
-                          <p>
-                            Prepared in Canada:{' '}
-                            {cityData.prepared_in_canada !== null
-                              ? `$${cityData.prepared_in_canada.toFixed(2)}`
-                              : 'N/A'}
-                          </p>
-                          <p>
-                            Not Prepared in Canada:{' '}
-                            {cityData.not_prepared_in_canada !== null
-                              ? `$${cityData.not_prepared_in_canada.toFixed(2)}`
-                              : 'N/A'}
-                          </p>
-                          <p className='font-medium'>
-                            City Average: ${cityData.city_average.toFixed(2)}
-                          </p>
-                        </div>
-                      </li>
-                    ))} */}
-                  </ul>
-                </li>
-              </FadeInUp>
-            ))}
-          </ul>
-        )}
-
-        {!loading && groceryItems?.length === 0 && !errorText && (
-          <Text>No data available.</Text>
-        )}
+        <h1>Grocery Categories</h1>
+        <GridWrapper>
+          {groceryItems.map((item, i) => {
+            const offset = getRandomOffset();
+            const key = removeSpecialChars(item.category);
+            return (
+              <ImageWrapper
+                $error={imgError[key]}
+                key={key}
+                initial={{
+                  rotate: offset.rotate,
+                  x: offset.x,
+                  y: offset.y,
+                }}
+                whileHover={{ scale: 1.1, rotate: 0, x: 0, y: 0 }}
+                transition={{ type: 'spring', stiffness: 200 }}
+              >
+                <img
+                  onError={() =>
+                    setImgError((prev) => ({
+                      ...prev,
+                      [key]: false,
+                    }))
+                  }
+                  src={`/assets/food-icons/${key}.png`}
+                  alt={item.category}
+                />
+                <InfoBox className='info-box'>
+                  <Text fontWeight='bold'>{item.category}</Text>
+                  <Text>
+                    🇨🇦 ${item.category_canada_average?.toFixed(2) ?? 'N/A'}
+                  </Text>
+                  <Text>
+                    🇺🇸 ${item.category_not_canada_average?.toFixed(2) ?? 'N/A'}
+                  </Text>
+                </InfoBox>
+              </ImageWrapper>
+            );
+          })}
+        </GridWrapper>
       </View>
     </Container>
   );

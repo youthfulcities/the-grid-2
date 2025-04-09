@@ -147,9 +147,20 @@ app.get(
       };
       command = new QueryCommand(params);
     }
-
-    // Use GSI_City if only city is provided
-    else if (city) {
+    // Use category as partition key if provided
+    else if (category) {
+      params = {
+        TableName: tableName,
+        KeyConditionExpression: '#pk = :pk',
+        ExpressionAttributeNames: {
+          '#pk': 'pk',
+        },
+        ExpressionAttributeValues: {
+          ':pk': `category#${category.toLowerCase().replace(/\s+/g, '_')}`,
+        },
+      };
+      command = new QueryCommand(params);
+    } else if (city) {
       params = {
         TableName: tableName,
         IndexName: 'GSI_City',
@@ -234,11 +245,31 @@ app.get(
     }
 
     try {
-      const data = await ddbDocClient.send(command);
+      let items = [];
+      let lastEvaluatedKey;
+      let commandInstance;
+
+      do {
+        if (lastEvaluatedKey) {
+          params.ExclusiveStartKey = lastEvaluatedKey;
+        }
+
+        commandInstance =
+          command instanceof QueryCommand
+            ? new QueryCommand(params)
+            : new ScanCommand(params);
+
+        const result = await ddbDocClient.send(commandInstance);
+
+        if (result.Items) {
+          items = items.concat(result.Items);
+        }
+
+        lastEvaluatedKey = result.LastEvaluatedKey;
+      } while (lastEvaluatedKey);
 
       const uniqueItems = {};
-
-      data.Items.forEach((item) => {
+      items.forEach((item) => {
         const key = `${item.city?.toLowerCase()}|${item.product_name?.toLowerCase()}`;
         const timestamp = new Date(item.timestamp);
 
@@ -250,9 +281,6 @@ app.get(
         }
       });
 
-      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
-      res.setHeader('Pragma', 'no-cache');
-      res.setHeader('Expires', '0');
       res.json(Object.values(uniqueItems));
     } catch (err) {
       console.error('DynamoDB error:', err);
@@ -271,25 +299,37 @@ app.get(path + 'public/unique', async function (req, res) {
   };
 
   try {
-    const data = await ddbDocClient.send(new ScanCommand(params));
+    let items = [];
+    let lastEvaluatedKey;
+
+    do {
+      if (lastEvaluatedKey) {
+        params.ExclusiveStartKey = lastEvaluatedKey;
+      }
+
+      const result = await ddbDocClient.send(new ScanCommand(params));
+
+      if (result.Items) {
+        items = items.concat(result.Items);
+      }
+
+      lastEvaluatedKey = result.LastEvaluatedKey;
+    } while (lastEvaluatedKey);
 
     // Step 1: Deduplicate by city + product_name
     const deduped = new Map();
 
-    const parseTimestamp = (ts) =>
-      ts ? new Date(ts.replace(/\.(\d{3})\d+/, '.$1')) : null;
-
-    data.Items.forEach((item) => {
+    items.forEach((item) => {
       const city = item.city?.toLowerCase();
       const product = item.product_name?.toLowerCase();
-      const timestamp = parseTimestamp(item.timestamp);
+      const timestamp = new Date(item.timestamp);
 
       if (!city || !product || isNaN(timestamp)) return;
 
       const key = `${city}|${product}`;
       const existing = deduped.get(key);
 
-      if (!existing || parseTimestamp(existing.timestamp) < timestamp) {
+      if (!existing || existing.timestamp < timestamp) {
         deduped.set(key, item);
       }
     });

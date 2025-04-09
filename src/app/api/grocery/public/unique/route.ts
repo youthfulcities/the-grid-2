@@ -23,7 +23,7 @@ interface CategoryGroupedItem {
   }[];
 }
 
-export const dynamic = 'force-dynamic';
+// export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
@@ -40,6 +40,7 @@ export async function GET() {
     }
 
     const rawData: GroceryItemResponse = await response.json();
+    console.log('Data fetched successfully');
 
     // Combine and flag data
     const allItems = [

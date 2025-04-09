@@ -4,6 +4,7 @@ import Container from '@/app/components/Background';
 import FadeInUp from '@/app/components/FadeInUp';
 import authFetch from '@/utils/authFetch';
 import { Text, View } from '@aws-amplify/ui-react';
+import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 interface GroceryItem {
@@ -28,21 +29,32 @@ const GroceryList: React.FC = () => {
   const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
   const [errorText, setErrorText] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const fetchGroceryItems = async () => {
       setLoading(true);
+      // Build query string from current URL params
+      const query = new URLSearchParams();
+      const category = searchParams.get('category');
+      const city = searchParams.get('city');
+      const prepared = searchParams.get('prepared_in_canada');
+
+      if (category) query.set('category', category);
+      if (city) query.set('city', city);
+      if (prepared) query.set('prepared_in_canada', prepared);
+
+      const queryString = query.toString();
+      const url = `/api/grocery/unique${queryString ? `?${queryString}` : ''}`;
+
       try {
-        const response = await authFetch(
-          '/api/grocery/unique?prepared_in_canada=true'
-        );
+        const response = await authFetch(url);
         const result = await response.json();
         console.log(result);
 
         if (!response.ok) {
           throw new Error(result.error || 'Failed to load grocery items');
         }
-
         setGroceryItems(result);
         setErrorText(null);
       } catch (error: any) {

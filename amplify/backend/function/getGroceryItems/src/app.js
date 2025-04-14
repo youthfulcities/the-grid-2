@@ -38,6 +38,97 @@ const UNAUTH = 'UNAUTH';
 const hashKeyPath = '/:' + partitionKeyName;
 const sortKeyPath = hasSortKey ? '/:' + sortKeyName : '';
 
+const normalizeQuantity = (quantity, unit) => {
+  if (!unit || isNaN(quantity)) {
+    return { value: null, unit: null };
+  }
+
+  const lower = unit.toLowerCase();
+
+  // Normalize weights to g
+  const weightMap = {
+    kg: 1000,
+    g: 1,
+  };
+
+  // Normalize volumes to mL
+  const volumeMap = {
+    l: 1000,
+    ml: 1,
+  };
+
+  if (weightMap[lower] !== undefined) {
+    const normalizedValue = quantity * weightMap[lower]; // convert to grams
+    const normalizedUnit = 'g';
+    return {
+      value: normalizedValue,
+      unit: normalizedUnit,
+    };
+  }
+
+  if (volumeMap[lower] !== undefined) {
+    const normalizedValue = quantity * volumeMap[lower]; // convert to ml
+    const normalizedUnit = 'ml';
+    return {
+      value: normalizedValue,
+      unit: normalizedUnit,
+    };
+  }
+
+  // If unknown unit, return original
+  return { value: quantity, unit: lower };
+};
+
+const normalizePricePer = (base_amount, base_unit, price_per_base_amount) => {
+  const { value: quantity, unit } = normalizeQuantity(base_amount, base_unit);
+  if (!quantity || quantity === 0) return null;
+  else if (base_unit === 'kg' || base_unit === 'l') {
+    return {
+      value: quantity / quantity,
+      unit: unit,
+      price_per_base_amount: price_per_base_amount / 1000 / quantity,
+    };
+  }
+  return {
+    value: quantity / quantity,
+    unit: unit,
+    price_per_base_amount: price_per_base_amount / quantity,
+  };
+};
+
+const averageMostCommonUnit = (values) => {
+  if (!values.length) return { unit: null, average: null };
+
+  // Count frequency of each unit
+  const unitCounts = {};
+  for (const { unit } of values) {
+    unitCounts[unit] = (unitCounts[unit] || 0) + 1;
+  }
+
+  // Find the most common unit
+  let mostCommonUnit = null;
+  let maxCount = 0;
+  for (const unit in unitCounts) {
+    if (unitCounts[unit] > maxCount) {
+      mostCommonUnit = unit;
+      maxCount = unitCounts[unit];
+    }
+  }
+
+  // Filter values by most common unit
+  const matchingValues = values
+    .filter((v) => v.unit === mostCommonUnit)
+    .map((v) => v.value);
+
+  const average =
+    matchingValues.reduce((sum, val) => sum + val, 0) / matchingValues.length;
+
+  return {
+    unit: mostCommonUnit,
+    average: parseFloat(average.toFixed(5)),
+  };
+};
+
 // Middleware to check authentication and authorization
 const authenticateAndAuthorize = (req, res, next) => {
   try {
@@ -341,12 +432,43 @@ app.get(path + 'public/unique', async function (req, res) {
     };
 
     for (const item of deduped.values()) {
-      const city = item.city;
-      const category = item.category;
-      const price = parseFloat(item.price_per_base_amount);
-      const isPrepared = item.prepared_in_canada === 'true';
+      const {
+        city,
+        category,
+        price,
+        quantity,
+        quantity_unit,
+        base_amount,
+        base_unit,
+        price_per_base_amount,
+        prepared_in_canada,
+        timestamp,
+      } = item;
+
+      const baseAmount = parseFloat(base_amount);
+      const baseUnit = base_unit?.toLowerCase();
+      const quantityUnit = quantity_unit?.toLowerCase();
+      const isPrepared = prepared_in_canada === 'true';
+      const time = new Date(timestamp);
 
       if (!city || !category || isNaN(price)) continue;
+
+      const { value: normalizedQty, unit: normalizedUnit } = normalizeQuantity(
+        quantity,
+        quantityUnit
+      );
+
+      const {
+        value: normalizedBaseAmount,
+        unit: normalizedBaseUnit,
+        price_per_base_amount: pricePerBase,
+      } = normalizePricePer(
+        baseAmount,
+        baseUnit,
+        parseFloat(price_per_base_amount)
+      );
+
+      if (pricePerBase == null) continue;
 
       const key = `${city}|${category}`;
       const targetGroup = isPrepared ? grouped.prepared : grouped.not_prepared;
@@ -355,22 +477,123 @@ app.get(path + 'public/unique', async function (req, res) {
         targetGroup[key] = {
           city,
           category,
-          total: price,
+          latest_timestamp: time,
+          total_price: price,
+          total_price_per_base: pricePerBase,
+          total_quantity: normalizedQty ?? 0,
+          quantity_count: normalizedQty ? 1 : 0,
+          quantity_unit: normalizedUnit ?? null,
+          quantity_units: new Set(normalizedUnit ? [normalizedUnit] : []),
+          base_amount_total: normalizedBaseAmount ?? 0,
+          base_count: normalizedBaseAmount ? 1 : 0,
+          base_unit: normalizedBaseUnit ?? null,
+          base_units: new Set(normalizedBaseUnit ? [normalizedBaseUnit] : []),
+          price_per_base_values: normalizedBaseUnit
+            ? [{ unit: normalizedBaseUnit, value: pricePerBase }]
+            : [],
+          quantity_values:
+            normalizedUnit && normalizedQty
+              ? [{ unit: normalizedUnit, value: normalizedQty }]
+              : [],
+          base_amount_values:
+            normalizedBaseUnit && !isNaN(normalizedBaseAmount)
+              ? [{ unit: normalizedBaseUnit, value: normalizedBaseAmount }]
+              : [],
           count: 1,
         };
       } else {
-        targetGroup[key].total += price;
-        targetGroup[key].count += 1;
+        const group = targetGroup[key];
+        group.total_price += price;
+        group.total_price_per_base += pricePerBase;
+        group.count += 1;
+
+        if (normalizedQty != null && normalizedQty !== 0) {
+          group.total_quantity += normalizedQty;
+          group.quantity_count += 1;
+        }
+
+        if (!isNaN(normalizedBaseAmount) && normalizedBaseAmount !== 0) {
+          group.base_amount_total += normalizedBaseAmount;
+          group.base_count += 1;
+        }
+
+        if (!group.base_unit && normalizedBaseUnit) {
+          group.base_unit = normalizedBaseUnit;
+        }
+
+        if (!group.quantity_unit && normalizedUnit) {
+          group.quantity_unit = normalizedUnit;
+        }
+
+        if (normalizedBaseUnit) {
+          group.base_units.add(normalizedBaseUnit);
+          group.price_per_base_values.push({
+            unit: normalizedBaseUnit,
+            value: pricePerBase,
+          });
+
+          if (!isNaN(normalizedBaseAmount)) {
+            group.base_amount_values.push({
+              unit: normalizedBaseUnit,
+              value: normalizedBaseAmount,
+            });
+          }
+        }
+
+        if (normalizedUnit && normalizedQty != null && normalizedQty !== 0) {
+          group.quantity_values.push({
+            unit: normalizedUnit,
+            value: normalizedQty,
+          });
+        }
+
+        if (normalizedUnit) {
+          group.quantity_units.add(normalizedUnit);
+        }
+
+        if (time > group.latest_timestamp) {
+          group.latest_timestamp = time;
+        }
       }
     }
 
-    // Step 3: Format results
     const formatGroups = (groupMap) =>
-      Object.values(groupMap).map((group) => ({
-        city: group.city,
-        category: group.category,
-        average_price: parseFloat((group.total / group.count).toFixed(2)),
-      }));
+      Object.values(groupMap).map((group) => {
+        const pricePerBase = averageMostCommonUnit(group.price_per_base_values);
+        const baseAmount = averageMostCommonUnit(group.base_amount_values);
+
+        // ✨ Use base_unit as authoritative for quantity
+        const baseUnit = pricePerBase.unit; // use this as the unit filter for quantity
+        const matchingQuantities = group.quantity_values
+          .filter((q) => (q.unit || '').trim().toLowerCase() === baseUnit)
+          .map((q) => q.value)
+          .filter((v) => typeof v === 'number' && !isNaN(v));
+
+        const averageQuantity =
+          matchingQuantities.length > 0
+            ? parseFloat(
+                (
+                  matchingQuantities.reduce((sum, v) => sum + v, 0) /
+                  matchingQuantities.length
+                ).toFixed(5)
+              )
+            : null;
+
+        return {
+          city: group.city,
+          category: group.category,
+          average_price:
+            group.count > 0
+              ? parseFloat((group.total_price / group.count).toFixed(2))
+              : null,
+          average_price_per_base: pricePerBase.average,
+          base_unit: baseUnit,
+          average_base_amount: baseAmount.average,
+          average_quantity: averageQuantity,
+          quantity_unit: baseUnit, // 🚨 always use the same unit as base_unit
+          latest_timestamp: group.latest_timestamp.toISOString(),
+        };
+      });
 
     const result = {
       prepared_in_canada: formatGroups(grouped.prepared),

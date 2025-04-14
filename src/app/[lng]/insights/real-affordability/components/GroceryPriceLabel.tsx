@@ -87,7 +87,7 @@ const GroceryPriceLabel: React.FC<GroceryPriceLabelProps> = ({
     price: number
   ) => {
     if (unit === 'g' || unit === 'ml') {
-      return `$${(price * 100).toFixed(2)} per ${quantity ?? 0 * 100}/${unit}`;
+      return `$${(price * 100).toFixed(2)} per ${(quantity ?? 1) * 100}/${unit}`;
     }
     return `$${price.toFixed(2)} per ${quantity}/${unit}`;
   };

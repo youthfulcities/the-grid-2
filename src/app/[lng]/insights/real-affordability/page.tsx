@@ -1,12 +1,21 @@
 'use client';
 
 import Container from '@/app/components/Background';
-import { Flex, Grid, Heading, Loader, Text, View } from '@aws-amplify/ui-react';
+import {
+  Button,
+  Flex,
+  Grid,
+  Heading,
+  Loader,
+  Text,
+  View,
+} from '@aws-amplify/ui-react';
 import { motion } from 'framer-motion';
 import _ from 'lodash';
 import Error from 'next/error';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import BasketBar from './components/BasketBar';
 import GroceryPriceLabel from './components/GroceryPriceLabel';
 
 interface GroceryItem {
@@ -92,6 +101,12 @@ const getLatestTimestamp = (items: GroceryItem[]): string | null => {
   return latest ?? null;
 };
 
+// Define the BasketEntry type
+interface BasketEntry {
+  item: GroceryItem;
+  quantity: number;
+}
+
 const GroceryList: React.FC = () => {
   const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
   const [latestTimestamp, setLatestTimestamp] = useState<string | null>(null);
@@ -100,6 +115,9 @@ const GroceryList: React.FC = () => {
   >(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [imgError, setImgError] = useState<{ [key: string]: boolean }>({});
+  const [basket, setBasket] = useState<{
+    [key: string]: { item: GroceryItem; quantity: number };
+  }>({});
 
   useEffect(() => {
     const fetchGroceryItems = async () => {
@@ -126,7 +144,38 @@ const GroceryList: React.FC = () => {
     fetchGroceryItems();
   }, []);
 
-  console.log('groceryItems', groceryItems);
+  const handleAddToBasket = (item: GroceryItem) => {
+    const key = removeSpecialChars(item.category);
+    setBasket((prev) => {
+      const existing = prev[key];
+      return {
+        ...prev,
+        [key]: {
+          item,
+          quantity: existing ? existing.quantity + 1 : 1,
+        },
+      };
+    });
+  };
+
+  const handleAddAll = () => {
+    const allItems: GroceryItem[] = groceryItems;
+    const all = allItems.reduce(
+      (acc, item) => {
+        const key = removeSpecialChars(item.category);
+        acc[key] = { item, quantity: 1 };
+        return acc;
+      },
+      {} as Record<string, BasketEntry>
+    );
+    setBasket(all);
+  };
+
+  const removeAll = () => {
+    setBasket({});
+  };
+
+  // console.log('groceryItems', groceryItems);
 
   return (
     <Container>
@@ -147,6 +196,14 @@ const GroceryList: React.FC = () => {
             Last updated: {new Date(latestTimestamp).toLocaleDateString()}
           </Text>
         )}
+        <Flex>
+          <Button onClick={handleAddAll} variation='primary'>
+            Add All
+          </Button>
+          <Button onClick={removeAll} variation='primary'>
+            Reset
+          </Button>
+        </Flex>
         {loading && (
           <Flex alignItems='center' margin='small'>
             <Loader size='large' />
@@ -157,7 +214,11 @@ const GroceryList: React.FC = () => {
             const offset = getRandomOffset();
             const key = removeSpecialChars(item.category);
             return (
-              <ImageWrapper $error={imgError[key]} key={key}>
+              <ImageWrapper
+                $error={imgError[key]}
+                key={key}
+                onClick={() => handleAddToBasket(item)}
+              >
                 <MotionImage
                   initial={{
                     rotate: offset.rotate,
@@ -198,6 +259,7 @@ const GroceryList: React.FC = () => {
             );
           })}
         </GridWrapper>
+        <BasketBar basket={basket} />
       </View>
     </Container>
   );

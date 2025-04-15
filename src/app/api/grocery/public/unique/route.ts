@@ -61,7 +61,7 @@ export const dynamic = 'force-dynamic';
 const CACHE_KEY = 'public/cache/grocery-public-unique.json';
 const CACHE_TTL_MS = 1000 * 60 * 60 * 24;
 
-export const getCachedJson = async () => {
+const getCachedJson = async () => {
   try {
     const { body } = await downloadData({
       path: CACHE_KEY,

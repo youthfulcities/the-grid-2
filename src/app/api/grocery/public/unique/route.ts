@@ -86,7 +86,7 @@ const getCachedJson = async () => {
   }
 };
 
-export const cacheJsonToS3 = async (data: any) => {
+const cacheJsonToS3 = async (data: any) => {
   try {
     const blob = new Blob(
       [JSON.stringify({ cachedAt: new Date().toISOString(), data })],

@@ -1,13 +1,33 @@
 'use client';
 
+import Drawer from '@/app/components/Drawer';
 import { Flex, Text, View } from '@aws-amplify/ui-react';
-import { motion } from 'framer-motion';
-import React from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 interface GroceryItem {
   category: string;
+  latest_timestamp?: string | null;
+  average_quantity: number | null;
+  canada_average_price: number | null;
+  not_canada_average_price: number | null;
+  canada_average_price_per_base: number | null;
+  not_canada_average_price_per_base: number | null;
+  canada_normalized_average: number | null;
+  not_canada_normalized_average: number | null;
   category_average: number | null;
+  category_normalized_average: number | null;
+  average_price_per_base: number | null;
+  average_base_amount: number | null;
+  base_unit: string | null;
+  cities: {
+    city: string;
+    prepared_in_canada: number | null;
+    not_prepared_in_canada: number | null;
+    city_average: number | null;
+    latest_timestamp?: string | null;
+  }[];
 }
 
 interface BasketEntry {
@@ -17,9 +37,10 @@ interface BasketEntry {
 
 interface BasketBarProps {
   basket: Record<string, BasketEntry>;
+  setBasket: React.Dispatch<React.SetStateAction<Record<string, BasketEntry>>>;
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled(motion.div)`
   position: fixed;
   bottom: 0;
   left: 50%;
@@ -29,22 +50,21 @@ const Wrapper = styled.div`
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.1);
   width: 100%;
+  overflow: hidden;
   padding-top: 40px;
 `;
 
 const BasketContainer = styled(Flex)`
-  position: relative;
   width: 100%;
 `;
 
 const BasketWrapper = styled(View)`
   position: relative;
   z-index: 2; /* basket on top */
-  width: 300px;
-  height: 210px;
+  padding-top: var(--amplify-space-xxl);
 `;
 
-const BasketItems = styled(View)`
+const BasketItems = styled(motion.div)`
   background: yellow;
   position: absolute;
   bottom: 50%;
@@ -66,22 +86,80 @@ const Item = styled(View)`
   }
 `;
 
-const QuantityBadge = styled.div`
+const BasketTab = styled.div`
+  position: relative;
+  width: 40px;
+  height: 40px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+`;
+
+const QuantityBadge = styled(motion.div)`
   position: absolute;
   top: -6px;
   right: -6px;
   background: #d11a2a;
   color: white;
   border-radius: 50%;
-  padding: 2px 5px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.65rem;
   font-weight: bold;
+  line-height: 1;
 `;
-
 const Total = styled.div`
   font-size: 1rem;
   font-weight: 600;
   margin-top: 0.5rem;
+`;
+
+const BasketList = styled.ul`
+  list-style: none;
+  width: 100%;
+  padding: 0;
+  margin: 1rem 0 0;
+`;
+
+const BasketListItem = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #eee;
+  padding: 0.5rem 0;
+  cursor: pointer;
+`;
+
+const BasketListText = styled.div`
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-size: 0.85rem;
+
+  span {
+    color: #666;
+    font-size: 0.75rem;
+  }
+`;
+
+const RemoveButton = styled.button`
+  background: transparent;
+  border: none;
+  color: #d11a2a;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+
+  &:hover {
+    color: #a00;
+  }
 `;
 
 const removeSpecialChars = (string: string) =>
@@ -91,38 +169,121 @@ const getRandomOffset = () => ({
   rotate: Math.random() * 10 - 5, // -5 to +5 degrees
 });
 
-const BasketBar: React.FC<BasketBarProps> = ({ basket }) => {
+const BasketBar: React.FC<BasketBarProps> = ({ basket, setBasket }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const total = Object.values(basket).reduce(
-    (sum, b) => sum + (b.item.category_average ?? 0) * b.quantity,
+    (sum, b) =>
+      sum +
+      ((b.item.canada_normalized_average ||
+        b.item.not_canada_normalized_average) ??
+        0) *
+        b.quantity,
     0
   );
 
+  const totalQuantity = Object.values(basket).reduce(
+    (sum, { quantity }) => sum + quantity,
+    0
+  );
+
+  const totalCanadianCost = Object.values(basket).reduce(
+    (sum, { item, quantity }) =>
+      sum +
+      ((item.canada_normalized_average || item.not_canada_normalized_average) ??
+        0) *
+        quantity,
+    0
+  );
+
+  const totalNotCanadianCost = Object.values(basket).reduce(
+    (sum, { item, quantity }) =>
+      sum +
+      ((item.not_canada_normalized_average || item.canada_normalized_average) ??
+        0) *
+        quantity,
+    0
+  );
+
+  const handleRemoveItem = (key: string) => {
+    setBasket((prev: Record<string, BasketEntry>) => {
+      const updated: Record<string, BasketEntry> = { ...prev };
+
+      if (!updated[key]) return prev;
+
+      if (updated[key].quantity > 1) {
+        updated[key] = {
+          ...updated[key],
+          quantity: updated[key].quantity - 1,
+        };
+      } else {
+        delete updated[key];
+      }
+
+      return updated;
+    });
+  };
+
+  const costDifference = totalCanadianCost - totalNotCanadianCost;
+  const costDifferenceFormatted = costDifference.toFixed(2);
+  const isMoreExpensive = costDifference > 0;
+
   return (
-    <Wrapper>
-      <BasketContainer justifyContent='center' alignItems='center'>
+    <Drawer
+      isopen={isOpen}
+      onOpen={() => setIsOpen((prev) => !prev)}
+      onClose={() => setIsOpen((prev) => !prev)}
+      tabComponent={
+        <BasketTab>
+          <img src='/assets/food-icons/basket.png' alt='Basket' />
+          {totalQuantity > 0 && (
+            <QuantityBadge
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            >
+              {totalQuantity}
+            </QuantityBadge>
+          )}
+        </BasketTab>
+      }
+    >
+      <BasketContainer
+        direction='column'
+        justifyContent='center'
+        alignItems='center'
+      >
         <BasketWrapper>
           <BasketItems>
-            {Object.entries(basket).map(([key, { item, quantity }], i) => {
-              const offset = getRandomOffset();
-              const count = 0;
-              return (
-                <Item
-                  key={key}
-                  style={{
-                    left: `${(i % 5) * 30}px`,
-                    bottom: `${(i % 3) * 12}px`,
-                    rotate: `${offset.rotate}deg`,
-                    zIndex: i,
-                  }}
-                >
-                  <motion.img
-                    layoutId={`icon-${removeSpecialChars(item.category)}`}
-                    src={`/assets/food-icons/${removeSpecialChars(item.category)}.png`}
-                    alt={item.category}
-                  />
-                </Item>
-              );
-            })}
+            <AnimatePresence>
+              {Object.entries(basket).map(([key, { item, quantity }], i) => {
+                const offset = getRandomOffset();
+                return (
+                  <Item
+                    key={key}
+                    style={{
+                      left: `${(i % 5) * 30}px`,
+                      bottom: `${(i % 3) * 12}px`,
+                      rotate: `${offset.rotate}deg`,
+                      zIndex: i,
+                    }}
+                  >
+                    <motion.img
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 300,
+                        damping: 20,
+                      }}
+                      layoutId={`icon-${removeSpecialChars(item.category)}`}
+                      src={`/assets/food-icons/${removeSpecialChars(item.category)}.png`}
+                      alt={item.category}
+                    />
+                  </Item>
+                );
+              })}
+            </AnimatePresence>
           </BasketItems>
           <img
             src='/assets/food-icons/basket.png'
@@ -135,9 +296,48 @@ const BasketBar: React.FC<BasketBarProps> = ({ basket }) => {
           <Text>
             Total: <strong>${total.toFixed(2)}</strong>
           </Text>
+          {totalQuantity > 0 &&
+            totalCanadianCost > 0 &&
+            totalNotCanadianCost > 0 &&
+            costDifference !== 0 && (
+              <Text fontSize='0.9rem' marginTop='0.5rem'>
+                {isMoreExpensive
+                  ? `It costs $${costDifferenceFormatted} more to buy Canadian!`
+                  : `You're saving $${Math.abs(costDifference).toFixed(2)} by buying Canadian!`}
+              </Text>
+            )}
         </Total>
+        <BasketList>
+          {Object.entries(basket).map(([key, { item, quantity }]) => {
+            const price =
+              (item.canada_normalized_average ||
+                item.not_canada_normalized_average) ??
+              0;
+            return (
+              <BasketListItem key={key} onClick={() => handleRemoveItem(key)}>
+                <Flex>
+                  <img
+                    src={`/assets/food-icons/${removeSpecialChars(item.category)}.png`}
+                    alt={item.category}
+                    width='40px'
+                    height='40px'
+                  />
+                  <BasketListText>
+                    <strong>{item.category}</strong>
+                    <span>
+                      {`${quantity} × ${item.canada_normalized_average ? `🍁 ${item.canada_normalized_average.toFixed(2)}` : '🍁 N/A'} | ${item.not_canada_normalized_average ? `🌎 ${item.not_canada_normalized_average.toFixed(2)}` : '🌎 N/A'}`}
+                    </span>
+                  </BasketListText>
+                </Flex>
+                <RemoveButton onClick={() => handleRemoveItem(key)}>
+                  ×
+                </RemoveButton>
+              </BasketListItem>
+            );
+          })}
+        </BasketList>
       </BasketContainer>
-    </Wrapper>
+    </Drawer>
   );
 };
 

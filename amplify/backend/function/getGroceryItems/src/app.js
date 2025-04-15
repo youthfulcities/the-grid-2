@@ -579,6 +579,22 @@ app.get(path + 'public/unique', async function (req, res) {
               )
             : null;
 
+        const quantityFrequencyMap = {};
+        for (const qty of matchingQuantities) {
+          quantityFrequencyMap[qty] = (quantityFrequencyMap[qty] || 0) + 1;
+        }
+
+        let mostFrequentQuantity;
+        let maxCount = 0;
+
+        for (const [valueStr, count] of Object.entries(quantityFrequencyMap)) {
+          const value = parseFloat(valueStr);
+          if (count > maxCount) {
+            maxCount = count;
+            mostFrequentQuantity = value;
+          }
+        }
+
         return {
           city: group.city,
           category: group.category,
@@ -589,6 +605,7 @@ app.get(path + 'public/unique', async function (req, res) {
           average_price_per_base: pricePerBase.average,
           base_unit: baseUnit,
           average_base_amount: baseAmount.average,
+          most_frequent_quantity: mostFrequentQuantity,
           average_quantity: averageQuantity,
           quantity_unit: baseUnit, // 🚨 always use the same unit as base_unit
           latest_timestamp: group.latest_timestamp.toISOString(),

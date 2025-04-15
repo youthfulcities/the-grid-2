@@ -22,9 +22,10 @@ const LabelWrapper = styled(motion.div)`
   border: 2px dashed #222;
   border-radius: 10px;
   padding: 10px 16px;
-  width: fit-content;
   min-width: 160px;
   top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
 `;

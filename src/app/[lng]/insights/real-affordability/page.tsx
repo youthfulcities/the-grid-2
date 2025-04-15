@@ -42,6 +42,11 @@ interface GroceryItem {
   }[];
 }
 
+interface BasketEntry {
+  item: GroceryItem;
+  quantity: number;
+}
+
 const GridWrapper = styled(Grid)`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -101,12 +106,6 @@ const getLatestTimestamp = (items: GroceryItem[]): string | null => {
   return latest ?? null;
 };
 
-// Define the BasketEntry type
-interface BasketEntry {
-  item: GroceryItem;
-  quantity: number;
-}
-
 const GroceryList: React.FC = () => {
   const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
   const [latestTimestamp, setLatestTimestamp] = useState<string | null>(null);
@@ -115,9 +114,7 @@ const GroceryList: React.FC = () => {
   >(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [imgError, setImgError] = useState<{ [key: string]: boolean }>({});
-  const [basket, setBasket] = useState<{
-    [key: string]: { item: GroceryItem; quantity: number };
-  }>({});
+  const [basket, setBasket] = useState<Record<string, BasketEntry>>({});
 
   useEffect(() => {
     const fetchGroceryItems = async () => {
@@ -125,7 +122,6 @@ const GroceryList: React.FC = () => {
       try {
         const response = await fetch('/api/grocery/public/unique');
         const result = await response.json();
-        console.log(result);
 
         if (!response.ok) {
           throw new Error(result.error || 'Failed to load grocery items');
@@ -175,93 +171,100 @@ const GroceryList: React.FC = () => {
     setBasket({});
   };
 
-  // console.log('groceryItems', groceryItems);
+  console.log('groceryItems', groceryItems);
 
   return (
-    <Container>
-      <View className='container padding'>
-        <Heading level={1} marginBottom='small'>
-          Canadian Grocery Prices
-        </Heading>
-        <Text>
-          Prices are calculated based on average quantity x average price per
-          unit. For example, the average large egg costs $0.51. This means 12
-          eggs would cost $6.12. However, eggs can also be purchased in packs of
-          18 or 30. Averaging the most common quantities from our search
-          results, the quantity ends up being about 17 eggs. Therefore, the
-          final price displayed is $8.85 (16.76 eggs x $0.51).
-        </Text>
-        {latestTimestamp && (
+    <>
+      <Container>
+        <View className='container padding'>
+          <Heading level={1} marginBottom='small'>
+            Canadian Grocery Prices
+          </Heading>
           <Text>
-            Last updated: {new Date(latestTimestamp).toLocaleDateString()}
+            Costs are in CAD. Prices reflect an average of non-discounted,
+            in-stock items at common Canadian grocery stores. When available,
+            the price represents the cost of goods prepared in Canada.
           </Text>
-        )}
-        <Flex>
-          <Button onClick={handleAddAll} variation='primary'>
-            Add All
-          </Button>
-          <Button onClick={removeAll} variation='primary'>
-            Reset
-          </Button>
-        </Flex>
-        {loading && (
-          <Flex alignItems='center' margin='small'>
-            <Loader size='large' />
+          {latestTimestamp && (
+            <Text>
+              Last updated: {new Date(latestTimestamp).toLocaleDateString()}
+            </Text>
+          )}
+          <Flex>
+            <Button onClick={handleAddAll} variation='primary'>
+              Add All
+            </Button>
+            <Button onClick={removeAll} variation='primary'>
+              Reset
+            </Button>
           </Flex>
-        )}
-        <GridWrapper marginBottom='xxxl'>
-          {groceryItems.map((item) => {
-            const offset = getRandomOffset();
-            const key = removeSpecialChars(item.category);
-            return (
-              <ImageWrapper
-                $error={imgError[key]}
-                key={key}
-                onClick={() => handleAddToBasket(item)}
-              >
-                <MotionImage
-                  initial={{
-                    rotate: offset.rotate,
-                    x: offset.x,
-                    y: offset.y,
-                  }}
-                  whileHover={{ scale: 1.1, rotate: 0, x: 0, y: 0 }}
-                  transition={{ type: 'spring', stiffness: 200 }}
+          {loading && (
+            <Flex alignItems='center' margin='small'>
+              <Loader size='large' />
+            </Flex>
+          )}
+          <GridWrapper marginBottom='xxxl'>
+            {groceryItems.map((item) => {
+              const offset = getRandomOffset();
+              const key = removeSpecialChars(item.category);
+              return (
+                <ImageWrapper
+                  $error={imgError[key]}
+                  key={key}
+                  onClick={() => handleAddToBasket(item)}
                 >
-                  <img
-                    onError={() =>
-                      setImgError((prev) => ({
-                        ...prev,
-                        [key]: false,
-                      }))
+                  <MotionImage
+                    initial={{
+                      rotate: offset.rotate,
+                      x: offset.x,
+                      y: offset.y,
+                    }}
+                    whileHover={{ scale: 1.1, rotate: 0, x: 0, y: 0 }}
+                    whileTap={{ scale: 0.4 }}
+                    transition={{ type: 'spring', stiffness: 200 }}
+                  >
+                    <img
+                      onError={() =>
+                        setImgError((prev) => ({
+                          ...prev,
+                          [key]: false,
+                        }))
+                      }
+                      src={`/assets/food-icons/${key}.png`}
+                      alt={item.category}
+                    />
+                  </MotionImage>
+                  <GroceryPriceLabel
+                    canadianPrice={
+                      item.canada_normalized_average ||
+                      item.canada_average_price
                     }
-                    src={`/assets/food-icons/${key}.png`}
-                    alt={item.category}
+                    globalPrice={
+                      item.not_canada_normalized_average ||
+                      item.not_canada_average_price
+                    }
+                    baseUnit={item.base_unit}
+                    baseQuantity={item.average_base_amount}
+                    basePrice={
+                      item.canada_average_price_per_base ||
+                      item.not_canada_average_price_per_base
+                    }
+                    label={item.category}
                   />
-                </MotionImage>
-                <GroceryPriceLabel
-                  canadianPrice={
-                    item.canada_normalized_average || item.canada_average_price
-                  }
-                  globalPrice={
-                    item.not_canada_normalized_average ||
-                    item.not_canada_average_price
-                  }
-                  baseUnit={item.base_unit}
-                  baseQuantity={item.average_base_amount}
-                  basePrice={
-                    item.canada_average_price_per_base ||
-                    item.not_canada_average_price_per_base
-                  }
-                  label={item.category}
-                />
-              </ImageWrapper>
-            );
-          })}
-        </GridWrapper>
-        <BasketBar basket={basket} />
-      </View>
-    </Container>
+                </ImageWrapper>
+              );
+            })}
+          </GridWrapper>
+          <Text>
+            Note that the data is limited to what is available from major
+            grocery store chains. There may be Canadian fruits and vegetables
+            available that have not been marked as “Prepared in Canada” by the
+            store.
+          </Text>
+        </View>
+      </Container>
+      <BasketBar basket={basket} setBasket={setBasket} />
+    </>
   );
 };
 

@@ -12,6 +12,7 @@ interface GroceryPriceLabelProps {
   baseUnit: string | null;
   baseQuantity: number | null;
   basePrice: number | null;
+  city?: string | null;
 }
 
 const LabelWrapper = styled(motion.div)`
@@ -58,6 +59,7 @@ const GroceryPriceLabel: React.FC<GroceryPriceLabelProps> = ({
   baseUnit,
   baseQuantity,
   basePrice,
+  city,
 }) => {
   let diffText = null;
   const hasCanadian = typeof canadianPrice === 'number';
@@ -110,6 +112,7 @@ const GroceryPriceLabel: React.FC<GroceryPriceLabelProps> = ({
         </LabelTitle>
       )}
       {diffText}
+      {city && <LabelTitle>({city})</LabelTitle>}
     </LabelWrapper>
   );
 };

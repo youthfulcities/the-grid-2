@@ -4,15 +4,13 @@ import truncateText from '@/utils/truncateText';
 import { Placeholder, View } from '@aws-amplify/ui-react';
 import * as d3 from 'd3';
 import _ from 'lodash';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Customize from './Customize';
 import SaveAsImg from './SaveAsImg';
 
-interface DataItem {
-  option_en: string;
-  count_Total: number;
-  percentage_Total: number;
+interface FlexibleDataItem {
+  [key: string]: string | number | undefined;
 }
 
 interface TooltipState {
@@ -23,10 +21,17 @@ interface TooltipState {
 
 interface BarChartProps {
   width: number;
+  data: FlexibleDataItem[];
+  labelAccessor: (d: FlexibleDataItem) => string;
+  valueAccessor: (d: FlexibleDataItem) => number;
+  tooltipFormatter?: (d: FlexibleDataItem) => string;
   tooltipState: TooltipState;
+  filterLabel?: string | null;
+  xLabel?: string;
+  mode?: 'percent' | 'absolute';
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
-  data: DataItem[];
-  children?: ReactNode;
+  onBarClick?: (label: string) => void;
+  children?: React.ReactNode;
 }
 
 interface LegendProps {
@@ -34,9 +39,7 @@ interface LegendProps {
 }
 
 interface ResponseGroup {
-  option_en: string;
-  count_Total: number;
-  percentage_Total: number;
+  [key: string]: string | number;
 }
 
 const ChartContainer = styled.div`
@@ -58,6 +61,13 @@ const BarChart: React.FC<BarChartProps> = ({
   setTooltipState,
   data,
   children,
+  mode = 'percent',
+  xLabel = 'Percent',
+  labelAccessor,
+  valueAccessor,
+  tooltipFormatter,
+  onBarClick,
+  filterLabel,
 }) => {
   const ref = useRef<SVGSVGElement>(null);
   const height = 600;
@@ -67,7 +77,6 @@ const BarChart: React.FC<BarChartProps> = ({
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
   const [activeLegendItems, setActiveLegendItems] = useState<string[]>([]);
-  const [dataToDisplay, setDataToDisplay] = useState<ResponseGroup[]>([]);
   const [allOptions, setAllOptions] = useState<string[]>([]);
   const sampleCutoff = 50;
   const truncateThreshold = 35;
@@ -84,13 +93,13 @@ const BarChart: React.FC<BarChartProps> = ({
   // Get all options/answers and truncate if necessary
   useEffect(() => {
     if (!data) return;
-    const answers = _.uniq((data || []).map((d) => d.option_en));
-    setAllOptions(answers);
-    setSelectedAnswers(answers);
+    const answers = _.uniq((data || []).map((d) => labelAccessor(d)));
+    setAllOptions(answers as string[]);
+    setSelectedAnswers(answers as string[]);
     const storedOptions = sessionStorage.getItem('selectedAnswers');
     if (storedOptions && storedOptions.length > 2) {
       setSelectedAnswers(JSON.parse(storedOptions));
-    } else setSelectedAnswers(answers.slice(0, answers.length)); // change me to show more or less answers at one time
+    } else setSelectedAnswers(answers.slice(0, answers.length) as string[]); // change me to show more or less answers at one time
 
     // Get the length of the longest item in allOptions using lodash
     const maxLength = _.get(_.maxBy(answers, 'length'), 'length', 0);
@@ -103,13 +112,10 @@ const BarChart: React.FC<BarChartProps> = ({
   }, [data]);
 
   // Update selected answers to display
-  useEffect(() => {
-    if (!data || !selectedAnswers) return;
-    const processedDataToDisplay = data.filter((d) =>
-      selectedAnswers.includes(d.option_en)
-    );
-    setDataToDisplay(processedDataToDisplay);
-  }, [selectedAnswers]);
+  const dataToDisplay = useMemo(() => {
+    if (!data || !selectedAnswers) return [];
+    return data.filter((d) => selectedAnswers.includes(labelAccessor(d)));
+  }, [data, selectedAnswers]);
 
   useEffect(() => {
     if (!ref.current || !dataToDisplay || !selectedAnswers || !width || !height)
@@ -126,7 +132,10 @@ const BarChart: React.FC<BarChartProps> = ({
     // Scales
     const xScale = d3
       .scaleLinear()
-      .domain([0, d3.max(dataToDisplay, (d) => d.percentage_Total) || 100])
+      .domain([
+        0,
+        d3.max(dataToDisplay, (d) => valueAccessor(d) as number) || 100,
+      ])
       .nice()
       .range([margin.left, width - margin.right]);
 
@@ -148,7 +157,9 @@ const BarChart: React.FC<BarChartProps> = ({
         d3
           .axisBottom(xScale)
           .ticks(5)
-          .tickFormat((d) => `${d}%`)
+          .tickFormat((d) =>
+            mode === 'percent' ? `${d}%` : d.toLocaleString()
+          )
       )
       .selectAll('text')
       .style('fill', 'white');
@@ -163,7 +174,7 @@ const BarChart: React.FC<BarChartProps> = ({
       .attr('fill', 'white')
       .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
       .attr('font-weight', '400')
-      .text('Percent');
+      .text(xLabel);
 
     // y-axis
     svg
@@ -189,21 +200,45 @@ const BarChart: React.FC<BarChartProps> = ({
       .attr('class', 'bar')
       .attr('data-testid', 'bar')
       .attr('x', xScale(0))
-      .attr('y', (d) => yScale(d.option_en) as number)
+      .attr('y', (d) => yScale(labelAccessor(d)) as number)
       .attr('width', 0)
+      .attr('cursor', 'pointer')
       .attr('height', yScale.bandwidth())
-      .attr('fill', (d) => colorScale(d.option_en) as string)
+      .attr('fill', (d) => colorScale(labelAccessor(d) as string) as string)
+      .attr('fill', (d) => {
+        const label = labelAccessor(d);
+        if (filterLabel && filterLabel !== label) {
+          return '#ccc'; // gray for non-selected bars
+        }
+        return colorScale(label) as string; // full color for selected bar
+      })
+      .on('click', (event, d) => {
+        if (onBarClick) {
+          onBarClick(labelAccessor(d));
+        }
+      })
       .on('mouseover', (event, d) => {
+        const x = event.pageX;
+        const y = event.pageY;
         setTooltipState({
-          position: { x: event.pageX, y: event.pageY },
-          content: `${d.percentage_Total}% selected "${d.option_en}"`,
+          position: { x, y },
+          content: tooltipFormatter
+            ? tooltipFormatter(d)
+            : `${valueAccessor(d)}% selected "${labelAccessor(d)}"`,
         });
       })
       .on('mousemove', (event, d) => {
+        const x = event.pageX;
+        const y = event.pageY;
         setTooltipState({
-          position: { x: event.pageX, y: event.pageY },
-          content: `${d.percentage_Total}% selected "${d.option_en}"`,
+          position: { x, y },
+          content: tooltipFormatter
+            ? tooltipFormatter(d)
+            : `${valueAccessor(d)}% selected "${labelAccessor(d)}"`,
         });
+      })
+      .on('mouseout', () => {
+        setTooltipState({ position: null });
       })
       .on('mouseout', () => {
         setTooltipState(() => ({ position: null }));
@@ -211,8 +246,8 @@ const BarChart: React.FC<BarChartProps> = ({
       .transition()
       .duration(duration)
       .delay((d, i) => i * (duration / 10))
-      .attr('width', (d) => xScale(d.percentage_Total) - xScale(0));
-  }, [dataToDisplay, width, height, leftMargin]);
+      .attr('width', (d) => xScale(valueAccessor(d) as number) - xScale(0));
+  }, [dataToDisplay, width, height, leftMargin, filterLabel]);
 
   return (
     <View>

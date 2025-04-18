@@ -3,7 +3,7 @@
 import Drawer from '@/app/components/Drawer';
 import { Flex, Text, View } from '@aws-amplify/ui-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 interface GroceryItem {
@@ -17,16 +17,21 @@ interface GroceryItem {
   canada_normalized_average: number | null;
   not_canada_normalized_average: number | null;
   category_average: number | null;
+  most_frequent_quantity: number | null;
   category_normalized_average: number | null;
   average_price_per_base: number | null;
   average_base_amount: number | null;
   base_unit: string | null;
   cities: {
     city: string;
-    prepared_in_canada: number | null;
-    not_prepared_in_canada: number | null;
-    city_average: number | null;
+    base_unit: string | null;
+    quantity_unit?: number | null;
     latest_timestamp?: string | null;
+    canada_average_price: number | null;
+    canada_normalized_average: number | null;
+    not_canada_average_price: number | null;
+    not_canada_normalized_average: number | null;
+    average_base_amount: number | null;
   }[];
 }
 
@@ -37,6 +42,7 @@ interface BasketEntry {
 
 interface BasketBarProps {
   basket: Record<string, BasketEntry>;
+  activeCity?: string | null;
   setBasket: React.Dispatch<React.SetStateAction<Record<string, BasketEntry>>>;
 }
 
@@ -169,40 +175,83 @@ const getRandomOffset = () => ({
   rotate: Math.random() * 10 - 5, // -5 to +5 degrees
 });
 
-const BasketBar: React.FC<BasketBarProps> = ({ basket, setBasket }) => {
+const BasketBar: React.FC<BasketBarProps> = ({
+  basket,
+  setBasket,
+  activeCity,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const total = Object.values(basket).reduce(
-    (sum, b) =>
-      sum +
-      ((b.item.canada_normalized_average ||
-        b.item.not_canada_normalized_average) ??
-        0) *
-        b.quantity,
+  const [filteredBasket, setFilteredBasket] =
+    useState<Record<string, BasketEntry>>(basket);
+
+  useEffect(() => {
+    if (activeCity && Object.keys(basket).length > 0) {
+      const filtered = Object.fromEntries(
+        Object.entries(basket).filter(([_, entry]) =>
+          entry.item.cities.some((city) => city.city === activeCity)
+        )
+      );
+      setIsOpen(true);
+      setFilteredBasket(filtered);
+    } else {
+      setFilteredBasket(basket);
+    }
+  }, [activeCity, basket]);
+
+  const total = Object.values(filteredBasket).reduce(
+    (sum, { item, quantity }) => {
+      const cityData = item.cities.find((c) => c.city === activeCity);
+      const normalized =
+        cityData?.canada_normalized_average ??
+        cityData?.not_canada_normalized_average ??
+        item.canada_normalized_average ??
+        item.not_canada_normalized_average ??
+        cityData?.canada_average_price ??
+        cityData?.not_canada_average_price;
+
+      return sum + (normalized ?? 0) * quantity;
+    },
     0
   );
 
-  const totalQuantity = Object.values(basket).reduce(
+  const totalQuantity = Object.values(filteredBasket).reduce(
     (sum, { quantity }) => sum + quantity,
     0
   );
 
-  const totalCanadianCost = Object.values(basket).reduce(
-    (sum, { item, quantity }) =>
-      sum +
-      ((item.canada_normalized_average || item.not_canada_normalized_average) ??
-        0) *
-        quantity,
+  const totalCanadianCost = Object.values(filteredBasket).reduce(
+    (sum, { item, quantity }) => {
+      const cityData = item.cities.find((c) => c.city === activeCity);
+      const value =
+        cityData?.canada_normalized_average ??
+        cityData?.not_canada_normalized_average ??
+        item.canada_normalized_average ??
+        item.not_canada_normalized_average ??
+        cityData?.canada_average_price ??
+        cityData?.not_canada_average_price ??
+        0;
+      return sum + value * quantity;
+    },
     0
   );
 
-  const totalNotCanadianCost = Object.values(basket).reduce(
-    (sum, { item, quantity }) =>
-      sum +
-      ((item.not_canada_normalized_average || item.canada_normalized_average) ??
-        0) *
-        quantity,
+  const totalNotCanadianCost = Object.values(filteredBasket).reduce(
+    (sum, { item, quantity }) => {
+      const cityData = item.cities.find((c) => c.city === activeCity);
+      const value =
+        cityData?.not_canada_normalized_average ??
+        cityData?.canada_normalized_average ??
+        item.not_canada_normalized_average ??
+        item.canada_normalized_average ??
+        cityData?.not_canada_average_price ??
+        cityData?.canada_average_price ??
+        0;
+      return sum + value * quantity;
+    },
     0
   );
+
+  console.log(totalCanadianCost, totalNotCanadianCost);
 
   const handleRemoveItem = (key: string) => {
     setBasket((prev: Record<string, BasketEntry>) => {
@@ -255,34 +304,36 @@ const BasketBar: React.FC<BasketBarProps> = ({ basket, setBasket }) => {
         <BasketWrapper>
           <BasketItems>
             <AnimatePresence>
-              {Object.entries(basket).map(([key, { item, quantity }], i) => {
-                const offset = getRandomOffset();
-                return (
-                  <Item
-                    key={key}
-                    style={{
-                      left: `${(i % 5) * 30}px`,
-                      bottom: `${(i % 3) * 12}px`,
-                      rotate: `${offset.rotate}deg`,
-                      zIndex: i,
-                    }}
-                  >
-                    <motion.img
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      exit={{ scale: 0 }}
-                      transition={{
-                        type: 'spring',
-                        stiffness: 300,
-                        damping: 20,
+              {Object.entries(filteredBasket).map(
+                ([key, { item, quantity }], i) => {
+                  const offset = getRandomOffset();
+                  return (
+                    <Item
+                      key={key}
+                      style={{
+                        left: `${(i % 5) * 30}px`,
+                        bottom: `${(i % 3) * 12}px`,
+                        rotate: `${offset.rotate}deg`,
+                        zIndex: i,
                       }}
-                      layoutId={`icon-${removeSpecialChars(item.category)}`}
-                      src={`/assets/food-icons/${removeSpecialChars(item.category)}.png`}
-                      alt={item.category}
-                    />
-                  </Item>
-                );
-              })}
+                    >
+                      <motion.img
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        exit={{ scale: 0 }}
+                        transition={{
+                          type: 'spring',
+                          stiffness: 300,
+                          damping: 20,
+                        }}
+                        layoutId={`icon-${removeSpecialChars(item.category)}`}
+                        src={`/assets/food-icons/${removeSpecialChars(item.category)}.png`}
+                        alt={item.category}
+                      />
+                    </Item>
+                  );
+                }
+              )}
             </AnimatePresence>
           </BasketItems>
           <img
@@ -300,19 +351,31 @@ const BasketBar: React.FC<BasketBarProps> = ({ basket, setBasket }) => {
             totalCanadianCost > 0 &&
             totalNotCanadianCost > 0 &&
             costDifference !== 0 && (
-              <Text fontSize='0.9rem' marginTop='0.5rem'>
-                {isMoreExpensive
-                  ? `It costs $${costDifferenceFormatted} more to buy Canadian!`
-                  : `You're saving $${Math.abs(costDifference).toFixed(2)} by buying Canadian!`}
-              </Text>
+              <>
+                <Text fontSize='0.9rem' marginTop='0.5rem'>
+                  {isMoreExpensive
+                    ? `It costs $${costDifferenceFormatted} more to buy Canadian!`
+                    : `You're saving $${Math.abs(costDifference).toFixed(2)} by buying Canadian!`}
+                </Text>
+                {activeCity && (
+                  <Text fontSize='0.9rem'>City: {activeCity}</Text>
+                )}
+              </>
             )}
         </Total>
         <BasketList>
-          {Object.entries(basket).map(([key, { item, quantity }]) => {
-            const price =
-              (item.canada_normalized_average ||
-                item.not_canada_normalized_average) ??
-              0;
+          {Object.entries(filteredBasket).map(([key, { item, quantity }]) => {
+            const cityData = item.cities.find((c) => c.city === activeCity);
+
+            const canadianPrice =
+              cityData?.canada_normalized_average ??
+              item.canada_normalized_average ??
+              item.canada_average_price;
+
+            const globalPrice =
+              cityData?.not_canada_normalized_average ??
+              item.not_canada_normalized_average ??
+              item.not_canada_average_price;
             return (
               <BasketListItem key={key} onClick={() => handleRemoveItem(key)}>
                 <Flex>
@@ -325,7 +388,12 @@ const BasketBar: React.FC<BasketBarProps> = ({ basket, setBasket }) => {
                   <BasketListText>
                     <strong>{item.category}</strong>
                     <span>
-                      {`${quantity} × ${item.canada_normalized_average ? `🍁 ${item.canada_normalized_average.toFixed(2)}` : '🍁 N/A'} | ${item.not_canada_normalized_average ? `🌎 ${item.not_canada_normalized_average.toFixed(2)}` : '🌎 N/A'}`}
+                      {`${quantity} × ${canadianPrice ? `🍁 $${canadianPrice.toFixed(2)}` : '🍁 N/A'} | ${
+                        globalPrice ? `🌎 $${globalPrice.toFixed(2)}` : '🌎 N/A'
+                      }`}
+                    </span>
+                    <span>
+                      per {item.most_frequent_quantity} {item.base_unit}
                     </span>
                   </BasketListText>
                 </Flex>

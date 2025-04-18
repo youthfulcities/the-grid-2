@@ -34,7 +34,7 @@ interface CityGroupedItem {
   canada_normalized_average: number | null;
   not_canada_normalized_average: number | null;
   quantity_unit: string | null;
-  average_base_amount: number | null;
+  base_amount: number | null;
   base_unit: string | null;
 }
 
@@ -162,7 +162,46 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
     })),
   ];
 
-  console.log(allItems.filter((item) => item.category === 'large eggs'));
+  const categoryGrouped = _.groupBy(allItems, 'category');
+
+  const categoryToMostFrequentQty: Record<string, number | null> = {};
+  const categoryToBaseUnit: Record<string, string | null> = {};
+
+  Object.entries(categoryGrouped).forEach(([category, items]) => {
+    const typedItems = items as GroceryItem[]; // Explicitly type items
+
+    // Get the dominant base unit for this category
+    const baseUnitFrequency: Record<string, number> = {};
+    typedItems.forEach((item) => {
+      const unit = item.base_unit?.toLowerCase();
+      if (unit) {
+        baseUnitFrequency[unit] = (baseUnitFrequency[unit] || 0) + 1;
+      }
+    });
+
+    let dominantBaseUnit: string | null = null;
+    let maxCount = 0;
+    Object.entries(baseUnitFrequency).forEach(([unit, count]) => {
+      if (count > maxCount) {
+        dominantBaseUnit = unit;
+        maxCount = count;
+      }
+    });
+
+    // Filter quantity values that match the dominant base unit
+    const matchingQuantities = typedItems
+      .filter(
+        (item) =>
+          item.base_unit?.toLowerCase() === dominantBaseUnit &&
+          typeof item.most_frequent_quantity === 'number'
+      )
+      .map((item) => item.most_frequent_quantity as number);
+
+    categoryToMostFrequentQty[category] = mode(matchingQuantities);
+    categoryToBaseUnit[category] = dominantBaseUnit;
+  });
+
+  console.log(allItems.filter((item) => item.category === 'chicken legs'));
 
   const sharedRazorItems = allItems.filter(
     (item) =>
@@ -175,21 +214,18 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
       .filter((v) => typeof v === 'number')
   );
 
-  const sharedRazorMostFrequentQuantity = mode(
-    sharedRazorItems
-      .map((item) => item.most_frequent_quantity)
-      .filter((v): v is number => typeof v === 'number')
-  );
+  const sharedRazorMostFrequentQuantity =
+    categoryToMostFrequentQty["men's razor"];
 
   const allItemsWithNormalized = allItems
     .filter((item) => typeof item.average_price_per_base === 'number')
     .map((item) => {
       const {
+        category,
+        base_unit,
         average_price_per_base,
         average_quantity,
-        most_frequent_quantity,
         average_base_amount,
-        category,
       } = item;
 
       const effective_quantity =
@@ -197,10 +233,19 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
           ? sharedRazorAverageQuantity
           : average_quantity;
 
+      if (base_unit?.toLowerCase() !== categoryToBaseUnit[category]) {
+        return {
+          ...item,
+          normalized_price: null,
+          average_quantity: null,
+          most_frequent_quantity: null,
+        };
+      }
+
       const effective_most_frequent_quantity =
         category === "men's razor" || category === "women's razor"
           ? sharedRazorMostFrequentQuantity
-          : most_frequent_quantity;
+          : categoryToMostFrequentQty[category];
 
       const normalized_price =
         typeof effective_quantity === 'number' &&
@@ -218,6 +263,7 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
       return {
         ...item,
         average_quantity: effective_quantity,
+        average_price_per_base,
         most_frequent_quantity: effective_most_frequent_quantity,
         normalized_price,
       };
@@ -259,16 +305,31 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
               i.average_base_amount || i.quantity_unit || i.latest_timestamp
           );
 
+          const canada_average_price_per_base = avg(
+            canadaItems
+              .filter((i) => typeof i.average_price_per_base === 'number')
+              .map((i) => i.average_price_per_base!)
+          );
+
+          const not_canada_average_price_per_base = avg(
+            notCanadaItems
+              .filter((i) => typeof i.average_price_per_base === 'number')
+              .map((i) => i.average_price_per_base!)
+          );
+
           return {
             city,
+            category,
+            canada_average_price_per_base,
+            not_canada_average_price_per_base,
             latest_timestamp: sampleItem?.latest_timestamp || null,
             canada_average_price: price_canada,
             not_canada_average_price: price_not_canada,
             canada_normalized_average: normalized_canada,
             not_canada_normalized_average: normalized_not_canada,
-            average_base_amount: sampleItem?.average_base_amount || null,
             base_unit: sampleItem?.base_unit || null,
             quantity_unit: sampleItem?.quantity_unit || null,
+            base_amount: categoryToMostFrequentQty[category],
           };
         }
       );
@@ -317,10 +378,6 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
         .map((i) => i.average_quantity)
         .filter((v): v is number => typeof v === 'number');
 
-      const frequencyValues = items
-        .map((i) => i.most_frequent_quantity)
-        .filter((v): v is number => typeof v === 'number');
-
       const average_quanitity =
         category === "men's razor" || category === "women's razor"
           ? sharedRazorAverageQuantity
@@ -329,7 +386,7 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
       const most_frequent_quantity =
         category === "men's razor" || category === "women's razor"
           ? sharedRazorMostFrequentQuantity
-          : mode(frequencyValues);
+          : categoryToMostFrequentQty[category];
 
       return {
         category,
@@ -352,17 +409,18 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
     }
   );
 
+  console.log(categoryToMostFrequentQty['chicken legs']);
   return transformed;
 };
 
 export const GET = async () => {
   try {
-    const cached = await getCachedJson();
-    if (cached) {
-      return NextResponse.json(cached, { status: 200 });
-    }
+    // const cached = await getCachedJson();
+    // if (cached) {
+    //   return NextResponse.json(cached, { status: 200 });
+    // }
     const transformed = await getTransformedData();
-    await cacheJsonToS3(transformed);
+    // await cacheJsonToS3(transformed);
     return NextResponse.json(transformed, {
       status: 200,
     });

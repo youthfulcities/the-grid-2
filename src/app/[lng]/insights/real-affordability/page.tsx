@@ -1,6 +1,9 @@
 'use client';
 
 import Container from '@/app/components/Background';
+import BarChart from '@/app/components/dataviz/BarChartGeneral';
+import Tooltip from '@/app/components/dataviz/TooltipChart';
+import { useDimensions } from '@/hooks/useDimensions';
 import {
   Button,
   Flex,
@@ -13,7 +16,7 @@ import {
 import { motion } from 'framer-motion';
 import _ from 'lodash';
 import Error from 'next/error';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import BasketBar from './components/BasketBar';
 import GroceryPriceLabel from './components/GroceryPriceLabel';
@@ -28,6 +31,7 @@ interface GroceryItem {
   not_canada_average_price_per_base: number | null;
   canada_normalized_average: number | null;
   not_canada_normalized_average: number | null;
+  most_frequent_quantity: number | null;
   category_average: number | null;
   category_normalized_average: number | null;
   average_price_per_base: number | null;
@@ -35,16 +39,31 @@ interface GroceryItem {
   base_unit: string | null;
   cities: {
     city: string;
-    prepared_in_canada: number | null;
-    not_prepared_in_canada: number | null;
-    city_average: number | null;
+    base_unit: string | null;
+    quantity_unit?: number | null;
     latest_timestamp?: string | null;
+    canada_average_price: number | null;
+    canada_normalized_average: number | null;
+    not_canada_average_price: number | null;
+    not_canada_normalized_average: number | null;
+    average_base_amount: number | null;
   }[];
 }
 
 interface BasketEntry {
   item: GroceryItem;
   quantity: number;
+}
+
+interface TooltipState {
+  position: { x: number; y: number } | null;
+  value?: number | null;
+  topic?: string;
+  content?: string;
+  group?: string;
+  cluster?: string;
+  child?: React.ReactNode | null;
+  minWidth?: number;
 }
 
 const GridWrapper = styled(Grid)`
@@ -107,6 +126,7 @@ const getLatestTimestamp = (items: GroceryItem[]): string | null => {
 };
 
 const GroceryList: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
   const [latestTimestamp, setLatestTimestamp] = useState<string | null>(null);
   const [errorText, setErrorText] = useState<
@@ -115,6 +135,83 @@ const GroceryList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [imgError, setImgError] = useState<{ [key: string]: boolean }>({});
   const [basket, setBasket] = useState<Record<string, BasketEntry>>({});
+  const [tooltipState, setTooltipState] = useState<TooltipState>({
+    position: null,
+  });
+  const [activeCity, setActiveCity] = useState<string | null>(null);
+  const { width } = useDimensions(containerRef);
+
+  const calculateCityTotals = () => {
+    const cityTotals: Record<string, number> = {};
+
+    if (Object.keys(basket).length === 0) {
+      groceryItems.forEach((item) => {
+        item.cities.forEach((city) => {
+          if (
+            city.canada_normalized_average ||
+            city.not_canada_normalized_average ||
+            item.canada_normalized_average ||
+            item.not_canada_normalized_average ||
+            city.canada_average_price ||
+            city.not_canada_average_price ||
+            item.canada_average_price ||
+            item.not_canada_average_price
+          ) {
+            const value =
+              (city.canada_normalized_average ||
+                city.not_canada_normalized_average ||
+                item.canada_normalized_average ||
+                item.not_canada_normalized_average ||
+                city.canada_average_price ||
+                city.not_canada_average_price ||
+                item.canada_average_price ||
+                item.not_canada_average_price) ??
+              0;
+
+            cityTotals[city.city] = (cityTotals[city.city] || 0) + value;
+          }
+        });
+      });
+    } else {
+      Object.values(basket).forEach(({ item, quantity }) => {
+        item.cities.forEach((city) => {
+          if (
+            city.canada_normalized_average ||
+            city.not_canada_normalized_average ||
+            item.canada_normalized_average ||
+            item.not_canada_normalized_average ||
+            city.canada_average_price ||
+            city.not_canada_average_price ||
+            item.canada_average_price ||
+            item.not_canada_average_price
+          ) {
+            const value =
+              (city.canada_normalized_average ||
+                city.not_canada_normalized_average ||
+                item.canada_normalized_average ||
+                item.not_canada_normalized_average ||
+                city.canada_average_price ||
+                city.not_canada_average_price ||
+                item.canada_average_price ||
+                item.not_canada_average_price) ??
+              0;
+            cityTotals[city.city] =
+              (cityTotals[city.city] || 0) + value * quantity;
+          }
+        });
+      });
+    }
+
+    // 🔁 Convert to array format: [{ city: 'Toronto', totalPrice: 123.45 }, ...]
+    return Object.entries(cityTotals).map(([city, totalPrice]) => ({
+      city,
+      totalPrice: parseFloat(totalPrice.toFixed(2)),
+    }));
+  };
+  const cityTotals = useMemo(
+    () => _.orderBy(calculateCityTotals(), ['totalPrice'], ['desc']),
+    [basket, groceryItems]
+  );
 
   useEffect(() => {
     const fetchGroceryItems = async () => {
@@ -169,14 +266,19 @@ const GroceryList: React.FC = () => {
 
   const removeAll = () => {
     setBasket({});
+    setActiveCity(null);
   };
 
-  console.log('groceryItems', groceryItems);
+  const resetCity = () => {
+    setBasket({});
+  };
+
+  console.log(groceryItems);
 
   return (
     <>
       <Container>
-        <View className='container padding'>
+        <View className='container padding' ref={containerRef}>
           <Heading level={1} marginBottom='small'>
             Canadian Grocery Prices
           </Heading>
@@ -203,10 +305,13 @@ const GroceryList: React.FC = () => {
               <Loader size='large' />
             </Flex>
           )}
-          <GridWrapper marginBottom='xxxl'>
+          <GridWrapper marginBottom='xl'>
             {groceryItems.map((item) => {
               const offset = getRandomOffset();
               const key = removeSpecialChars(item.category);
+              const cityData = item.cities.find(
+                (city) => city.city === activeCity
+              );
               return (
                 <ImageWrapper
                   $error={imgError[key]}
@@ -236,20 +341,25 @@ const GroceryList: React.FC = () => {
                   </MotionImage>
                   <GroceryPriceLabel
                     canadianPrice={
-                      item.canada_normalized_average ||
+                      cityData?.canada_normalized_average ??
+                      item.canada_normalized_average ??
                       item.canada_average_price
                     }
                     globalPrice={
-                      item.not_canada_normalized_average ||
+                      cityData?.not_canada_normalized_average ??
+                      item.not_canada_normalized_average ??
                       item.not_canada_average_price
+                    }
+                    basePrice={
+                      cityData?.canada_average_price_per_base ??
+                      cityData?.not_canada_average_price_per_base ??
+                      item.canada_average_price_per_base ??
+                      item.not_canada_average_price_per_base
                     }
                     baseUnit={item.base_unit}
                     baseQuantity={item.average_base_amount}
-                    basePrice={
-                      item.canada_average_price_per_base ||
-                      item.not_canada_average_price_per_base
-                    }
                     label={item.category}
+                    city={activeCity}
                   />
                 </ImageWrapper>
               );
@@ -261,9 +371,61 @@ const GroceryList: React.FC = () => {
             available that have not been marked as “Prepared in Canada” by the
             store.
           </Text>
+          {!loading && (
+            <>
+              <Heading level={2} marginTop='xl' textAlign='center'>
+                Cost of basket by City
+              </Heading>
+              <BarChart
+                data={cityTotals}
+                filterLabel={activeCity}
+                onBarClick={(city) => setActiveCity(city)}
+                width={width}
+                tooltipState={tooltipState}
+                setTooltipState={setTooltipState}
+                mode='absolute'
+                labelAccessor={(d) => d.city as string}
+                valueAccessor={(d) => d.totalPrice as number}
+                tooltipFormatter={(d) =>
+                  `${d.city}: $${(d.totalPrice as number).toFixed(2) ?? 0}`
+                }
+                xLabel='$CAD'
+              />
+              <Flex>
+                <Button
+                  onClick={removeAll}
+                  variation='primary'
+                  marginTop='small'
+                >
+                  Reset basket
+                </Button>
+                <Button
+                  onClick={resetCity}
+                  variation='primary'
+                  marginTop='small'
+                >
+                  Reset City
+                </Button>
+              </Flex>
+            </>
+          )}
         </View>
       </Container>
-      <BasketBar basket={basket} setBasket={setBasket} />
+      <BasketBar
+        basket={basket}
+        setBasket={setBasket}
+        activeCity={activeCity}
+      />
+      {tooltipState.position && (
+        <Tooltip
+          x={tooltipState.position.x}
+          content={tooltipState.content}
+          y={tooltipState.position.y}
+          group={tooltipState.group}
+          child={tooltipState.child}
+          minWidth={tooltipState.minWidth}
+        />
+      )}
     </>
   );
 };

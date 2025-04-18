@@ -345,10 +345,12 @@ const Survey: React.FC = () => {
                   </>
                 )}
                 <BarChart
-                  data={currentData || []}
+                  data={currentData ?? []}
                   width={width}
                   tooltipState={tooltipState}
                   setTooltipState={setTooltipState}
+                  labelAccessor={(d) => d.option_en as string}
+                  valueAccessor={(d) => d.percentage_Total as number}
                 >
                   {/* <Text fontSize='xs'>
                   *Note: Segments below a sample size of 50 are not displayed.

@@ -10,7 +10,6 @@ import Legend from './Legend';
 import SaveAsImg from './SaveAsImg';
 
 interface DataItem {
-  option_en: string;
   [key: string]: string | number;
 }
 

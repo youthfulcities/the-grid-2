@@ -16,8 +16,8 @@ interface GroceryItem {
   not_canada_average_price_per_base: number | null;
   canada_normalized_average: number | null;
   not_canada_normalized_average: number | null;
-  category_average: number | null;
   most_frequent_quantity: number | null;
+  category_average: number | null;
   category_normalized_average: number | null;
   average_price_per_base: number | null;
   average_base_amount: number | null;
@@ -25,6 +25,8 @@ interface GroceryItem {
   cities: {
     city: string;
     base_unit: string | null;
+    canada_average_price_per_base: number | null;
+    not_canada_average_price_per_base: number | null;
     quantity_unit?: number | null;
     latest_timestamp?: string | null;
     canada_average_price: number | null;

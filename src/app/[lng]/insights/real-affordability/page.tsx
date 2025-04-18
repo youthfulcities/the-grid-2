@@ -40,6 +40,8 @@ interface GroceryItem {
   cities: {
     city: string;
     base_unit: string | null;
+    canada_average_price_per_base: number | null;
+    not_canada_average_price_per_base: number | null;
     quantity_unit?: number | null;
     latest_timestamp?: string | null;
     canada_average_price: number | null;

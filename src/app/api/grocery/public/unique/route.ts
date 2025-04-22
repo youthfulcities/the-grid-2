@@ -443,12 +443,12 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
 
 export const GET = async () => {
   try {
-    // const cached = await getCachedJson();
-    // if (cached) {
-    //   return NextResponse.json(cached, { status: 200 });
-    // }
+    const cached = await getCachedJson();
+    if (cached) {
+      return NextResponse.json(cached, { status: 200 });
+    }
     const transformed = await getTransformedData();
-    // await cacheJsonToS3(transformed);
+    await cacheJsonToS3(transformed);
     return NextResponse.json(transformed, {
       status: 200,
     });

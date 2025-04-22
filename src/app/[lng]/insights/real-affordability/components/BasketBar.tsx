@@ -196,13 +196,13 @@ const BasketBar: React.FC<BasketBarProps> = ({
 
   useEffect(() => {
     if (activeCity && Object.keys(basket).length > 0) {
-      const filtered = Object.fromEntries(
-        Object.entries(basket).filter(([_, entry]) =>
-          entry.item.cities.some((city) => city.city === activeCity)
-        )
-      );
+      // const filtered = Object.fromEntries(
+      //   Object.entries(basket).filter(([_, entry]) =>
+      //     entry.item.cities.some((city) => city.city === activeCity)
+      //   )
+      // );
       setIsOpen(true);
-      setFilteredBasket(filtered);
+      setFilteredBasket(basket);
     } else {
       setFilteredBasket(basket);
     }

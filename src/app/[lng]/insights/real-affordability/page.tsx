@@ -209,36 +209,49 @@ const GroceryList: React.FC = () => {
     return city_not_canada_average_price ?? not_canada_average_price ?? 0;
   };
 
-  const calculateCityTotals = () => {
+  const calculateCityTotals = React.useCallback(() => {
     const cityTotals: Record<string, number> = {};
 
+    if (groceryItems.length === 0) return [];
+
     if (Object.keys(basket).length === 0) {
-      groceryItems.forEach((item) => {
-        item.cities.forEach((city) => {
-          const value = calculatePrice(item, city, null);
-          cityTotals[city.city] = (cityTotals[city.city] || 0) + value;
+      // Calculate totals for all cities and all items
+      const allCities = new Set(
+        groceryItems.flatMap((item) => item.cities.map((c) => c.city))
+      );
+
+      allCities.forEach((cityName) => {
+        groceryItems.forEach((item) => {
+          const cityData = item.cities.find((c) => c.city === cityName);
+          const value = calculatePrice(item, cityData ?? null, null);
+          cityTotals[cityName] = (cityTotals[cityName] || 0) + value;
         });
       });
     } else {
-      Object.values(basket).forEach(({ item, quantity }) => {
-        item.cities.forEach((city) => {
-          const value = calculatePrice(item, city, null);
-          cityTotals[city.city] =
-            (cityTotals[city.city] || 0) + value * quantity;
+      // Loop over all cities in items, and calculate based on what's in the basket
+      const allCities = new Set(
+        groceryItems.flatMap((item) => item.cities.map((c) => c.city))
+      );
+
+      allCities.forEach((cityName) => {
+        Object.values(basket).forEach(({ item, quantity }) => {
+          const cityData = item.cities.find((c) => c.city === cityName);
+          const value = calculatePrice(item, cityData ?? null, null);
+          cityTotals[cityName] = (cityTotals[cityName] || 0) + value * quantity;
         });
       });
     }
 
-    // 🔁 Convert to array format: [{ city: 'Toronto', totalPrice: 123.45 }, ...]
     return Object.entries(cityTotals).map(([city, totalPrice]) => ({
       city,
       totalPrice: parseFloat(totalPrice.toFixed(2)),
     }));
-  };
-  const cityTotals = useMemo(
-    () => _.orderBy(calculateCityTotals(), ['totalPrice'], ['desc']),
-    [basket, groceryItems]
-  );
+  }, [basket, groceryItems]);
+
+  const cityTotals = useMemo(() => {
+    const totals = calculateCityTotals();
+    return totals.length > 0 ? _.orderBy(totals, ['totalPrice'], ['desc']) : [];
+  }, [calculateCityTotals]);
 
   useEffect(() => {
     const fetchGroceryItems = async () => {

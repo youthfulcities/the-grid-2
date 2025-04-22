@@ -310,7 +310,7 @@ const GroceryList: React.FC = () => {
   };
 
   const resetCity = () => {
-    setBasket({});
+    setActiveCity(null);
   };
 
   console.log(groceryItems);
@@ -424,6 +424,9 @@ const GroceryList: React.FC = () => {
                 xLabel='$CAD'
               />
               <Flex>
+                <Button onClick={handleAddAll} variation='primary'>
+                  Add All
+                </Button>
                 <Button
                   onClick={removeAll}
                   variation='primary'

@@ -136,7 +136,7 @@
         },
         "getGroceryItems": {
           "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
-          "s3Key": "amplify-builds/getGroceryItems-782b6c6f7a6f652f464e-build.zip"
+          "s3Key": "amplify-builds/getGroceryItems-774134356e7239516e47-build.zip"
         },
         "thegrid2fafc44b3DefineAuthChallenge": {
           "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",

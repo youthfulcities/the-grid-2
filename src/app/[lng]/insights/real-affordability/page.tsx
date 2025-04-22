@@ -143,63 +143,88 @@ const GroceryList: React.FC = () => {
   const [activeCity, setActiveCity] = useState<string | null>(null);
   const { width } = useDimensions(containerRef);
 
+  const calculatePrice = (
+    item: any,
+    city: any,
+    canadian: boolean | null = null
+  ): number => {
+    const {
+      canada_average_price: city_canada_average_price,
+      not_canada_average_price: city_not_canada_average_price,
+      canada_average_price_per_base: city_canada_price_per_base,
+      not_canada_average_price_per_base: city_not_canada_price_per_base,
+    } = city || {};
+
+    const {
+      statscan_quantity,
+      most_frequent_quantity,
+      canada_average_price_per_base,
+      not_canada_average_price_per_base,
+      canada_average_price,
+      not_canada_average_price,
+    } = item;
+
+    const quantity = statscan_quantity ?? most_frequent_quantity ?? 1;
+
+    if (canadian === null) {
+      const pricePerBase =
+        city_canada_price_per_base ??
+        city_not_canada_price_per_base ??
+        canada_average_price_per_base ??
+        not_canada_average_price_per_base ??
+        0;
+
+      if (pricePerBase > 0) {
+        return pricePerBase * quantity;
+      }
+
+      // Fallback to raw average prices
+      return (
+        city_canada_average_price ??
+        city_not_canada_average_price ??
+        canada_average_price ??
+        not_canada_average_price ??
+        0
+      );
+    }
+
+    if (canadian) {
+      const pricePerBase =
+        city_canada_price_per_base ?? canada_average_price_per_base ?? 0;
+
+      if (pricePerBase > 0) {
+        return pricePerBase * quantity;
+      }
+
+      return city_canada_average_price ?? canada_average_price ?? 0;
+    }
+
+    const pricePerBase =
+      city_not_canada_price_per_base ?? not_canada_average_price_per_base ?? 0;
+
+    if (pricePerBase > 0) {
+      return pricePerBase * quantity;
+    }
+
+    return city_not_canada_average_price ?? not_canada_average_price ?? 0;
+  };
+
   const calculateCityTotals = () => {
     const cityTotals: Record<string, number> = {};
 
     if (Object.keys(basket).length === 0) {
       groceryItems.forEach((item) => {
         item.cities.forEach((city) => {
-          if (
-            city.canada_normalized_average ||
-            city.not_canada_normalized_average ||
-            item.canada_normalized_average ||
-            item.not_canada_normalized_average ||
-            city.canada_average_price ||
-            city.not_canada_average_price ||
-            item.canada_average_price ||
-            item.not_canada_average_price
-          ) {
-            const value =
-              (city.canada_normalized_average ||
-                city.not_canada_normalized_average ||
-                item.canada_normalized_average ||
-                item.not_canada_normalized_average ||
-                city.canada_average_price ||
-                city.not_canada_average_price ||
-                item.canada_average_price ||
-                item.not_canada_average_price) ??
-              0;
-
-            cityTotals[city.city] = (cityTotals[city.city] || 0) + value;
-          }
+          const value = calculatePrice(item, city, null);
+          cityTotals[city.city] = (cityTotals[city.city] || 0) + value;
         });
       });
     } else {
       Object.values(basket).forEach(({ item, quantity }) => {
         item.cities.forEach((city) => {
-          if (
-            city.canada_normalized_average ||
-            city.not_canada_normalized_average ||
-            item.canada_normalized_average ||
-            item.not_canada_normalized_average ||
-            city.canada_average_price ||
-            city.not_canada_average_price ||
-            item.canada_average_price ||
-            item.not_canada_average_price
-          ) {
-            const value =
-              (city.canada_normalized_average ||
-                city.not_canada_normalized_average ||
-                item.canada_normalized_average ||
-                item.not_canada_normalized_average ||
-                city.canada_average_price ||
-                city.not_canada_average_price ||
-                item.canada_average_price ||
-                item.not_canada_average_price) ??
-              0;
-            cityTotals[city.city] =
-              (cityTotals[city.city] || 0) + value * quantity;
-          }
+          const value = calculatePrice(item, city, null);
+          cityTotals[city.city] =
+            (cityTotals[city.city] || 0) + value * quantity;
         });
       });
     }
@@ -342,16 +367,8 @@ const GroceryList: React.FC = () => {
                     />
                   </MotionImage>
                   <GroceryPriceLabel
-                    canadianPrice={
-                      cityData?.canada_normalized_average ??
-                      item.canada_normalized_average ??
-                      item.canada_average_price
-                    }
-                    globalPrice={
-                      cityData?.not_canada_normalized_average ??
-                      item.not_canada_normalized_average ??
-                      item.not_canada_average_price
-                    }
+                    canadianPrice={calculatePrice(item, cityData, true)}
+                    globalPrice={calculatePrice(item, cityData, false)}
                     basePrice={
                       cityData?.canada_average_price_per_base ??
                       cityData?.not_canada_average_price_per_base ??
@@ -414,6 +431,7 @@ const GroceryList: React.FC = () => {
         </View>
       </Container>
       <BasketBar
+        calculatePrice={calculatePrice}
         basket={basket}
         setBasket={setBasket}
         activeCity={activeCity}

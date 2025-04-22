@@ -389,6 +389,22 @@ app.get(path + 'public/unique', async function (req, res) {
     Select: 'ALL_ATTRIBUTES',
   };
 
+  params.FilterExpression =
+    'NOT begins_with(#pk, :excluded) AND #department = :department' +
+    ' AND (attribute_not_exists(#outlier) OR #outlier <> :outlier)';
+
+  params.ExpressionAttributeNames = {
+    '#pk': 'pk',
+    '#department': 'department',
+    '#outlier': 'outlier',
+  };
+
+  params.ExpressionAttributeValues = {
+    ':excluded': 'category#easter',
+    ':department': 'grocery',
+    ':outlier': 'true',
+  };
+
   try {
     let items = [];
     let lastEvaluatedKey;
@@ -442,6 +458,8 @@ app.get(path + 'public/unique', async function (req, res) {
         base_unit,
         price_per_base_amount,
         prepared_in_canada,
+        statscan_quantity,
+        statscan_unit,
         timestamp,
       } = item;
 
@@ -458,15 +476,22 @@ app.get(path + 'public/unique', async function (req, res) {
         quantityUnit
       );
 
-      const {
-        value: normalizedBaseAmount,
-        unit: normalizedBaseUnit,
-        price_per_base_amount: pricePerBase,
-      } = normalizePricePer(
+      const { value: normalizedStatscanQty, unit: normalizedStatscanUnit } =
+        normalizeQuantity(statscan_quantity, statscan_unit);
+
+      const result = normalizePricePer(
         baseAmount,
         baseUnit,
         parseFloat(price_per_base_amount)
       );
+
+      if (!result) continue;
+
+      const {
+        value: normalizedBaseAmount,
+        unit: normalizedBaseUnit,
+        price_per_base_amount: pricePerBase,
+      } = result;
 
       if (pricePerBase == null) continue;
 
@@ -476,9 +501,11 @@ app.get(path + 'public/unique', async function (req, res) {
       if (!targetGroup[key]) {
         targetGroup[key] = {
           city,
-          category,
+          category: category.toLowerCase().trim(),
           latest_timestamp: time,
           total_price: price,
+          statscan_quantity: normalizedStatscanQty ?? null,
+          statscan_unit: normalizedStatscanUnit ?? null,
           total_price_per_base: pricePerBase,
           total_quantity: normalizedQty ?? 0,
           quantity_count: normalizedQty ? 1 : 0,
@@ -597,12 +624,14 @@ app.get(path + 'public/unique', async function (req, res) {
 
         return {
           city: group.city,
-          category: group.category,
+          category: group.category.toLowerCase().trim(),
           average_price:
             group.count > 0
               ? parseFloat((group.total_price / group.count).toFixed(2))
               : null,
           average_price_per_base: pricePerBase.average,
+          statscan_quantity: group.statscan_quantity,
+          statscan_unit: group.statscan_unit,
           base_unit: baseUnit,
           average_base_amount: baseAmount.average,
           most_frequent_quantity: mostFrequentQuantity,

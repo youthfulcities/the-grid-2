@@ -17,6 +17,8 @@ interface GroceryItem {
   canada_normalized_average: number | null;
   not_canada_normalized_average: number | null;
   most_frequent_quantity: number | null;
+  statscan_quantity?: number | null;
+  statscan_unit?: string | null;
   category_average: number | null;
   category_normalized_average: number | null;
   average_price_per_base: number | null;
@@ -46,6 +48,11 @@ interface BasketBarProps {
   basket: Record<string, BasketEntry>;
   activeCity?: string | null;
   setBasket: React.Dispatch<React.SetStateAction<Record<string, BasketEntry>>>;
+  calculatePrice: (
+    item: GroceryItem,
+    cityData: GroceryItem['cities'][number] | undefined,
+    isCanadian: boolean | null
+  ) => number;
 }
 
 const Wrapper = styled(motion.div)`
@@ -75,7 +82,7 @@ const BasketWrapper = styled(View)`
 const BasketItems = styled(motion.div)`
   background: yellow;
   position: absolute;
-  bottom: 50%;
+  bottom: 30%;
   width: 210px;
   left: 50%;
   transform: translateX(-50%);
@@ -181,6 +188,7 @@ const BasketBar: React.FC<BasketBarProps> = ({
   basket,
   setBasket,
   activeCity,
+  calculatePrice,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [filteredBasket, setFilteredBasket] =
@@ -203,15 +211,7 @@ const BasketBar: React.FC<BasketBarProps> = ({
   const total = Object.values(filteredBasket).reduce(
     (sum, { item, quantity }) => {
       const cityData = item.cities.find((c) => c.city === activeCity);
-      const normalized =
-        cityData?.canada_normalized_average ??
-        cityData?.not_canada_normalized_average ??
-        item.canada_normalized_average ??
-        item.not_canada_normalized_average ??
-        cityData?.canada_average_price ??
-        cityData?.not_canada_average_price;
-
-      return sum + (normalized ?? 0) * quantity;
+      return sum + calculatePrice(item, cityData, null) * quantity;
     },
     0
   );
@@ -224,15 +224,7 @@ const BasketBar: React.FC<BasketBarProps> = ({
   const totalCanadianCost = Object.values(filteredBasket).reduce(
     (sum, { item, quantity }) => {
       const cityData = item.cities.find((c) => c.city === activeCity);
-      const value =
-        cityData?.canada_normalized_average ??
-        cityData?.not_canada_normalized_average ??
-        item.canada_normalized_average ??
-        item.not_canada_normalized_average ??
-        cityData?.canada_average_price ??
-        cityData?.not_canada_average_price ??
-        0;
-      return sum + value * quantity;
+      return sum + calculatePrice(item, cityData, true) * quantity;
     },
     0
   );
@@ -240,15 +232,7 @@ const BasketBar: React.FC<BasketBarProps> = ({
   const totalNotCanadianCost = Object.values(filteredBasket).reduce(
     (sum, { item, quantity }) => {
       const cityData = item.cities.find((c) => c.city === activeCity);
-      const value =
-        cityData?.not_canada_normalized_average ??
-        cityData?.canada_normalized_average ??
-        item.not_canada_normalized_average ??
-        item.canada_normalized_average ??
-        cityData?.not_canada_average_price ??
-        cityData?.canada_average_price ??
-        0;
-      return sum + value * quantity;
+      return sum + calculatePrice(item, cityData, false) * quantity;
     },
     0
   );
@@ -314,7 +298,7 @@ const BasketBar: React.FC<BasketBarProps> = ({
                       key={key}
                       style={{
                         left: `${(i % 5) * 30}px`,
-                        bottom: `${(i % 3) * 12}px`,
+                        bottom: `${(i % 4) * 15}px`,
                         rotate: `${offset.rotate}deg`,
                         zIndex: i,
                       }}
@@ -369,15 +353,8 @@ const BasketBar: React.FC<BasketBarProps> = ({
           {Object.entries(filteredBasket).map(([key, { item, quantity }]) => {
             const cityData = item.cities.find((c) => c.city === activeCity);
 
-            const canadianPrice =
-              cityData?.canada_normalized_average ??
-              item.canada_normalized_average ??
-              item.canada_average_price;
-
-            const globalPrice =
-              cityData?.not_canada_normalized_average ??
-              item.not_canada_normalized_average ??
-              item.not_canada_average_price;
+            const canadianPrice = calculatePrice(item, cityData, true);
+            const globalPrice = calculatePrice(item, cityData, false);
             return (
               <BasketListItem key={key} onClick={() => handleRemoveItem(key)}>
                 <Flex>
@@ -395,7 +372,9 @@ const BasketBar: React.FC<BasketBarProps> = ({
                       }`}
                     </span>
                     <span>
-                      per {item.most_frequent_quantity} {item.base_unit}
+                      per{' '}
+                      {item.statscan_quantity ?? item.most_frequent_quantity}{' '}
+                      {item.statscan_unit ?? item.base_unit}
                     </span>
                   </BasketListText>
                 </Flex>

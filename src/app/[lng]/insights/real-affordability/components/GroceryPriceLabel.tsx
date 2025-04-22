@@ -62,8 +62,8 @@ const GroceryPriceLabel: React.FC<GroceryPriceLabelProps> = ({
   city,
 }) => {
   let diffText = null;
-  const hasCanadian = typeof canadianPrice === 'number';
-  const hasAmerican = typeof globalPrice === 'number';
+  const hasCanadian = typeof canadianPrice === 'number' && canadianPrice > 0;
+  const hasAmerican = typeof globalPrice === 'number' && globalPrice > 0;
 
   if (hasCanadian && hasAmerican && globalPrice !== 0) {
     const diff = canadianPrice! - globalPrice!;

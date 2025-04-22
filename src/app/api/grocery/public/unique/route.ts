@@ -19,6 +19,8 @@ interface GroceryItem {
   prepared: boolean;
   normalized_price?: number;
   latest_timestamp?: string | null;
+  statscan_unit?: string | null;
+  statscan_quantity?: number | null;
 }
 
 interface GroceryItemResponse {
@@ -29,6 +31,8 @@ interface GroceryItemResponse {
 interface CityGroupedItem {
   latest_timestamp: string | null;
   city: string;
+  statscan_unit?: string | null;
+  statscan_quantity?: number | null;
   canada_average_price: number | null;
   not_canada_average_price: number | null;
   canada_normalized_average: number | null;
@@ -201,7 +205,7 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
     categoryToBaseUnit[category] = dominantBaseUnit;
   });
 
-  console.log(allItems.filter((item) => item.category === 'chicken legs'));
+  console.log(allItems.filter((item) => item.category === 'chicken thigh'));
 
   const sharedRazorItems = allItems.filter(
     (item) =>
@@ -221,6 +225,8 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
     .filter((item) => typeof item.average_price_per_base === 'number')
     .map((item) => {
       const {
+        statscan_unit,
+        statscan_quantity,
         category,
         base_unit,
         average_price_per_base,
@@ -266,6 +272,8 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
         average_price_per_base,
         most_frequent_quantity: effective_most_frequent_quantity,
         normalized_price,
+        statscan_unit,
+        statscan_quantity,
       };
     });
 
@@ -286,41 +294,54 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
               .filter((price): price is number => price !== null)
           );
           const price_not_canada = avg(
-            notCanadaItems.map((i) => i.average_price)
+            notCanadaItems
+              .map((i) => i.average_price)
+              .filter((price): price is number => price !== null)
           );
 
           const normalized_canada = avg(
             canadaItems
               .filter((i) => typeof i.normalized_price === 'number')
-              .map((i) => i.normalized_price!)
+              .map((i) => i.normalized_price)
+              .filter((price): price is number => price !== null)
           );
           const normalized_not_canada = avg(
             notCanadaItems
               .filter((i) => typeof i.normalized_price === 'number')
-              .map((i) => i.normalized_price!)
+              .map((i) => i.normalized_price ?? null)
+              .filter((price): price is number => price !== null)
           );
 
-          const sampleItem = cityItems.find(
-            (i) =>
-              i.average_base_amount || i.quantity_unit || i.latest_timestamp
-          );
+          const sampleItem = cityItems.find((i) => i.latest_timestamp);
 
           const canada_average_price_per_base = avg(
             canadaItems
-              .filter((i) => typeof i.average_price_per_base === 'number')
-              .map((i) => i.average_price_per_base!)
+              .filter(
+                (i) =>
+                  typeof i.average_price_per_base === 'number' &&
+                  i.base_unit ===
+                    (i.statscan_unit ? i.statscan_unit : i.base_unit)
+              )
+              .map((i) => i.average_price_per_base ?? null)
           );
 
           const not_canada_average_price_per_base = avg(
             notCanadaItems
-              .filter((i) => typeof i.average_price_per_base === 'number')
-              .map((i) => i.average_price_per_base!)
+              .filter(
+                (i) =>
+                  typeof i.average_price_per_base === 'number' &&
+                  i.base_unit ===
+                    (i.statscan_unit ? i.statscan_unit : i.base_unit)
+              )
+              .map((i) => i.average_price_per_base ?? null)
           );
 
           return {
             city,
             category,
             canada_average_price_per_base,
+            statscan_unit: sampleItem?.statscan_unit || null,
+            statscan_quantity: sampleItem?.statscan_quantity || null,
             not_canada_average_price_per_base,
             latest_timestamp: sampleItem?.latest_timestamp || null,
             canada_average_price: price_canada,
@@ -343,13 +364,19 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
 
       const canadaPricePerBase = items
         .filter(
-          (i) => i.prepared && typeof i.average_price_per_base === 'number'
+          (i) =>
+            i.prepared &&
+            typeof i.average_price_per_base === 'number' &&
+            i.base_unit === (i.statscan_unit ? i.statscan_unit : i.base_unit)
         )
         .map((i) => i.average_price_per_base);
 
       const notCanadaPricePerBase = items
         .filter(
-          (i) => !i.prepared && typeof i.average_price_per_base === 'number'
+          (i) =>
+            !i.prepared &&
+            typeof i.average_price_per_base === 'number' &&
+            i.base_unit === (i.statscan_unit ? i.statscan_unit : i.base_unit)
         )
         .map((i) => i.average_price_per_base);
 
@@ -393,6 +420,8 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
         latest_timestamp: sampleCategoryItem?.latest_timestamp || null,
         average_quanitity,
         most_frequent_quantity,
+        statscan_unit: sampleCategoryItem?.statscan_unit || null,
+        statscan_quantity: sampleCategoryItem?.statscan_quantity || null,
         canada_average_price: avg(canadaAveragePrices),
         not_canada_average_price: avg(notCanadaAveragePrices),
         canada_average_price_per_base: avg(canadaPricePerBase),
@@ -408,9 +437,8 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
       };
     }
   );
-
-  console.log(categoryToMostFrequentQty['chicken legs']);
-  return transformed;
+  const sorted_transformed = _.sortBy(transformed, 'category');
+  return sorted_transformed;
 };
 
 export const GET = async () => {

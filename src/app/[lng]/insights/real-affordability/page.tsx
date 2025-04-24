@@ -438,7 +438,7 @@ const GroceryList: React.FC = () => {
       <Container>
         <View className='container padding' ref={containerRef}>
           <Heading level={1} marginBottom='small'>
-            Canadian Grocery Prices
+            What&apos;s in your basket?
           </Heading>
           <Text>
             Costs are in CAD. Prices reflect an average of non-discounted,
@@ -550,6 +550,7 @@ const GroceryList: React.FC = () => {
                 filterLabel={activeCity}
                 onBarClick={(city) => setActiveCity(city)}
                 width={width}
+                marginLeft={90}
                 tooltipState={tooltipState}
                 setTooltipState={setTooltipState}
                 mode='absolute'

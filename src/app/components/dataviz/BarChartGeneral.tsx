@@ -32,6 +32,7 @@ interface BarChartProps {
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   onBarClick?: (label: string) => void;
   children?: React.ReactNode;
+  marginLeft?: number;
 }
 
 interface LegendProps {
@@ -68,11 +69,17 @@ const BarChart: React.FC<BarChartProps> = ({
   tooltipFormatter,
   onBarClick,
   filterLabel,
+  marginLeft,
 }) => {
   const ref = useRef<SVGSVGElement>(null);
   const height = 600;
   const [leftMargin, setLeftMargin] = useState(10);
-  const margin = { left: leftMargin, right: 10, top: 0, bottom: 80 };
+  const margin = {
+    left: marginLeft ?? leftMargin,
+    right: 10,
+    top: 0,
+    bottom: 80,
+  };
   const duration = 1000;
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);

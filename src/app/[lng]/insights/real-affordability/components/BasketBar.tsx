@@ -51,23 +51,10 @@ interface BasketBarProps {
   calculatePrice: (
     item: GroceryItem,
     cityData: GroceryItem['cities'][number] | undefined,
-    isCanadian: boolean | null
+    isCanadian: boolean | null,
+    defaultToGlobal?: boolean
   ) => number;
 }
-
-const Wrapper = styled(motion.div)`
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
-  text-align: center;
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.1);
-  width: 100%;
-  overflow: hidden;
-  padding-top: 40px;
-`;
 
 const BasketContainer = styled(Flex)`
   width: 100%;
@@ -224,7 +211,7 @@ const BasketBar: React.FC<BasketBarProps> = ({
   const totalCanadianCost = Object.values(filteredBasket).reduce(
     (sum, { item, quantity }) => {
       const cityData = item.cities.find((c) => c.city === activeCity);
-      return sum + calculatePrice(item, cityData, true) * quantity;
+      return sum + calculatePrice(item, cityData, true, true) * quantity;
     },
     0
   );
@@ -232,7 +219,7 @@ const BasketBar: React.FC<BasketBarProps> = ({
   const totalNotCanadianCost = Object.values(filteredBasket).reduce(
     (sum, { item, quantity }) => {
       const cityData = item.cities.find((c) => c.city === activeCity);
-      return sum + calculatePrice(item, cityData, false) * quantity;
+      return sum + calculatePrice(item, cityData, false, true) * quantity;
     },
     0
   );
@@ -290,36 +277,34 @@ const BasketBar: React.FC<BasketBarProps> = ({
         <BasketWrapper>
           <BasketItems>
             <AnimatePresence>
-              {Object.entries(filteredBasket).map(
-                ([key, { item, quantity }], i) => {
-                  const offset = getRandomOffset();
-                  return (
-                    <Item
-                      key={key}
-                      style={{
-                        left: `${(i % 5) * 30}px`,
-                        bottom: `${(i % 4) * 15}px`,
-                        rotate: `${offset.rotate}deg`,
-                        zIndex: i,
+              {Object.entries(filteredBasket).map(([key, { item }], i) => {
+                const offset = getRandomOffset();
+                return (
+                  <Item
+                    key={key}
+                    style={{
+                      left: `${(i % 5) * 30}px`,
+                      bottom: `${(i % 4) * 15}px`,
+                      rotate: `${offset.rotate}deg`,
+                      zIndex: i,
+                    }}
+                  >
+                    <motion.img
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 300,
+                        damping: 20,
                       }}
-                    >
-                      <motion.img
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        exit={{ scale: 0 }}
-                        transition={{
-                          type: 'spring',
-                          stiffness: 300,
-                          damping: 20,
-                        }}
-                        layoutId={`icon-${removeSpecialChars(item.category)}`}
-                        src={`/assets/food-icons/${removeSpecialChars(item.category)}.png`}
-                        alt={item.category}
-                      />
-                    </Item>
-                  );
-                }
-              )}
+                      layoutId={`icon-${removeSpecialChars(item.category)}`}
+                      src={`/assets/food-icons/${removeSpecialChars(item.category)}.png`}
+                      alt={item.category}
+                    />
+                  </Item>
+                );
+              })}
             </AnimatePresence>
           </BasketItems>
           <img
@@ -330,7 +315,7 @@ const BasketBar: React.FC<BasketBarProps> = ({
           />
         </BasketWrapper>
         <Total>
-          <Text>
+          <Text marginTop='-50px'>
             Total: <strong>${total.toFixed(2)}</strong>
           </Text>
           {totalQuantity > 0 &&

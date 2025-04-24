@@ -7,7 +7,6 @@ import { useDimensions } from '@/hooks/useDimensions';
 import {
   Button,
   Flex,
-  Grid,
   Heading,
   Loader,
   Text,
@@ -17,8 +16,10 @@ import { motion } from 'framer-motion';
 import _ from 'lodash';
 import Error from 'next/error';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
 import styled from 'styled-components';
 import BasketBar from './components/BasketBar';
+import GroceryBadge from './components/GroceryBadge';
 import GroceryPriceLabel from './components/GroceryPriceLabel';
 
 interface GroceryItem {
@@ -68,15 +69,50 @@ interface TooltipState {
   minWidth?: number;
 }
 
-const GridWrapper = styled(Grid)`
+const containerVariants = {
+  expanded: {
+    height: 'auto',
+    transition: {
+      type: 'spring',
+      stiffness: 120,
+      damping: 20,
+      when: 'afterChildren',
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+  collapsed: {
+    height: 400,
+    transition: {
+      when: 'beforeChildren',
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+      duration: 0.8,
+      type: 'spring',
+      stiffness: 300,
+      damping: 40,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, scale: 0.5 },
+  visible: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0.5 },
+};
+
+const GridWrapper = styled(motion.div)<{ expanded?: boolean }>`
   display: grid;
+  position: relative;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 32px;
   padding: 2rem;
   justify-items: center;
+  overflow: ${({ expanded }) => (expanded ? 'visible' : 'hidden')};
+  min-height: 400px;
 `;
 
-const ImageWrapper = styled.div<{ $error: boolean }>`
+const ImageWrapper = styled(motion.div)<{ $error: boolean }>`
   display: ${(props) => (props.$error ? 'none' : 'block')};
   position: relative;
   width: 120px;
@@ -87,6 +123,7 @@ const ImageWrapper = styled.div<{ $error: boolean }>`
     z-index: -1;
     width: 100%;
     height: 100%;
+    aspect-ratio: 1 / 1;
     object-fit: contain;
     display: block;
   }
@@ -99,8 +136,34 @@ const ImageWrapper = styled.div<{ $error: boolean }>`
 const MotionImage = styled(motion.div)`
   width: 100%;
   height: 100%;
+  aspect-ratio: 1 / 1;
   z-index: 0;
   will-change: transform;
+`;
+
+const FadeOverlay = styled(View)`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--amplify-colors-neutral-90)
+  );
+  pointer-events: none;
+`;
+
+const ExpandButton = styled(Button)`
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  z-index: 1;
 `;
 
 const getRandomOffset = () => ({
@@ -141,12 +204,35 @@ const GroceryList: React.FC = () => {
     position: null,
   });
   const [activeCity, setActiveCity] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState(false);
   const { width } = useDimensions(containerRef);
+
+  const visibleItems = useMemo(() => {
+    if (expanded) return groceryItems;
+    return groceryItems.slice(0, 18);
+  }, [expanded, groceryItems]);
+
+  const offsetRef = useRef<
+    Record<string, { rotate: number; x: number; y: number }>
+  >({});
+
+  const offsetsByKey = useMemo(() => {
+    const map = { ...offsetRef.current };
+    visibleItems.forEach((item) => {
+      const key = removeSpecialChars(item.category);
+      if (!map[key]) {
+        map[key] = getRandomOffset();
+      }
+    });
+    offsetRef.current = map;
+    return map;
+  }, [visibleItems]);
 
   const calculatePrice = (
     item: any,
     city: any,
-    canadian: boolean | null = null
+    canadian: boolean | null = null,
+    defaultToGlobal: boolean = false
   ): number => {
     const {
       canada_average_price: city_canada_average_price,
@@ -190,24 +276,55 @@ const GroceryList: React.FC = () => {
 
     if (canadian) {
       const pricePerBase =
-        city_canada_price_per_base ?? canada_average_price_per_base ?? 0;
+        city_canada_price_per_base ??
+        canada_average_price_per_base ??
+        (defaultToGlobal &&
+          (city_not_canada_price_per_base ??
+            not_canada_average_price_per_base)) ??
+        0;
 
       if (pricePerBase > 0) {
         return pricePerBase * quantity;
       }
 
-      return city_canada_average_price ?? canada_average_price ?? 0;
+      return (
+        city_canada_average_price ??
+        canada_average_price ??
+        (defaultToGlobal &&
+          (city_not_canada_average_price ?? not_canada_average_price)) ??
+        0
+      );
     }
 
     const pricePerBase =
-      city_not_canada_price_per_base ?? not_canada_average_price_per_base ?? 0;
+      city_not_canada_price_per_base ??
+      not_canada_average_price_per_base ??
+      (defaultToGlobal &&
+        (city_canada_price_per_base ?? canada_average_price_per_base)) ??
+      0;
 
     if (pricePerBase > 0) {
       return pricePerBase * quantity;
     }
 
-    return city_not_canada_average_price ?? not_canada_average_price ?? 0;
+    return (
+      city_not_canada_average_price ??
+      not_canada_average_price ??
+      (defaultToGlobal &&
+        (city_not_canada_average_price ?? not_canada_average_price)) ??
+      0
+    );
   };
+
+  const precomputedData = useMemo(
+    () =>
+      visibleItems.map((item) => {
+        const key = removeSpecialChars(item.category);
+        const offset = offsetsByKey[key];
+        return { item, key, offset };
+      }),
+    [visibleItems, activeCity]
+  );
 
   const calculateCityTotals = React.useCallback(() => {
     const cityTotals: Record<string, number> = {};
@@ -305,6 +422,7 @@ const GroceryList: React.FC = () => {
   };
 
   const removeAll = () => {
+    setExpanded(false);
     setBasket({});
     setActiveCity(null);
   };
@@ -345,10 +463,14 @@ const GroceryList: React.FC = () => {
               <Loader size='large' />
             </Flex>
           )}
-          <GridWrapper marginBottom='xl'>
-            {groceryItems.map((item) => {
-              const offset = getRandomOffset();
-              const key = removeSpecialChars(item.category);
+          <GridWrapper
+            expanded={expanded}
+            variants={containerVariants}
+            initial='collapsed'
+            animate={expanded ? 'expanded' : 'collapsed'}
+          >
+            {/* <AnimatePresence> */}
+            {precomputedData.map(({ item, key, offset }) => {
               const cityData = item.cities.find(
                 (city) => city.city === activeCity
               );
@@ -358,15 +480,27 @@ const GroceryList: React.FC = () => {
                   key={key}
                   onClick={() => handleAddToBasket(item)}
                 >
+                  <GroceryBadge
+                    canadianPrice={calculatePrice(item, cityData, true)}
+                    globalPrice={calculatePrice(item, cityData, false)}
+                  />
                   <MotionImage
-                    initial={{
-                      rotate: offset.rotate,
-                      x: offset.x,
-                      y: offset.y,
+                    layout
+                    key={key}
+                    variants={itemVariants}
+                    initial='hidden'
+                    animate='visible'
+                    exit='exit'
+                    transition={{
+                      type: 'spring',
+                      stiffness: 300,
+                      damping: 20,
+                    }}
+                    style={{
+                      rotate: `${offset.rotate}deg`,
                     }}
                     whileHover={{ scale: 1.1, rotate: 0, x: 0, y: 0 }}
                     whileTap={{ scale: 0.4 }}
-                    transition={{ type: 'spring', stiffness: 200 }}
                   >
                     <img
                       onError={() =>
@@ -379,6 +513,7 @@ const GroceryList: React.FC = () => {
                       alt={item.category}
                     />
                   </MotionImage>
+
                   <GroceryPriceLabel
                     canadianPrice={calculatePrice(item, cityData, true)}
                     globalPrice={calculatePrice(item, cityData, false)}
@@ -396,13 +531,15 @@ const GroceryList: React.FC = () => {
                 </ImageWrapper>
               );
             })}
+            {/* </AnimatePresence> */}
+            {!expanded && <FadeOverlay />}
+            <ExpandButton
+              variation='primary'
+              onClick={() => setExpanded((prev) => !prev)}
+            >
+              {expanded ? <FaAngleUp /> : <FaAngleDown />}
+            </ExpandButton>
           </GridWrapper>
-          <Text>
-            Note that the data is limited to what is available from major
-            grocery store chains. There may be Canadian fruits and vegetables
-            available that have not been marked as “Prepared in Canada” by the
-            store.
-          </Text>
           {!loading && (
             <>
               <Heading level={2} marginTop='xl' textAlign='center'>
@@ -423,8 +560,12 @@ const GroceryList: React.FC = () => {
                 }
                 xLabel='$CAD'
               />
-              <Flex>
-                <Button onClick={handleAddAll} variation='primary'>
+              <Flex marginBottom='large'>
+                <Button
+                  onClick={handleAddAll}
+                  variation='primary'
+                  marginTop='small'
+                >
                   Add All
                 </Button>
                 <Button
@@ -444,6 +585,117 @@ const GroceryList: React.FC = () => {
               </Flex>
             </>
           )}
+          <Text>
+            Food icons created by{' '}
+            <a
+              href='https://www.flaticon.com/free-icons/lentils'
+              title='lentils icons'
+            >
+              Freepik
+            </a>
+            ,{' '}
+            <a
+              href='https://www.flaticon.com/free-icons/sunflower-seed'
+              title='sunflower seed icons'
+            >
+              surang
+            </a>
+            ,{' '}
+            <a
+              href='https://www.flaticon.com/free-icons/soy-milk'
+              title='soy milk icons'
+            >
+              Peerapak Takpho
+            </a>
+            ,{' '}
+            <a href='https://www.flaticon.com/free-icons/oil' title='oil icons'>
+              iconixar
+            </a>
+            ,{' '}
+            <a
+              href='https://www.flaticon.com/free-icons/bean'
+              title='bean icons'
+            >
+              Nikita Golubev
+            </a>
+            ,{' '}
+            <a
+              href='https://www.flaticon.com/free-icons/ribs'
+              title='ribs icons'
+            >
+              Kemalmoe
+            </a>
+            ,{' '}
+            <a
+              href='https://www.flaticon.com/free-icons/tuna'
+              title='tuna icons'
+            >
+              Konkapp
+            </a>
+            ,{' '}
+            <a
+              href='https://www.flaticon.com/free-icons/coffee'
+              title='coffee icons'
+            >
+              Smashicons
+            </a>
+            ,{' '}
+            <a
+              href='https://www.flaticon.com/free-icons/juice'
+              title='juice icons'
+            >
+              nawicon
+            </a>
+            ,{' '}
+            <a
+              href='https://www.flaticon.com/free-icons/apple-juice'
+              title='apple juice icons'
+            >
+              photo3idea_studio
+            </a>
+            ,{' '}
+            <a
+              href='https://www.flaticon.com/free-icons/lemon'
+              title='lemon icons'
+            >
+              popo2021
+            </a>
+            ,{' '}
+            <a
+              href='https://www.flaticon.com/free-icons/lemon'
+              title='lemon icons'
+            >
+              designbydai
+            </a>
+            ,{' '}
+            <a
+              href='https://www.flaticon.com/free-icons/cereal'
+              title='cereal icons'
+            >
+              kliwir art
+            </a>
+            ,{' '}
+            <a
+              href='https://www.flaticon.com/free-icons/pasta'
+              title='pasta icons'
+            >
+              Good Ware
+            </a>
+            , and{' '}
+            <a
+              href='https://www.flaticon.com/free-icons/breads'
+              title='breads icons'
+            >
+              piksart
+            </a>
+            . Thank you!
+          </Text>
+          <Text>
+            Note that the data is limited to what is available from major
+            grocery store chains. There may be Canadian fruits and vegetables
+            available that have not been marked as “Prepared in Canada” by the
+            store.
+          </Text>
         </View>
       </Container>
       <BasketBar

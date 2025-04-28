@@ -18,6 +18,7 @@ import Error from 'next/error';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
 import styled from 'styled-components';
+import AffordabilityOverview from './components/AffordabilityOverview';
 import BasketBar from './components/BasketBar';
 import GroceryBadge from './components/GroceryBadge';
 import GroceryPriceLabel from './components/GroceryPriceLabel';
@@ -165,6 +166,9 @@ const ExpandButton = styled(Button)`
   padding: 0;
   z-index: 1;
 `;
+
+// Keys order matters: expenses first (negative), surplus last (positive)
+const keys = ['rent', 'food', 'other', 'surplus'];
 
 const getRandomOffset = () => ({
   rotate: Math.random() * 10 - 5, // -5 to +5 degrees
@@ -431,12 +435,15 @@ const GroceryList: React.FC = () => {
     setActiveCity(null);
   };
 
-  console.log(groceryItems);
-
   return (
     <>
       <Container>
         <View className='container padding' ref={containerRef}>
+          <AffordabilityOverview
+            width={width}
+            tooltipState={tooltipState}
+            setTooltipState={setTooltipState}
+          />
           <Heading level={1} marginBottom='small'>
             What&apos;s in your basket?
           </Heading>

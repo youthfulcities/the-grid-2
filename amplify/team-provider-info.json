@@ -9,7 +9,9 @@
       "UnauthRoleName": "amplify-thegrid2-prod-f85ee-unauthRole",
       "StackName": "amplify-thegrid2-prod-f85ee",
       "StackId": "arn:aws:cloudformation:ca-central-1:730335589682:stack/amplify-thegrid2-prod-f85ee/0c5641c0-3304-11ef-9d62-06d76b7ee45d",
-      "AmplifyAppId": "dlnca7rtkq5g9"
+      "AmplifyAppId": "dlnca7rtkq5g9",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-thegrid2-prod-f85ee-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-thegrid2-prod-f85ee-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "function": {
@@ -26,6 +28,43 @@
         "interviewAll": {
           "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
           "s3Key": "amplify-builds/interviewAll-682f63423761372b6b6f-build.zip"
+        },
+        "AdminQueries1eae25ec": {
+          "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
+          "s3Key": "amplify-builds/AdminQueries1eae25ec-6c72725a435766394a6d-build.zip"
+        },
+        "getGroceryItems": {
+          "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
+          "s3Key": "amplify-builds/getGroceryItems-346f66544f784f756968-build.zip"
+        },
+        "thegrid2fafc44b3CreateAuthChallenge": {
+          "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
+          "s3Key": "amplify-builds/thegrid2fafc44b3CreateAuthChallenge-4f4554545944304c6e67-build.zip"
+        },
+        "thegrid2fafc44b3CustomMessage": {
+          "REDIRECTURL": "youthdatalab.youthfulcities.com/redirect",
+          "EMAILSUBJECT": "Please confirm your Youth Data Lab account",
+          "EMAILMESSAGE": "Hello from Youthful Cities! Click the following link to confirm your Youth Data Lab account.",
+          "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
+          "s3Key": "amplify-builds/thegrid2fafc44b3CustomMessage-69765567634330453738-build.zip"
+        },
+        "thegrid2fafc44b3DefineAuthChallenge": {
+          "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
+          "s3Key": "amplify-builds/thegrid2fafc44b3DefineAuthChallenge-6350662f4366686e3263-build.zip"
+        },
+        "thegrid2fafc44b3PostConfirmation": {
+          "GROUP": "general",
+          "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
+          "s3Key": "amplify-builds/thegrid2fafc44b3PostConfirmation-7a467272787253306f56-build.zip"
+        },
+        "thegrid2fafc44b3VerifyAuthChallengeResponse": {
+          "RECAPTCHASECRET": "6LfnPxIeAAAAAKne44ci6rqAklSLmCPtjSj6O2oG",
+          "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
+          "s3Key": "amplify-builds/thegrid2fafc44b3VerifyAuthChallengeResponse-303663524746584c5a63-build.zip"
+        },
+        "AdminQueries8e2ac1c4": {
+          "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
+          "s3Key": "amplify-builds/AdminQueries8e2ac1c4-6a385451372b48713852-build.zip"
         }
       },
       "storage": {
@@ -51,17 +90,31 @@
         "thegrid24c63f4ac": {
           "bucketName": "ycydl-prod",
           "region": "ca-central-1"
+        },
+        "groceryprices": {
+          "tableName": "grocery_prices",
+          "region": "ca-central-1",
+          "arn": "arn:aws:dynamodb:ca-central-1:730335589682:table/grocery_prices",
+          "partitionKeyName": "pk",
+          "partitionKeyType": "S",
+          "sortKeyName": "sk",
+          "sortKeyType": "S"
         }
       },
       "auth": {
-        "thegrid2fafc44b3": {}
+        "thegrid2fafc44b3": {
+          "googleClientId": "483064867453-qkbovj3el7ghljqfmjj3ou7892kbcd7j.apps.googleusercontent.com"
+        },
+        "userPoolGroups": {}
       },
       "analytics": {
         "thegrid2": {}
       },
       "api": {
         "thegrid2": {},
-        "interviewAll": {}
+        "interviewAll": {},
+        "AdminQueries": {},
+        "grocery": {}
       }
     }
   },

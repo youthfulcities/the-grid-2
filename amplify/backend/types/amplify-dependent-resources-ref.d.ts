@@ -12,6 +12,11 @@ export type AmplifyDependentResourcesAttributes = {
       "ApiName": "string",
       "RootUrl": "string"
     },
+    "grocery": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
+    },
     "interviewAll": {
       "ApiId": "string",
       "ApiName": "string",
@@ -43,6 +48,13 @@ export type AmplifyDependentResourcesAttributes = {
   },
   "function": {
     "AdminQueries1eae25ec": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "AdminQueries8e2ac1c4": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",

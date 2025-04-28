@@ -2,7 +2,7 @@
   "version": "1",
   "cognitoConfig": {
     "identityPoolName": "thegrid2fafc44b3_identitypool_fafc44b3",
-    "allowUnauthenticatedIdentities": true,
+    "allowUnauthenticatedIdentities": false,
     "resourceNameTruncated": "thegrifafc44b3",
     "userPoolName": "thegrid2fafc44b3_userpool_fafc44b3",
     "autoVerifiedAttributes": [
@@ -36,7 +36,7 @@
     "sharedId": "fafc44b3",
     "resourceName": "thegrid2fafc44b3",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "manual",
+    "useDefault": "defaultSocial",
     "usernameAttributes": [
       "email"
     ],
@@ -107,10 +107,6 @@
         ]
       }
     ],
-    "thirdPartyAuth": true,
-    "authProviders": [
-      "accounts.google.com"
-    ],
     "userPoolGroups": true,
     "adminQueries": true,
     "triggers": {
@@ -145,6 +141,7 @@
     "permissions": [
       "{\n  \"policyName\": \"AddToGroupCognito\",\n  \"trigger\": \"PostConfirmation\",\n  \"effect\": \"Allow\",\n  \"actions\": [\n    \"cognito-idp:AdminAddUserToGroup\",\n    \"cognito-idp:GetGroup\",\n    \"cognito-idp:CreateGroup\"\n  ],\n  \"resource\": {\n    \"paramType\": \"!GetAtt\",\n    \"keys\": [\n      \"UserPool\",\n      \"Arn\"\n    ]\n  }\n}"
     ],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://www.youthdatalab.youthfulcities.com/redirect/\",\"https://staging.dlnca7rtkq5g9.amplifyapp.com/redirect/\",\"http://localhost:3000/redirect/\"],\"LogoutURLs\":[\"https://www.youthdatalab.youthfulcities.com/en/\",\"https://staging.dlnca7rtkq5g9.amplifyapp.com/en/\",\"http://localhost:3000/en/\"]}"
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://www.youthdatalab.youthfulcities.com/redirect/\",\"https://staging.dlnca7rtkq5g9.amplifyapp.com/redirect/\",\"http://localhost:3000/redirect/\"],\"LogoutURLs\":[\"https://www.youthdatalab.youthfulcities.com/en/\",\"https://staging.dlnca7rtkq5g9.amplifyapp.com/en/\",\"http://localhost:3000/en/\"]}",
+    "authProviders": []
   }
 }

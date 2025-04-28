@@ -22,7 +22,7 @@
             "Name"
           ],
           "category": "function",
-          "resourceName": "AdminQueries1eae25ec"
+          "resourceName": "AdminQueries8e2ac1c4"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -214,6 +214,20 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "AdminQueries8e2ac1c4": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "thegrid2fafc44b3"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "contactFormUploader": {
       "build": true,
       "dependsOn": [
@@ -320,6 +334,22 @@
         {
           "category": "function",
           "resourceName": "AdminQueries1eae25ec"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueries8e2ac1c4_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries8e2ac1c4"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueries8e2ac1c4_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries8e2ac1c4"
         }
       ]
     },
@@ -620,6 +650,14 @@
       ]
     },
     "AMPLIFY_storage_interviewall_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviewall_streamArn": {
       "usedBy": [
         {
           "category": "storage",

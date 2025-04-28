@@ -1,8 +1,13 @@
 import config from '@/amplifyconfiguration.json';
+import awsExports from '@/aws-exports';
 import { Amplify } from 'aws-amplify';
 import { downloadData, uploadData } from 'aws-amplify/storage';
 import _ from 'lodash';
 import { NextResponse } from 'next/server';
+
+export const API_URL = awsExports.aws_cloud_logic_custom.find(
+  (item) => item.name === 'grocery'
+)?.endpoint;
 
 Amplify.configure(config);
 
@@ -145,9 +150,7 @@ const avg = (values: number[]) =>
     : null;
 
 const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
-  const response = await fetch(
-    'https://v03ckta50h.execute-api.ca-central-1.amazonaws.com/staging/public/unique'
-  );
+  const response = await fetch(`${API_URL}/public/unique`);
 
   if (!response.ok) {
     throw new Error('Failed to fetch source data');

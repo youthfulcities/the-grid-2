@@ -8,6 +8,8 @@ import Container from '@/app/components/Background';
 import '../global.css';
 
 import useTranslation from '@/app/i18n/client';
+
+import 'aws-amplify/auth/enable-oauth-listener';
 import { useParams } from 'next/navigation';
 import { Trans } from 'react-i18next/TransWithoutContext';
 import RedirectAfterAuth from './components/RedirectAfterAuth';

@@ -32,5 +32,5 @@
     "src/app/components/dataviz/Legend",
     "setupTests.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "amplify/#current-cloud-backend"]
 }

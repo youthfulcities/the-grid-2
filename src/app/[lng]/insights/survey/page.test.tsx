@@ -1,5 +1,5 @@
 import { WUWWLSurveyProvider } from '@/app/[lng]/insights/survey/context/WUWWLSurveyContext';
-import fetchData from '@/lib/fetchData';
+import fetchData from '@/utils/fetchData';
 import {
   act,
   fireEvent,
@@ -24,7 +24,7 @@ jest.mock(
   { virtual: true }
 );
 
-jest.mock('@/lib/fetchData', () => jest.fn());
+jest.mock('@/utils/fetchData', () => jest.fn());
 
 const rawData =
   'option_en,question_ID,question_en,count_Total,percentage_Total\nOption 1,1,Question 1,100,50%\nOption 2,2,Question 2,200,75%';

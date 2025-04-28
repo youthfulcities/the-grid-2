@@ -6,6 +6,56 @@
     }
   },
   "api": {
+    "AdminQueries": {
+      "authorizationType": "AMAZON_COGNITO_USER_POOLS",
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "thegrid2fafc44b3"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "AdminQueries1eae25ec"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "grocery": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "getGroceryItems"
+        },
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "thegrid2fafc44b3"
+        },
+        {
+          "attributes": [
+            "adminGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
     "interviewAll": {
       "dependsOn": [
         {
@@ -60,11 +110,57 @@
   "auth": {
     "thegrid2fafc44b3": {
       "customAuth": false,
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3DefineAuthChallenge",
+          "triggerProvider": "Cognito"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3CreateAuthChallenge",
+          "triggerProvider": "Cognito"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3VerifyAuthChallengeResponse",
+          "triggerProvider": "Cognito"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3CustomMessage",
+          "triggerProvider": "Cognito"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3PostConfirmation",
+          "triggerProvider": "Cognito"
+        }
+      ],
       "frontendAuthConfig": {
-        "mfaConfiguration": "OFF",
+        "mfaConfiguration": "OPTIONAL",
         "mfaTypes": [
-          "SMS"
+          "TOTP"
         ],
         "passwordProtectionSettings": {
           "passwordPolicyCharacters": [],
@@ -73,7 +169,9 @@
         "signupAttributes": [
           "EMAIL"
         ],
-        "socialProviders": [],
+        "socialProviders": [
+          "GOOGLE"
+        ],
         "usernameAttributes": [
           "EMAIL"
         ],
@@ -83,9 +181,39 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    },
+    "userPoolGroups": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId",
+            "AppClientIDWeb",
+            "AppClientID",
+            "IdentityPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "thegrid2fafc44b3"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito-UserPool-Groups"
     }
   },
   "function": {
+    "AdminQueries1eae25ec": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "thegrid2fafc44b3"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "contactFormUploader": {
       "build": true,
       "dependsOn": [
@@ -103,6 +231,25 @@
     },
     "dataapi": {
       "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "getGroceryItems": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributeEnvMap": {
+            "Arn": "TABLE_ARN",
+            "Name": "TABLE_NAME"
+          },
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "groceryprices"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -124,9 +271,58 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "thegrid2fafc44b3CreateAuthChallenge": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "thegrid2fafc44b3CustomMessage": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "thegrid2fafc44b3DefineAuthChallenge": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "thegrid2fafc44b3PostConfirmation": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "thegrid2fafc44b3VerifyAuthChallengeResponse": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
+    "AMPLIFY_auth_thegrid2fafc44b3_googleClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "thegrid2fafc44b3"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueries1eae25ec_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries1eae25ec"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueries1eae25ec_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries1eae25ec"
+        }
+      ]
+    },
     "AMPLIFY_function_contactFormUploader_deploymentBucketName": {
       "usedBy": [
         {
@@ -175,6 +371,22 @@
         }
       ]
     },
+    "AMPLIFY_function_getGroceryItems_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getGroceryItems"
+        }
+      ]
+    },
+    "AMPLIFY_function_getGroceryItems_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getGroceryItems"
+        }
+      ]
+    },
     "AMPLIFY_function_interviewAll_deploymentBucketName": {
       "usedBy": [
         {
@@ -188,6 +400,182 @@
         {
           "category": "function",
           "resourceName": "interviewAll"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3CreateAuthChallenge_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3CreateAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3CreateAuthChallenge_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3CreateAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3CustomMessage_EMAILMESSAGE": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3CustomMessage_EMAILSUBJECT": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3CustomMessage_REDIRECTURL": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3CustomMessage_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3CustomMessage_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3DefineAuthChallenge_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3DefineAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3DefineAuthChallenge_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3DefineAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3PostConfirmation_GROUP": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3PostConfirmation_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3PostConfirmation_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3VerifyAuthChallengeResponse_RECAPTCHASECRET": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3VerifyAuthChallengeResponse"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3VerifyAuthChallengeResponse_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3VerifyAuthChallengeResponse"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3VerifyAuthChallengeResponse_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3VerifyAuthChallengeResponse"
+        }
+      ]
+    },
+    "AMPLIFY_storage_groceryprices_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "groceryprices"
+        }
+      ]
+    },
+    "AMPLIFY_storage_groceryprices_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "groceryprices"
+        }
+      ]
+    },
+    "AMPLIFY_storage_groceryprices_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "groceryprices"
+        }
+      ]
+    },
+    "AMPLIFY_storage_groceryprices_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "groceryprices"
+        }
+      ]
+    },
+    "AMPLIFY_storage_groceryprices_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "groceryprices"
+        }
+      ]
+    },
+    "AMPLIFY_storage_groceryprices_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "groceryprices"
+        }
+      ]
+    },
+    "AMPLIFY_storage_groceryprices_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "groceryprices"
         }
       ]
     },
@@ -321,6 +709,12 @@
     }
   },
   "storage": {
+    "groceryprices": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB",
+      "serviceType": "imported"
+    },
     "interviewall": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",

@@ -13,7 +13,7 @@ import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
 import useDownloadFile from '@/hooks/useDownloadFile';
 import useFilteredPosts from '@/hooks/useFilteredPosts';
-import fetchData from '@/lib/fetchData';
+import fetchData from '@/utils/fetchData';
 import {
   Button,
   Heading,
@@ -345,10 +345,12 @@ const Survey: React.FC = () => {
                   </>
                 )}
                 <BarChart
-                  data={currentData || []}
+                  data={currentData ?? []}
                   width={width}
                   tooltipState={tooltipState}
                   setTooltipState={setTooltipState}
+                  labelAccessor={(d) => d.option_en as string}
+                  valueAccessor={(d) => d.percentage_Total as number}
                 >
                   {/* <Text fontSize='xs'>
                   *Note: Segments below a sample size of 50 are not displayed.

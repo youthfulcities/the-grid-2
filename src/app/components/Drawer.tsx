@@ -12,7 +12,8 @@ interface DrawerProps {
   noOverlay?: boolean;
   absolute?: boolean;
   onOpen?: () => void;
-  tabText?: React.ReactNode;
+  tabText?: string | React.ReactNode;
+  tabComponent?: React.ReactNode;
   noClickOutside?: boolean;
   translate?: number;
   id?: string;
@@ -87,6 +88,30 @@ const Tab = styled(motion.div)<{
   border-radius: 0 8px 8px 0;
 `;
 
+const MinimalTab = styled(motion.div)<{
+  $offset: number;
+  $absolute: boolean;
+  $translate: number;
+}>`
+  position: ${({ $absolute }) => ($absolute ? 'absolute' : 'fixed')};
+  background-color: rgba(0, 0, 0, 0.8);
+  top: 12%;
+  right: ${({ $offset, $translate }) => `calc(${$offset}px - ${$translate}px)`};
+  min-width: 50px;
+  min-height: 50px;
+  height: auto;
+  backdrop-filter: blur(10px);
+  color: var(--amplify-colors-font-inverse);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 1000;
+  transition: all 0.3s ease-in-out;
+  border-radius: 8px 0 0 8px;
+`;
+
 const Drawer: React.FC<DrawerProps> = ({
   isopen,
   onClose,
@@ -94,6 +119,7 @@ const Drawer: React.FC<DrawerProps> = ({
   children,
   noOverlay,
   tabText,
+  tabComponent,
   absolute,
   noClickOutside,
   translate = 0,
@@ -185,15 +211,29 @@ const Drawer: React.FC<DrawerProps> = ({
               : child
           )}
       </DrawerContainer>
-      <Tab
-        $translate={translate}
-        $absolute={absolute || false}
-        ref={tabRef}
-        $offset={isopen ? tabOffset : 0}
-        onClick={isopen ? onClose : onOpen}
-      >
-        <Text margin='0'>{isopen ? <FaX /> : tabText || <FaAngleRight />}</Text>
-      </Tab>
+      {tabComponent ? (
+        <MinimalTab
+          $translate={translate}
+          $absolute={absolute || false}
+          ref={tabRef}
+          $offset={isopen ? tabOffset : 0}
+          onClick={isopen ? onClose : onOpen}
+        >
+          {tabComponent}
+        </MinimalTab>
+      ) : (
+        <Tab
+          $translate={translate}
+          $absolute={absolute || false}
+          ref={tabRef}
+          $offset={isopen ? tabOffset : 0}
+          onClick={isopen ? onClose : onOpen}
+        >
+          <Text margin='0'>
+            {isopen ? <FaX /> : tabText || <FaAngleRight />}
+          </Text>
+        </Tab>
+      )}
     </>
   );
 };

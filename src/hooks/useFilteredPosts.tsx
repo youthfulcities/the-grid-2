@@ -1,4 +1,4 @@
-import fetchPosts from '@/lib/fetchPosts';
+import fetchPosts from '@/utils/fetchPosts';
 import { useEffect, useState } from 'react';
 
 interface Post {

@@ -1,6 +1,6 @@
 'use client';
 
-import truncateText from '@/lib/truncateText';
+import truncateText from '@/utils/truncateText';
 import * as d3 from 'd3';
 import _, { sample } from 'lodash';
 import { ReactNode, useEffect, useRef, useState } from 'react';
@@ -10,7 +10,6 @@ import Legend from './Legend';
 import SaveAsImg from './SaveAsImg';
 
 interface DataItem {
-  option_en: string;
   [key: string]: string | number;
 }
 

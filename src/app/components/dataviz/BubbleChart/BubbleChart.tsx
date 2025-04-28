@@ -1,5 +1,5 @@
-import shouldUseWhiteText from '@/lib/shouldUseWhiteText';
-import truncateText from '@/lib/truncateText';
+import shouldUseWhiteText from '@/utils/shouldUseWhiteText';
+import truncateText from '@/utils/truncateText';
 import { Placeholder, View } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';

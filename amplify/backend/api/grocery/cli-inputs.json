@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "paths": {
+    "/public": {
+      "name": "/public",
+      "lambdaFunction": "getGroceryItems",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/items": {
+      "name": "/items",
+      "lambdaFunction": "getGroceryItems",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ],
+        "groups": {
+          "admin": [
+            "create",
+            "read",
+            "update",
+            "delete"
+          ]
+        }
+      }
+    }
+  }
+}

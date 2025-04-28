@@ -54,13 +54,14 @@ const StyledAuthLink = styled(Link)<{
 }`}
 `;
 
-const AuthLink: React.FC<{ authStatus: string; mobile?: boolean }> = ({
-  authStatus,
-  mobile = false,
-}) => {
+const AuthLink: React.FC<{ mobile?: boolean }> = ({ mobile = false }) => {
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'translation');
-  const { signOut } = useAuthenticator((context) => [context.user]);
+  const { signOut, authStatus } = useAuthenticator((context) => [
+    context.user,
+    context.authStatus,
+  ]);
+  console.log(authStatus);
   const router = useRouter();
   const pathname = usePathname();
 

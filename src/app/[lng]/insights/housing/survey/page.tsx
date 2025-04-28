@@ -9,7 +9,7 @@ import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
 import useDownloadFile from '@/hooks/useDownloadFile';
 import useFilteredPosts from '@/hooks/useFilteredPosts';
-import fetchData from '@/lib/fetchData';
+import fetchData from '@/utils/fetchData';
 import {
   Button,
   Heading,

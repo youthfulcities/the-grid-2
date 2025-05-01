@@ -5,12 +5,6 @@ import { downloadData, uploadData } from 'aws-amplify/storage';
 import _ from 'lodash';
 import { NextResponse } from 'next/server';
 
-export const API_URL = awsExports.aws_cloud_logic_custom.find(
-  (item) => item.name === 'grocery'
-)?.endpoint;
-
-Amplify.configure(config);
-
 interface GroceryItem {
   city: string;
   category: string;
@@ -64,6 +58,12 @@ interface CategoryGroupedItem {
   average_quanitity?: number | null;
   cities: CityGroupedItem[];
 }
+
+const API_URL = awsExports.aws_cloud_logic_custom.find(
+  (item) => item.name === 'grocery'
+)?.endpoint;
+
+Amplify.configure(config);
 
 export const dynamic = 'force-dynamic';
 

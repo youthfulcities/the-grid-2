@@ -1,6 +1,6 @@
 {
-  "httpMethod": "POST",
-  "path": "/items",
+  "httpMethod": "GET",
+  "path": "/public/all",
   "queryStringParameters": {
     "limit": "10"
   },

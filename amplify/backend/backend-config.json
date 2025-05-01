@@ -252,10 +252,21 @@
       "build": true,
       "dependsOn": [
         {
-          "attributeEnvMap": {
-            "Arn": "TABLE_ARN",
-            "Name": "TABLE_NAME"
-          },
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "processGrocery"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "groceryAggregated"
+        },
+        {
           "attributes": [
             "Name",
             "Arn"
@@ -281,6 +292,29 @@
           ],
           "category": "storage",
           "resourceName": "interviewall"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "processGrocery": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "groceryAggregated"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "groceryprices"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -401,6 +435,14 @@
         }
       ]
     },
+    "AMPLIFY_function_getGroceryItems_bucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getGroceryItems"
+        }
+      ]
+    },
     "AMPLIFY_function_getGroceryItems_deploymentBucketName": {
       "usedBy": [
         {
@@ -430,6 +472,30 @@
         {
           "category": "function",
           "resourceName": "interviewAll"
+        }
+      ]
+    },
+    "AMPLIFY_function_processGrocery_bucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processGrocery"
+        }
+      ]
+    },
+    "AMPLIFY_function_processGrocery_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processGrocery"
+        }
+      ]
+    },
+    "AMPLIFY_function_processGrocery_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processGrocery"
         }
       ]
     },
@@ -657,14 +723,6 @@
         }
       ]
     },
-    "AMPLIFY_storage_interviewall_streamArn": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "interviewall"
-        }
-      ]
-    },
     "AMPLIFY_storage_interviewall_tableName": {
       "usedBy": [
         {
@@ -747,6 +805,10 @@
     }
   },
   "storage": {
+    "groceryAggregated": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
     "groceryprices": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",

@@ -1,14 +1,5 @@
 {
-  "lambdaLayers": [],
   "permissions": {
-    "function": {
-      "processGrocery": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ]
-    },
     "storage": {
       "groceryAggregated": [
         "create",
@@ -24,6 +15,8 @@
       ]
     }
   },
+  "handler": "index.handler",
+  "lambdaLayers": [],
   "environmentVariableList": [
     {
       "cloudFormationParameterName": "bucketName",

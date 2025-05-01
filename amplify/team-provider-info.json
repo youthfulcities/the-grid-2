@@ -99,7 +99,8 @@
           "partitionKeyType": "S",
           "sortKeyName": "sk",
           "sortKeyType": "S"
-        }
+        },
+        "groceryAggregated": {}
       },
       "auth": {
         "thegrid2fafc44b3": {
@@ -170,7 +171,8 @@
           "partitionKeyType": "S",
           "sortKeyName": "sk",
           "sortKeyType": "S"
-        }
+        },
+        "groceryAggregated": {}
       },
       "function": {
         "dataapi": {
@@ -189,7 +191,8 @@
         },
         "getGroceryItems": {
           "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
-          "s3Key": "amplify-builds/getGroceryItems-774134356e7239516e47-build.zip"
+          "s3Key": "amplify-builds/getGroceryItems-2b7449746a385453534c-build.zip",
+          "bucketName": "ycydl"
         },
         "thegrid2fafc44b3DefineAuthChallenge": {
           "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
@@ -219,6 +222,15 @@
         "AdminQueries1eae25ec": {
           "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
           "s3Key": "amplify-builds/AdminQueries1eae25ec-6c72725a435766394a6d-build.zip"
+        },
+        "AdminQueries8e2ac1c4": {
+          "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
+          "s3Key": "amplify-builds/AdminQueries8e2ac1c4-6a385451372b48713852-build.zip"
+        },
+        "processGrocery": {
+          "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
+          "s3Key": "amplify-builds/processGrocery-77696952697873474167-build.zip",
+          "bucketName": "ycydl"
         }
       },
       "api": {

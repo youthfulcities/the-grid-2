@@ -12,9 +12,15 @@ import {
   mergeVariantsAndOverrides,
 } from "./utils";
 import { Flex, Heading, Image, Text } from "@aws-amplify/ui-react";
-import CircleButton from "./CircleButton";
 export default function GRIDCardMain(props) {
-  const { overrides: overridesProp, ...rest } = props;
+  const {
+    title,
+    year,
+    description,
+    cardActionButtons,
+    overrides: overridesProp,
+    ...rest
+  } = props;
   const variants = [
     {
       overrides: {
@@ -181,7 +187,7 @@ export default function GRIDCardMain(props) {
             position="relative"
             padding="0px 0px 0px 0px"
             whiteSpace="pre-wrap"
-            children="2023"
+            children={year}
             {...getOverrideProps(overrides, "2023")}
           ></Text>
           <Text
@@ -204,7 +210,7 @@ export default function GRIDCardMain(props) {
             position="relative"
             padding="0px 0px 0px 0px"
             whiteSpace="pre-wrap"
-            children="Now in its third iteration, the Urban Work Index 2023 ranks 30 cities across Canada to find the best places for youth to work and live."
+            children={description}
             {...getOverrideProps(
               overrides,
               "Now in its third iteration, the Urban Work Index 2023 ranks 30 cities across Canada to find the best places for youth to work and live."
@@ -222,76 +228,9 @@ export default function GRIDCardMain(props) {
           position="relative"
           padding="0px 0px 0px 0px"
           display="flex"
+          children={cardActionButtons}
           {...getOverrideProps(overrides, "Card Action Buttons")}
-        >
-          <CircleButton
-            display="flex"
-            gap="0"
-            direction="row"
-            width="57px"
-            height="57px"
-            justifyContent="center"
-            alignItems="center"
-            shrink="0"
-            position="relative"
-            boxShadow="0px 2px 2px rgba(0, 0, 0, 0.10000000149011612)"
-            borderRadius="35px"
-            padding="8px 16px 8px 16px"
-            backgroundColor="rgba(30,48,108,1)"
-            property1="Default"
-            {...getOverrideProps(overrides, "Circle Button58551424")}
-          ></CircleButton>
-          <CircleButton
-            display="flex"
-            gap="0"
-            direction="row"
-            width="57px"
-            height="57px"
-            justifyContent="center"
-            alignItems="center"
-            shrink="0"
-            position="relative"
-            boxShadow="0px 2px 2px rgba(0, 0, 0, 0.10000000149011612)"
-            borderRadius="35px"
-            padding="8px 16px 8px 16px"
-            backgroundColor="rgba(30,48,108,1)"
-            property1="Default"
-            {...getOverrideProps(overrides, "Circle Button58551425")}
-          ></CircleButton>
-          <CircleButton
-            display="flex"
-            gap="0"
-            direction="row"
-            width="57px"
-            height="57px"
-            justifyContent="center"
-            alignItems="center"
-            shrink="0"
-            position="relative"
-            boxShadow="0px 2px 2px rgba(0, 0, 0, 0.10000000149011612)"
-            borderRadius="35px"
-            padding="8px 16px 8px 16px"
-            backgroundColor="rgba(30,48,108,1)"
-            property1="Default"
-            {...getOverrideProps(overrides, "Circle Button58551426")}
-          ></CircleButton>
-          <CircleButton
-            display="flex"
-            gap="0"
-            direction="row"
-            width="57px"
-            height="57px"
-            justifyContent="center"
-            alignItems="center"
-            shrink="0"
-            position="relative"
-            boxShadow="0px 2px 2px rgba(0, 0, 0, 0.10000000149011612)"
-            borderRadius="35px"
-            padding="8px 16px 8px 16px"
-            property1="Disabled"
-            {...getOverrideProps(overrides, "Circle Button58551427")}
-          ></CircleButton>
-        </Flex>
+        ></Flex>
       </Flex>
     </Flex>
   );

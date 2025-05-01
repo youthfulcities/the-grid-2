@@ -42,7 +42,9 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   setTooltipState,
 }) => (
   <View>
-    <Heading level={1}>Canada&apos;s Most Affordable City</Heading>
+    <Heading level={1} marginBottom='large'>
+      Canada&apos;s Most Affordable City
+    </Heading>
     <BarChartStacked
       tooltipState={tooltipState}
       setTooltipState={setTooltipState}

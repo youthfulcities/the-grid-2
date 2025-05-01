@@ -1,5 +1,6 @@
 import * as d3 from 'd3';
 import { useEffect, useRef } from 'react';
+import SaveAsImg from './SaveAsImg';
 
 const colors = [
   '#F2695D',
@@ -205,7 +206,12 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .text('Surplus →');
   }, [data, width, height, keys]);
 
-  return <svg ref={ref} width={width} height={400} />;
+  return (
+    <>
+      <svg ref={ref} width={width} height={400} />
+      {width > 0 && <SaveAsImg svgRef={ref} />}
+    </>
+  );
 };
 
 export default BarChartStacked;

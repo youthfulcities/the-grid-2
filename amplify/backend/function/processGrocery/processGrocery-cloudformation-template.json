@@ -16,18 +16,6 @@
     "s3Key": {
       "Type": "String"
     },
-    "storagegrocerypricesName": {
-      "Type": "String",
-      "Default": "storagegrocerypricesName"
-    },
-    "storagegrocerypricesArn": {
-      "Type": "String",
-      "Default": "storagegrocerypricesArn"
-    },
-    "functionprocessGroceryName": {
-      "Type": "String",
-      "Default": "functionprocessGroceryName"
-    },
     "storagegroceryAggregatedName": {
       "Type": "String",
       "Default": "storagegroceryAggregatedName"
@@ -36,9 +24,13 @@
       "Type": "String",
       "Default": "storagegroceryAggregatedArn"
     },
-    "storagegrocerypricesStreamArn": {
+    "storagegrocerypricesName": {
       "Type": "String",
-      "Default": "storagegrocerypricesStreamArn"
+      "Default": "storagegrocerypricesName"
+    },
+    "storagegrocerypricesArn": {
+      "Type": "String",
+      "Default": "storagegrocerypricesArn"
     },
     "bucketName": {
       "Type": "String"
@@ -74,12 +66,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "getGroceryItems",
+            "processGrocery",
             {
               "Fn::Join": [
                 "",
                 [
-                  "getGroceryItems",
+                  "processGrocery",
                   "-",
                   {
                     "Ref": "env"
@@ -96,9 +88,6 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
-            },
-            "FUNCTION_PROCESSGROCERY_NAME": {
-              "Ref": "functionprocessGroceryName"
             },
             "STORAGE_GROCERYAGGREGATED_NAME": {
               "Ref": "storagegroceryAggregatedName"
@@ -123,7 +112,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs22.x",
         "Layers": [],
         "Timeout": 25
       }
@@ -134,12 +123,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "thegrid2LambdaRolef9ffe3aa",
+            "thegrid2LambdaRole745a8a8e",
             {
               "Fn::Join": [
                 "",
                 [
-                  "thegrid2LambdaRolef9ffe3aa",
+                  "thegrid2LambdaRole745a8a8e",
                   "-",
                   {
                     "Ref": "env"
@@ -205,34 +194,6 @@
                   }
                 ]
               }
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "dynamodb:DescribeTable",
-                "dynamodb:GetItem",
-                "dynamodb:Query",
-                "dynamodb:Scan",
-                "dynamodb:PutItem",
-                "dynamodb:UpdateItem",
-                "dynamodb:DeleteItem"
-              ],
-              "Resource": [
-                {
-                  "Ref": "storagegrocerypricesArn"
-                },
-                {
-                  "Fn::Join": [
-                    "/",
-                    [
-                      {
-                        "Ref": "storagegrocerypricesArn"
-                      },
-                      "index/*"
-                    ]
-                  ]
-                }
-              ]
             }
           ]
         }
@@ -253,41 +214,6 @@
         "PolicyDocument": {
           "Version": "2012-10-17",
           "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "lambda:Create*",
-                "lambda:Put*",
-                "lambda:Add*",
-                "lambda:Get*",
-                "lambda:List*",
-                "lambda:Invoke*",
-                "lambda:Update*",
-                "lambda:Delete*",
-                "lambda:Remove*"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:lambda:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":function:",
-                      {
-                        "Ref": "functionprocessGroceryName"
-                      }
-                    ]
-                  ]
-                }
-              ]
-            },
             {
               "Effect": "Allow",
               "Action": [
@@ -365,6 +291,45 @@
           ]
         }
       }
+    },
+    "CloudWatchEvent": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Description": "Schedule rule for Lambda",
+        "ScheduleExpression": {
+          "Ref": "CloudWatchRule"
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "LambdaFunction",
+                "Arn"
+              ]
+            },
+            "Id": {
+              "Ref": "LambdaFunction"
+            }
+          }
+        ]
+      }
+    },
+    "PermissionForEventsToInvokeLambda": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "LambdaFunction"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "CloudWatchEvent",
+            "Arn"
+          ]
+        }
+      }
     }
   },
   "Outputs": {
@@ -397,6 +362,11 @@
           "LambdaExecutionRole",
           "Arn"
         ]
+      }
+    },
+    "CloudWatchEventRule": {
+      "Value": {
+        "Ref": "CloudWatchEvent"
       }
     }
   }

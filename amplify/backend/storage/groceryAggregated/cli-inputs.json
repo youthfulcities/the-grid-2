@@ -1,0 +1,14 @@
+{
+  "resourceName": "groceryAggregated",
+  "tableName": "groceryAggregated",
+  "partitionKey": {
+    "fieldName": "city",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "category",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

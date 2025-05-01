@@ -378,7 +378,7 @@ const GroceryList: React.FC = () => {
     const fetchGroceryItems = async () => {
       setLoading(true);
       try {
-        const response = await fetch('/api/grocery/public/unique');
+        const response = await fetch('/api/grocery/public/all');
         const result = await response.json();
 
         if (!response.ok) {

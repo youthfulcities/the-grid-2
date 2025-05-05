@@ -48,7 +48,7 @@ interface BasketBarProps {
   basket: Record<string, BasketEntry>;
   activeCity?: string | null;
   setBasket: React.Dispatch<React.SetStateAction<Record<string, BasketEntry>>>;
-  calculatePrice: (
+  calculateGroceryPrice: (
     item: GroceryItem,
     cityData: GroceryItem['cities'][number] | undefined,
     isCanadian: boolean | null,
@@ -175,7 +175,7 @@ const BasketBar: React.FC<BasketBarProps> = ({
   basket,
   setBasket,
   activeCity,
-  calculatePrice,
+  calculateGroceryPrice,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [filteredBasket, setFilteredBasket] =
@@ -198,7 +198,7 @@ const BasketBar: React.FC<BasketBarProps> = ({
   const total = Object.values(filteredBasket).reduce(
     (sum, { item, quantity }) => {
       const cityData = item.cities.find((c) => c.city === activeCity);
-      return sum + calculatePrice(item, cityData, null) * quantity;
+      return sum + calculateGroceryPrice(item, cityData, null) * quantity;
     },
     0
   );
@@ -211,7 +211,7 @@ const BasketBar: React.FC<BasketBarProps> = ({
   const totalCanadianCost = Object.values(filteredBasket).reduce(
     (sum, { item, quantity }) => {
       const cityData = item.cities.find((c) => c.city === activeCity);
-      return sum + calculatePrice(item, cityData, true, true) * quantity;
+      return sum + calculateGroceryPrice(item, cityData, true, true) * quantity;
     },
     0
   );
@@ -219,12 +219,10 @@ const BasketBar: React.FC<BasketBarProps> = ({
   const totalNotCanadianCost = Object.values(filteredBasket).reduce(
     (sum, { item, quantity }) => {
       const cityData = item.cities.find((c) => c.city === activeCity);
-      return sum + calculatePrice(item, cityData, false, true) * quantity;
+      return sum + calculateGroceryPrice(item, cityData, false, true) * quantity;
     },
     0
   );
-
-  console.log(totalCanadianCost, totalNotCanadianCost);
 
   const handleRemoveItem = (key: string) => {
     setBasket((prev: Record<string, BasketEntry>) => {
@@ -338,8 +336,8 @@ const BasketBar: React.FC<BasketBarProps> = ({
           {Object.entries(filteredBasket).map(([key, { item, quantity }]) => {
             const cityData = item.cities.find((c) => c.city === activeCity);
 
-            const canadianPrice = calculatePrice(item, cityData, true);
-            const globalPrice = calculatePrice(item, cityData, false);
+            const canadianPrice = calculateGroceryPrice(item, cityData, true);
+            const globalPrice = calculateGroceryPrice(item, cityData, false);
             return (
               <BasketListItem key={key} onClick={() => handleRemoveItem(key)}>
                 <Flex>

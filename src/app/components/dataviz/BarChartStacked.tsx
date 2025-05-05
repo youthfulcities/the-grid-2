@@ -36,9 +36,11 @@ interface BarChartProps {
   onBarClick?: (label: string) => void;
   children?: React.ReactNode;
   marginLeft?: number;
+  height?: number;
 }
 
 const BarChartStacked: React.FC<BarChartProps> = ({
+  height = 800,
   width = 600,
   setTooltipState,
   data,
@@ -48,13 +50,12 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   marginLeft,
 }) => {
   const ref = useRef<SVGSVGElement | null>(null);
-  const height = 400;
   const duration = 1000;
   const margin = {
     left: marginLeft ?? 60,
     right: 20,
     top: 20,
-    bottom: 80,
+    bottom: 100,
   };
 
   useEffect(() => {
@@ -111,9 +112,11 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .on('mouseover', (event, d) => {
         const x = event.pageX;
         const y = event.pageY;
+        const { key } = d;
+        const value = d[1] - d[0];
         setTooltipState({
           position: { x, y },
-          content: `${JSON.stringify(d)}`,
+          content: `${labelAccessor(d.data)} ${key}: $${value.toFixed(2)}`,
         });
       })
       .on('mousemove', (event, d) => {
@@ -123,7 +126,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         const value = d[1] - d[0];
         setTooltipState({
           position: { x, y },
-          content: `${labelAccessor(d.data)} ${key}: $${value}`,
+          content: `${labelAccessor(d.data)} ${key}: $${value.toFixed(2)}`,
         });
       })
       .on('mouseout', () => {
@@ -157,6 +160,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
 
     yAxis
       .selectAll('text')
+      .attr('text-anchor', 'end') // Align text properly
       .attr('transform', 'rotate(-30)')
       .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
       .attr('font-weight', '400')
@@ -208,7 +212,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
 
   return (
     <>
-      <svg ref={ref} width={width} height={400} />
+      <svg ref={ref} width={width} height={height} />
       {width > 0 && <SaveAsImg svgRef={ref} />}
     </>
   );

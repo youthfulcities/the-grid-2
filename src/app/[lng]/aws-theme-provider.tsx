@@ -94,6 +94,10 @@ const theme = createTheme(
         },
       },
       components: {
+        fieldcontrol: {
+          borderRadius: { value: '{radii.xl.value}' },
+          borderColor: { value: '{components.button.border.color.value}' },
+        },
         field: {
           gap: { value: '{space.xxxxs.value}' },
           label: { color: { value: '{colors.font.inverse.value}' } },
@@ -134,9 +138,7 @@ const theme = createTheme(
           startColor: { value: '{colors.neutral.90}' },
           endColor: { value: '{colors.neutral.80}' },
         },
-        fieldcontrol: {
-          borderColor: { value: '{components.button.border.color.value}' },
-        },
+
         select: {
           color: { value: '{colors.font.inverse.value}' },
           option: {

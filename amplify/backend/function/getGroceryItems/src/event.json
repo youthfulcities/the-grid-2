@@ -1,6 +1,6 @@
 {
   "httpMethod": "GET",
-  "path": "/public/all",
+  "path": "/public/income",
   "queryStringParameters": {
     "limit": "10"
   },

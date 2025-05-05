@@ -8,7 +8,8 @@ const API_URL = awsExports.aws_cloud_logic_custom.find(
 
 export const GET = async () => {
   try {
-    const response = await fetch(`${API_URL}/public/all`);
+    const response = await fetch(`${API_URL}/public/rent`);
+
     const body = await response.json();
     return NextResponse.json(body, {
       status: response.status,

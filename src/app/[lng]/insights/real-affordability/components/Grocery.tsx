@@ -1,4 +1,8 @@
-import BarChart from '@/app/components/dataviz/BarChartGeneral';
+import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
+import {
+  calculateGroceryPrice,
+  calculateGroceryTotals,
+} from '@/utils/calculateGroceryTotals';
 import {
   Button,
   Flex,
@@ -8,7 +12,7 @@ import {
   View,
 } from '@aws-amplify/ui-react';
 import { motion } from 'framer-motion';
-import { useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
 import { styled } from 'styled-components';
 import { BasketEntry, GroceryItem, TooltipState } from '../types';
@@ -86,6 +90,8 @@ const ExpandButton = styled(Button)`
   z-index: 1;
 `;
 
+const keys = ['Canadian goods', 'Non-Canadian goods'];
+
 const containerVariants = {
   expanded: {
     height: 'auto',
@@ -127,31 +133,24 @@ const Grocery = ({
   setBasket,
   activeCity,
   setActiveCity,
-  calculateGroceryPrice,
   cityTotals,
-  tooltipState,
   setTooltipState,
   width,
   loading,
+  basket,
 }: {
   groceryItems: GroceryItem[];
   latestTimestamp: string | null;
   setBasket: React.Dispatch<React.SetStateAction<Record<string, BasketEntry>>>;
   activeCity: string | null;
   setActiveCity: React.Dispatch<React.SetStateAction<string | null>>;
-  calculateGroceryPrice: (
-    item: GroceryItem,
-    cityData: any,
-    isCanadian: boolean
-  ) => number;
   cityTotals: { city: string; totalPrice: number }[];
-  tooltipState: TooltipState;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   width: number;
   loading: boolean;
+  basket: Record<string, BasketEntry>;
 }) => {
   const [imgError, setImgError] = useState<{ [key: string]: boolean }>({});
-
   const [expanded, setExpanded] = useState(false);
 
   const visibleItems = useMemo(() => {
@@ -182,7 +181,7 @@ const Grocery = ({
         const offset = offsetsByKey[key];
         return { item, key, offset };
       }),
-    [visibleItems, activeCity]
+    [visibleItems, offsetsByKey]
   );
 
   const handleAddToBasket = (item: GroceryItem) => {
@@ -221,6 +220,33 @@ const Grocery = ({
   const resetCity = () => {
     setActiveCity(null);
   };
+
+  const canadianTotal = useMemo(
+    () => calculateGroceryTotals(groceryItems, basket, true),
+    [groceryItems, basket]
+  );
+
+  const processedData = useMemo(
+    () =>
+      cityTotals.map((city) => {
+        const cityName = city.city;
+        const canadian =
+          canadianTotal.find((item) => item.city === cityName)?.totalPrice ?? 0;
+        return {
+          city: cityName,
+          'Canadian goods': canadian,
+          'Non-Canadian goods': city.totalPrice - canadian,
+          totalPrice: city.totalPrice,
+        };
+      }),
+    [cityTotals, canadianTotal]
+  );
+
+  const tooltipFormatter = useCallback(
+    (d: any) =>
+      `${d.city}: $${d.totalPrice.toFixed(2)} (${((d['Canadian goods'] / d.totalPrice) * 100).toFixed(1)}% Canadian goods)`,
+    []
+  );
 
   return (
     <>
@@ -333,7 +359,17 @@ const Grocery = ({
           <Heading level={2} marginTop='xl' textAlign='center'>
             Cost of basket by City
           </Heading>
-          <BarChart
+          <BarChartStacked
+            data={processedData}
+            keys={keys}
+            labelAccessor={(d) => d.city as string}
+            width={width}
+            setTooltipState={setTooltipState}
+            height={800}
+            marginLeft={100}
+            tooltipFormatter={tooltipFormatter}
+          />
+          {/* <BarChart
             data={cityTotals}
             filterLabel={activeCity}
             onBarClick={(city) => setActiveCity(city)}
@@ -348,7 +384,7 @@ const Grocery = ({
               `${d.city}: $${(d.totalPrice as number).toFixed(2) ?? 0}`
             }
             xLabel='$CAD'
-          />
+          /> */}
           <Flex marginBottom='large'>
             <Button
               onClick={handleAddAll}

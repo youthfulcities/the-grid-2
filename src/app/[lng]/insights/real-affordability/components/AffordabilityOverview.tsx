@@ -10,7 +10,6 @@ interface TooltipState {
 
 interface AffordabilityOverviewProps {
   width: number;
-  tooltipState: TooltipState;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   cityTotals: { city: string; totalPrice: number }[];
 }
@@ -108,7 +107,6 @@ const province = {
 
 const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   width,
-  tooltipState,
   setTooltipState,
   cityTotals,
 }) => {
@@ -116,8 +114,6 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   const [errorText, setErrorText] = useState(null);
   const [rent, setRent] = useState<RentData>([]);
   const [income, setIncome] = useState<IncomeData>([]);
-
-  console.log(income);
 
   useEffect(() => {
     const fetchRent = async () => {
@@ -195,12 +191,14 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
       }),
     [data]
   );
+
   processedData.sort((a, b) => {
     if (b.surplus !== a.surplus) {
       return b.surplus - a.surplus;
     }
     return b.totalExpenses - a.totalExpenses;
   });
+
   return (
     <View marginBottom='large'>
       <Heading level={1} marginBottom='large'>
@@ -208,12 +206,10 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
       </Heading>
       {cityTotals?.length > 0 && processedData?.length > 0 ? (
         <BarChartStacked
-          tooltipState={tooltipState}
           setTooltipState={setTooltipState}
           data={processedData}
           labelAccessor={(d) => d.city as string}
           keys={keys}
-          surplusKey='surplus'
           width={width}
           height={800}
           marginLeft={100}

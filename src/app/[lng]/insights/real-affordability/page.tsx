@@ -12,6 +12,7 @@ import _ from 'lodash';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import AffordabilityOverview from './components/AffordabilityOverview';
 import BasketBar from './components/BasketBar';
+import CharacterCreator from './components/CharacterCreator';
 import Grocery from './components/Grocery';
 import { BasketEntry, GroceryItem, TooltipState } from './types';
 
@@ -78,21 +79,20 @@ const GroceryList: React.FC = () => {
     <>
       <Container>
         <View className='container padding' ref={containerRef}>
+          <CharacterCreator />
           <AffordabilityOverview
             width={width}
-            tooltipState={tooltipState}
             setTooltipState={setTooltipState}
             cityTotals={cityTotals}
           />
           <Grocery
-            calculateGroceryPrice={calculateGroceryPrice}
+            basket={basket}
             activeCity={activeCity}
             setActiveCity={setActiveCity}
             cityTotals={cityTotals}
             groceryItems={groceryItems}
             latestTimestamp={latestTimestamp}
             setBasket={setBasket}
-            tooltipState={tooltipState}
             setTooltipState={setTooltipState}
             width={width}
             loading={loading}

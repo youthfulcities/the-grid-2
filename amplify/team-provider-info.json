@@ -35,7 +35,8 @@
         },
         "getGroceryItems": {
           "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
-          "s3Key": "amplify-builds/getGroceryItems-346f66544f784f756968-build.zip"
+          "s3Key": "amplify-builds/getGroceryItems-3571762f684e53766635-build.zip",
+          "bucketName": "ycydl"
         },
         "thegrid2fafc44b3CreateAuthChallenge": {
           "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
@@ -65,6 +66,11 @@
         "AdminQueries8e2ac1c4": {
           "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
           "s3Key": "amplify-builds/AdminQueries8e2ac1c4-6a385451372b48713852-build.zip"
+        },
+        "processGrocery": {
+          "bucketName": "ycydl",
+          "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
+          "s3Key": "amplify-builds/processGrocery-65554663567070505231-build.zip"
         }
       },
       "storage": {
@@ -229,7 +235,7 @@
         },
         "processGrocery": {
           "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
-          "s3Key": "amplify-builds/processGrocery-77696952697873474167-build.zip",
+          "s3Key": "amplify-builds/processGrocery-65554663567070505231-build.zip",
           "bucketName": "ycydl"
         }
       },

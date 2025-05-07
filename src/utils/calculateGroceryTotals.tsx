@@ -1,8 +1,7 @@
 // lib/cityTotals.ts
-import _ from 'lodash';
 import {
-  GroceryItem,
   BasketEntry,
+  GroceryItem,
 } from '@/app/[lng]/insights/real-affordability/types';
 
 export const calculateGroceryPrice = (
@@ -85,9 +84,33 @@ export const calculateGroceryPrice = (
   );
 };
 
+export const getCanadianPriceOnly = (item: any, city: any): number => {
+  const quantity = item.statscan_quantity ?? item.most_frequent_quantity ?? 1;
+
+  const pricePerBase =
+    city?.canada_average_price_per_base ?? item.canada_average_price_per_base;
+
+  if (pricePerBase !== undefined) return pricePerBase * quantity;
+
+  return city?.canada_average_price ?? item.canada_average_price ?? 0;
+};
+
+export const getNonCanadianPriceOnly = (item: any, city: any): number => {
+  const quantity = item.statscan_quantity ?? item.most_frequent_quantity ?? 1;
+
+  const pricePerBase =
+    city?.not_canada_average_price_per_base ??
+    item.not_canada_average_price_per_base;
+
+  if (pricePerBase !== undefined) return pricePerBase * quantity;
+
+  return city?.not_canada_average_price ?? item.not_canada_average_price ?? 0;
+};
+
 export const calculateGroceryTotals = (
   groceryItems: GroceryItem[],
-  basket: Record<string, BasketEntry>
+  basket: Record<string, BasketEntry>,
+  canadian: boolean | null = null
 ) => {
   const cityTotals: Record<string, number> = {};
 
@@ -99,7 +122,10 @@ export const calculateGroceryTotals = (
     allCities.forEach((cityName) => {
       groceryItems.forEach((item) => {
         const cityData = item.cities.find((c) => c.city === cityName);
-        const value = calculateGroceryPrice(item, cityData ?? null, null);
+        let value = 0;
+        if (canadian === true) {
+          value = getCanadianPriceOnly(item, cityData ?? null);
+        } else value = calculateGroceryPrice(item, cityData ?? null);
         cityTotals[cityName] = (cityTotals[cityName] || 0) + value;
       });
     });
@@ -107,7 +133,10 @@ export const calculateGroceryTotals = (
     allCities.forEach((cityName) => {
       Object.values(basket).forEach(({ item, quantity }) => {
         const cityData = item.cities.find((c) => c.city === cityName);
-        const value = calculateGroceryPrice(item, cityData ?? null, null);
+        let value = 0;
+        if (canadian === true) {
+          value = getCanadianPriceOnly(item, cityData ?? null);
+        } else value = calculateGroceryPrice(item, cityData ?? null);
         cityTotals[cityName] = (cityTotals[cityName] || 0) + value * quantity;
       });
     });

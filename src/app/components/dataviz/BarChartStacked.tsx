@@ -1,5 +1,7 @@
 import * as d3 from 'd3';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import Legend from './Legend';
 import SaveAsImg from './SaveAsImg';
 
 const colors = [
@@ -10,6 +12,10 @@ const colors = [
   '#F6D9D7',
   '#af6860',
 ];
+
+const ChartContainer = styled.div`
+  position: relative;
+`;
 
 interface FlexibleDataItem {
   [key: string]: number | string;
@@ -25,16 +31,14 @@ interface BarChartProps {
   width: number;
   data: FlexibleDataItem[];
   keys: string[];
-  surplusKey: string;
   labelAccessor: (d: FlexibleDataItem) => string;
   tooltipFormatter?: (d: FlexibleDataItem) => string;
-  tooltipState: TooltipState;
-  filterLabel?: string | null;
-  xLabel?: string;
-  mode?: 'percent' | 'absolute';
+  // filterLabel?: string | null;
+  // xLabel?: string;
+  // mode?: 'percent' | 'absolute';
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
-  onBarClick?: (label: string) => void;
-  children?: React.ReactNode;
+  // onBarClick?: (label: string) => void;
+  // children?: React.ReactNode;
   marginLeft?: number;
   height?: number;
 }
@@ -46,8 +50,8 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   data,
   keys,
   labelAccessor,
-  surplusKey,
   marginLeft,
+  tooltipFormatter,
 }) => {
   const ref = useRef<SVGSVGElement | null>(null);
   const duration = 1000;
@@ -55,8 +59,12 @@ const BarChartStacked: React.FC<BarChartProps> = ({
     left: marginLeft ?? 60,
     right: 20,
     top: 20,
-    bottom: 100,
+    bottom: 40,
   };
+  const legendData = keys.map((key, index) => ({
+    key,
+    color: colors[index] || '#000', // Default color if out of bounds
+  }));
 
   useEffect(() => {
     if (!ref.current || !data || !width || !height) return;
@@ -72,13 +80,14 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .keys(keys)
       .offset(d3.stackOffsetDiverging);
 
-    const xDomainMin = d3.min(data, (d) =>
-      d3.sum(keys, (key) => Number(d[key]) || 0)
-    )!;
+    const currentSeries = stackGenerator(data);
 
-    const xDomainMax = d3.max(data, (d) =>
-      d[surplusKey] ? Number(d[surplusKey]) : 0
-    )!;
+    const allValues = currentSeries.flatMap((s) =>
+      s.map((d) => [d[0], d[1]]).flat()
+    );
+
+    const xDomainMin = Math.min(0, d3.min(allValues)!);
+    const xDomainMax = Math.max(0, d3.max(allValues)!);
 
     const yScale = d3
       .scaleBand()
@@ -116,7 +125,9 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         const value = d[1] - d[0];
         setTooltipState({
           position: { x, y },
-          content: `${labelAccessor(d.data)} ${key}: $${value.toFixed(2)}`,
+          content: tooltipFormatter
+            ? tooltipFormatter(d.data)
+            : `${labelAccessor(d.data)} ${key}: $${value.toFixed(2)}`,
         });
       })
       .on('mousemove', (event, d) => {
@@ -126,7 +137,9 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         const value = d[1] - d[0];
         setTooltipState({
           position: { x, y },
-          content: `${labelAccessor(d.data)} ${key}: $${value.toFixed(2)}`,
+          content: tooltipFormatter
+            ? tooltipFormatter(d.data)
+            : `${labelAccessor(d.data)} ${key}: $${value.toFixed(2)}`,
         });
       })
       .on('mouseout', () => {
@@ -140,17 +153,22 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .attr('x', (d) => xScale(Math.min(d[0], d[1])))
       .attr('width', (d) => Math.abs(xScale(d[1]) - xScale(d[0])));
 
-    svg
+    const xAxis = svg
       .append('g')
       .attr('class', 'x-axis')
       .attr('transform', `translate(0,${margin.top})`)
       .call(
         d3.axisTop(xScale).tickFormat((d) => `$${d3.format(',')(d as number)}`)
-      )
+      );
+
+    xAxis
       .selectAll('text')
       .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
       .attr('font-weight', '400')
       .style('fill', 'white');
+
+    xAxis.selectAll('.tick line').attr('stroke', 'white');
+    xAxis.selectAll('.domain').remove();
 
     const yAxis = svg
       .append('g')
@@ -160,14 +178,15 @@ const BarChartStacked: React.FC<BarChartProps> = ({
 
     yAxis
       .selectAll('text')
-      .attr('text-anchor', 'end') // Align text properly
+      .attr('text-anchor', 'end')
       .attr('transform', 'rotate(-30)')
+      .attr('dy', '-0.4em') // Move text up slightly
       .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
       .attr('font-weight', '400')
       .style('fill', 'white');
 
+    yAxis.selectAll('.tick line').attr('stroke', 'white');
     yAxis.selectAll('.domain').remove();
-    yAxis.selectAll('.tick line').remove();
 
     // Find pixel position of 0
     const zeroX = xScale(0);
@@ -182,40 +201,45 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .attr('stroke-width', 2)
       .attr('stroke-dasharray', '4,2');
 
-    // Create a group for labels
-    const labelsGroup = svg
-      .append('g')
-      .attr('transform', `translate(0,${height - margin.bottom / 2})`);
+    if (xDomainMin < 0 && xDomainMax > 0) {
+      // Create a group for labels
+      const labelsGroup = svg
+        .append('g')
+        .attr('transform', `translate(0,${height - margin.bottom / 2})`);
 
-    // Expenses label
-    labelsGroup
-      .append('text')
-      .attr('x', zeroX - 10) // 50px left of 0
-      .attr('y', 0)
-      .attr('text-anchor', 'end') // Right-align text
-      .attr('fill', 'white')
-      .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
-      .attr('font-size', 12)
-      .text('← Expenses');
+      // Expenses label
+      labelsGroup
+        .append('text')
+        .attr('x', zeroX - 10) // 10px left of 0
+        .attr('y', 0)
+        .attr('text-anchor', 'end') // Right-align text
+        .attr('fill', 'white')
+        .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
+        .attr('font-size', 12)
+        .text('← Expenses');
 
-    // Surplus label
-    labelsGroup
-      .append('text')
-      .attr('x', zeroX + 10) // 50px right of 0
-      .attr('y', 0)
-      .attr('text-anchor', 'start') // Left-align text
-      .attr('fill', 'white')
-      .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
-      .attr('font-size', 12)
-      .text('Surplus →');
+      // Surplus label
+      labelsGroup
+        .append('text')
+        .attr('x', zeroX + 10) // 10px right of 0
+        .attr('y', 0)
+        .attr('text-anchor', 'start') // Left-align text
+        .attr('fill', 'white')
+        .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
+        .attr('font-size', 12)
+        .text('Surplus →');
+    }
   }, [data, width, height, keys]);
 
   return (
     <>
-      <svg ref={ref} width={width} height={height} />
+      <ChartContainer>
+        <svg ref={ref} width={width} height={height} />
+        <Legend data={legendData} position='absolute' />
+      </ChartContainer>
       {width > 0 && <SaveAsImg svgRef={ref} />}
     </>
   );
 };
 
-export default BarChartStacked;
+export default React.memo(BarChartStacked);

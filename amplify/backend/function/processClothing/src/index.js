@@ -1,10 +1,15 @@
 /* Amplify Params - DO NOT EDIT
+	API_GROCERY_APIID
+	API_GROCERY_APINAME
 	ENV
+	FUNCTION_GETGROCERYITEMS_NAME
 	REGION
 	STORAGE_GROCERYAGGREGATED_ARN
 	STORAGE_GROCERYAGGREGATED_NAME
+	STORAGE_GROCERYAGGREGATED_STREAMARN
 	STORAGE_GROCERYPRICES_ARN
 	STORAGE_GROCERYPRICES_NAME
+	STORAGE_GROCERYPRICES_STREAMARN
 Amplify Params - DO NOT EDIT */
 
 /**
@@ -22,8 +27,8 @@ const client = new DynamoDBClient({});
 const ddbDocClient = DynamoDBDocumentClient.from(client);
 const s3 = new S3Client({ region: process.env.AWS_REGION });
 const BUCKET_NAME = process.env.BUCKET_NAME + '-' + process.env.ENV;
-const PREFIX_AGGREGATED = `internal/RAI/grocery/cache/aggregated/`;
-const PREFIX_CATEGORIES = `internal/RAI/grocery/cache/aggregated-categories/`;
+const PREFIX_AGGREGATED = `internal/RAI/clothing/cache/aggregated/`;
+const PREFIX_CATEGORIES = `internal/RAI/clothing/cache/aggregated-categories/`;
 
 const SOURCE_TABLE = process.env.STORAGE_GROCERYPRICES_NAME;
 const TARGET_TABLE = process.env.STORAGE_GROCERYAGGREGATED_NAME;
@@ -47,7 +52,7 @@ const handler = async (event) => {
           },
           ExpressionAttributeValues: {
             ':excluded': 'category#easter',
-            ':department': 'grocery',
+            ':department': 'clothing',
             ':outlier': 'true',
           },
         })

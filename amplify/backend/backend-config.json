@@ -297,6 +297,44 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "processClothing": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "ApiName",
+            "ApiId"
+          ],
+          "category": "api",
+          "resourceName": "grocery"
+        },
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "getGroceryItems"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "groceryAggregated"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "groceryprices"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "processGrocery": {
       "build": true,
       "dependsOn": [
@@ -472,6 +510,30 @@
         {
           "category": "function",
           "resourceName": "interviewAll"
+        }
+      ]
+    },
+    "AMPLIFY_function_processClothing_bucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processClothing"
+        }
+      ]
+    },
+    "AMPLIFY_function_processClothing_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processClothing"
+        }
+      ]
+    },
+    "AMPLIFY_function_processClothing_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processClothing"
         }
       ]
     },

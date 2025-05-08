@@ -11,9 +11,11 @@ import {
   Button,
   CheckboxField,
   Flex,
+  Text,
   TextAreaField,
   TextField,
 } from "@aws-amplify/ui-react";
+import MyIcon from "./MyIcon";
 export default function ContactUs(props) {
   const { overrides, ...rest } = props;
   return (
@@ -27,6 +29,7 @@ export default function ContactUs(props) {
       position="relative"
       borderRadius="8px"
       padding="32px 32px 32px 32px"
+      backgroundColor="rgba(252,250,248,1)"
       {...getOverrideProps(overrides, "ContactUs")}
       {...rest}
     >
@@ -85,32 +88,6 @@ export default function ContactUs(props) {
         variation="default"
         {...getOverrideProps(overrides, "TextField29766939")}
       ></TextField>
-      <TextField
-        width="unset"
-        height="unset"
-        label="Phone Number"
-        shrink="0"
-        alignSelf="stretch"
-        placeholder=""
-        size="default"
-        isDisabled={false}
-        labelHidden={false}
-        variation="default"
-        {...getOverrideProps(overrides, "TextField63852084")}
-      ></TextField>
-      <TextField
-        width="unset"
-        height="unset"
-        label="Topic"
-        shrink="0"
-        alignSelf="stretch"
-        placeholder=""
-        size="default"
-        isDisabled={false}
-        labelHidden={false}
-        variation="default"
-        {...getOverrideProps(overrides, "TextField63662253")}
-      ></TextField>
       <TextAreaField
         width="unset"
         height="unset"
@@ -146,6 +123,116 @@ export default function ContactUs(props) {
         children="Send message"
         {...getOverrideProps(overrides, "Button")}
       ></Button>
+      <Flex
+        gap="24px"
+        direction="row"
+        width="unset"
+        height="unset"
+        justifyContent="center"
+        alignItems="flex-start"
+        shrink="0"
+        alignSelf="stretch"
+        position="relative"
+        padding="0px 0px 0px 0px"
+        {...getOverrideProps(overrides, "Frame 2829766941")}
+      >
+        <Flex
+          gap="8px"
+          direction="row"
+          width="unset"
+          height="unset"
+          justifyContent="flex-start"
+          alignItems="center"
+          shrink="0"
+          position="relative"
+          padding="0px 0px 0px 0px"
+          {...getOverrideProps(overrides, "Frame 2829766942")}
+        >
+          <MyIcon
+            width="24px"
+            height="24px"
+            display="block"
+            gap="unset"
+            alignItems="unset"
+            justifyContent="unset"
+            overflow="hidden"
+            shrink="0"
+            position="relative"
+            padding="0px 0px 0px 0px"
+            type="instagram"
+            {...getOverrideProps(overrides, "MyIcon39193120")}
+          ></MyIcon>
+          <Text
+            fontFamily="Inter"
+            fontSize="14px"
+            fontWeight="400"
+            color="rgba(102,100,96,1)"
+            lineHeight="24px"
+            textAlign="left"
+            display="block"
+            direction="column"
+            justifyContent="unset"
+            width="unset"
+            height="unset"
+            gap="unset"
+            alignItems="unset"
+            shrink="0"
+            position="relative"
+            padding="0px 0px 0px 0px"
+            whiteSpace="pre-wrap"
+            children="Instagram"
+            {...getOverrideProps(overrides, "Instagram")}
+          ></Text>
+        </Flex>
+        <Flex
+          gap="8px"
+          direction="row"
+          width="unset"
+          height="unset"
+          justifyContent="flex-start"
+          alignItems="center"
+          shrink="0"
+          position="relative"
+          padding="0px 0px 0px 0px"
+          {...getOverrideProps(overrides, "Frame 30")}
+        >
+          <MyIcon
+            width="24px"
+            height="24px"
+            display="block"
+            gap="unset"
+            alignItems="unset"
+            justifyContent="unset"
+            overflow="hidden"
+            shrink="0"
+            position="relative"
+            padding="0px 0px 0px 0px"
+            type="twitter"
+            {...getOverrideProps(overrides, "MyIcon39193123")}
+          ></MyIcon>
+          <Text
+            fontFamily="Inter"
+            fontSize="14px"
+            fontWeight="400"
+            color="rgba(102,100,96,1)"
+            lineHeight="24px"
+            textAlign="left"
+            display="block"
+            direction="column"
+            justifyContent="unset"
+            width="unset"
+            height="unset"
+            gap="unset"
+            alignItems="unset"
+            shrink="0"
+            position="relative"
+            padding="0px 0px 0px 0px"
+            whiteSpace="pre-wrap"
+            children="Twitter"
+            {...getOverrideProps(overrides, "Twitter")}
+          ></Text>
+        </Flex>
+      </Flex>
     </Flex>
   );
 }

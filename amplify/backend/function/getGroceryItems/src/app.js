@@ -518,6 +518,46 @@ app.get(path + 'public/income', async function (req, res) {
   }
 });
 
+app.get(path + 'public/clothing/all', async function (req, res) {
+  const PREFIX = `internal/RAI/clothing/cache/aggregated-categories/`;
+  try {
+    // Step 1: List all objects in the aggregation folder
+    const listCommand = new ListObjectsV2Command({
+      Bucket: BUCKET_NAME,
+      Prefix: PREFIX,
+    });
+
+    const listResponse = await s3.send(listCommand);
+    const files = listResponse.Contents || [];
+
+    if (files.length === 0) {
+      return res.status(404).json({ error: 'No files found.' });
+    }
+
+    // Step 2: Find the most recent file by LastModified
+    const mostRecentFile = files.reduce((a, b) =>
+      new Date(a.LastModified) > new Date(b.LastModified) ? a : b
+    );
+
+    // Step 3: Get the file content
+    const getCommand = new GetObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key: mostRecentFile.Key,
+    });
+
+    const getResponse = await s3.send(getCommand);
+    const body = await getResponse.Body.transformToString();
+
+    // Step 4: Return as JSON
+    res.setHeader('Content-Type', 'application/json');
+    res.send(body);
+  } catch (err) {
+    res.statusCode = 500;
+    console.log(err);
+    res.json({ error: 'Could not load items: ' + err.message });
+  }
+});
+
 /************************************
  * HTTP Public get method to get all unique objects *
  ************************************/

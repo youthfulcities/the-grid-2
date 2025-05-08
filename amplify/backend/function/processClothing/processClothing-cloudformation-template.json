@@ -16,17 +16,17 @@
     "s3Key": {
       "Type": "String"
     },
-    "storagegrocerypricesName": {
+    "apigroceryApiName": {
       "Type": "String",
-      "Default": "storagegrocerypricesName"
+      "Default": "apigroceryApiName"
     },
-    "storagegrocerypricesArn": {
+    "apigroceryApiId": {
       "Type": "String",
-      "Default": "storagegrocerypricesArn"
+      "Default": "apigroceryApiId"
     },
-    "functionprocessGroceryName": {
+    "functiongetGroceryItemsName": {
       "Type": "String",
-      "Default": "functionprocessGroceryName"
+      "Default": "functiongetGroceryItemsName"
     },
     "storagegroceryAggregatedName": {
       "Type": "String",
@@ -35,6 +35,14 @@
     "storagegroceryAggregatedArn": {
       "Type": "String",
       "Default": "storagegroceryAggregatedArn"
+    },
+    "storagegrocerypricesName": {
+      "Type": "String",
+      "Default": "storagegrocerypricesName"
+    },
+    "storagegrocerypricesArn": {
+      "Type": "String",
+      "Default": "storagegrocerypricesArn"
     },
     "bucketName": {
       "Type": "String"
@@ -70,12 +78,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "getGroceryItems",
+            "processClothing",
             {
               "Fn::Join": [
                 "",
                 [
-                  "getGroceryItems",
+                  "processClothing",
                   "-",
                   {
                     "Ref": "env"
@@ -93,8 +101,14 @@
             "REGION": {
               "Ref": "AWS::Region"
             },
-            "FUNCTION_PROCESSGROCERY_NAME": {
-              "Ref": "functionprocessGroceryName"
+            "API_GROCERY_APINAME": {
+              "Ref": "apigroceryApiName"
+            },
+            "API_GROCERY_APIID": {
+              "Ref": "apigroceryApiId"
+            },
+            "FUNCTION_GETGROCERYITEMS_NAME": {
+              "Ref": "functiongetGroceryItemsName"
             },
             "STORAGE_GROCERYAGGREGATED_NAME": {
               "Ref": "storagegroceryAggregatedName"
@@ -119,7 +133,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs22.x",
         "Layers": [],
         "Timeout": 25
       }
@@ -130,12 +144,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "thegrid2LambdaRolef9ffe3aa",
+            "thegrid2LambdaRole454dde4d",
             {
               "Fn::Join": [
                 "",
                 [
-                  "thegrid2LambdaRolef9ffe3aa",
+                  "thegrid2LambdaRole454dde4d",
                   "-",
                   {
                     "Ref": "env"
@@ -201,34 +215,6 @@
                   }
                 ]
               }
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "dynamodb:DescribeTable",
-                "dynamodb:GetItem",
-                "dynamodb:Query",
-                "dynamodb:Scan",
-                "dynamodb:PutItem",
-                "dynamodb:UpdateItem",
-                "dynamodb:DeleteItem"
-              ],
-              "Resource": [
-                {
-                  "Ref": "storagegrocerypricesArn"
-                },
-                {
-                  "Fn::Join": [
-                    "/",
-                    [
-                      {
-                        "Ref": "storagegrocerypricesArn"
-                      },
-                      "index/*"
-                    ]
-                  ]
-                }
-              ]
             }
           ]
         }
@@ -249,6 +235,36 @@
         "PolicyDocument": {
           "Version": "2012-10-17",
           "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "apigateway:POST",
+                "apigateway:PUT",
+                "apigateway:GET",
+                "apigateway:HEAD",
+                "apigateway:OPTIONS",
+                "apigateway:PATCH",
+                "apigateway:DELETE"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "::/restapis/",
+                      {
+                        "Ref": "apigroceryApiName"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
             {
               "Effect": "Allow",
               "Action": [
@@ -277,7 +293,7 @@
                       },
                       ":function:",
                       {
-                        "Ref": "functionprocessGroceryName"
+                        "Ref": "functiongetGroceryItemsName"
                       }
                     ]
                   ]

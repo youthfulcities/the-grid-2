@@ -4,14 +4,7 @@ import styled from 'styled-components';
 import Legend from './Legend';
 import SaveAsImg from './SaveAsImg';
 
-const colors = [
-  '#F2695D',
-  '#FBD166',
-  '#2f4eac',
-  '#B8D98D',
-  '#F6D9D7',
-  '#af6860',
-];
+const colors = ['#FBD166', '#2f4eac', '#F6D9D7', '#B8D98D', '#af6860'];
 
 const ChartContainer = styled.div`
   position: relative;
@@ -61,10 +54,17 @@ const BarChartStacked: React.FC<BarChartProps> = ({
     top: 20,
     bottom: 40,
   };
-  const legendData = keys.map((key, index) => ({
-    key,
-    color: colors[index] || '#000', // Default color if out of bounds
-  }));
+
+  const filteredKeys = keys.filter((key) => key !== 'deficit'); // Exclude 'deficit' from the keys
+  const legendData = [
+    ...filteredKeys // Exclude 'deficit' first
+      .map((key, index) => ({
+        key,
+        color: colors[index] || '#000', // Default color if out of bounds
+      })),
+
+    ...(keys.includes('deficit') ? [{ key: 'deficit', color: '#F2695D' }] : []), // Add deficit only if it's in the keys array
+  ];
 
   useEffect(() => {
     if (!ref.current || !data || !width || !height) return;
@@ -73,12 +73,17 @@ const BarChartStacked: React.FC<BarChartProps> = ({
 
     svg.selectAll('*').remove();
 
-    const color = d3.scaleOrdinal<string>().domain(keys).range(colors);
+    const color = d3.scaleOrdinal<string>().domain(filteredKeys).range(colors);
 
     const stackGenerator = d3
       .stack<{ [key: string]: number | string }>()
-      .keys(keys)
+      .keys(keys.filter((key) => key !== 'deficit')) // Exclude 'deficit' from the main stack
       .offset(d3.stackOffsetDiverging);
+
+    const deficitData = data.map((d) => ({
+      label: labelAccessor(d),
+      value: d.deficit as number,
+    }));
 
     const currentSeries = stackGenerator(data);
 
@@ -145,13 +150,46 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .on('mouseout', () => {
         setTooltipState({ position: null });
       })
-      .on('mouseout', () => {
-        setTooltipState(() => ({ position: null }));
-      })
       .transition()
       .duration(duration)
       .attr('x', (d) => xScale(Math.min(d[0], d[1])))
       .attr('width', (d) => Math.abs(xScale(d[1]) - xScale(d[0])));
+
+    // Add deficit rectangles
+    svg
+      .append('g')
+      .selectAll('rect')
+      .data(deficitData)
+      .join('rect')
+      .attr('y', (d) => yScale(d.label)!)
+      .attr('x', xScale(0)) // Start at 0 for animation
+      .attr('width', 0) // Start with width 0 for animation
+      .attr('height', yScale.bandwidth())
+      .attr('fill', '#F2695D') // Use a distinct color for deficit
+      .attr('cursor', 'pointer')
+      .on('mouseover', (event, d) => {
+        const x = event.pageX;
+        const y = event.pageY;
+        setTooltipState({
+          position: { x, y },
+          content: `Deficit: $${d.value.toFixed(2)}`,
+        });
+      })
+      .on('mousemove', (event, d) => {
+        const x = event.pageX;
+        const y = event.pageY;
+        setTooltipState({
+          position: { x, y },
+          content: `Deficit: $${d.value.toFixed(2)}`,
+        });
+      })
+      .on('mouseout', () => {
+        setTooltipState({ position: null });
+      })
+      .transition()
+      .duration(duration)
+      .attr('x', (d) => xScale(Math.min(0, d.value))) // Animate to final x position
+      .attr('width', (d) => Math.abs(xScale(d.value) - xScale(0))); // Animate to final width
 
     const xAxis = svg
       .append('g')

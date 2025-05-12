@@ -47,6 +47,7 @@ const NavigationLinks = styled(Flex)`
   display: flex;
   flex-direction: row;
   justify-content: center;
+  border-radius: inherit;
   align-items: center;
   position: relative;
 `;
@@ -55,6 +56,7 @@ const NavLink = styled(Link)<{ $currentPage: boolean }>`
   font-family: 'Gotham Narrow Medium';
   text-align: center;
   font-size: 16px;
+  border-radius: inherit;
   font-weight: 450;
   max-width: 110px;
   color: var(--amplify-colors-font-inverse);
@@ -86,6 +88,7 @@ const NavLink = styled(Link)<{ $currentPage: boolean }>`
 
 const StyledMenuButton = styled(MenuButton)`
   border-color: transparent;
+  border-radius: inherit;
   color: var(--amplify-colors-font-inverse);
   &:hover {
     background-color: var(--amplify-colors-neutral-80);
@@ -100,6 +103,7 @@ const StyledMenuButton = styled(MenuButton)`
 `;
 
 const MobileLink = styled(Link)`
+  border-radius: inherit;
   width: 100%;
 `;
 
@@ -109,6 +113,7 @@ const MobileMenuItem = styled(MenuItem)`
   font-weight: 450;
   text-transform: uppercase;
   line-height: 24px;
+  border-radius: 0px;
   width: 100%;
   text-transform: uppercase;
 `;
@@ -234,6 +239,7 @@ const NavBar = () => {
         </Flex>
         {ismobile ? (
           <Menu
+            borderRadius='0px'
             menuAlign='end'
             trigger={
               <StyledMenuButton>

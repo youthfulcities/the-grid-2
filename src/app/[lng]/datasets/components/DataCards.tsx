@@ -1,4 +1,4 @@
-import CardAccordion from '@/app/components/CardAccordion';
+import CardAccordion from '@/app/[lng]/datasets/components/CardAccordion';
 import useTranslation from '@/app/i18n/client';
 import datasetCards from '@/data/dataset-cards.json';
 import useDimension from '@/hooks/useDimensions';
@@ -35,6 +35,7 @@ interface DatasetCard {
   date: string;
   desc: string;
   descfr?: string;
+  public?: boolean;
   file?: string;
   filefr?: string;
   link?: string;
@@ -45,6 +46,7 @@ interface DatasetCard {
 const StyledCard = styled(Card)<{ $background: string; $font: string }>`
   position: relative;
   display: flex;
+  border-radius: var(--amplify-radii-large) var(--amplify-radii-large) 0px 0px;
   background-color: ${(props) => props.$background};
   color: ${(props) => props.$font};
 `;
@@ -83,6 +85,7 @@ const DownloadButton = styled(Button)<{
   bottom: 0px;
   left: 0px;
   font-size: 15px;
+  border-radius: 0px;
   text-transform: uppercase;
   background-color: ${(props) => props.$background};
   color: ${(props) => props.$font};
@@ -173,20 +176,6 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
     [tokens]
   );
 
-  const handleDownload = async (file: string | undefined) => {
-    if (!file) return;
-
-    try {
-      const getUrlResult: { url: URL; expiresAt: Date } | null =
-        await fetchUrl(file);
-      if (getUrlResult) {
-        window.open(getUrlResult.url.href);
-      }
-    } catch (error) {
-      console.error('Error downloading file:', error);
-    }
-  };
-
   const containerRef = useRef<HTMLDivElement>(null);
   const { width, height } = useDimension(containerRef);
 
@@ -206,6 +195,8 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
         <div
           className={`card-img ${card.className}`}
           style={{
+            borderRadius:
+              'var(--amplify-radii-large) var(--amplify-radii-large) 0px 0px',
             position: 'absolute',
             top: '-1px',
             transform: `translateX(-${tokens.space.large.value})`,
@@ -261,7 +252,10 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
           $inverse={getColor(index).button}
           $fullWidth={!hasAdditionalButtons}
           onClick={() =>
-            downloadFile((lng === 'fr' && card.filefr) || card.file || '')
+            downloadFile(
+              (lng === 'fr' && card.filefr) || card.file || '',
+              card.public || false
+            )
           }
         >
           Download File

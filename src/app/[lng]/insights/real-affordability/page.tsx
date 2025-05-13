@@ -1,20 +1,29 @@
 'use client';
 
 import Container from '@/app/components/Background';
+import ChapterNav from '@/app/components/ChapterNav';
 import Tooltip from '@/app/components/dataviz/TooltipChart';
 import { useDimensions } from '@/hooks/useDimensions';
 import {
   calculateGroceryPrice,
   calculateGroceryTotals,
 } from '@/utils/calculateGroceryTotals';
-import { View } from '@aws-amplify/ui-react';
+import { Heading, View } from '@aws-amplify/ui-react';
 import _ from 'lodash';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import AffordabilityOverview from './components/AffordabilityOverview';
 import BasketBar from './components/BasketBar';
 import CharacterCreator from './components/CharacterCreator';
 import Grocery from './components/Grocery';
-import { BasketEntry, GroceryItem, TooltipState } from './types';
+import useSectionInView from './hooks/useSectionInView';
+import { BasketEntry, GroceryItem, TooltipState } from './types/types';
+
+const steps = [
+  { title: 'Affordability', key: 'overviewInView' },
+  { title: 'Profile', key: 'creatorInView' },
+  { title: 'Grocery', key: 'groceryInView' },
+  { title: 'Housing', key: 'housingInView' },
+];
 
 const getLatestTimestamp = (items: GroceryItem[]): string | null => {
   const allTimestamps = _.flatMap(items, (item) => {
@@ -30,10 +39,16 @@ const getLatestTimestamp = (items: GroceryItem[]): string | null => {
   );
   return latest ?? null;
 };
-
 const GroceryList: React.FC = () => {
+  const [gender, setGender] = useState('woman');
+  const [occupation, setOccupation] = useState(0);
+  const [age, setAge] = useState(19);
+  const [seed, setSeed] = useState('initial');
+  const [customized, setCustomized] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [manIncome, setManIncome] = useState<number>(0);
+  const [currentIncome, setCurrentIncome] = useState<number>(0);
   const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
   const [latestTimestamp, setLatestTimestamp] = useState<string | null>(null);
   const [errorText, setErrorText] = useState<
@@ -45,6 +60,13 @@ const GroceryList: React.FC = () => {
   });
   const [activeCity, setActiveCity] = useState<string | null>(null);
   const { width } = useDimensions(containerRef);
+  const {
+    creatorRef,
+    overviewRef,
+    groceryRef,
+    housingRef,
+    inViewMap: currentInView,
+  } = useSectionInView();
 
   useEffect(() => {
     const fetchGroceryItems = async () => {
@@ -79,24 +101,57 @@ const GroceryList: React.FC = () => {
     <>
       <Container>
         <View className='container padding' ref={containerRef}>
-          <CharacterCreator />
-          <AffordabilityOverview
-            width={width}
-            setTooltipState={setTooltipState}
-            cityTotals={cityTotals}
-          />
-          <Grocery
-            basket={basket}
-            activeCity={activeCity}
-            setActiveCity={setActiveCity}
-            cityTotals={cityTotals}
-            groceryItems={groceryItems}
-            latestTimestamp={latestTimestamp}
-            setBasket={setBasket}
-            setTooltipState={setTooltipState}
-            width={width}
-            loading={loading}
-          />
+          <Heading level={1} marginBottom='large'>
+            Canada&apos;s Most{' '}
+            <span className='highlight'>Affordable City</span>
+          </Heading>
+          <View ref={overviewRef} data-section='overviewInView'>
+            <AffordabilityOverview
+              setCurrentIncome={setCurrentIncome}
+              setManIncome={setManIncome}
+              gender={gender}
+              occupation={occupation}
+              age={age}
+              customized={customized}
+              setCustomized={setCustomized}
+              width={width}
+              setTooltipState={setTooltipState}
+              cityTotals={cityTotals}
+            />
+          </View>
+          <View ref={creatorRef} data-section='creatorInView'>
+            <CharacterCreator
+              seed={seed}
+              setSeed={setSeed}
+              currentIncome={currentIncome}
+              customized={customized}
+              manIncome={manIncome}
+              gender={gender}
+              setGender={setGender}
+              occupation={occupation}
+              setOccupation={setOccupation}
+              age={age}
+              setAge={setAge}
+              setCustomized={setCustomized}
+            />
+          </View>
+          <View ref={groceryRef} data-section='groceryInView'>
+            <Grocery
+              basket={basket}
+              activeCity={activeCity}
+              setActiveCity={setActiveCity}
+              cityTotals={cityTotals}
+              groceryItems={groceryItems}
+              latestTimestamp={latestTimestamp}
+              setBasket={setBasket}
+              setTooltipState={setTooltipState}
+              width={width}
+              loading={loading}
+            />
+          </View>
+          <View ref={housingRef} data-section='housingInView'>
+            Housing
+          </View>
         </View>
       </Container>
       <BasketBar
@@ -115,6 +170,8 @@ const GroceryList: React.FC = () => {
           minWidth={tooltipState.minWidth}
         />
       )}
+      {/* <CharacterOverlay seed={seed} /> */}
+      <ChapterNav currentInView={currentInView} steps={steps} />
     </>
   );
 };

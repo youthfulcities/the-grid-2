@@ -51,6 +51,15 @@ const theme = createTheme(
         colorMode: 'dark',
         tokens: {
           components: {
+            stepperfield: {
+              button: {
+                backgroundColor: { value: '{colors.yellow.60.value}' },
+                _hover: {
+                  color: { value: '{colors.red.80.value}' },
+                  backgroundColor: { value: '{colors.red.60.value}' },
+                },
+              },
+            },
             togglebutton: {
               borderColor: { value: '{colors.border.primary.value}' },
               color: { value: '{colors.font.primary.value}' },
@@ -111,7 +120,7 @@ const theme = createTheme(
             color: { value: '{colors.green.90.value}' },
           },
           warning: {
-            color: { value: 'colors.red.90.value' },
+            color: { value: '{colors.red.90.value}' },
           },
         },
         button: {

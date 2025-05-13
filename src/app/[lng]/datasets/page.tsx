@@ -19,6 +19,7 @@ import { getProperties, getUrl } from 'aws-amplify/storage';
 import Link from 'next/link';
 import React from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
+import Feature from '@/app/components/Feature';
 // import config from '../../../amplifyconfiguration.json';
 
 interface RootLayoutProps {
@@ -106,46 +107,7 @@ const Datasets: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
         </FadeInUp>
         <View className='inner-container'>
           <FadeInUp>
-            <Card
-              backgroundColor='blue.60'
-              variation='elevated'
-              borderRadius='xl'
-              padding='xl'
-              marginBottom='xxl'
-            >
-              <Flex gap='xl'>
-                <img
-                  src='https://www.youthfulcities.com/wp-content/uploads/2025/05/insight-part-1.3.png'
-                  alt='Building Bridges: Connecting Youth Skills to the Future
-                of Work'
-                  width='50%'
-                />
-                <Flex direction='column' justifyContent='center'>
-                  <View>
-                    <Heading level={5} color='yellow.60'>
-                      FEATURED
-                    </Heading>
-                    <Heading level={3}>
-                      Building Bridges: Connecting Youth Skills to the Future of
-                      Work
-                    </Heading>
-                  </View>
-                  <Text>
-                    Download part one of the DEVlab insights report, taking a
-                    deep dive into youth data insights and stories from the
-                    DEVlab project.
-                  </Text>
-                  <Button
-                    onClick={() =>
-                      downloadFile('insight-part-1-final-small.pdf', true)
-                    }
-                    variation='primary'
-                  >
-                    Download Now
-                  </Button>
-                </Flex>
-              </Flex>
-            </Card>
+            <Feature />
           </FadeInUp>
           <FadeInUp>
             <Text>{t('description')}</Text>

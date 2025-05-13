@@ -1,4 +1,5 @@
 import FadeInUp from '@/app/components/FadeInUp';
+import Feature from '@/app/components/Feature';
 import InsightCards from '@/app/components/InsightCards';
 import useTranslation from '@/app/i18n/client';
 import { Flex, View, useTheme } from '@aws-amplify/ui-react';
@@ -75,6 +76,9 @@ const HomeHeader = () => {
             <Image alt='Youthful Cities logo' src={ycLogo} width={200} />
             </a> */}
           </Flex>
+        </FadeInUp>
+        <FadeInUp>
+          <Feature color='blue' value='90' />
         </FadeInUp>
         <FadeInUp>
           <InsightCards lng={lng} maxLength={4} />

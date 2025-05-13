@@ -90,8 +90,9 @@ const SaveAsImg: React.FC<SvgToImageProps> = ({ svgRef }) => {
 
   return (
     <Button
+      fontSize='small'
       marginTop='small'
-      variation='primary'
+      color='#fff'
       onClick={() => downloadSVGAsImage('png')}
     >
       {t('download_png')}

@@ -2,7 +2,7 @@
 import {
   BasketEntry,
   GroceryItem,
-} from '@/app/[lng]/insights/real-affordability/types';
+} from '@/app/[lng]/insights/real-affordability/types/types';
 
 export const calculateGroceryPrice = (
   item: any,

@@ -15,7 +15,7 @@ import { motion } from 'framer-motion';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
 import { styled } from 'styled-components';
-import { BasketEntry, GroceryItem, TooltipState } from '../types';
+import { BasketEntry, GroceryItem, TooltipState } from '../types/types';
 import GroceryBadge from './GroceryBadge';
 import GroceryPriceLabel from './GroceryPriceLabel';
 
@@ -250,7 +250,7 @@ const Grocery = ({
 
   return (
     <>
-      <Heading level={1} marginBottom='small'>
+      <Heading level={1} marginTop='xxxl' marginBottom='small'>
         What&apos;s in <span className='highlight'>your basket?</span>
       </Heading>
       <Text>

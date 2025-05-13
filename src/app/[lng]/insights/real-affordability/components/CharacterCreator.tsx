@@ -5,7 +5,7 @@ import {
   Heading,
   Image,
   SelectField,
-  TextField,
+  StepperField,
   View,
 } from '@aws-amplify/ui-react';
 import { micah } from '@dicebear/collection';
@@ -36,7 +36,7 @@ const Background = styled(View)`
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(10px);
   padding: var(--amplify-space-large);
-  margin-bottom: var(--amplify-space-xxl);
+  margin-bottom: var(--amplify-space-large);
 `;
 
 const StyledButton = styled(Button)`
@@ -75,20 +75,61 @@ const AvatarWrapper = styled(motion.div)`
   }
 `;
 
+const StyledStepperField = styled(StepperField)`
+  button:hover {
+    background-color: var(--amplify-colors-brand-primary-10);
+  }
+  label {
+    font-size: var(--amplify-font-sizes-small);
+    margin-bottom: var(--amplify-space-xxxs);
+  }
+`;
+
+const StyledSelectField = styled(SelectField)`
+  padding-bottom: var(--amplify-space-small);
+  label {
+    font-size: var(--amplify-font-sizes-small);
+    margin-bottom: var(--amplify-space-xxxs);
+  }
+`;
+
 const MotionImage = motion(Image);
 const MotionButton = motion(Button);
+
+interface CharacterCreatorProps {
+  gender: string;
+  setGender: (value: string) => void;
+  occupation: number;
+  setOccupation: (value: number) => void;
+  age: number;
+  setAge: (value: number) => void;
+  setCustomized: (value: boolean) => void;
+  currentIncome: number;
+  manIncome: number;
+  customized: boolean;
+  seed: string;
+  setSeed: (value: string) => void;
+}
 
 const options = {
   ...schema.properties,
   ...micah.schema.properties,
 };
 
-const CharacterCreator: React.FC = () => {
-  const [seed, setSeed] = useState('initial');
-  const [gender, setGender] = useState('female');
-  const [occupation, setOccupation] = useState('Engineer');
-  const [age, setAge] = useState('30');
-
+const CharacterCreator: React.FC<CharacterCreatorProps> = ({
+  gender,
+  setGender,
+  occupation,
+  setOccupation,
+  age,
+  setAge,
+  setCustomized,
+  customized,
+  currentIncome,
+  manIncome,
+  seed,
+  setSeed,
+}) => {
   const [hair, setHair] = useState('full');
   const [eyes, setEyes] = useState('round');
   const [mouth, setMouth] = useState('smile');
@@ -139,6 +180,7 @@ const CharacterCreator: React.FC = () => {
   const avatarSvg = useMemo(() => {
     const avatar = createAvatar(micah, {
       seed,
+      ears: ['attached'],
       mouth: [mouth] as Options['mouth'],
       glassesProbability: 100,
       earringsProbability: 0,
@@ -188,8 +230,8 @@ const CharacterCreator: React.FC = () => {
 
   return (
     <Background>
-      <StyledHeading level={3}>Character Creator</StyledHeading>
-      <Flex alignItems='stretch'>
+      <StyledHeading level={3}>Create Profile</StyledHeading>
+      <Flex alignItems='stretch' gap='large'>
         <View>
           <View position='relative'>
             <AvatarWrapper
@@ -211,9 +253,9 @@ const CharacterCreator: React.FC = () => {
                 <StyledButton
                   variation='primary'
                   colorTheme='info'
-                  onClick={() =>
-                    setHair(cycleOption(hair, hairOptions as string[]))
-                  }
+                  onClick={() => {
+                    setHair(cycleOption(hair, hairOptions as string[]));
+                  }}
                 >
                   <FaCaretRight />
                 </StyledButton>
@@ -329,44 +371,94 @@ const CharacterCreator: React.FC = () => {
           >
             🎲 Randomize Colours
           </Button>
+          <Button
+            fontSize='small'
+            width='100%'
+            marginTop='xs'
+            colorTheme='error'
+            color='#fff'
+            onClick={() => setCustomized(false)}
+          >
+            Reset Chart
+          </Button>
         </View>
         <View width='100%'>
-          <SelectField
+          <StyledSelectField
             id='gender'
             name='gender'
             label='Gender'
             value={gender}
-            onChange={(e) => setGender(e.target.value)}
+            onChange={(e) => {
+              setGender(e.target.value);
+              setCustomized(true);
+            }}
           >
-            <option value='female'>Female</option>
-            <option value='male'>Male</option>
-            <option value='nonbinary'>Non-binary</option>
-          </SelectField>
-          <SelectField
+            <option value='woman'>Woman</option>
+            <option value='man'>Man</option>
+            <option value='nonbinary'>Non-binary / gender diverse*</option>
+          </StyledSelectField>
+          <StyledSelectField
             id='occupation'
             name='occupation'
             label='Occupation'
-            value={occupation}
-            onChange={(e) => setOccupation(e.target.value)}
+            value={String(occupation)}
+            onChange={(e) => {
+              setOccupation(Number(e.target.value));
+              setCustomized(true);
+            }}
           >
-            <option value='Engineer'>Engineer</option>
-            <option value='Artist'>Artist</option>
-            <option value='Explorer'>Explorer</option>
-            <option value='Scientist'>Scientist</option>
-            <option value='Medic'>Medic</option>
-          </SelectField>
-          <TextField
+            <option value={0}>Manager</option>
+            <option value={1}>Business and finance</option>
+            <option value={2}>Engineer</option>
+            <option value={3}>Health care</option>
+            <option value={4}>Teacher</option>
+            <option value={5}>Arts & recreation</option>
+            <option value={6}>Retail</option>
+            <option value={7}>Construction worker</option>
+            <option value={8}>Natural resources</option>
+            <option value={9}>Factory worker</option>
+          </StyledSelectField>
+          <StyledStepperField
+            min={19}
+            max={29}
+            step={5}
             id='age'
             label='Age'
             name='age'
             type='number'
             value={age}
-            onChange={(e) => setAge(e.target.value)}
-            min={10}
-            max={120}
+            onStepChange={(n) => {
+              setAge(n);
+              setCustomized(true);
+            }}
           />
         </View>
       </Flex>
+      {manIncome !== 0 && customized && currentIncome !== 0 && (
+        <Heading
+          level={3}
+          marginTop='medium'
+          marginBottom='0'
+          textAlign='center'
+        >
+          Average income: ${currentIncome.toFixed(2)} per month{' '}
+          {gender !== 'man' && customized && (
+            <span
+              style={{
+                color:
+                  currentIncome > manIncome
+                    ? 'var(--amplify-colors-green-40)'
+                    : 'var(--amplify-colors-red-60)',
+              }}
+            >
+              ({currentIncome > manIncome ? '+' : ''}
+              {(((currentIncome - manIncome) / manIncome) * 100).toFixed(
+                1
+              )}% {currentIncome > manIncome ? 'more than' : 'less than'} men)
+            </span>
+          )}
+        </Heading>
+      )}
     </Background>
   );
 };

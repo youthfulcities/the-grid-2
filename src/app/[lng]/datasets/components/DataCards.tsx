@@ -46,7 +46,7 @@ interface DatasetCard {
 const StyledCard = styled(Card)<{ $background: string; $font: string }>`
   position: relative;
   display: flex;
-  border-radius: var(--amplify-radii-large) var(--amplify-radii-large) 0px 0px;
+  border-radius: var(--amplify-radii-large) 0px 0px 0px;
   background-color: ${(props) => props.$background};
   color: ${(props) => props.$font};
 `;
@@ -195,8 +195,7 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
         <div
           className={`card-img ${card.className}`}
           style={{
-            borderRadius:
-              'var(--amplify-radii-large) var(--amplify-radii-large) 0px 0px',
+            borderRadius: 'var(--amplify-radii-large) 0px 0px 0px',
             position: 'absolute',
             top: '-1px',
             transform: `translateX(-${tokens.space.large.value})`,

@@ -58,6 +58,7 @@ const Feature: React.FC<FeatureProps> = ({ color = 'blue', value = '60' }) => {
           </Text>
           <Button
             data-ga-download='download-insight-part-1-final-small.pdf'
+            id='feature-download-insight-part-1-final-small.pdf'
             onClick={() => downloadFile('insight-part-1-final-small.pdf', true)}
             variation='primary'
           >

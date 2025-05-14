@@ -78,7 +78,7 @@ const BarChart: React.FC<BarChartProps> = ({
     left: marginLeft ?? leftMargin,
     right: 10,
     top: 0,
-    bottom: 80,
+    bottom: 20,
   };
   const duration = 1000;
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);

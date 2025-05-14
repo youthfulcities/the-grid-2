@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "storage": {
+      "groceryAggregated": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "groceryprices": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "handler": "index.handler",
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "bucketName",
+      "environmentVariableName": "BUCKET_NAME"
+    }
+  ]
+}

@@ -44,6 +44,7 @@ const CustomizeButton = styled(Button)<{
   width: 30px;
   height: 30px;
   padding: 0;
+  border-radius: 0px;
   border: none;
   display: flex;
   justify-content: flex-end;
@@ -113,13 +114,12 @@ const Accordion: React.FC<AccordionProps> = ({
         {openIndex === 0 && (
           <AccordionContent
             key='content'
-            initial={{ height: 0, opacity: 0 }}
+            initial={{ height: 0 }}
             animate={{
               height: parentHeight - 150,
               width: parentWidth,
-              opacity: 1,
             }}
-            exit={{ height: 0, opacity: 0 }}
+            exit={{ height: 0 }}
             transition={{ ease: [0.0, 0.0, 0.0, 0.0] }}
             $width={parentWidth || 300}
             $height={parentHeight}

@@ -83,8 +83,8 @@ const useDownloadFile = () => {
     }
   }, [authStatus]);
 
-  const downloadFile = (filename: string) => {
-    if (authStatus !== 'authenticated') {
+  const downloadFile = (filename: string, bypassAuthCheck = false) => {
+    if (!bypassAuthCheck && authStatus !== 'authenticated') {
       console.error('User is not authenticated.');
       sessionStorage.setItem('postLoginRedirect', pathname);
       sessionStorage.setItem('downloadFilename', filename);

@@ -48,4 +48,4 @@ const Tooltip: React.FC<{
 
 Tooltip.displayName = 'Tooltip';
 
-export default Tooltip;
+export default React.memo(Tooltip);

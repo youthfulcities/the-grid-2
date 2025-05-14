@@ -1,6 +1,18 @@
 {
   "datasetCards": [
     {
+      "title": "Building Bridges: Connecting Youth Skills to the Future of Work",
+      "titlefr": "",
+      "date": "2024",
+      "type": "survey",
+      "desc": "Download part one of the DEVlab insights report, taking a deep dive into youth data insights and stories from the DEVlab project.",
+      "descfr": "",
+      "className": "image-card-insight-1",
+      "file": "insight-part-1-final-small.pdf",
+      "public": true,
+      "keywords": []
+    },
+    {
       "title": "What’s up with work lately? — Survey",
       "titlefr": "Que se passe-t-il au travail ces temps-ci? - Enquête",
       "date": "2024",

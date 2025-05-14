@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "api": {
+      "grocery": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "function": {
+      "getGroceryItems": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "storage": {
+      "groceryAggregated": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "groceryprices": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "bucketName",
+      "environmentVariableName": "BUCKET_NAME"
+    }
+  ]
+}

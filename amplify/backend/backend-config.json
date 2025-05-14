@@ -22,7 +22,7 @@
             "Name"
           ],
           "category": "function",
-          "resourceName": "AdminQueries1eae25ec"
+          "resourceName": "AdminQueries8e2ac1c4"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -214,6 +214,20 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "AdminQueries8e2ac1c4": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "thegrid2fafc44b3"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "contactFormUploader": {
       "build": true,
       "dependsOn": [
@@ -238,10 +252,21 @@
       "build": true,
       "dependsOn": [
         {
-          "attributeEnvMap": {
-            "Arn": "TABLE_ARN",
-            "Name": "TABLE_NAME"
-          },
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "processGrocery"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "groceryAggregated"
+        },
+        {
           "attributes": [
             "Name",
             "Arn"
@@ -267,6 +292,67 @@
           ],
           "category": "storage",
           "resourceName": "interviewall"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "processClothing": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "ApiName",
+            "ApiId"
+          ],
+          "category": "api",
+          "resourceName": "grocery"
+        },
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "getGroceryItems"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "groceryAggregated"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "groceryprices"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "processGrocery": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "groceryAggregated"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "groceryprices"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -323,6 +409,22 @@
         }
       ]
     },
+    "AMPLIFY_function_AdminQueries8e2ac1c4_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries8e2ac1c4"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueries8e2ac1c4_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries8e2ac1c4"
+        }
+      ]
+    },
     "AMPLIFY_function_contactFormUploader_deploymentBucketName": {
       "usedBy": [
         {
@@ -371,6 +473,14 @@
         }
       ]
     },
+    "AMPLIFY_function_getGroceryItems_bucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getGroceryItems"
+        }
+      ]
+    },
     "AMPLIFY_function_getGroceryItems_deploymentBucketName": {
       "usedBy": [
         {
@@ -400,6 +510,54 @@
         {
           "category": "function",
           "resourceName": "interviewAll"
+        }
+      ]
+    },
+    "AMPLIFY_function_processClothing_bucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processClothing"
+        }
+      ]
+    },
+    "AMPLIFY_function_processClothing_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processClothing"
+        }
+      ]
+    },
+    "AMPLIFY_function_processClothing_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processClothing"
+        }
+      ]
+    },
+    "AMPLIFY_function_processGrocery_bucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processGrocery"
+        }
+      ]
+    },
+    "AMPLIFY_function_processGrocery_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processGrocery"
+        }
+      ]
+    },
+    "AMPLIFY_function_processGrocery_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processGrocery"
         }
       ]
     },
@@ -709,6 +867,10 @@
     }
   },
   "storage": {
+    "groceryAggregated": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
     "groceryprices": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",

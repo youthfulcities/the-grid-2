@@ -1,6 +1,6 @@
 {
-  "httpMethod": "POST",
-  "path": "/items",
+  "httpMethod": "GET",
+  "path": "/public/income",
   "queryStringParameters": {
     "limit": "10"
   },

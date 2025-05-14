@@ -246,6 +246,7 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
         </Flex>
 
         <DownloadButton
+          data-ga-download={`download-${card.file}`}
           $background={getColor(index).background}
           $font={getColor(index).font}
           $inverse={getColor(index).button}

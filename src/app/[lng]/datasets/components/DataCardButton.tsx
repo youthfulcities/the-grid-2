@@ -98,6 +98,7 @@ const DataCardButton = ({
           <TooltipWrapper>
             <Tooltip showTooltip={showTooltip} tooltipMsg={tooltipMsg}>
               <StyledButton
+                data-ga-download={`download-${file}`}
                 $background={getColor(index).button}
                 $inverse={getColor(index).buttonInverse}
                 variation='primary'
@@ -119,6 +120,7 @@ const DataCardButton = ({
             tooltipDesc={tooltipDesc}
           >
             <StyledButton
+              data-ga-download={`download-${file}`}
               $background={getColor(index).button}
               $inverse={getColor(index).buttonInverse}
               onClick={() => downloadFile(file || '')}

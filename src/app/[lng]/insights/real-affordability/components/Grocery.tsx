@@ -15,7 +15,7 @@ import { motion } from 'framer-motion';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
 import { styled } from 'styled-components';
-import { BasketEntry, GroceryItem, TooltipState } from '../types/types';
+import { BasketEntry, GroceryItem, TooltipState } from '../types/BasketTypes';
 import GroceryBadge from './GroceryBadge';
 import GroceryPriceLabel from './GroceryPriceLabel';
 

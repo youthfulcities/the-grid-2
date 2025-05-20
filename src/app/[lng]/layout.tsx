@@ -142,6 +142,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({
       <body>
         <GoogleAnalytics gaId='G-GEF0PPKZXD' />
         <GoogleTagManager gtmId='GTM-MXZ2WJTV' />
+        <GoogleTagManager gtmId='GTM-NQN7F59B' />
         <StyledComponentsRegistry>
           <AutheticatorProvider>
             <ThemeProvider>

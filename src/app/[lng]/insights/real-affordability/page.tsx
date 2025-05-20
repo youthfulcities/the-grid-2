@@ -14,9 +14,12 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import AffordabilityOverview from './components/AffordabilityOverview';
 import BasketBar from './components/BasketBar';
 import CharacterCreator from './components/CharacterCreator';
+import CharacterOverlay from './components/CharacterOverlay';
 import Grocery from './components/Grocery';
+import { AvatarProvider } from './context/AvatarContext';
 import useSectionInView from './hooks/useSectionInView';
-import { BasketEntry, GroceryItem, TooltipState } from './types/types';
+import { BasketEntry, GroceryItem, TooltipState } from './types/BasketTypes';
+import { IncomeData } from './types/IncomeTypes';
 
 const steps = [
   { title: 'Affordability', key: 'overviewInView' },
@@ -41,9 +44,9 @@ const getLatestTimestamp = (items: GroceryItem[]): string | null => {
 };
 const GroceryList: React.FC = () => {
   const [gender, setGender] = useState('woman');
-  const [occupation, setOccupation] = useState(0);
+  const [occupation, setOccupation] = useState('0');
+  const [income, setIncome] = useState<IncomeData>([]);
   const [age, setAge] = useState(19);
-  const [seed, setSeed] = useState('initial');
   const [customized, setCustomized] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -92,13 +95,36 @@ const GroceryList: React.FC = () => {
     fetchGroceryItems();
   }, []);
 
+  useEffect(() => {
+    const fetchIncome = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('/api/income');
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to load income');
+        }
+        setIncome(result);
+        setErrorText(null);
+      } catch (fetchError: unknown) {
+        const error = fetchError as Error;
+        console.error('Error fetching income:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchIncome();
+  }, []);
+
   const cityTotals = useMemo(() => {
     const totals = calculateGroceryTotals(groceryItems, basket);
     return totals.length > 0 ? _.orderBy(totals, ['totalPrice'], ['desc']) : [];
   }, [basket, groceryItems]);
 
+  console.log(currentInView);
+
   return (
-    <>
+    <AvatarProvider>
       <Container>
         <View className='container padding' ref={containerRef}>
           <Heading level={1} marginBottom='large'>
@@ -109,6 +135,7 @@ const GroceryList: React.FC = () => {
             <AffordabilityOverview
               setCurrentIncome={setCurrentIncome}
               setManIncome={setManIncome}
+              income={income}
               gender={gender}
               occupation={occupation}
               age={age}
@@ -121,8 +148,6 @@ const GroceryList: React.FC = () => {
           </View>
           <View ref={creatorRef} data-section='creatorInView'>
             <CharacterCreator
-              seed={seed}
-              setSeed={setSeed}
               currentIncome={currentIncome}
               customized={customized}
               manIncome={manIncome}
@@ -170,9 +195,13 @@ const GroceryList: React.FC = () => {
           minWidth={tooltipState.minWidth}
         />
       )}
-      {/* <CharacterOverlay seed={seed} /> */}
+      <CharacterOverlay
+        income={income}
+        profileInView={currentInView.creatorInView}
+        character={{ age, gender, occupation, currentIncome }}
+      />
       <ChapterNav currentInView={currentInView} steps={steps} />
-    </>
+    </AvatarProvider>
   );
 };
 

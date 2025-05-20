@@ -1,6 +1,12 @@
 import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
 import { Button, Flex, Loader, View } from '@aws-amplify/ui-react';
 import React, { useEffect, useMemo, useState } from 'react';
+import { IncomeData } from '../types/IncomeTypes';
+import ageMap from '../utils/ageMap';
+import getIncome from '../utils/calculateIncome';
+import genderMap from '../utils/genderMap.json';
+import occupationMap from '../utils/occupationMap.json';
+import provinceMap from '../utils/provinceMap.json';
 
 interface TooltipState {
   position: { x: number; y: number } | null;
@@ -11,7 +17,7 @@ interface TooltipState {
 interface AffordabilityOverviewProps {
   age: number;
   gender: string;
-  occupation: number;
+  occupation: string;
   customized: boolean;
   setCustomized: React.Dispatch<React.SetStateAction<boolean>>;
   setManIncome: React.Dispatch<React.SetStateAction<number>>;
@@ -19,6 +25,7 @@ interface AffordabilityOverviewProps {
   width: number;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   cityTotals: { city: string; totalPrice: number }[];
+  income: IncomeData;
 }
 
 interface RentItem {
@@ -49,109 +56,9 @@ interface ClothingItem {
 
 type ClothingData = ClothingItem[];
 
-interface IncomeItem {
-  city: string;
-  province: string;
-  avg_monthly_income: number;
-  avg_monthly_income_post_tax: number;
-  median_monthly_income: number;
-  median_monthly_income_post_tax: number;
-  weighted_avg_monthly_income: number;
-  weighted_avg_monthly_income_post_tax: number;
-  data: [
-    {
-      Age_12_Group: string;
-      Gender_Label: string;
-      NOC_Class: string;
-      'Province Name': string;
-      avg_hrlyearn: number;
-      avg_hrlyearn_post_tax: number;
-      avg_monthly_income: number;
-      avg_monthly_income_post_tax: number;
-      median_hrlyearn: number;
-      median_hrlyearn_post_tax: number;
-      median_monthly_income: number;
-      median_monthly_income_post_tax: number;
-      sample_size: number;
-    },
-  ];
-}
-
-type IncomeData = IncomeItem[];
-
 // Preprocess
 
 const keys = ['deficit', 'rent', 'food', 'clothing', 'surplus'];
-
-const province = {
-  'Ottawa-Gatineau': 'Ontario',
-  'Kitchener-Waterloo': 'Ontario',
-  Quebec: 'Quebec',
-  "St. John's": 'Newfoundland and Labrador',
-  Saskatoon: 'Saskatchewan',
-  Vancouver: 'British Columbia',
-  Mississauga: 'Ontario',
-  Coquitlam: 'British Columbia',
-  Richmond: 'British Columbia',
-  Burnaby: 'British Columbia',
-  Surrey: 'British Columbia',
-  Toronto: 'Ontario',
-  Langley: 'British Columbia',
-  Oshawa: 'Ontario',
-  Delta: 'British Columbia',
-  Saanich: 'British Columbia',
-  Halifax: 'Nova Scotia',
-  Victoria: 'British Columbia',
-  Hamilton: 'Ontario',
-  London: 'Ontario',
-  Calgary: 'Alberta',
-  Sudbury: 'Ontario',
-  Brampton: 'Ontario',
-  Moncton: 'New Brunswick',
-  Fredericton: 'New Brunswick',
-  Laval: 'Quebec',
-  Kelowna: 'British Columbia',
-  Montreal: 'Quebec',
-  Lethbridge: 'Alberta',
-  Charlottetown: 'Prince Edward Island',
-  Regina: 'Saskatchewan',
-  Edmonton: 'Alberta',
-  Winnipeg: 'Manitoba',
-};
-
-const ageMap = (age: number): string | undefined => {
-  if (age >= 15 && age <= 19) {
-    return '15 to 19 years';
-  }
-  if (age >= 20 && age <= 24) {
-    return '20 to 24 years';
-  }
-  if (age >= 15 && age <= 19) {
-    return '15 to 19 years';
-  }
-  if (age >= 25 && age <= 29) {
-    return '25 to 29 years';
-  }
-};
-
-const occupationMap = {
-  0: 'Management occupations',
-  1: 'Business, finance & admin occupations, except management',
-  2: 'Natural & applied sciences occupations, except management',
-  3: 'Health occupations, except management',
-  4: 'Education, law & social, community & government services occupations',
-  5: 'Art, culture, recreation & sport occupations, except management',
-  6: 'Sales & service occupations, except management',
-  7: 'Trades, transport & equipment operators & related occupations',
-  8: 'Natural resources, agriculture & related production occupations',
-  9: 'Manufacturing & utilities occupations, except management',
-};
-
-const genderMap = {
-  woman: 'Women+',
-  man: 'Men+',
-  nonbinary: 'Women+',
-};
 
 const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   gender,
@@ -164,11 +71,11 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   width,
   setTooltipState,
   cityTotals,
+  income,
 }) => {
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState(null);
   const [rent, setRent] = useState<RentData>([]);
-  const [income, setIncome] = useState<IncomeData>([]);
   const [clothing, setClothing] = useState<ClothingData>([]);
 
   useEffect(() => {
@@ -190,27 +97,6 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
       }
     };
     fetchRent();
-  }, []);
-
-  useEffect(() => {
-    const fetchIncome = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch('/api/income');
-        const result = await response.json();
-        if (!response.ok) {
-          throw new Error(result.error || 'Failed to load income');
-        }
-        setIncome(result);
-        setErrorText(null);
-      } catch (fetchError: unknown) {
-        const error = fetchError as Error;
-        console.error('Error fetching income:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchIncome();
   }, []);
 
   useEffect(() => {
@@ -257,65 +143,6 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
       (cityData.length || 1),
   };
 
-  const getIncome = ({
-    city,
-    currentProvince,
-    currentAge,
-    currentGender,
-    currentOccupation,
-  }: {
-    city?: string;
-    currentProvince?: string;
-    currentAge?: string;
-    currentGender?: string;
-    currentOccupation?: string;
-  }): number => {
-    const normalizeMatch = (entry: any) =>
-      (!customized || !currentAge || entry.Age_12_Group === currentAge) &&
-      (!customized || !currentGender || entry.Gender_Label === currentGender) &&
-      (!customized ||
-        !currentOccupation ||
-        entry.NOC_Class === currentOccupation);
-
-    if (city) {
-      const cityEntry = income.find(
-        (item) =>
-          item.city === city || item.city === `Other CMA - ${currentProvince}`
-      );
-
-      const nestedMatch = cityEntry?.data?.find(normalizeMatch);
-
-      return (
-        nestedMatch?.median_monthly_income_post_tax ??
-        cityEntry?.median_monthly_income_post_tax ??
-        income.find(
-          (item) => item.province === province[city as keyof typeof province]
-        )?.median_monthly_income ??
-        averageValues.income
-      );
-    }
-
-    // Fallback: average across all entries matching the filters
-    const allIncomes = income
-      .flatMap(
-        (item) =>
-          item.data
-            ?.filter(normalizeMatch)
-            .map((entry) => entry.median_monthly_income_post_tax) || []
-      )
-      .filter((val) => typeof val === 'number');
-
-    console.log(city, allIncomes);
-
-    if (allIncomes.length > 0) {
-      const avg =
-        allIncomes.reduce((sum, val) => sum + val, 0) / allIncomes.length;
-      return avg;
-    }
-    // Final fallback if no matches at all
-    return averageValues.income;
-  };
-
   const data = useMemo(
     () =>
       rent.map((city) => ({
@@ -329,7 +156,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
         rent: city.rent ?? averageValues.rent,
         income: getIncome({
           city: city.city,
-          currentProvince: province[city.city as keyof typeof province],
+          currentProvince: provinceMap[city.city as keyof typeof provinceMap],
           currentAge: customized ? ageMap(age) : undefined,
           currentGender: customized
             ? genderMap[gender as keyof typeof genderMap]
@@ -337,6 +164,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
           currentOccupation: customized
             ? occupationMap[occupation as keyof typeof occupationMap]
             : undefined,
+          income,
         }),
         other:
           cityData.find((item) => item.city === city.city)?.other ??
@@ -376,6 +204,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
         currentAge: ageGroup,
         currentGender: 'Men+',
         currentOccupation: occupationGroup,
+        income,
       })
     );
     setCurrentIncome(
@@ -383,6 +212,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
         currentAge: ageGroup,
         currentGender: genderGroup,
         currentOccupation: occupationGroup,
+        income,
       })
     );
   }, [ageGroup, occupationGroup, genderGroup]);

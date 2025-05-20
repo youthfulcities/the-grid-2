@@ -1,80 +1,114 @@
-import { Card, Text, View } from '@aws-amplify/ui-react';
-import { micah } from '@dicebear/collection';
-import { createAvatar } from '@dicebear/core';
-import { motion } from 'framer-motion';
+import { Heading, Text, View } from '@aws-amplify/ui-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import _ from 'lodash';
 import React from 'react';
 import styled from 'styled-components';
+import { IncomeData } from '../types/IncomeTypes';
+import ageMap from '../utils/ageMap';
+import getIncome from '../utils/calculateIncome';
+import genderMap from '../utils/genderMap.json';
+import occupationMap from '../utils/occupationMap.json';
+import AvatarSvg from './AvatarSvg';
 
 interface CharacterFacts {
-  name: string;
-  imageUrl: string;
   age: number;
   gender: string;
   occupation: string;
-  income: string;
+  currentIncome: number;
 }
 
-const AvatarWrapper = styled.div`
+const AvatarWrapper = styled(motion.div)`
   position: fixed;
   bottom: 16px;
   left: 16px;
   z-index: 1000;
   cursor: pointer;
-`;
-
-const HoverCard = styled(motion.div)`
-  position: absolute;
-  bottom: 80px;
-  left: 0;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  padding: 16px;
-  width: 240px;
-  pointer-events: none;
-`;
-
-const AvatarImage = styled(motion.div)`
-  width: 64px;
-  height: 64px;
   border-radius: 50%;
   border: 2px solid white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 `;
 
+const HoverCard = styled(motion(View))`
+  position: absolute;
+  bottom: 90px;
+  left: 0;
+  background: white;
+  width: 240px;
+  pointer-events: none;
+  box-shadow: var(--amplify-shadows-large);
+  border-radius: var(--amplify-radii-large);
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  padding: var(--amplify-space-large);
+  margin-bottom: var(--amplify-space-large);
+`;
+
 const CharacterOverlay: React.FC<{
+  profileInView: boolean;
   character: CharacterFacts;
-  seed: string;
-}> = ({ character, seed }) => {
+  income: IncomeData;
+}> = ({ character, income, profileInView }) => {
   const [hovered, setHovered] = React.useState(false);
-  const avatarSvg = createAvatar(micah, { seed });
 
   return (
-    <AvatarWrapper
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <AvatarImage dangerouslySetInnerHTML={{ __html: avatarSvg }} />
-
-      {hovered && (
-        <HoverCard
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 10 }}
-          transition={{ duration: 0.2 }}
+    <AnimatePresence>
+      {!profileInView && (
+        <AvatarWrapper
+          initial={{ y: 100 }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          exit={{ y: 100 }}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
         >
-          <Card variation='elevated'>
-            <Text fontWeight='bold'>{character.name}</Text>
-            <View marginTop='4px'>
-              <Text fontSize='small'>Age: {character.age}</Text>
-              <Text fontSize='small'>Gender: {character.gender}</Text>
-              <Text fontSize='small'>Occupation: {character.occupation}</Text>
-              <Text fontSize='small'>Income: {character.income}</Text>
-            </View>
-          </Card>
-        </HoverCard>
+          <AvatarSvg width={100} height={100} radius={50} />
+          {hovered && (
+            <HoverCard
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Heading level={5} color='font.inverse' textAlign='center'>
+                Current Profile
+              </Heading>
+              <Text fontSize='small'>
+                <span className='highlight'>Age:</span> {ageMap(character.age)}
+              </Text>
+              <Text fontSize='small'>
+                <span className='highlight'>Gender: </span>
+                {_.capitalize(character.gender)}
+              </Text>
+              <Text fontSize='small'>
+                <span className='highlight'>Occupation:</span>{' '}
+                {
+                  occupationMap[
+                    character.occupation as keyof typeof occupationMap
+                  ]
+                }
+              </Text>
+              <Text fontSize='small'>
+                <span className='highlight'>Income:</span>
+                {' $'}
+                {character.currentIncome > 0
+                  ? character.currentIncome.toFixed(2)
+                  : getIncome({
+                      currentAge: ageMap(character.age),
+                      currentGender:
+                        genderMap[character.gender as keyof typeof genderMap],
+                      currentOccupation:
+                        occupationMap[
+                          character.occupation as keyof typeof occupationMap
+                        ],
+                      income,
+                    }).toFixed(2)}{' '}
+                per month
+              </Text>
+            </HoverCard>
+          )}
+        </AvatarWrapper>
       )}
-    </AvatarWrapper>
+    </AnimatePresence>
   );
 };
 

@@ -8,7 +8,7 @@ import CrosslinkCards from '@/app/components/CrosslinkCards';
 import Drawer from '@/app/components/Drawer';
 import FadeInUp from '@/app/components/FadeInUp';
 import BarChart from '@/app/components/dataviz/BarChartGeneral';
-import Tooltip from '@/app/components/dataviz/TooltipChart';
+import Tooltip from '@/app/components/dataviz/TooltipChart/TooltipChart';
 import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
 import useDownloadFile from '@/hooks/useDownloadFile';

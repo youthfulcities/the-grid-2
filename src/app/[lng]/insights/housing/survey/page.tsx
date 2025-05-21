@@ -4,7 +4,7 @@ import { useHousingSurvey } from '@/app/[lng]/insights/housing/survey/context/Ho
 import Background from '@/app/components/Background';
 import CrosslinkCards from '@/app/components/CrosslinkCards';
 import BarChart from '@/app/components/dataviz/BarChartJSON';
-import Tooltip from '@/app/components/dataviz/TooltipChart';
+import Tooltip from '@/app/components/dataviz/TooltipChart/TooltipChart';
 import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
 import useDownloadFile from '@/hooks/useDownloadFile';

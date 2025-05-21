@@ -2,6 +2,7 @@ import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
 import { Button, Flex, Loader, View } from '@aws-amplify/ui-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { IncomeData } from '../types/IncomeTypes';
+import { RentData } from '../types/RentTypes';
 import ageMap from '../utils/ageMap';
 import getIncome from '../utils/calculateIncome';
 import genderMap from '../utils/genderMap.json';
@@ -26,20 +27,8 @@ interface AffordabilityOverviewProps {
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   cityTotals: { city: string; totalPrice: number }[];
   income: IncomeData;
+  rent: RentData;
 }
-
-interface RentItem {
-  city: string;
-  rent: number;
-  bedrooms?: {
-    0?: number;
-    1?: number;
-    2?: number;
-    3?: number;
-  };
-}
-
-type RentData = RentItem[];
 
 interface CityDataItem {
   city: string;
@@ -72,32 +61,11 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   setTooltipState,
   cityTotals,
   income,
+  rent,
 }) => {
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState(null);
-  const [rent, setRent] = useState<RentData>([]);
   const [clothing, setClothing] = useState<ClothingData>([]);
-
-  useEffect(() => {
-    const fetchRent = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch('/api/rent');
-        const result = await response.json();
-        if (!response.ok) {
-          throw new Error(result.error || 'Failed to load rent');
-        }
-        setRent(result);
-        setErrorText(null);
-      } catch (fetchError: unknown) {
-        const error = fetchError as Error;
-        console.error('Error fetching rent:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchRent();
-  }, []);
 
   useEffect(() => {
     const fetchClothing = async () => {
@@ -215,7 +183,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
         income,
       })
     );
-  }, [ageGroup, occupationGroup, genderGroup]);
+  }, [ageGroup, occupationGroup, genderGroup, income]);
 
   return (
     <View marginBottom='large'>

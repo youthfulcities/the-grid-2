@@ -4,8 +4,6 @@ import styled from 'styled-components';
 import Legend from './Legend';
 import SaveAsImg from './SaveAsImg';
 
-const colors = ['#FBD166', '#2f4eac', '#F6D9D7', '#B8D98D', '#af6860'];
-
 const ChartContainer = styled.div`
   position: relative;
 `;
@@ -34,6 +32,7 @@ interface BarChartProps {
   // children?: React.ReactNode;
   marginLeft?: number;
   height?: number;
+  colors?: string[];
 }
 
 const BarChartStacked: React.FC<BarChartProps> = ({
@@ -45,6 +44,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   labelAccessor,
   marginLeft,
   tooltipFormatter,
+  colors = ['#FBD166', '#2f4eac', '#F6D9D7', '#B8D98D', '#af6860'],
 }) => {
   const ref = useRef<SVGSVGElement | null>(null);
   const duration = 1000;

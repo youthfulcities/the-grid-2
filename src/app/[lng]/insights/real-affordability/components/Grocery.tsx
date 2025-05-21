@@ -259,17 +259,13 @@ const Grocery = ({
         represents the cost of goods prepared in Canada.
       </Text>
       {latestTimestamp && (
-        <Text>
+        <Text fontSize='small'>
           Last updated: {new Date(latestTimestamp).toLocaleDateString()}
         </Text>
       )}
-      <Flex>
-        <Button onClick={handleAddAll} variation='primary'>
-          Add All
-        </Button>
-        <Button onClick={removeAll} variation='primary'>
-          Reset
-        </Button>
+      <Flex justifyContent='center' marginTop='xxl'>
+        <Button onClick={handleAddAll}>Add All</Button>
+        <Button onClick={removeAll}>Reset</Button>
       </Flex>
       {loading ? (
         <Flex alignItems='center' margin='small'>
@@ -356,8 +352,8 @@ const Grocery = ({
       )}
       {!loading && (
         <>
-          <Heading level={2} marginTop='xl' textAlign='center'>
-            Cost of basket by City
+          <Heading level={2} marginTop='xxl' textAlign='center'>
+            Cost of basket <span className='highlight'>by City</span>
           </Heading>
           <BarChartStacked
             data={processedData}
@@ -385,24 +381,36 @@ const Grocery = ({
             }
             xLabel='$CAD'
           /> */}
-          <Flex marginBottom='large'>
-            <Button
-              onClick={handleAddAll}
-              variation='primary'
-              marginTop='small'
-            >
-              Add All
-            </Button>
-            <Button onClick={removeAll} variation='primary' marginTop='small'>
-              Reset basket
-            </Button>
-            <Button onClick={resetCity} variation='primary' marginTop='small'>
-              Reset City
-            </Button>
-          </Flex>
+          <Button
+            onClick={handleAddAll}
+            size='small'
+            color='font.inverse'
+            marginTop='small'
+            marginLeft='xs'
+          >
+            Add All
+          </Button>
+          <Button
+            onClick={removeAll}
+            marginTop='small'
+            size='small'
+            color='font.inverse'
+            marginLeft='xs'
+          >
+            Reset basket
+          </Button>
+          <Button
+            onClick={resetCity}
+            marginTop='small'
+            size='small'
+            color='font.inverse'
+            marginLeft='xs'
+          >
+            Reset City
+          </Button>
         </>
       )}
-      <Text>
+      <Text fontSize='small' marginTop='large'>
         Food icons created by{' '}
         <a
           href='https://www.flaticon.com/free-icons/lentils'
@@ -486,7 +494,7 @@ const Grocery = ({
         </a>
         . Thank you!
       </Text>
-      <Text>
+      <Text fontSize='small'>
         Note that the data is limited to what is available from major grocery
         store chains. There may be Canadian fruits and vegetables available that
         have not been marked as “Prepared in Canada” by the store.

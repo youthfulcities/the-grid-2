@@ -2,7 +2,7 @@
 
 import Container from '@/app/components/Background';
 import ChapterNav from '@/app/components/ChapterNav';
-import Tooltip from '@/app/components/dataviz/TooltipChart';
+import Tooltip from '@/app/components/dataviz/TooltipChart/TooltipChart';
 import { useDimensions } from '@/hooks/useDimensions';
 import {
   calculateGroceryPrice,
@@ -16,11 +16,12 @@ import BasketBar from './components/BasketBar';
 import CharacterCreator from './components/CharacterCreator';
 import CharacterOverlay from './components/CharacterOverlay';
 import Grocery from './components/Grocery';
+import Housing from './components/Housing';
 import { AvatarProvider } from './context/AvatarContext';
 import useSectionInView from './hooks/useSectionInView';
 import { BasketEntry, GroceryItem, TooltipState } from './types/BasketTypes';
 import { IncomeData } from './types/IncomeTypes';
-
+import { RentData } from './types/RentTypes';
 const steps = [
   { title: 'Affordability', key: 'overviewInView' },
   { title: 'Profile', key: 'creatorInView' },
@@ -45,14 +46,18 @@ const getLatestTimestamp = (items: GroceryItem[]): string | null => {
 const GroceryList: React.FC = () => {
   const [gender, setGender] = useState('woman');
   const [occupation, setOccupation] = useState('0');
-  const [income, setIncome] = useState<IncomeData>([]);
   const [age, setAge] = useState(19);
   const [customized, setCustomized] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [income, setIncome] = useState<IncomeData>([]);
+  const [incomeLoading, setIncomeLoading] = useState<boolean>(true);
   const [manIncome, setManIncome] = useState<number>(0);
   const [currentIncome, setCurrentIncome] = useState<number>(0);
   const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
+  const [groceryLoading, setGroceryLoading] = useState<boolean>(true);
+  const [rent, setRent] = useState<RentData>([]);
+  const [rentLoading, setRentLoading] = useState<boolean>(true);
   const [latestTimestamp, setLatestTimestamp] = useState<string | null>(null);
   const [errorText, setErrorText] = useState<
     string | null | undefined | unknown
@@ -73,7 +78,7 @@ const GroceryList: React.FC = () => {
 
   useEffect(() => {
     const fetchGroceryItems = async () => {
-      setLoading(true);
+      setGroceryLoading(true);
       try {
         const response = await fetch('/api/grocery/public/all');
         const result = await response.json();
@@ -89,7 +94,7 @@ const GroceryList: React.FC = () => {
         const error = fetchError as Error;
         console.error('Error fetching grocery items:', error);
       } finally {
-        setLoading(false);
+        setGroceryLoading(false);
       }
     };
     fetchGroceryItems();
@@ -97,7 +102,7 @@ const GroceryList: React.FC = () => {
 
   useEffect(() => {
     const fetchIncome = async () => {
-      setLoading(true);
+      setIncomeLoading(true);
       try {
         const response = await fetch('/api/income');
         const result = await response.json();
@@ -110,18 +115,37 @@ const GroceryList: React.FC = () => {
         const error = fetchError as Error;
         console.error('Error fetching income:', error);
       } finally {
-        setLoading(false);
+        setIncomeLoading(false);
       }
     };
     fetchIncome();
+  }, []);
+
+  useEffect(() => {
+    const fetchRent = async () => {
+      setRentLoading(true);
+      try {
+        const response = await fetch('/api/rent');
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to load rent');
+        }
+        setRent(result);
+        setErrorText(null);
+      } catch (fetchError: unknown) {
+        const error = fetchError as Error;
+        console.error('Error fetching rent:', error);
+      } finally {
+        setRentLoading(false);
+      }
+    };
+    fetchRent();
   }, []);
 
   const cityTotals = useMemo(() => {
     const totals = calculateGroceryTotals(groceryItems, basket);
     return totals.length > 0 ? _.orderBy(totals, ['totalPrice'], ['desc']) : [];
   }, [basket, groceryItems]);
-
-  console.log(currentInView);
 
   return (
     <AvatarProvider>
@@ -133,6 +157,7 @@ const GroceryList: React.FC = () => {
           </Heading>
           <View ref={overviewRef} data-section='overviewInView'>
             <AffordabilityOverview
+              rent={rent}
               setCurrentIncome={setCurrentIncome}
               setManIncome={setManIncome}
               income={income}
@@ -171,11 +196,16 @@ const GroceryList: React.FC = () => {
               setBasket={setBasket}
               setTooltipState={setTooltipState}
               width={width}
-              loading={loading}
+              loading={groceryLoading}
             />
           </View>
           <View ref={housingRef} data-section='housingInView'>
-            Housing
+            <Housing
+              rent={rent}
+              width={width}
+              loading={rentLoading}
+              setTooltipState={setTooltipState}
+            />
           </View>
         </View>
       </Container>

@@ -51,12 +51,29 @@ const theme = createTheme(
         colorMode: 'dark',
         tokens: {
           components: {
+            button: {
+              color: { value: '{colors.font.inverse.value}' },
+              _hover: {
+                borderColor: { value: '{colors.brand.secondary.80.value}' },
+                backgroundColor: {
+                  value: '{colors.brand.secondary.100.value}',
+                },
+                color: { value: '{colors.font.inverse.value}' },
+              },
+              primary: {
+                _hover: {
+                  backgroundColor: {
+                    value: '{colors.brand.primary.100.value}',
+                  },
+                  color: { value: '{colors.font.inverse.value}' },
+                },
+              },
+            },
             stepperfield: {
               button: {
-                backgroundColor: { value: '{colors.yellow.60.value}' },
+                backgroundColor: { value: '{colors.yellow.80.value}' },
                 _hover: {
-                  color: { value: '{colors.red.80.value}' },
-                  backgroundColor: { value: '{colors.red.60.value}' },
+                  backgroundColor: { value: '{colors.yellow.100.value}' },
                 },
               },
             },
@@ -121,16 +138,6 @@ const theme = createTheme(
           },
           warning: {
             color: { value: '{colors.red.90.value}' },
-          },
-        },
-        button: {
-          primary: {
-            _hover: {
-              backgroundColor: {
-                value: '{colors.brand.primary.100.value}',
-              },
-              color: { value: '{colors.font.inverse.value}' },
-            },
           },
         },
         tabs: {

@@ -45,14 +45,15 @@ const HoverCard = styled(motion(View))`
 
 const CharacterOverlay: React.FC<{
   profileInView: boolean;
+  housingJourneyInView: boolean;
   character: CharacterFacts;
   income: IncomeData;
-}> = ({ character, income, profileInView }) => {
+}> = ({ character, income, profileInView, housingJourneyInView }) => {
   const [hovered, setHovered] = React.useState(false);
 
   return (
     <AnimatePresence>
-      {!profileInView && (
+      {!profileInView && !housingJourneyInView && (
         <AvatarWrapper
           initial={{ y: 100 }}
           animate={{ y: 0 }}

@@ -1,7 +1,7 @@
 export interface RentItem {
   city: string;
   rent: number;
-  bedrooms?: {
+  bedrooms: {
     0?: number;
     1?: number;
     2?: number;

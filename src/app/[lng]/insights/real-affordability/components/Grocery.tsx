@@ -356,6 +356,8 @@ const Grocery = ({
             Cost of basket <span className='highlight'>by City</span>
           </Heading>
           <BarChartStacked
+            filterLabel={activeCity}
+            onBarClick={(d) => setActiveCity(d)}
             data={processedData}
             keys={keys}
             labelAccessor={(d) => d.city as string}
@@ -365,22 +367,6 @@ const Grocery = ({
             marginLeft={100}
             tooltipFormatter={tooltipFormatter}
           />
-          {/* <BarChart
-            data={cityTotals}
-            filterLabel={activeCity}
-            onBarClick={(city) => setActiveCity(city)}
-            width={width}
-            marginLeft={90}
-            tooltipState={tooltipState}
-            setTooltipState={setTooltipState}
-            mode='absolute'
-            labelAccessor={(d) => d.city as string}
-            valueAccessor={(d) => d.totalPrice as number}
-            tooltipFormatter={(d) =>
-              `${d.city}: $${(d.totalPrice as number).toFixed(2) ?? 0}`
-            }
-            xLabel='$CAD'
-          /> */}
           <Button
             onClick={handleAddAll}
             size='small'

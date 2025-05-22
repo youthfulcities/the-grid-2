@@ -1,3 +1,4 @@
+import toGreyscale from '@/utils/toGreyscale';
 import * as d3 from 'd3';
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
@@ -24,12 +25,9 @@ interface BarChartProps {
   keys: string[];
   labelAccessor: (d: FlexibleDataItem) => string;
   tooltipFormatter?: (d: FlexibleDataItem) => string;
-  // filterLabel?: string | null;
-  // xLabel?: string;
-  // mode?: 'percent' | 'absolute';
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
-  // onBarClick?: (label: string) => void;
-  // children?: React.ReactNode;
+  onBarClick?: (label: string) => void;
+  filterLabel?: string | null;
   marginLeft?: number;
   height?: number;
   colors?: string[];
@@ -45,6 +43,8 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   marginLeft,
   tooltipFormatter,
   colors = ['#FBD166', '#2f4eac', '#F6D9D7', '#B8D98D', '#af6860'],
+  onBarClick,
+  filterLabel,
 }) => {
   const ref = useRef<SVGSVGElement | null>(null);
   const duration = 1000;
@@ -123,6 +123,20 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .attr('width', 0)
       .attr('height', yScale.bandwidth())
       .attr('cursor', 'pointer')
+      .attr('fill', (d) => {
+        const barLabel = labelAccessor(d.data);
+        const originalColor = color(d.key);
+        if (filterLabel && filterLabel !== barLabel) {
+          return toGreyscale(originalColor as string);
+        }
+        return originalColor;
+      })
+      .on('click', (event, d) => {
+        if (onBarClick) {
+          const label = labelAccessor(d.data);
+          onBarClick(label);
+        }
+      })
       .on('mouseover', (event, d) => {
         const x = event.pageX;
         const y = event.pageY;
@@ -167,6 +181,12 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .attr('height', yScale.bandwidth())
       .attr('fill', '#F2695D') // Use a distinct color for deficit
       .attr('cursor', 'pointer')
+      .on('click', (event, d) => {
+        if (onBarClick) {
+          const label = labelAccessor(d);
+          onBarClick(label);
+        }
+      })
       .on('mouseover', (event, d) => {
         const x = event.pageX;
         const y = event.pageY;
@@ -267,7 +287,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         .attr('font-size', 12)
         .text('Surplus →');
     }
-  }, [data, width, height, keys]);
+  }, [data, width, height, keys, filterLabel]);
 
   return (
     <>

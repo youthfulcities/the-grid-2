@@ -50,7 +50,6 @@ const GroceryList: React.FC = () => {
       try {
         const response = await authFetch(url);
         const result = await response.json();
-        console.log(result);
 
         if (!response.ok) {
           throw new Error(result.error || 'Failed to load grocery items');

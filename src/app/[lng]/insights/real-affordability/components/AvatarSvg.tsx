@@ -70,8 +70,6 @@ const AvatarSvg: React.FC<AvatarSvgProps> = ({
     return avatarImage.toString();
   }, [avatar]);
 
-  console.log(avatar);
-
   return (
     <AvatarWrapper
       key={avatar.seed}

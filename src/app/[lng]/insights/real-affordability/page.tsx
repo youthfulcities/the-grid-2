@@ -3,6 +3,7 @@
 import Container from '@/app/components/Background';
 import ChapterNav from '@/app/components/ChapterNav';
 import Tooltip from '@/app/components/dataviz/TooltipChart/TooltipChart';
+import FadeInUp from '@/app/components/FadeInUp';
 import { useDimensions } from '@/hooks/useDimensions';
 import {
   calculateGroceryPrice,
@@ -17,6 +18,7 @@ import CharacterCreator from './components/CharacterCreator';
 import CharacterOverlay from './components/CharacterOverlay';
 import Grocery from './components/Grocery';
 import Housing from './components/Housing';
+import HousingJourney from './components/HousingJourney';
 import { AvatarProvider } from './context/AvatarContext';
 import useSectionInView from './hooks/useSectionInView';
 import { BasketEntry, GroceryItem, TooltipState } from './types/BasketTypes';
@@ -73,6 +75,7 @@ const GroceryList: React.FC = () => {
     overviewRef,
     groceryRef,
     housingRef,
+    housingJourneyRef,
     inViewMap: currentInView,
   } = useSectionInView();
 
@@ -151,60 +154,77 @@ const GroceryList: React.FC = () => {
     <AvatarProvider>
       <Container>
         <View className='container padding' ref={containerRef}>
-          <Heading level={1} marginBottom='large'>
-            Canada&apos;s Most{' '}
-            <span className='highlight'>Affordable City</span>
-          </Heading>
-          <View ref={overviewRef} data-section='overviewInView'>
-            <AffordabilityOverview
-              rent={rent}
-              setCurrentIncome={setCurrentIncome}
-              setManIncome={setManIncome}
-              income={income}
-              gender={gender}
-              occupation={occupation}
-              age={age}
-              customized={customized}
-              setCustomized={setCustomized}
-              width={width}
-              setTooltipState={setTooltipState}
-              cityTotals={cityTotals}
-            />
-          </View>
-          <View ref={creatorRef} data-section='creatorInView'>
-            <CharacterCreator
-              currentIncome={currentIncome}
-              customized={customized}
-              manIncome={manIncome}
-              gender={gender}
-              setGender={setGender}
-              occupation={occupation}
-              setOccupation={setOccupation}
-              age={age}
-              setAge={setAge}
-              setCustomized={setCustomized}
-            />
-          </View>
-          <View ref={groceryRef} data-section='groceryInView'>
-            <Grocery
-              basket={basket}
-              activeCity={activeCity}
-              setActiveCity={setActiveCity}
-              cityTotals={cityTotals}
-              groceryItems={groceryItems}
-              latestTimestamp={latestTimestamp}
-              setBasket={setBasket}
-              setTooltipState={setTooltipState}
-              width={width}
-              loading={groceryLoading}
-            />
-          </View>
-          <View ref={housingRef} data-section='housingInView'>
-            <Housing
-              rent={rent}
-              width={width}
+          <FadeInUp>
+            <Heading level={1} marginBottom='large'>
+              Canada&apos;s Most{' '}
+              <span className='highlight'>Affordable City</span>
+            </Heading>
+            <View ref={overviewRef} data-section='overviewInView'>
+              <AffordabilityOverview
+                rent={rent}
+                setCurrentIncome={setCurrentIncome}
+                setManIncome={setManIncome}
+                income={income}
+                gender={gender}
+                occupation={occupation}
+                age={age}
+                customized={customized}
+                setCustomized={setCustomized}
+                width={width}
+                setTooltipState={setTooltipState}
+                cityTotals={cityTotals}
+              />
+            </View>
+          </FadeInUp>
+          <FadeInUp>
+            <View ref={creatorRef} data-section='creatorInView'>
+              <CharacterCreator
+                currentIncome={currentIncome}
+                customized={customized}
+                manIncome={manIncome}
+                gender={gender}
+                setGender={setGender}
+                occupation={occupation}
+                setOccupation={setOccupation}
+                age={age}
+                setAge={setAge}
+                setCustomized={setCustomized}
+              />
+            </View>
+          </FadeInUp>
+          <FadeInUp>
+            <View ref={groceryRef} data-section='groceryInView'>
+              <Grocery
+                basket={basket}
+                activeCity={activeCity}
+                setActiveCity={setActiveCity}
+                cityTotals={cityTotals}
+                groceryItems={groceryItems}
+                latestTimestamp={latestTimestamp}
+                setBasket={setBasket}
+                setTooltipState={setTooltipState}
+                width={width}
+                loading={groceryLoading}
+              />
+            </View>
+          </FadeInUp>
+          <FadeInUp>
+            <View ref={housingRef} data-section='housingInView'>
+              <Housing
+                rent={rent}
+                width={width}
+                loading={rentLoading}
+                setTooltipState={setTooltipState}
+                activeCity={activeCity}
+                setActiveCity={setActiveCity}
+              />
+            </View>
+          </FadeInUp>
+          <View ref={housingJourneyRef} data-section='housingJourneyInView'>
+            <HousingJourney
               loading={rentLoading}
-              setTooltipState={setTooltipState}
+              rent={rent}
+              activeCity={activeCity}
             />
           </View>
         </View>
@@ -228,6 +248,7 @@ const GroceryList: React.FC = () => {
       <CharacterOverlay
         income={income}
         profileInView={currentInView.creatorInView}
+        housingJourneyInView={currentInView.housingJourneyInView}
         character={{ age, gender, occupation, currentIncome }}
       />
       <ChapterNav currentInView={currentInView} steps={steps} />

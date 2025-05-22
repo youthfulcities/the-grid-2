@@ -1,15 +1,16 @@
 import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
 import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
-import { Heading, View } from '@aws-amplify/ui-react';
+import { Button, Heading, Text, View } from '@aws-amplify/ui-react';
 import React, { useMemo } from 'react';
 import { RentData } from '../types/RentTypes';
-import AvatarSvg from './AvatarSvg';
 
 interface HousingProps {
   rent: RentData;
   width: number;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   loading?: boolean;
+  activeCity: string | null;
+  setActiveCity: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const keys = [
@@ -27,6 +28,8 @@ const Housing: React.FC<HousingProps> = ({
   width,
   setTooltipState,
   loading,
+  activeCity,
+  setActiveCity,
 }) => {
   const processedData = useMemo(
     () =>
@@ -59,14 +62,39 @@ const Housing: React.FC<HousingProps> = ({
     [processedData]
   );
 
-  const finalData = sortedData;
+  const handleScroll = () => {
+    const element = document.querySelector(
+      `[data-section="housingJourneyInView"]`
+    );
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  };
+
+  const onBarClick = (label: string) => {
+    setActiveCity(label);
+    handleScroll();
+  };
+
+  const resetCity = () => {
+    setActiveCity(null);
+  };
 
   return (
     <View marginTop='xxxl'>
-      <Heading level={1} marginBottom='xxl'>
+      <Heading level={1} marginBottom='large'>
         The Real Cost of <span className='highlight'>Moving Out</span>
       </Heading>
+      <Text marginBottom='large' textAlign='center'>
+        Click on a city to start your housing journey.
+      </Text>
       <BarChartStacked
+        filterLabel={activeCity}
+        marginLeft={100}
+        onBarClick={onBarClick}
         setTooltipState={setTooltipState}
         width={width}
         colors={[
@@ -78,11 +106,19 @@ const Housing: React.FC<HousingProps> = ({
           '#F6D9D7',
           '#af6860',
         ]}
-        data={finalData}
+        data={sortedData}
         keys={keys}
         labelAccessor={(d) => d.city as string}
       />
-      <AvatarSvg radius={50} />
+      <Button
+        onClick={resetCity}
+        marginTop='small'
+        size='small'
+        color='font.inverse'
+        marginLeft='xs'
+      >
+        Reset City
+      </Button>
     </View>
   );
 };

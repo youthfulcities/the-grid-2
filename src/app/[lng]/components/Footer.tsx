@@ -71,9 +71,9 @@ const FooterBottomSection = styled(Flex)`
   align-items: center;
 `;
 
-const HoverLink = styled(Link)<{ $hover: string; $color: string }>`
+const HoverLink = styled(Link)<{ $hover: string }>`
   text-decoration: none;
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
   &:hover {
     color: var(--amplify-colors-secondary-60);
   }
@@ -112,6 +112,8 @@ const FooterComponent = () => {
     breakpoints: { values: breakpoint },
   } = defaultTheme;
 
+  console.log(tokens);
+
   return (
     <FooterBase as='footer' $background={tokens.colors.blue[100].value}>
       <Flex className='short-container' direction='column' alignItems='stretch'>
@@ -121,10 +123,10 @@ const FooterComponent = () => {
             gap='5px'
             maxWidth={{ base: '100%', medium: '50%' }}
           >
-            <Heading level={6} color={tokens.colors.font.inverse.value}>
+            <Heading level={6} color='font.primary'>
               {t('sign-up')}
             </Heading>
-            <Text as='h1' color={tokens.colors.font.inverse.value}>
+            <Text as='h1' color='font.primary'>
               {t('sign-up-text')}
             </Text>
           </Flex>
@@ -174,7 +176,6 @@ const FooterComponent = () => {
                 href='/'
                 passHref
                 $hover={tokens.colors.primary[60].value}
-                $color={tokens.colors.font.inverse.value}
               >
                 {t('home')}
               </HoverLink>
@@ -182,7 +183,6 @@ const FooterComponent = () => {
                 href='/datasets'
                 passHref
                 $hover={tokens.colors.primary[60].value}
-                $color={tokens.colors.font.inverse.value}
               >
                 {t('datasets')}
               </HoverLink>
@@ -190,7 +190,6 @@ const FooterComponent = () => {
                 href='/insights'
                 passHref
                 $hover={tokens.colors.primary[60].value}
-                $color={tokens.colors.font.inverse.value}
               >
                 {t('insights')}
               </HoverLink>
@@ -198,7 +197,6 @@ const FooterComponent = () => {
                 href='/about'
                 passHref
                 $hover={tokens.colors.primary[60].value}
-                $color={tokens.colors.font.inverse.value}
               >
                 {t('about')}
               </HoverLink>
@@ -206,7 +204,6 @@ const FooterComponent = () => {
                 href='/contact'
                 passHref
                 $hover={tokens.colors.primary[60].value}
-                $color={tokens.colors.font.inverse.value}
               >
                 {t('contact')}
               </HoverLink>
@@ -216,7 +213,6 @@ const FooterComponent = () => {
                 href='/chatbot'
                 passHref
                 $hover={tokens.colors.primary[60].value}
-                $color={tokens.colors.font.inverse.value}
               >
                 {t('chatbot')}
               </HoverLink>
@@ -224,7 +220,6 @@ const FooterComponent = () => {
                 href='/cookie-policy'
                 passHref
                 $hover={tokens.colors.primary[60].value}
-                $color={tokens.colors.font.inverse.value}
               >
                 {t('cookie')}
               </HoverLink>
@@ -232,7 +227,6 @@ const FooterComponent = () => {
                 href='/terms'
                 passHref
                 $hover={tokens.colors.primary[60].value}
-                $color={tokens.colors.font.inverse.value}
               >
                 {t('terms')}
               </HoverLink>
@@ -240,7 +234,6 @@ const FooterComponent = () => {
                 href='/privacy-policy'
                 passHref
                 $hover={tokens.colors.primary[60].value}
-                $color={tokens.colors.font.inverse.value}
               >
                 {t('privacy')}
               </HoverLink>

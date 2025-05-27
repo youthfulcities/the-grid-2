@@ -50,7 +50,7 @@ const StyledAuthLink = styled(Link)<{
     transform-origin: left;
 }`
       : `&:hover {
-    color: var(--amplify-font-inverse);
+    color: var(--amplify-font-primary);
 }`}
 `;
 

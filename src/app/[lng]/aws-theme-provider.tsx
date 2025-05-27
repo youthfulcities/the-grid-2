@@ -50,22 +50,41 @@ const theme = createTheme(
       {
         colorMode: 'dark',
         tokens: {
+          colors: {
+            font: {
+              primary: { value: '#ffffff' },
+              inverse: { value: '#000000' },
+            },
+          },
           components: {
+            card: {
+              borderRadius: { value: '{radii.large.value}' },
+              backgroundColor: { value: '{colors.neutral.100.value}' },
+              boxShadow: {
+                value: '{shadows.medium.value}',
+              },
+              elevated: {
+                borderRadius: { value: '{radii.large.value}' },
+                boxShadow: {
+                  value: '{shadows.large.value}',
+                },
+              },
+            },
             button: {
-              color: { value: '{colors.font.inverse.value}' },
+              color: { value: '{colors.font.primary.value}' },
               _hover: {
                 borderColor: { value: '{colors.brand.secondary.80.value}' },
                 backgroundColor: {
                   value: '{colors.brand.secondary.100.value}',
                 },
-                color: { value: '{colors.font.inverse.value}' },
+                color: { value: '{colors.font.primary.value}' },
               },
               primary: {
                 _hover: {
                   backgroundColor: {
                     value: '{colors.brand.primary.100.value}',
                   },
-                  color: { value: '{colors.font.inverse.value}' },
+                  color: { value: '{colors.font.primary.value}' },
                 },
               },
             },
@@ -97,12 +116,6 @@ const theme = createTheme(
               },
             },
           },
-          colors: {
-            font: {
-              primary: { value: '#ffffff' },
-              inverse: { value: '#ffffff' },
-            },
-          },
         },
       },
     ],
@@ -126,7 +139,7 @@ const theme = createTheme(
         },
         field: {
           gap: { value: '{space.xxxxs.value}' },
-          label: { color: { value: '{colors.font.inverse.value}' } },
+          label: { color: { value: '{colors.font.primary.value}' } },
         },
         card: {
           backgroundColor: { value: '{colors.brand.primary.60.value}' },
@@ -142,7 +155,7 @@ const theme = createTheme(
         },
         tabs: {
           item: {
-            color: { value: '{colors.font.inverse.value}' },
+            color: { value: '{colors.font.primary.value}' },
             _active: {
               color: { value: '{colors.brand.primary.60.value}' },
             },
@@ -156,9 +169,9 @@ const theme = createTheme(
         },
 
         select: {
-          color: { value: '{colors.font.inverse.value}' },
+          color: { value: '{colors.font.primary.value}' },
           option: {
-            color: { value: '{colors.font.inverse.value}' },
+            color: { value: '{colors.font.primary.value}' },
           },
         },
       },

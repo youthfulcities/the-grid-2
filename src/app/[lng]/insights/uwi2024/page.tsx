@@ -54,7 +54,7 @@ const Index = () => {
           />
         </Heading>
         <div className='inner-container'>
-          <Heading level={3} color='font.inverse' marginBottom='xl'>
+          <Heading level={3} color='font.primary' marginBottom='xl'>
             {t('subtitle')}
           </Heading>
           <Text marginBottom='xl'>

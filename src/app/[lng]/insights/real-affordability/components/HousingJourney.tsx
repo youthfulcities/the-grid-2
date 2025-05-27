@@ -1,17 +1,27 @@
+import AnimatedAmount from '@/app/components/AnimatedAmount';
 import FadeInUp from '@/app/components/FadeInUp';
-import { Button, Flex, Text, View } from '@aws-amplify/ui-react';
+import { Button, Flex, Heading, Text, View } from '@aws-amplify/ui-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaBan, FaPerson } from 'react-icons/fa6';
 import styled from 'styled-components';
 import { RentData } from '../types/RentTypes';
+import getCityTotal from '../utils/getCityTotal';
 import AvatarSvg from './AvatarSvg';
+import HousingComparison from './HousingComparison';
+
+type CityData = {
+  city: string;
+  [key: string]: number | string;
+};
 
 interface HousingJourneyProps {
   rent: RentData;
   loading?: boolean;
   activeCity: string | null;
+  income: number;
+  processedData: CityData[];
 }
 
 const ImgButton = styled(motion(Button))`
@@ -58,14 +68,14 @@ const Person = styled(motion(FaPerson))`
   width: 100%;
   height: 100%;
   margin: 0 -30px;
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
 `;
 
 const Ban = styled(motion(FaBan))`
   width: 100%;
   height: 100%;
   margin: 0 -30px;
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
 `;
 
 const MotionImg = motion(Image);
@@ -76,77 +86,116 @@ const iconVariants = {
   exit: { scaleY: 0, scale: 0 },
 };
 
+const getAverageRents = (data: RentData): Record<number, number> => {
+  const grouped = data.reduce(
+    (acc, { bedrooms }) => {
+      Object.entries(bedrooms).forEach(([bedroom, rent]) => {
+        const key = Number(bedroom);
+        acc[key] = acc[key] || [];
+        acc[key].push(rent);
+      });
+      return acc;
+    },
+    {} as Record<number, number[]>
+  );
+
+  return Object.fromEntries(
+    Object.entries(grouped).map(([bedroom, rents]) => {
+      const avg = rents.reduce((sum, r) => sum + r, 0) / rents.length;
+      return [Number(bedroom), Math.round(avg)];
+    })
+  );
+};
+
+const getRentForBedroom = (
+  data: RentData,
+  cityName: string | null,
+  bedroomCount: number
+): number | undefined => {
+  const averages = getAverageRents(data);
+  if (!data.length) return averages[bedroomCount];
+
+  if (cityName) {
+    const city = data.find(
+      (d) => d.city.trim().toLowerCase() === cityName.trim().toLowerCase()
+    );
+    if (
+      city &&
+      city.bedrooms[bedroomCount as keyof typeof city.bedrooms] !== undefined
+    ) {
+      return city.bedrooms[bedroomCount as keyof typeof city.bedrooms];
+    }
+  }
+
+  return averages[bedroomCount];
+};
+
+const rentToDaysOfWork = (rent: number, income: number) => {
+  if (!income || income <= 0) return 0;
+
+  const daysInMonth = 30;
+  const dailyIncome = income / daysInMonth;
+  return rent / dailyIncome;
+};
+
 const HousingJourney: React.FC<HousingJourneyProps> = ({
   rent,
   loading,
   activeCity,
+  income,
+  processedData,
 }) => {
-  const [bedrooms, setBedrooms] = useState(1);
-  const [count, setCount] = useState(bedrooms);
+  const [bedrooms, setBedrooms] = useState<number | null>(null);
+  const [location, setLocation] = useState<string | null>(null);
+  const [count, setCount] = useState<number>(bedrooms ?? 0);
   const min = 0;
   const max = 4;
+
+  useEffect(() => {
+    setCount(Math.max((bedrooms ?? 0) - 1, 0));
+  }, [bedrooms]);
+
   const updateCount = (newCount: number) => {
     if (newCount >= min && newCount <= max) {
       setCount(newCount);
     }
   };
-  const getRentDiffs = (data: RentData, cityName: string | null) => {
-    if (loading || !data.length) return;
+  const getRentDiffs = (
+    data: RentData,
+    cityName: string | null
+  ): Record<number, number> | undefined => {
+    if (!data.length) return;
+
+    let rents: Record<number, number | undefined>;
+
     if (cityName) {
       const city = data.find(
-        (d) => d.city.toLowerCase() === cityName.toLowerCase()
+        (d) => d.city.trim().toLowerCase() === cityName.trim().toLowerCase()
       );
-      if (!city) throw new Error(`City "${cityName}" not found in dataset`);
-
-      const studioRent = city.bedrooms[0] ?? city.bedrooms[1];
-      if (studioRent === undefined)
-        throw new Error(`Studio or 1-bedroom rent missing for "${cityName}"`);
-
-      return Object.fromEntries(
-        Object.entries(city.bedrooms).map(([bedroom, currentRent]) => [
-          Number(bedroom),
-          Number((currentRent - studioRent).toFixed(2)),
-        ])
-      );
+      if (city) {
+        rents = city.bedrooms;
+      } else {
+        console.warn(`City "${cityName}" not found — using average rents.`);
+        rents = getAverageRents(data);
+      }
+    } else {
+      rents = getAverageRents(data);
     }
 
-    // Compute average rent per bedroom across all cities
-    const bedroomEntries = data.flatMap((d) =>
-      Object.entries(d.bedrooms).map(([bedroom, currentRent]) => ({
-        bedroom: Number(bedroom),
-        currentRent,
-      }))
-    );
-
-    const grouped = bedroomEntries.reduce(
-      (acc, { bedroom, currentRent }) => {
-        acc[bedroom] = acc[bedroom] || [];
-        acc[bedroom].push(currentRent);
-        return acc;
-      },
-      {} as Record<number, number[]>
-    );
-
-    const averages = Object.fromEntries(
-      Object.entries(grouped).map(([bedroom, rents]) => {
-        const avg = rents.reduce((sum, r) => sum + r, 0) / rents.length;
-        return [Number(bedroom), avg];
-      })
-    );
-
-    const studioAvg = averages[0] ?? averages[1];
-    if (studioAvg === undefined)
-      throw new Error('No studio or 1-bedroom rent average found');
+    const studio = rents[0] ?? rents[1];
+    if (studio === undefined) return;
 
     return Object.fromEntries(
-      Object.entries(averages).map(([bedroom, avgRent]) => [
+      Object.entries(rents).map(([bedroom, currentRent]) => [
         Number(bedroom),
-        Number((avgRent - studioAvg).toFixed(2)),
+        Number((((currentRent ?? 0 - studio) / studio) * 100).toFixed(1)),
       ])
     );
   };
 
   const rentDiffs = getRentDiffs(rent, activeCity);
+  const activeRent = getRentForBedroom(rent, activeCity, bedrooms ?? 0);
+  const activeCityTotal = getCityTotal(activeCity, processedData);
 
   return (
     !loading &&
@@ -159,15 +208,22 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
             for?
           </Text>
         </FadeInUp>
-        <Flex wrap='wrap' justifyContent='center' alignItems='start'>
+        <Flex
+          wrap='wrap'
+          justifyContent='center'
+          alignItems='start'
+          marginBottom='xxxl'
+        >
           <Flex direction='column' justifyContent='center'>
             <ImgButton
+              onClick={() => setBedrooms(0)}
               variation='primary'
               colorTheme='overlay'
               disabled={rentDiffs ? rentDiffs[0] === undefined : false}
               whileHover='hover'
               initial='initial'
               animate='initial'
+              backgroundColor={bedrooms === 0 ? 'blue.80' : ''}
             >
               <MotionImg
                 alt='Studio bedroom apartment floorplan'
@@ -186,11 +242,13 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
           </Flex>
           <Flex direction='column' justifyContent='center'>
             <ImgButton
+              onClick={() => setBedrooms(1)}
               variation='primary'
               colorTheme='overlay'
               whileHover='hover'
               initial='initial'
               animate='initial'
+              backgroundColor={bedrooms === 1 ? 'blue.80' : ''}
             >
               <MotionImg
                 alt='One bedroom apartment floorplan'
@@ -214,16 +272,18 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
               fontSize='large'
               color='red.60'
             >
-              +${rentDiffs[1]}
+              +{rentDiffs[1]}%
             </Text>
           </Flex>
           <Flex direction='column' justifyContent='center'>
             <ImgButton
+              onClick={() => setBedrooms(2)}
               variation='primary'
               colorTheme='overlay'
               whileHover='hover'
               initial='initial'
               animate='initial'
+              backgroundColor={bedrooms === 2 ? 'blue.80' : ''}
             >
               <MotionImg
                 alt='Two bedroom apartment floorplan'
@@ -247,16 +307,18 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
               fontSize='large'
               color='red.60'
             >
-              +${rentDiffs[2]}
+              +{rentDiffs[2]}%
             </Text>
           </Flex>
           <Flex direction='column' justifyContent='center'>
             <ImgButton
+              onClick={() => setBedrooms(3)}
               variation='primary'
               colorTheme='overlay'
               whileHover='hover'
               initial='initial'
               animate='initial'
+              backgroundColor={bedrooms === 3 ? 'blue.80' : ''}
             >
               <MotionImg
                 alt='Studio bedroom apartment floorplan'
@@ -279,13 +341,21 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
               fontSize='large'
               color='red.60'
             >
-              +${rentDiffs[3]}
+              +{rentDiffs[3]}%
             </Text>
           </Flex>
         </Flex>
-        <Flex justifyContent='center' alignItems='start'>
+        <Text textAlign='center'>
+          Now, what area of the city are you looking for?
+        </Text>
+        <Flex justifyContent='center' alignItems='start' marginBottom='xxxl'>
           <Flex direction='column' justifyContent='center'>
-            <SvgButton variation='primary' colorTheme='overlay'>
+            <SvgButton
+              onClick={() => setLocation('outer')}
+              variation='primary'
+              colorTheme='overlay'
+              backgroundColor={location === 'outer' ? 'blue.80' : ''}
+            >
               <SvgContainer
                 whileHover='hover'
                 initial='initial'
@@ -309,7 +379,12 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
             </Text>
           </Flex>
           <Flex direction='column' justifyContent='center'>
-            <SvgButton variation='primary' colorTheme='overlay'>
+            <SvgButton
+              onClick={() => setLocation('inner')}
+              variation='primary'
+              colorTheme='overlay'
+              backgroundColor={location === 'inner' ? 'blue.80' : ''}
+            >
               <SvgContainer
                 whileHover='hover'
                 initial='initial'
@@ -337,12 +412,38 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
               fontSize='large'
               color='red.60'
             >
-              +$500
+              +30%
             </Text>
           </Flex>
         </Flex>
-        <Flex width='100%' justifyContent='space-between'>
+        <Text textAlign='center'>The current appartment would cost you...</Text>
+        <Flex justifyContent='center'>
+          <AnimatedAmount before='$' amount={activeRent ?? 0} />
+          {count > 0 && (
+            <>
+              <Heading
+                level={2}
+                textAlign='center'
+                fontSize='xxxxl'
+                color='font.primary'
+              >
+                {' '}
+                / {count + 1} =
+              </Heading>
+              <AnimatedAmount
+                before='$'
+                amount={(activeRent ?? 0) / (count + 1)}
+                color='yellow.60'
+              />
+            </>
+          )}
+        </Flex>
+        <Text textAlign='center'>
+          How many roommates do you want to split the cost with?
+        </Text>
+        <Flex width='100%' justifyContent='space-between' marginBottom='xxxl'>
           <Button
+            fontSize='xxxl'
             variation='link'
             isDisabled={count <= min}
             onClick={() => updateCount(count - 1)}
@@ -363,7 +464,7 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
                     height: '150px',
                     width: '150px',
                     margin: '0 -30px',
-                    color: 'var(--amplify-colors-font-inverse)',
+                    color: 'var(--amplify-colors-font-primary)',
                   }}
                 >
                   <Ban />
@@ -381,7 +482,7 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
                       height: '150px',
                       width: '150px',
                       margin: '0 -30px',
-                      color: 'var(--amplify-colors-font-inverse)',
+                      color: 'var(--amplify-colors-font-primary)',
                     }}
                   >
                     <Person key={i} />
@@ -391,6 +492,7 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
             </AnimatePresence>
           </Flex>
           <Button
+            fontSize='xxxl'
             variation='link'
             isDisabled={count >= max}
             onClick={() => updateCount(count + 1)}
@@ -398,6 +500,17 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
             +
           </Button>
         </Flex>
+        <Text textAlign='center'>
+          {activeCity ? `In ${activeCity}` : 'On average'}, it will take you{' '}
+          {rentToDaysOfWork(activeCityTotal ?? 0, income).toFixed(0)} days* to
+          save up move out and{' '}
+          {rentToDaysOfWork((activeRent ?? 0) / (count + 1), income).toFixed(0)}{' '}
+          days to work to pay your rent each month.
+        </Text>
+        <Text fontSize='small'>
+          *if you save 100% of your income and work full-time.
+        </Text>
+        <HousingComparison rent={rent} />
       </Flex>
     )
   );

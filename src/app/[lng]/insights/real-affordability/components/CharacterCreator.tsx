@@ -40,7 +40,7 @@ const Background = styled(View)`
 `;
 
 const StyledButton = styled(Button)`
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
   width: 30px;
   height: 30px;
   padding: 0;
@@ -324,7 +324,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
           <Button
             marginTop='xxs'
             width='100%'
-            color='font.inverse'
+            color='font.primary'
             fontSize='small'
             onClick={reroll}
           >

@@ -370,7 +370,7 @@ const Grocery = ({
           <Button
             onClick={handleAddAll}
             size='small'
-            color='font.inverse'
+            color='font.primary'
             marginTop='small'
             marginLeft='xs'
           >
@@ -380,7 +380,7 @@ const Grocery = ({
             onClick={removeAll}
             marginTop='small'
             size='small'
-            color='font.inverse'
+            color='font.primary'
             marginLeft='xs'
           >
             Reset basket
@@ -389,7 +389,7 @@ const Grocery = ({
             onClick={resetCity}
             marginTop='small'
             size='small'
-            color='font.inverse'
+            color='font.primary'
             marginLeft='xs'
           >
             Reset City

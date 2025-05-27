@@ -66,7 +66,6 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState(null);
   const [clothing, setClothing] = useState<ClothingData>([]);
-
   useEffect(() => {
     const fetchClothing = async () => {
       setLoading(true);

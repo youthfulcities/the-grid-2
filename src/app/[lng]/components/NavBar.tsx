@@ -28,7 +28,7 @@ const StyledFlex = styled(Flex)`
   flex-direction: row;
   align-items: center;
   gap: 10px;
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
   padding: var(--amplify-space-xs) 0;
   position: relative;
   box-shadow: 0px 2px 6px
@@ -59,7 +59,7 @@ const NavLink = styled(Link)<{ $currentPage: boolean }>`
   border-radius: inherit;
   font-weight: 450;
   max-width: 110px;
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
   text-transform: uppercase;
   line-height: 24px;
   display: inline-block;
@@ -89,7 +89,7 @@ const NavLink = styled(Link)<{ $currentPage: boolean }>`
 const StyledMenuButton = styled(MenuButton)`
   border-color: transparent;
   border-radius: inherit;
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
   &:hover {
     background-color: var(--amplify-colors-neutral-80);
   }
@@ -107,7 +107,7 @@ const MobileLink = styled(Link)`
   width: 100%;
 `;
 
-const MobileMenuItem = styled(MenuItem)`
+const MobileMenuItem = styled(MenuItem)<{ isDisabled: boolean }>`
   font-family: 'Gotham Narrow Medium';
   font-size: 16px;
   font-weight: 450;
@@ -116,11 +116,15 @@ const MobileMenuItem = styled(MenuItem)`
   border-radius: 0px;
   width: 100%;
   text-transform: uppercase;
+  color: ${({ isDisabled }) =>
+    isDisabled
+      ? 'var(--amplify-colors-neutral-80)'
+      : 'var(--amplify-colors-font-inverse)'};
 `;
 
 const SmallText = styled(Text)`
   font-size: var(--amplify-font-sizes-xs);
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
   margin: 0;
 `;
 
@@ -178,7 +182,7 @@ const NavBar = () => {
 
           <View style={{ marginLeft: '20px' }}>
             <Button
-              color={tokens.colors.font.inverse}
+              color='font.primary'
               colorTheme='overlay'
               border='0'
               width='30px'
@@ -192,7 +196,7 @@ const NavBar = () => {
             </Button>
             |
             <Button
-              color={tokens.colors.font.inverse}
+              color='font.primary'
               colorTheme='overlay'
               border='0'
               width='30px'
@@ -206,7 +210,7 @@ const NavBar = () => {
             </Button>
             <Flex gap='0' alignItems='center' display='none'>
               <Button
-                color={tokens.colors.font.inverse}
+                color='font.primary'
                 colorTheme='overlay'
                 border='0'
                 size='small'
@@ -221,7 +225,7 @@ const NavBar = () => {
               </Button>
               |
               <Button
-                color={tokens.colors.font.inverse}
+                color='font.primary'
                 colorTheme='overlay'
                 border='0'
                 size='small'
@@ -277,7 +281,7 @@ const NavBar = () => {
                 {t('contact')}
               </MobileMenuItem>
             </MobileLink>
-            <MobileMenuItem>
+            <MobileMenuItem isDisabled={false}>
               <AuthLink mobile />
             </MobileMenuItem>
           </Menu>

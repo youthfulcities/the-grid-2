@@ -20,6 +20,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb';
 import aggregateCategories from './utils/aggregateCategories.js';
+import calculateFinalPrice from './utils/calculateFinalPrice.js';
 import deduplicateItems from './utils/deduplicateItems.js';
 import groupAndNormalize from './utils/groupAndNormalize.js';
 
@@ -97,6 +98,21 @@ const handler = async (event) => {
     );
 
     const aggregatedCategories = aggregateCategories(grouped);
+
+    aggregatedCategories.forEach((category) => {
+      // Calculate category-level final price (no city)
+      category.final_price = calculateFinalPrice(category, null, null, true);
+
+      // Calculate city-level final price
+      category.cities.forEach((cityData) => {
+        cityData.final_price = calculateFinalPrice(
+          category,
+          cityData,
+          null,
+          true
+        );
+      });
+    });
 
     await s3Client.send(
       new PutObjectCommand({

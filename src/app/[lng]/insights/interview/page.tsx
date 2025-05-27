@@ -179,7 +179,7 @@ const Interview = () => {
             />
           </Heading>
           <div className='inner-container'>
-            <Heading marginBottom='xl' level={3} color='font.inverse'>
+            <Heading marginBottom='xl' level={3} color='font.primary'>
               {t('youth_cite')}
             </Heading>
           </div>
@@ -353,7 +353,7 @@ const Interview = () => {
       >
         {visibleQuotes.length > 0 ? (
           <Flex direction='column' paddingTop='xxl' paddingBottom='xxl'>
-            <Heading level={3} color='font.inverse' marginBottom={0}>
+            <Heading level={3} color='font.primary' marginBottom={0}>
               <Trans t={t} i18nKey='drawer_heading' values={{ code }} />
             </Heading>
             <View ref={quotesRef}>

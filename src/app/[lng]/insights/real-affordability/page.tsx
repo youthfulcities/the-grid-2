@@ -30,7 +30,6 @@ const steps = [
   { title: 'Grocery', key: 'groceryInView' },
   { title: 'Housing', key: 'housingInView' },
 ];
-
 const getLatestTimestamp = (items: GroceryItem[]): string | null => {
   const allTimestamps = _.flatMap(items, (item) => {
     const topLevel = item.latest_timestamp ? [item.latest_timestamp] : [];
@@ -150,6 +149,21 @@ const GroceryList: React.FC = () => {
     return totals.length > 0 ? _.orderBy(totals, ['totalPrice'], ['desc']) : [];
   }, [basket, groceryItems]);
 
+  const processedRentData = useMemo(
+    () =>
+      rent.map((d) => ({
+        city: d.city,
+        rent: d.rent,
+        firstMonth: d.rent,
+        furniture: 400,
+        utilities: 200,
+        keyDeposit: 100,
+        laundry: 100,
+        movers: 500,
+      })),
+    [rent]
+  );
+
   return (
     <AvatarProvider>
       <Container>
@@ -211,7 +225,7 @@ const GroceryList: React.FC = () => {
           <FadeInUp>
             <View ref={housingRef} data-section='housingInView'>
               <Housing
-                rent={rent}
+                processedData={processedRentData}
                 width={width}
                 loading={rentLoading}
                 setTooltipState={setTooltipState}
@@ -222,8 +236,10 @@ const GroceryList: React.FC = () => {
           </FadeInUp>
           <View ref={housingJourneyRef} data-section='housingJourneyInView'>
             <HousingJourney
+              processedData={processedRentData}
               loading={rentLoading}
               rent={rent}
+              income={currentIncome}
               activeCity={activeCity}
             />
           </View>
@@ -250,6 +266,7 @@ const GroceryList: React.FC = () => {
         profileInView={currentInView.creatorInView}
         housingJourneyInView={currentInView.housingJourneyInView}
         character={{ age, gender, occupation, currentIncome }}
+        activeCity={activeCity}
       />
       <ChapterNav currentInView={currentInView} steps={steps} />
     </AvatarProvider>

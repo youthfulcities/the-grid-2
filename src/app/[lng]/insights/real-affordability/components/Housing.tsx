@@ -2,15 +2,18 @@ import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
 import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 import { Button, Heading, Text, View } from '@aws-amplify/ui-react';
 import React, { useMemo } from 'react';
-import { RentData } from '../types/RentTypes';
+
+interface FlexibleDataItem {
+  [key: string]: number | string;
+}
 
 interface HousingProps {
-  rent: RentData;
   width: number;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   loading?: boolean;
   activeCity: string | null;
   setActiveCity: React.Dispatch<React.SetStateAction<string | null>>;
+  processedData: FlexibleDataItem[];
 }
 
 const keys = [
@@ -24,28 +27,13 @@ const keys = [
 ];
 
 const Housing: React.FC<HousingProps> = ({
-  rent,
+  processedData,
   width,
   setTooltipState,
   loading,
   activeCity,
   setActiveCity,
 }) => {
-  const processedData = useMemo(
-    () =>
-      rent.map((d) => ({
-        city: d.city,
-        rent: d.rent,
-        firstMonth: d.rent,
-        furniture: 400,
-        utilities: 200,
-        keyDeposit: 100,
-        laundry: 100,
-        movers: 500,
-      })),
-    [rent]
-  );
-
   const sortedData = useMemo(
     () =>
       [...processedData].sort((a, b) => {
@@ -114,7 +102,7 @@ const Housing: React.FC<HousingProps> = ({
         onClick={resetCity}
         marginTop='small'
         size='small'
-        color='font.inverse'
+        color='font.primary'
         marginLeft='xs'
       >
         Reset City

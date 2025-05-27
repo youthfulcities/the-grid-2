@@ -48,12 +48,19 @@ const CharacterOverlay: React.FC<{
   housingJourneyInView: boolean;
   character: CharacterFacts;
   income: IncomeData;
-}> = ({ character, income, profileInView, housingJourneyInView }) => {
+  activeCity: string | null;
+}> = ({
+  character,
+  income,
+  profileInView,
+  housingJourneyInView,
+  activeCity,
+}) => {
   const [hovered, setHovered] = React.useState(false);
 
   return (
     <AnimatePresence>
-      {!profileInView && !housingJourneyInView && (
+      {!profileInView && (
         <AvatarWrapper
           initial={{ y: 100 }}
           animate={{ y: 0 }}
@@ -70,7 +77,7 @@ const CharacterOverlay: React.FC<{
               exit={{ opacity: 0, y: 10 }}
               transition={{ duration: 0.2 }}
             >
-              <Heading level={5} color='font.inverse' textAlign='center'>
+              <Heading level={5} color='font.primary' textAlign='center'>
                 Current Profile
               </Heading>
               <Text fontSize='small'>
@@ -104,6 +111,10 @@ const CharacterOverlay: React.FC<{
                       income,
                     }).toFixed(2)}{' '}
                 per month
+              </Text>
+              <Text fontSize='small'>
+                <span className='highlight'>Current city:</span>{' '}
+                {activeCity === null ? 'Not selected' : activeCity}
               </Text>
             </HoverCard>
           )}

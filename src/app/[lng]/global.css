@@ -198,7 +198,7 @@ ol {
   list-style-type: decimal;
 }
 li {
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
 }
 
 .hover-cursor {

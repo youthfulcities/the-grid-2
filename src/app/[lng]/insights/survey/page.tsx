@@ -305,7 +305,7 @@ const Survey: React.FC = () => {
                 <StyledSelect
                   marginBottom='large'
                   label={t('select_question')}
-                  color='font.inverse'
+                  color='font.primary'
                   value={currentQuestion}
                   onChange={(e) => setCurrentQuestion(e.target.value)}
                 >
@@ -333,7 +333,7 @@ const Survey: React.FC = () => {
                     <Heading
                       level={3}
                       textAlign='center'
-                      color='font.inverse'
+                      color='font.primary'
                       marginTop='xxl'
                       marginBottom='xl'
                     >

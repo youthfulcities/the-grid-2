@@ -272,7 +272,7 @@ const HousingSurvey = () => {
               <StyledSelect
                 marginBottom='large'
                 label='Select a question'
-                color='font.inverse'
+                color='font.primary'
                 value={currentQuestion}
                 onChange={(e) => setCurrentQuestion(e.target.value)}
               >
@@ -285,7 +285,7 @@ const HousingSurvey = () => {
               <StyledSelect
                 marginBottom='xl'
                 label='Select a demographic segment'
-                color='font.inverse'
+                color='font.primary'
                 value={currentSegment}
                 onChange={(e) => setCurrentSegment(e.target.value)}
               >
@@ -297,10 +297,10 @@ const HousingSurvey = () => {
               </StyledSelect>
               {currentSegment && (
                 <>
-                  <Heading level={3} textAlign='center' color='font.inverse'>
+                  <Heading level={3} textAlign='center' color='font.primary'>
                     {currentQuestion?.replace(regex, '').trim()}
                   </Heading>
-                  <Heading level={5} textAlign='center' color='font.inverse'>
+                  <Heading level={5} textAlign='center' color='font.primary'>
                     Broken down by: {currentSegment.replace(regex, '').trim()}
                   </Heading>
                 </>

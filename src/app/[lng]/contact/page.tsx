@@ -86,7 +86,7 @@ const StyledButton = styled(Button)`
 `;
 
 const StyledCheckbox = styled(CheckboxField)`
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
   margin-bottom: var(--amplify-space-large);
   .amplify-flex {
     align-items: center;

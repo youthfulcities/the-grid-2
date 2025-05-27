@@ -9,7 +9,7 @@ const DismissButton = styled.button`
   font-family: 'Gotham Narrow Medium';
   font-size: 16px;
   font-weight: 450;
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
   background-color: var(--amplify-colors-brand-primary-60);
   border: none;
   padding: 0.5rem 1rem;

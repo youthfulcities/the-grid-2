@@ -25,8 +25,9 @@ const groupAndNormalize = (deduped) => {
     } = item;
 
     const baseAmount = parseFloat(base_amount);
-    const baseUnit = base_unit?.toLowerCase();
-    const quantityUnit = quantity_unit?.toLowerCase();
+    const rawBaseUnit = base_unit;
+    const rawQuantityUnit = quantity_unit;
+
     const isPrepared = prepared_in_canada === 'true';
     const time = new Date(timestamp);
 
@@ -34,15 +35,14 @@ const groupAndNormalize = (deduped) => {
 
     const { value: normalizedQty, unit: normalizedUnit } = normalizeQuantity(
       quantity,
-      quantityUnit
+      rawQuantityUnit
     );
-
     const { value: normalizedStatscanQty, unit: normalizedStatscanUnit } =
       normalizeQuantity(statscan_quantity, statscan_unit);
 
     const result = normalizePricePer(
       baseAmount,
-      baseUnit,
+      rawBaseUnit,
       parseFloat(price_per_base_amount)
     );
 
@@ -70,11 +70,11 @@ const groupAndNormalize = (deduped) => {
         statscan_unit: normalizedStatscanUnit ?? null,
         total_price_per_base: pricePerBase,
         total_quantity: normalizedQty ?? 0,
-        quantity_count: normalizedQty ? 1 : 0,
+        quantity_count: normalizedQty ?? 0,
         quantity_unit: normalizedUnit ?? null,
         quantity_units: new Set(normalizedUnit ? [normalizedUnit] : []),
         base_amount_total: normalizedBaseAmount ?? 0,
-        base_count: normalizedBaseAmount ? 1 : 0,
+        base_count: normalizedBaseAmount ?? 0,
         base_unit: normalizedBaseUnit ?? null,
         base_units: new Set(normalizedBaseUnit ? [normalizedBaseUnit] : []),
         price_per_base_values: normalizedBaseUnit
@@ -149,7 +149,6 @@ const groupAndNormalize = (deduped) => {
   const formatGroups = (groupMap) =>
     Object.values(groupMap).map((group) => {
       const pricePerBase = averageMostCommonUnit(group.price_per_base_values);
-      const baseAmount = averageMostCommonUnit(group.base_amount_values);
 
       // ✨ Use base_unit as authoritative for quantity
       const baseUnit = pricePerBase.unit; // use this as the unit filter for quantity
@@ -195,7 +194,6 @@ const groupAndNormalize = (deduped) => {
         statscan_quantity: group.statscan_quantity,
         statscan_unit: group.statscan_unit,
         base_unit: baseUnit,
-        average_base_amount: baseAmount.average,
         most_frequent_quantity: mostFrequentQuantity,
         average_quantity: averageQuantity,
         quantity_unit: baseUnit, // 🚨 always use the same unit as base_unit

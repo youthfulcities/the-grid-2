@@ -26,9 +26,12 @@ const getIncome = ({
   income,
 }: GetIncomeOptions): number => {
   const normalizeMatch = (entry: IncomeEntry) =>
-    (!currentAge || entry.Age_12_Group === currentAge) &&
-    (!currentGender || entry.Gender_Label === currentGender) &&
-    (!currentOccupation || entry.NOC_Class === currentOccupation);
+    currentAge &&
+    entry.Age_12_Group === currentAge &&
+    currentGender &&
+    entry.Gender_Label === currentGender &&
+    currentOccupation &&
+    entry.NOC_Class === currentOccupation;
 
   const averageIncome = computeAverageIncome(income);
   if (city) {
@@ -45,7 +48,7 @@ const getIncome = ({
       income.find(
         (item) =>
           item.province === provinceMap[city as keyof typeof provinceMap]
-      )?.median_monthly_income ??
+      )?.median_monthly_income_post_tax ??
       averageIncome
     );
   }

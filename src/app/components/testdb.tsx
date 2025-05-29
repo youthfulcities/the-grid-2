@@ -26,7 +26,6 @@ const MyComponent = () => {
             },
           }
         );
-        console.log(response.data);
         setData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);

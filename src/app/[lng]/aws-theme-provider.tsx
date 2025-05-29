@@ -86,6 +86,7 @@ const theme = createTheme(
                   },
                   color: { value: '{colors.font.primary.value}' },
                 },
+                color: { value: '{colors.font.primary.value}' },
               },
             },
             stepperfield: {

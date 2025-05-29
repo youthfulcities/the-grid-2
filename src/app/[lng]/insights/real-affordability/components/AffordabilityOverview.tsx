@@ -92,53 +92,55 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   const occupationGroup =
     occupationMap[occupation as keyof typeof occupationMap];
 
-  const averageValues = {
-    clothing:
-      clothing.reduce((sum, item) => sum + item.totalPrice, 0) /
-      (clothing.length || 1),
-    food:
-      cityTotals.reduce((sum, item) => sum + item.totalPrice, 0) /
-      (cityTotals.length || 1),
-    rent: rent.reduce((sum, item) => sum + item.rent, 0) / (rent.length || 1),
-    income:
-      income.reduce(
-        (sum, item) => sum + item.median_monthly_income_post_tax,
-        0
-      ) / (income.length || 1),
-    other:
-      cityData.reduce((sum, item) => sum + item.other, 0) /
-      (cityData.length || 1),
-  };
-
-  const data = useMemo(
-    () =>
-      rent.map((city) => ({
-        city: city.city,
-        clothing:
-          (clothing.find((item) => item.city === city.city)?.totalPrice ??
-            averageValues.clothing) / 12,
-        food:
-          cityTotals.find((item) => item.city === city.city)?.totalPrice ??
-          averageValues.food,
-        rent: city.rent ?? averageValues.rent,
-        income: getIncome({
-          city: city.city,
-          currentProvince: provinceMap[city.city as keyof typeof provinceMap],
-          currentAge: customized ? ageMap(age) : undefined,
-          currentGender: customized
-            ? genderMap[gender as keyof typeof genderMap]
-            : undefined,
-          currentOccupation: customized
-            ? occupationMap[occupation as keyof typeof occupationMap]
-            : undefined,
-          income,
-        }),
-        other:
-          cityData.find((item) => item.city === city.city)?.other ??
-          averageValues.other,
-      })),
-    [cityTotals, rent, income, clothing, age, gender, occupation, customized]
+  income.sort(
+    (a, b) =>
+      b.weighted_avg_monthly_income_post_tax -
+      a.weighted_avg_monthly_income_post_tax
   );
+
+  const data = useMemo(() => {
+    const averageValues = {
+      clothing:
+        clothing.reduce((sum, item) => sum + item.totalPrice, 0) /
+        (clothing.length || 1),
+      food:
+        cityTotals.reduce((sum, item) => sum + item.totalPrice, 0) /
+        (cityTotals.length || 1),
+      rent: rent.reduce((sum, item) => sum + item.rent, 0) / (rent.length || 1),
+      other:
+        cityData.reduce((sum, item) => sum + item.other, 0) /
+        (cityData.length || 1),
+    };
+
+    return rent.map((city) => ({
+      city: city.city,
+      clothing:
+        (clothing.find((item) => item.city === city.city)?.totalPrice ??
+          averageValues.clothing) / 12,
+      food:
+        cityTotals.find((item) => item.city === city.city)?.totalPrice ??
+        averageValues.food,
+      rent: city.rent ?? averageValues.rent,
+      income: getIncome({
+        city: city.city,
+        currentProvince: provinceMap[city.city as keyof typeof provinceMap],
+        currentAge: customized ? ageMap(age) : undefined,
+        currentGender: customized
+          ? genderMap[gender as keyof typeof genderMap]
+          : undefined,
+        currentOccupation: customized
+          ? occupationMap[occupation as keyof typeof occupationMap]
+          : undefined,
+        income,
+      }),
+      other:
+        cityData.find((item) => item.city === city.city)?.other ??
+        averageValues.other,
+    }));
+  }, [cityTotals, rent, income, clothing, age, gender, occupation, customized]);
+
+  console.log(income);
+  console.log(data);
 
   const processedData = useMemo(
     () =>

@@ -12,25 +12,22 @@ import {
   Text,
   View,
   useBreakpointValue,
-  useTheme,
 } from '@aws-amplify/ui-react';
-// import { Amplify } from 'aws-amplify';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { FaBars, FaMoon, FaRegMoon, FaRegSun, FaSun } from 'react-icons/fa6';
 import styled from 'styled-components';
 import AuthLink from './AuthLink';
 
-// Amplify.configure(config);
-
 const StyledFlex = styled(Flex)`
   display: flex;
   flex-direction: row;
+  color: white;
   align-items: center;
   gap: 10px;
-  color: var(--amplify-colors-font-primary);
   padding: var(--amplify-space-xs) 0;
   position: relative;
+  background-color: var(--amplify-colors-neutral-100);
   box-shadow: 0px 2px 6px
     rgba(
       0.05098039284348488,
@@ -38,11 +35,11 @@ const StyledFlex = styled(Flex)`
       0.14901961386203766,
       0.15000000596046448
     );
-  background-color: var(--amplify-colors-neutral-100);
   z-index: 100;
 `;
 
 const NavigationLinks = styled(Flex)`
+  color: white;
   gap: var(--amplify-space-xl);
   display: flex;
   flex-direction: row;
@@ -54,12 +51,12 @@ const NavigationLinks = styled(Flex)`
 
 const NavLink = styled(Link)<{ $currentPage: boolean }>`
   font-family: 'Gotham Narrow Medium';
+  color: white;
   text-align: center;
   font-size: 16px;
   border-radius: inherit;
   font-weight: 450;
   max-width: 110px;
-  color: var(--amplify-colors-font-primary);
   text-transform: uppercase;
   line-height: 24px;
   display: inline-block;
@@ -89,7 +86,7 @@ const NavLink = styled(Link)<{ $currentPage: boolean }>`
 const StyledMenuButton = styled(MenuButton)`
   border-color: transparent;
   border-radius: inherit;
-  color: var(--amplify-colors-font-primary);
+  color: white;
   &:hover {
     background-color: var(--amplify-colors-neutral-80);
   }
@@ -103,6 +100,7 @@ const StyledMenuButton = styled(MenuButton)`
 `;
 
 const MobileLink = styled(Link)`
+  color: black;
   border-radius: inherit;
   width: 100%;
 `;
@@ -117,14 +115,12 @@ const MobileMenuItem = styled(MenuItem)<{ isDisabled: boolean }>`
   width: 100%;
   text-transform: uppercase;
   color: ${({ isDisabled }) =>
-    isDisabled
-      ? 'var(--amplify-colors-neutral-80)'
-      : 'var(--amplify-colors-font-inverse)'};
+    isDisabled ? 'var(--amplify-colors-neutral-80)' : 'black'};
 `;
 
 const SmallText = styled(Text)`
   font-size: var(--amplify-font-sizes-xs);
-  color: var(--amplify-colors-font-primary);
+  color: white;
   margin: 0;
 `;
 
@@ -141,8 +137,6 @@ const NavBar = () => {
     large: true,
     xl: false,
   });
-
-  const { tokens } = useTheme();
   const { colorMode, setColorMode } = useThemeContext();
 
   function handleLanguageChange(locale: string) {
@@ -177,12 +171,12 @@ const NavBar = () => {
                 height='60px'
               />
             )}
-            <SmallText>Powered by Youthful Cities</SmallText>
+            <SmallText> Powered by Youthful Cities</SmallText>
           </Link>
 
-          <View style={{ marginLeft: '20px' }}>
+          <View marginLeft='small' color='white'>
             <Button
-              color='font.primary'
+              color='white'
               colorTheme='overlay'
               border='0'
               width='30px'
@@ -196,7 +190,7 @@ const NavBar = () => {
             </Button>
             |
             <Button
-              color='font.primary'
+              color='white'
               colorTheme='overlay'
               border='0'
               width='30px'
@@ -208,9 +202,9 @@ const NavBar = () => {
             >
               FR
             </Button>
-            <Flex gap='0' alignItems='center' display='none'>
+            <Flex gap='0' alignItems='center'>
               <Button
-                color='font.primary'
+                color='white'
                 colorTheme='overlay'
                 border='0'
                 size='small'
@@ -225,7 +219,7 @@ const NavBar = () => {
               </Button>
               |
               <Button
-                color='font.primary'
+                color='white'
                 colorTheme='overlay'
                 border='0'
                 size='small'

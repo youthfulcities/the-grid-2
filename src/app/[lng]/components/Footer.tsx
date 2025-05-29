@@ -73,7 +73,7 @@ const FooterBottomSection = styled(Flex)`
 
 const HoverLink = styled(Link)<{ $hover: string }>`
   text-decoration: none;
-  color: var(--amplify-colors-font-primary);
+  color: white;
   &:hover {
     color: var(--amplify-colors-secondary-60);
   }
@@ -112,8 +112,6 @@ const FooterComponent = () => {
     breakpoints: { values: breakpoint },
   } = defaultTheme;
 
-  console.log(tokens);
-
   return (
     <FooterBase as='footer' $background={tokens.colors.blue[100].value}>
       <Flex className='short-container' direction='column' alignItems='stretch'>
@@ -123,10 +121,10 @@ const FooterComponent = () => {
             gap='5px'
             maxWidth={{ base: '100%', medium: '50%' }}
           >
-            <Heading level={6} color='font.primary'>
+            <Heading level={6} color='white'>
               {t('sign-up')}
             </Heading>
-            <Text as='h1' color='font.primary'>
+            <Text as='h1' color='white'>
               {t('sign-up-text')}
             </Text>
           </Flex>

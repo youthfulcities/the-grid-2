@@ -61,7 +61,6 @@ const AuthLink: React.FC<{ mobile?: boolean }> = ({ mobile = false }) => {
     context.user,
     context.authStatus,
   ]);
-  console.log(authStatus);
   const router = useRouter();
   const pathname = usePathname();
 

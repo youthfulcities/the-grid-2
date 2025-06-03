@@ -2,6 +2,8 @@ import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
 import { Button, Flex, Loader, View } from '@aws-amplify/ui-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useProfile } from '../context/ProfileContext';
+import { TooltipState } from '../types/BasketTypes';
+import { CategoryData } from '../types/CostTypes';
 import { IncomeData } from '../types/IncomeTypes';
 import { RentData } from '../types/RentTypes';
 import ageMap from '../utils/ageMap';
@@ -10,18 +12,15 @@ import genderMap from '../utils/genderMap.json';
 import occupationMap from '../utils/occupationMap.json';
 import provinceMap from '../utils/provinceMap.json';
 
-interface TooltipState {
-  position: { x: number; y: number } | null;
-  content?: string;
-  group?: string;
-}
-
 interface AffordabilityOverviewProps {
   width: number;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   cityTotals: { city: string; totalPrice: number }[];
   income: IncomeData;
   rent: RentData;
+  move: CategoryData;
+  play: CategoryData;
+  work: CategoryData;
 }
 
 interface CityDataItem {

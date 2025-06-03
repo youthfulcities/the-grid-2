@@ -8,6 +8,7 @@ const normalizePricePer = (base_amount, base_unit, price_per_base_amount) => {
   if (!normalizedQuantity || normalizedQuantity === 0) return null;
 
   return {
+    value: normalizedQuantity, // include normalized base amount
     unit: normalizedUnit,
     price_per_base_amount: price_per_base_amount / normalizedQuantity,
   };

@@ -1,19 +1,22 @@
 // CharacterCreator.tsx
-import {
-  Button,
-  Flex,
-  Heading,
-  SelectField,
-  StepperField,
-  Text,
-  View,
-} from '@aws-amplify/ui-react';
+import
+  {
+    Button,
+    CheckboxField,
+    Flex,
+    Heading,
+    SelectField,
+    StepperField,
+    Text,
+    View,
+  } from '@aws-amplify/ui-react';
 import { micah } from '@dicebear/collection';
 import { schema } from '@dicebear/core';
 import React from 'react';
 import { FaCaretLeft, FaCaretRight } from 'react-icons/fa6';
 import styled from 'styled-components';
-import { useAvatar } from '../context/AvatarContext';
+import { useProfile } from '../context/ProfileContext';
+import { AvatarOptions } from '../types/AvatarOptions';
 import AvatarSvg from './AvatarSvg';
 
 const OverlayButton = styled(View)`
@@ -69,37 +72,38 @@ const StyledSelectField = styled(SelectField)`
   }
 `;
 
-interface CharacterCreatorProps {
-  gender: string;
-  setGender: (value: string) => void;
-  occupation: string;
-  setOccupation: (value: string) => void;
-  age: number;
-  setAge: (value: number) => void;
-  setCustomized: (value: boolean) => void;
-  currentIncome: number;
-  manIncome: number;
-  customized: boolean;
-}
+const StyledCheckboxField = styled(CheckboxField)`
+  .amplify-text {
+    margin: 0;
+  }
+`;
+
+interface CharacterCreatorProps {}
 
 const options = {
   ...schema.properties,
   ...micah.schema.properties,
 };
 
-const CharacterCreator: React.FC<CharacterCreatorProps> = ({
-  gender,
-  setGender,
-  occupation,
-  setOccupation,
-  age,
-  setAge,
-  setCustomized,
-  customized,
-  currentIncome,
-  manIncome,
-}) => {
-  const { avatar, setAvatar } = useAvatar();
+const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
+  const {
+    avatar,
+    setAvatar,
+    gender,
+    setGender,
+    age,
+    setAge,
+    customized,
+    setCustomized,
+    occupation,
+    setOccupation,
+    currentIncome,
+    manIncome,
+    student,
+    car,
+    setCar,
+    setStudent,
+  } = useProfile();
 
   const mouthOptions =
     typeof options?.mouth !== 'boolean' && options?.mouth.default;
@@ -107,10 +111,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
     typeof options?.hair !== 'boolean' && options?.hair.default;
   const eyeOptions =
     typeof options?.eyes !== 'boolean' && options?.eyes.default;
-  const eyebrowOptions =
-    typeof options?.eyebrows !== 'boolean' && options?.eyebrows.default;
-  const noseOptions =
-    typeof options?.nose !== 'boolean' && options?.nose.default;
+  // const eyebrowOptions =
+  //   typeof options?.eyebrows !== 'boolean' && options?.eyebrows.default;
+  // const noseOptions =
+  //   typeof options?.nose !== 'boolean' && options?.nose.default;
   const glassesOptions = typeof options?.glasses !== 'boolean' &&
     options?.glasses.default && [
       ...(options?.glasses.default as string[]),
@@ -139,7 +143,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
   };
 
   const reroll = () => {
-    setAvatar((prev) => ({
+    setAvatar((prev: AvatarOptions) => ({
       ...prev,
       seed: Math.random().toString(36).substring(2, 10),
       hairColour: hairColourOptions
@@ -151,7 +155,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
   };
 
   const setAvatarOption = (key: string, newValue: string) =>
-    setAvatar((prev) => ({ ...prev, [key]: newValue }));
+    setAvatar((prev: AvatarOptions) => ({ ...prev, [key]: newValue }));
 
   return (
     <Background>
@@ -334,6 +338,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
             <Button
               fontSize='small'
               width='100%'
+              minWidth='200px'
               marginTop='xs'
               colorTheme='error'
               color='#fff'
@@ -345,6 +350,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
             <Button
               fontSize='small'
               width='100%'
+              minWidth='200px'
               marginTop='xs'
               colorTheme='error'
               color='#fff'
@@ -406,6 +412,28 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
               setCustomized(true);
             }}
           />
+          <Flex
+            marginTop='medium'
+            alignItems='baseline'
+            justifyContent='flex-start'
+          >
+            <StyledCheckboxField
+              label='I am a student'
+              name='student'
+              value='true'
+              size='large'
+              color='font.primary'
+              onChange={(e) => setStudent(!!e.target.checked)}
+            />
+            <StyledCheckboxField
+              name='car'
+              label='I own a car'
+              value='true'
+              size='large'
+              color='font.primary'
+              onChange={(e) => setCar(!!e.target.checked)}
+            />
+          </Flex>
           {gender === 'nonbinary' && (
             <>
               <Text fontSize='small' marginTop='small'>

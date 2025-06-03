@@ -9,6 +9,7 @@ import {
   calculateGroceryPrice,
   calculateGroceryTotals,
 } from '@/utils/calculateGroceryTotals';
+import fetchData from '@/utils/fetchData';
 import { Heading, View } from '@aws-amplify/ui-react';
 import _ from 'lodash';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -19,9 +20,9 @@ import CharacterOverlay from './components/CharacterOverlay';
 import Grocery from './components/Grocery';
 import Housing from './components/Housing';
 import HousingJourney from './components/HousingJourney';
-import { AvatarProvider } from './context/AvatarContext';
+import { useProfile } from './context/ProfileContext';
 import useSectionInView from './hooks/useSectionInView';
-import { BasketEntry, GroceryItem, TooltipState } from './types/BasketTypes';
+import { GroceryItem, TooltipState } from './types/BasketTypes';
 import { IncomeData } from './types/IncomeTypes';
 import { RentData } from './types/RentTypes';
 const steps = [
@@ -44,17 +45,14 @@ const getLatestTimestamp = (items: GroceryItem[]): string | null => {
   );
   return latest ?? null;
 };
-const GroceryList: React.FC = () => {
-  const [gender, setGender] = useState('woman');
-  const [occupation, setOccupation] = useState('0');
-  const [age, setAge] = useState(19);
-  const [customized, setCustomized] = useState(false);
+const AffordabilityPage: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  // const [loading, setLoading] = useState<boolean>(true);
   const [income, setIncome] = useState<IncomeData>([]);
+  const [move, setMove] = useState({});
+  const [play, setPlay] = useState({});
+  const [work, setWork] = useState({});
   const [incomeLoading, setIncomeLoading] = useState<boolean>(true);
-  const [manIncome, setManIncome] = useState<number>(0);
-  const [currentIncome, setCurrentIncome] = useState<number>(0);
   const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
   const [groceryLoading, setGroceryLoading] = useState<boolean>(true);
   const [rent, setRent] = useState<RentData>([]);
@@ -63,11 +61,12 @@ const GroceryList: React.FC = () => {
   const [errorText, setErrorText] = useState<
     string | null | undefined | unknown
   >(null);
-  const [basket, setBasket] = useState<Record<string, BasketEntry>>({});
   const [tooltipState, setTooltipState] = useState<TooltipState>({
     position: null,
   });
-  const [activeCity, setActiveCity] = useState<string | null>(null);
+
+  const { basket } = useProfile();
+
   const { width } = useDimensions(containerRef);
   const {
     creatorRef,
@@ -77,6 +76,39 @@ const GroceryList: React.FC = () => {
     housingJourneyRef,
     inViewMap: currentInView,
   } = useSectionInView();
+
+  useEffect(() => {
+    const loadData = async () => {
+      const path = 'internal/RAI/move';
+      const activeFile = 'move_category.json';
+      const text = await fetchData(path, activeFile);
+      const jsonData = JSON.parse(text as string);
+      setMove(jsonData);
+    };
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const path = 'internal/RAI/play';
+      const activeFile = 'play_category.json';
+      const text = await fetchData(path, activeFile);
+      const jsonData = JSON.parse(text as string);
+      setPlay(jsonData);
+    };
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const path = 'internal/RAI/work';
+      const activeFile = 'work_category.json';
+      const text = await fetchData(path, activeFile);
+      const jsonData = JSON.parse(text as string);
+      setWork(jsonData);
+    };
+    loadData();
+  }, []);
 
   useEffect(() => {
     const fetchGroceryItems = async () => {
@@ -165,7 +197,7 @@ const GroceryList: React.FC = () => {
   );
 
   return (
-    <AvatarProvider>
+    <>
       <Container>
         <View className='container padding' ref={containerRef}>
           <FadeInUp>
@@ -175,15 +207,11 @@ const GroceryList: React.FC = () => {
             </Heading>
             <View ref={overviewRef} data-section='overviewInView'>
               <AffordabilityOverview
+                work={work}
+                move={move}
+                play={play}
                 rent={rent}
-                setCurrentIncome={setCurrentIncome}
-                setManIncome={setManIncome}
                 income={income}
-                gender={gender}
-                occupation={occupation}
-                age={age}
-                customized={customized}
-                setCustomized={setCustomized}
                 width={width}
                 setTooltipState={setTooltipState}
                 cityTotals={cityTotals}
@@ -192,30 +220,15 @@ const GroceryList: React.FC = () => {
           </FadeInUp>
           <FadeInUp>
             <View ref={creatorRef} data-section='creatorInView'>
-              <CharacterCreator
-                currentIncome={currentIncome}
-                customized={customized}
-                manIncome={manIncome}
-                gender={gender}
-                setGender={setGender}
-                occupation={occupation}
-                setOccupation={setOccupation}
-                age={age}
-                setAge={setAge}
-                setCustomized={setCustomized}
-              />
+              <CharacterCreator />
             </View>
           </FadeInUp>
           <FadeInUp>
             <View ref={groceryRef} data-section='groceryInView'>
               <Grocery
-                basket={basket}
-                activeCity={activeCity}
-                setActiveCity={setActiveCity}
                 cityTotals={cityTotals}
                 groceryItems={groceryItems}
                 latestTimestamp={latestTimestamp}
-                setBasket={setBasket}
                 setTooltipState={setTooltipState}
                 width={width}
                 loading={groceryLoading}
@@ -227,10 +240,7 @@ const GroceryList: React.FC = () => {
               <Housing
                 processedData={processedRentData}
                 width={width}
-                loading={rentLoading}
                 setTooltipState={setTooltipState}
-                activeCity={activeCity}
-                setActiveCity={setActiveCity}
               />
             </View>
           </FadeInUp>
@@ -239,18 +249,11 @@ const GroceryList: React.FC = () => {
               processedData={processedRentData}
               loading={rentLoading}
               rent={rent}
-              income={currentIncome}
-              activeCity={activeCity}
             />
           </View>
         </View>
       </Container>
-      <BasketBar
-        calculateGroceryPrice={calculateGroceryPrice}
-        basket={basket}
-        setBasket={setBasket}
-        activeCity={activeCity}
-      />
+      <BasketBar calculateGroceryPrice={calculateGroceryPrice} />
       {tooltipState.position && (
         <Tooltip
           x={tooltipState.position.x}
@@ -264,13 +267,10 @@ const GroceryList: React.FC = () => {
       <CharacterOverlay
         income={income}
         profileInView={currentInView.creatorInView}
-        housingJourneyInView={currentInView.housingJourneyInView}
-        character={{ age, gender, occupation, currentIncome }}
-        activeCity={activeCity}
       />
       <ChapterNav currentInView={currentInView} steps={steps} />
-    </AvatarProvider>
+    </>
   );
 };
 
-export default GroceryList;
+export default AffordabilityPage;

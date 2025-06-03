@@ -5,52 +5,13 @@ import { Flex, Text, View } from '@aws-amplify/ui-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-
-interface GroceryItem {
-  category: string;
-  latest_timestamp?: string | null;
-  average_quantity: number | null;
-  canada_average_price: number | null;
-  not_canada_average_price: number | null;
-  canada_average_price_per_base: number | null;
-  not_canada_average_price_per_base: number | null;
-  canada_normalized_average: number | null;
-  not_canada_normalized_average: number | null;
-  most_frequent_quantity: number | null;
-  statscan_quantity?: number | null;
-  statscan_unit?: string | null;
-  category_average: number | null;
-  category_normalized_average: number | null;
-  average_price_per_base: number | null;
-  average_base_amount: number | null;
-  base_unit: string | null;
-  cities: {
-    city: string;
-    base_unit: string | null;
-    canada_average_price_per_base: number | null;
-    not_canada_average_price_per_base: number | null;
-    quantity_unit?: number | null;
-    latest_timestamp?: string | null;
-    canada_average_price: number | null;
-    canada_normalized_average: number | null;
-    not_canada_average_price: number | null;
-    not_canada_normalized_average: number | null;
-    average_base_amount: number | null;
-  }[];
-}
-
-interface BasketEntry {
-  item: GroceryItem;
-  quantity: number;
-}
+import { useProfile } from '../context/ProfileContext';
+import { BasketEntry, GroceryItem } from '../types/BasketTypes';
 
 interface BasketBarProps {
-  basket: Record<string, BasketEntry>;
-  activeCity?: string | null;
-  setBasket: React.Dispatch<React.SetStateAction<Record<string, BasketEntry>>>;
   calculateGroceryPrice: (
     item: GroceryItem,
-    cityData: GroceryItem['cities'][number] | undefined,
+    cityData: GroceryItem['cities'][number] | undefined | null,
     isCanadian: boolean | null,
     defaultToGlobal?: boolean
   ) => number;
@@ -104,7 +65,7 @@ const QuantityBadge = styled(motion.div)`
   position: absolute;
   top: -6px;
   right: -6px;
-  background: #d11a2a;
+  background: var(--amplify-colors-red-60);
   color: white;
   border-radius: 50%;
   width: 20px;
@@ -153,14 +114,14 @@ const BasketListText = styled.div`
 const RemoveButton = styled.button`
   background: transparent;
   border: none;
-  color: #d11a2a;
+  color: var(--amplify-colors-red-60);
   font-size: 1.2rem;
   cursor: pointer;
   padding: 0;
   line-height: 1;
 
   &:hover {
-    color: #a00;
+    color: var(--amplify-colors-red-100);
   }
 `;
 
@@ -171,13 +132,9 @@ const getRandomOffset = () => ({
   rotate: Math.random() * 10 - 5, // -5 to +5 degrees
 });
 
-const BasketBar: React.FC<BasketBarProps> = ({
-  basket,
-  setBasket,
-  activeCity,
-  calculateGroceryPrice,
-}) => {
+const BasketBar: React.FC<BasketBarProps> = ({ calculateGroceryPrice }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { activeCity, basket, setBasket } = useProfile();
   const [filteredBasket, setFilteredBasket] =
     useState<Record<string, BasketEntry>>(basket);
 
@@ -211,7 +168,10 @@ const BasketBar: React.FC<BasketBarProps> = ({
   const totalCanadianCost = Object.values(filteredBasket).reduce(
     (sum, { item, quantity }) => {
       const cityData = item.cities.find((c) => c.city === activeCity);
-      return sum + calculateGroceryPrice(item, cityData, true, true) * quantity;
+      return (
+        sum +
+        calculateGroceryPrice(item, cityData ?? null, true, true) * quantity
+      );
     },
     0
   );
@@ -219,7 +179,10 @@ const BasketBar: React.FC<BasketBarProps> = ({
   const totalNotCanadianCost = Object.values(filteredBasket).reduce(
     (sum, { item, quantity }) => {
       const cityData = item.cities.find((c) => c.city === activeCity);
-      return sum + calculateGroceryPrice(item, cityData, false, true) * quantity;
+      return (
+        sum +
+        calculateGroceryPrice(item, cityData ?? null, false, true) * quantity
+      );
     },
     0
   );
@@ -336,8 +299,18 @@ const BasketBar: React.FC<BasketBarProps> = ({
           {Object.entries(filteredBasket).map(([key, { item, quantity }]) => {
             const cityData = item.cities.find((c) => c.city === activeCity);
 
-            const canadianPrice = calculateGroceryPrice(item, cityData, true);
-            const globalPrice = calculateGroceryPrice(item, cityData, false);
+            const canadianPrice = calculateGroceryPrice(
+              item,
+              cityData ?? null,
+              true,
+              !cityData
+            );
+            const globalPrice = calculateGroceryPrice(
+              item,
+              cityData ?? null,
+              false,
+              !cityData
+            );
             return (
               <BasketListItem key={key} onClick={() => handleRemoveItem(key)}>
                 <Flex>

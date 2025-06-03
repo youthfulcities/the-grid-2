@@ -3,19 +3,13 @@ import { AnimatePresence, motion } from 'framer-motion';
 import _ from 'lodash';
 import React from 'react';
 import styled from 'styled-components';
+import { useProfile } from '../context/ProfileContext';
 import { IncomeData } from '../types/IncomeTypes';
 import ageMap from '../utils/ageMap';
 import getIncome from '../utils/calculateIncome';
 import genderMap from '../utils/genderMap.json';
 import occupationMap from '../utils/occupationMap.json';
 import AvatarSvg from './AvatarSvg';
-
-interface CharacterFacts {
-  age: number;
-  gender: string;
-  occupation: string;
-  currentIncome: number;
-}
 
 const AvatarWrapper = styled(motion.div)`
   position: fixed;
@@ -45,18 +39,11 @@ const HoverCard = styled(motion(View))`
 
 const CharacterOverlay: React.FC<{
   profileInView: boolean;
-  housingJourneyInView: boolean;
-  character: CharacterFacts;
   income: IncomeData;
-  activeCity: string | null;
-}> = ({
-  character,
-  income,
-  profileInView,
-  housingJourneyInView,
-  activeCity,
-}) => {
+}> = ({ income, profileInView }) => {
   const [hovered, setHovered] = React.useState(false);
+
+  const { age, gender, occupation, activeCity, currentIncome } = useProfile();
 
   return (
     <AnimatePresence>
@@ -81,33 +68,27 @@ const CharacterOverlay: React.FC<{
                 Current Profile
               </Heading>
               <Text fontSize='small'>
-                <span className='highlight'>Age:</span> {ageMap(character.age)}
+                <span className='highlight'>Age:</span> {ageMap(age)}
               </Text>
               <Text fontSize='small'>
                 <span className='highlight'>Gender: </span>
-                {_.capitalize(character.gender)}
+                {_.capitalize(gender)}
               </Text>
               <Text fontSize='small'>
                 <span className='highlight'>Occupation:</span>{' '}
-                {
-                  occupationMap[
-                    character.occupation as keyof typeof occupationMap
-                  ]
-                }
+                {occupationMap[occupation as keyof typeof occupationMap]}
               </Text>
               <Text fontSize='small'>
                 <span className='highlight'>Income:</span>
                 {' $'}
-                {character.currentIncome > 0
-                  ? character.currentIncome.toFixed(2)
+                {currentIncome > 0
+                  ? currentIncome.toFixed(2)
                   : getIncome({
-                      currentAge: ageMap(character.age),
+                      currentAge: ageMap(age),
                       currentGender:
-                        genderMap[character.gender as keyof typeof genderMap],
+                        genderMap[gender as keyof typeof genderMap],
                       currentOccupation:
-                        occupationMap[
-                          character.occupation as keyof typeof occupationMap
-                        ],
+                        occupationMap[occupation as keyof typeof occupationMap],
                       income,
                     }).toFixed(2)}{' '}
                 per month

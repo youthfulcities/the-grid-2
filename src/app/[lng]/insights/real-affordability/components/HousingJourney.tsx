@@ -6,6 +6,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { FaBan, FaPerson } from 'react-icons/fa6';
 import styled from 'styled-components';
+import { useProfile } from '../context/ProfileContext';
 import { RentData } from '../types/RentTypes';
 import getCityTotal from '../utils/getCityTotal';
 import AvatarSvg from './AvatarSvg';
@@ -19,8 +20,6 @@ type CityData = {
 interface HousingJourneyProps {
   rent: RentData;
   loading?: boolean;
-  activeCity: string | null;
-  income: number;
   processedData: CityData[];
 }
 
@@ -141,10 +140,9 @@ const rentToDaysOfWork = (rent: number, income: number) => {
 const HousingJourney: React.FC<HousingJourneyProps> = ({
   rent,
   loading,
-  activeCity,
-  income,
   processedData,
 }) => {
+  const { activeCity, currentIncome } = useProfile();
   const [bedrooms, setBedrooms] = useState<number | null>(null);
   const [location, setLocation] = useState<string | null>(null);
   const [count, setCount] = useState<number>(bedrooms ?? 0);
@@ -188,7 +186,7 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
     return Object.fromEntries(
       Object.entries(rents).map(([bedroom, currentRent]) => [
         Number(bedroom),
-        Number((((currentRent ?? 0 - studio) / studio) * 100).toFixed(1)),
+        Number(((((currentRent ?? 0) - studio) / studio) * 100).toFixed(1)),
       ])
     );
   };
@@ -463,7 +461,7 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
                   style={{
                     height: '150px',
                     width: '150px',
-                    margin: '0 -30px',
+                    margin: '0 -30px 0 30px',
                     color: 'var(--amplify-colors-font-primary)',
                   }}
                 >
@@ -481,7 +479,8 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
                     style={{
                       height: '150px',
                       width: '150px',
-                      margin: '0 -30px',
+                      marginLeft: i === 0 ? '30px' : '-30px',
+                      marginRight: '-30px',
                       color: 'var(--amplify-colors-font-primary)',
                     }}
                   >
@@ -502,9 +501,17 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
         </Flex>
         <Text textAlign='center'>
           {activeCity ? `In ${activeCity}` : 'On average'}, it will take you{' '}
-          {rentToDaysOfWork(activeCityTotal ?? 0, income).toFixed(0)} days* to
-          save up move out and{' '}
-          {rentToDaysOfWork((activeRent ?? 0) / (count + 1), income).toFixed(0)}{' '}
+          {rentToDaysOfWork(
+            (activeCityTotal ?? 0) -
+              (activeRent ?? 0) * 2 +
+              ((activeRent ?? 0) / (count + 1)) * 2,
+            currentIncome
+          ).toFixed(0)}{' '}
+          days* to save up move out and{' '}
+          {rentToDaysOfWork(
+            (activeRent ?? 0) / (count + 1),
+            currentIncome
+          ).toFixed(0)}{' '}
           days to work to pay your rent each month.
         </Text>
         <Text fontSize='small'>

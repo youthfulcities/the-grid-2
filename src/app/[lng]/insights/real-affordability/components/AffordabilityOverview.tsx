@@ -1,6 +1,7 @@
 import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
 import { Button, Flex, Loader, View } from '@aws-amplify/ui-react';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useProfile } from '../context/ProfileContext';
 import { IncomeData } from '../types/IncomeTypes';
 import { RentData } from '../types/RentTypes';
 import ageMap from '../utils/ageMap';
@@ -16,13 +17,6 @@ interface TooltipState {
 }
 
 interface AffordabilityOverviewProps {
-  age: number;
-  gender: string;
-  occupation: string;
-  customized: boolean;
-  setCustomized: React.Dispatch<React.SetStateAction<boolean>>;
-  setManIncome: React.Dispatch<React.SetStateAction<number>>;
-  setCurrentIncome: React.Dispatch<React.SetStateAction<number>>;
   width: number;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   cityTotals: { city: string; totalPrice: number }[];
@@ -45,27 +39,50 @@ interface ClothingItem {
 
 type ClothingData = ClothingItem[];
 
-// Preprocess
+const keys = [
+  'deficit',
+  'rent',
+  'move',
+  'work',
+  'play',
+  'food',
+  'clothing',
+  'surplus',
+];
 
-const keys = ['deficit', 'rent', 'food', 'clothing', 'surplus'];
+const colors = [
+  '#253D88',
+  '#673934',
+  '#FBD166',
+  '#5125E8',
+  '#F6D9D7',
+  '#550D35',
+  '#B8D98D',
+];
 
 const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
-  gender,
-  occupation,
-  age,
-  customized,
-  setCustomized,
-  setCurrentIncome,
-  setManIncome,
   width,
   setTooltipState,
   cityTotals,
   income,
   rent,
+  move,
+  work,
+  play,
 }) => {
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState(null);
   const [clothing, setClothing] = useState<ClothingData>([]);
+  const {
+    gender,
+    age,
+    customized,
+    setCustomized,
+    occupation,
+    setCurrentIncome,
+    setManIncome,
+  } = useProfile();
+
   useEffect(() => {
     const fetchClothing = async () => {
       setLoading(true);
@@ -112,15 +129,19 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
         (cityData.length || 1),
     };
 
-    return rent.map((city) => ({
+    return cityTotals.map((city) => ({
       city: city.city,
+      work: work.total_monthly_cost_by_city[city.city] ?? 0,
+      play: play.total_monthly_cost_by_city[city.city] ?? 0,
+      move: move.total_monthly_cost_by_city[city.city] ?? 0,
       clothing:
-        (clothing.find((item) => item.city === city.city)?.totalPrice ??
-          averageValues.clothing) / 12,
+        clothing.find((item) => item.city === city.city)?.totalPrice ?? 0 / 12,
       food:
         cityTotals.find((item) => item.city === city.city)?.totalPrice ??
         averageValues.food,
-      rent: city.rent ?? averageValues.rent,
+      rent:
+        rent.find((item) => item.city === city.city)?.rent ??
+        averageValues.rent,
       income: getIncome({
         city: city.city,
         currentProvince: provinceMap[city.city as keyof typeof provinceMap],
@@ -137,21 +158,33 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
         cityData.find((item) => item.city === city.city)?.other ??
         averageValues.other,
     }));
-  }, [cityTotals, rent, income, clothing, age, gender, occupation, customized]);
-
-  console.log(income);
-  console.log(data);
+  }, [
+    cityTotals,
+    rent,
+    income,
+    clothing,
+    age,
+    gender,
+    occupation,
+    customized,
+    move,
+    work,
+    play,
+  ]);
 
   const processedData = useMemo(
     () =>
       data.map((d) => {
-        const totalExpenses = d.rent + d.food + d.other + d.clothing;
+        const totalExpenses =
+          d.rent + d.food + d.clothing + d.play + d.work + d.move;
         return {
           city: d.city,
+          work: -d.work,
+          move: -d.move,
+          play: -d.play,
           rent: -d.rent,
           food: -d.food,
           clothing: -d.clothing,
-          other: -d.other,
           surplus: d.income - totalExpenses < 0 ? 0 : d.income - totalExpenses,
           deficit: d.income - totalExpenses > 0 ? 0 : d.income - totalExpenses,
           totalExpenses,
@@ -191,6 +224,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
       {cityTotals?.length > 0 && processedData?.length > 0 ? (
         <>
           <BarChartStacked
+            colors={colors}
             setTooltipState={setTooltipState}
             data={processedData}
             labelAccessor={(d) => d.city as string}

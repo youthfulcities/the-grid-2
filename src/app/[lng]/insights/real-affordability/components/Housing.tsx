@@ -2,6 +2,7 @@ import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
 import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 import { Button, Heading, Text, View } from '@aws-amplify/ui-react';
 import React, { useMemo } from 'react';
+import { useProfile } from '../context/ProfileContext';
 
 interface FlexibleDataItem {
   [key: string]: number | string;
@@ -10,9 +11,6 @@ interface FlexibleDataItem {
 interface HousingProps {
   width: number;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
-  loading?: boolean;
-  activeCity: string | null;
-  setActiveCity: React.Dispatch<React.SetStateAction<string | null>>;
   processedData: FlexibleDataItem[];
 }
 
@@ -30,10 +28,9 @@ const Housing: React.FC<HousingProps> = ({
   processedData,
   width,
   setTooltipState,
-  loading,
-  activeCity,
-  setActiveCity,
 }) => {
+  const { activeCity, setActiveCity } = useProfile();
+
   const sortedData = useMemo(
     () =>
       [...processedData].sort((a, b) => {

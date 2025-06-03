@@ -15,7 +15,7 @@ interface FlexibleDataItem {
 
 interface TooltipState {
   position: { x: number; y: number } | null;
-  content?: string;
+  content?: string | React.ReactNode;
   group?: string;
 }
 
@@ -24,7 +24,7 @@ interface BarChartProps {
   data: FlexibleDataItem[];
   keys: string[];
   labelAccessor: (d: FlexibleDataItem) => string;
-  tooltipFormatter?: (d: FlexibleDataItem) => string;
+  tooltipFormatter?: (d: FlexibleDataItem) => string | React.ReactNode;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   onBarClick?: (label: string) => void;
   filterLabel?: string | null;

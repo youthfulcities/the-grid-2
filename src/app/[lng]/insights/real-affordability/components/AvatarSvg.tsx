@@ -3,7 +3,7 @@ import { createAvatar } from '@dicebear/core';
 import { motion } from 'framer-motion';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { useAvatar } from '../context/AvatarContext';
+import { useProfile } from '../context/ProfileContext';
 import { Options } from '../types/CharacterCreatorTypes';
 
 const AvatarWrapper = styled(motion.div)<{
@@ -35,7 +35,7 @@ const AvatarSvg: React.FC<AvatarSvgProps> = ({
   height = 200,
   radius = 0,
 }) => {
-  const { avatar } = useAvatar();
+  const { avatar } = useProfile();
 
   const avatarSvg = useMemo(() => {
     const avatarImage = createAvatar(micah, {

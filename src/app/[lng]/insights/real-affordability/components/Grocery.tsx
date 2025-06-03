@@ -1,7 +1,7 @@
 import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
 import {
   calculateGroceryPrice,
-  calculateGroceryTotals,
+  CityTotal,
 } from '@/utils/calculateGroceryTotals';
 import {
   Button,
@@ -15,9 +15,14 @@ import { motion } from 'framer-motion';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
 import { styled } from 'styled-components';
+import { useProfile } from '../context/ProfileContext';
 import { BasketEntry, GroceryItem, TooltipState } from '../types/BasketTypes';
 import GroceryBadge from './GroceryBadge';
 import GroceryPriceLabel from './GroceryPriceLabel';
+
+interface FlexibleDataItem {
+  [key: string]: number | string;
+}
 
 const itemVariants = {
   hidden: { opacity: 0, scale: 0.5 },
@@ -90,7 +95,7 @@ const ExpandButton = styled(Button)`
   z-index: 1;
 `;
 
-const keys = ['Canadian goods', 'Non-Canadian goods'];
+const keys = ['Canadian goods', 'Non-Canadian goods', 'Canadian average'];
 
 const containerVariants = {
   expanded: {
@@ -130,28 +135,21 @@ const removeSpecialChars = (string: string) =>
 const Grocery = ({
   groceryItems,
   latestTimestamp,
-  setBasket,
-  activeCity,
-  setActiveCity,
   cityTotals,
   setTooltipState,
   width,
   loading,
-  basket,
 }: {
   groceryItems: GroceryItem[];
   latestTimestamp: string | null;
-  setBasket: React.Dispatch<React.SetStateAction<Record<string, BasketEntry>>>;
-  activeCity: string | null;
-  setActiveCity: React.Dispatch<React.SetStateAction<string | null>>;
-  cityTotals: { city: string; totalPrice: number }[];
+  cityTotals: CityTotal[];
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   width: number;
   loading: boolean;
-  basket: Record<string, BasketEntry>;
 }) => {
   const [imgError, setImgError] = useState<{ [key: string]: boolean }>({});
   const [expanded, setExpanded] = useState(false);
+  const { activeCity, setActiveCity, setBasket } = useProfile();
 
   const visibleItems = useMemo(() => {
     if (expanded) return groceryItems;
@@ -221,30 +219,54 @@ const Grocery = ({
     setActiveCity(null);
   };
 
-  const canadianTotal = useMemo(
-    () => calculateGroceryTotals(groceryItems, basket, true),
-    [groceryItems, basket]
-  );
-
   const processedData = useMemo(
     () =>
       cityTotals.map((city) => {
         const cityName = city.city;
-        const canadian =
-          canadianTotal.find((item) => item.city === cityName)?.totalPrice ?? 0;
+        const {
+          totalPrice,
+          totalCanadianCost,
+          totalNotCanadianCost,
+          differenceFromNationalAverage,
+        } = city;
         return {
           city: cityName,
-          'Canadian goods': canadian,
-          'Non-Canadian goods': city.totalPrice - canadian,
-          totalPrice: city.totalPrice,
+          difference: differenceFromNationalAverage as number,
+          'Canadian goods': totalCanadianCost,
+          'Non-Canadian goods': totalNotCanadianCost,
+          'Canadian average': Math.max(
+            0,
+            totalPrice - (totalCanadianCost + totalNotCanadianCost)
+          ),
+          totalPrice,
         };
       }),
-    [cityTotals, canadianTotal]
+    [cityTotals]
   );
 
   const tooltipFormatter = useCallback(
-    (d: any) =>
-      `${d.city}: $${d.totalPrice.toFixed(2)} (${((d['Canadian goods'] / d.totalPrice) * 100).toFixed(1)}% Canadian goods)`,
+    (d: FlexibleDataItem) => (
+      <div>
+        {`${d.city}: $${(d.totalPrice as number).toFixed(2)}`}
+        <br />
+        {`${(
+          ((d['Canadian goods'] as number) / (d.totalPrice as number)) *
+          100
+        ).toFixed(1)}% Canadian goods`}
+        <br />
+        {`${(
+          ((d['Non-Canadian goods'] as number) / (d.totalPrice as number)) *
+          100
+        ).toFixed(1)}% Non-Canadian goods`}
+        <br />
+        {`${(
+          ((d['Canadian average'] as number) / (d.totalPrice as number)) *
+          100
+        ).toFixed(1)}% based on Canadian average`}
+        <br />
+        {`${(((d.difference as number) - 1) * 100).toFixed(2)}% difference from Canadian average`}
+      </div>
+    ),
     []
   );
 
@@ -290,8 +312,18 @@ const Grocery = ({
                 onClick={() => handleAddToBasket(item)}
               >
                 <GroceryBadge
-                  canadianPrice={calculateGroceryPrice(item, cityData, true)}
-                  globalPrice={calculateGroceryPrice(item, cityData, false)}
+                  canadianPrice={calculateGroceryPrice(
+                    item,
+                    cityData ?? null,
+                    true,
+                    !cityData
+                  )}
+                  globalPrice={calculateGroceryPrice(
+                    item,
+                    cityData ?? null,
+                    false,
+                    !cityData
+                  )}
                 />
                 <MotionImage
                   layout
@@ -322,18 +354,33 @@ const Grocery = ({
                     alt={item.category}
                   />
                 </MotionImage>
-
                 <GroceryPriceLabel
-                  canadianPrice={calculateGroceryPrice(item, cityData, true)}
-                  globalPrice={calculateGroceryPrice(item, cityData, false)}
+                  canadianPrice={calculateGroceryPrice(
+                    item,
+                    cityData ?? null,
+                    true,
+                    true
+                  )}
+                  globalPrice={calculateGroceryPrice(
+                    item,
+                    cityData ?? null,
+                    false,
+                    true
+                  )}
                   basePrice={
                     cityData?.canada_average_price_per_base ??
                     cityData?.not_canada_average_price_per_base ??
                     item.canada_average_price_per_base ??
                     item.not_canada_average_price_per_base
                   }
-                  baseUnit={item.base_unit}
-                  baseQuantity={item.average_base_amount}
+                  baseUnit={
+                    item.statscan_unit ? item.statscan_unit : item.base_unit
+                  }
+                  baseQuantity={
+                    item.statscan_unit === 'ea' || item.base_unit === 'ea'
+                      ? 1
+                      : 100
+                  }
                   label={item.category}
                   city={activeCity}
                 />

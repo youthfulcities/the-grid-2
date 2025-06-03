@@ -1,8 +1,8 @@
 import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
-import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 import { Button, Heading, Text, View } from '@aws-amplify/ui-react';
 import React, { useMemo } from 'react';
 import { useProfile } from '../context/ProfileContext';
+import { TooltipState } from '../types/BasketTypes';
 
 interface FlexibleDataItem {
   [key: string]: number | string;

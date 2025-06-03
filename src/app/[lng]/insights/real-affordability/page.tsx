@@ -3,6 +3,7 @@
 import Container from '@/app/components/Background';
 import ChapterNav from '@/app/components/ChapterNav';
 import Tooltip from '@/app/components/dataviz/TooltipChart/TooltipChart';
+// import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 import FadeInUp from '@/app/components/FadeInUp';
 import { useDimensions } from '@/hooks/useDimensions';
 import {
@@ -23,8 +24,10 @@ import HousingJourney from './components/HousingJourney';
 import { useProfile } from './context/ProfileContext';
 import useSectionInView from './hooks/useSectionInView';
 import { GroceryItem, TooltipState } from './types/BasketTypes';
+import { CategoryData } from './types/CostTypes';
 import { IncomeData } from './types/IncomeTypes';
 import { RentData } from './types/RentTypes';
+
 const steps = [
   { title: 'Affordability', key: 'overviewInView' },
   { title: 'Profile', key: 'creatorInView' },
@@ -207,9 +210,9 @@ const AffordabilityPage: React.FC = () => {
             </Heading>
             <View ref={overviewRef} data-section='overviewInView'>
               <AffordabilityOverview
-                work={work}
-                move={move}
-                play={play}
+                work={work as CategoryData}
+                move={move as CategoryData}
+                play={play as CategoryData}
                 rent={rent}
                 income={income}
                 width={width}
@@ -261,7 +264,6 @@ const AffordabilityPage: React.FC = () => {
           y={tooltipState.position.y}
           group={tooltipState.group}
           child={tooltipState.child}
-          minWidth={tooltipState.minWidth}
         />
       )}
       <CharacterOverlay

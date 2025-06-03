@@ -1,6 +1,7 @@
 import { Text } from '@aws-amplify/ui-react';
-import React, { ReactNode } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { TooltipState } from './TooltipState';
 
 const SmallText = styled(Text)`
   margin: 0;
@@ -25,26 +26,21 @@ const TooltipContainer = styled.div<{ $minWidth?: number }>`
   border-radius: var(--amplify-space-xs);
 `;
 
-const Tooltip: React.FC<{
-  x: number | null;
-  y: number | null;
-  content?: string;
-  group?: string;
-  child?: ReactNode;
-  minWidth?: number;
-}> = React.memo(({ x, y, content, group, child, minWidth = 0 }) => {
-  if (x === null || y === null) {
-    return null;
-  }
+const Tooltip: React.FC<TooltipState> = React.memo(
+  ({ x, y, content, group, child, minWidth = 0 }) => {
+    if (x === null || y === null) {
+      return null;
+    }
 
-  return (
-    <TooltipContainer style={{ left: x, top: y }} $minWidth={minWidth}>
-      {content}
-      {group && <SmallText>{group}</SmallText>}
-      {child}
-    </TooltipContainer>
-  );
-});
+    return (
+      <TooltipContainer style={{ left: x, top: y }} $minWidth={minWidth}>
+        {content}
+        {group && <SmallText>{group}</SmallText>}
+        {child}
+      </TooltipContainer>
+    );
+  }
+);
 
 Tooltip.displayName = 'Tooltip';
 

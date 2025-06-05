@@ -11,6 +11,7 @@ import {
   Text,
   View,
 } from '@aws-amplify/ui-react';
+import { SeriesPoint } from 'd3';
 import { motion } from 'framer-motion';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
@@ -397,52 +398,36 @@ const Grocery = ({
           </ExpandButton>
         </GridWrapper>
       )}
-      {!loading && (
-        <>
-          <Heading level={2} marginTop='xxl' textAlign='center'>
-            Cost of basket <span className='highlight'>by City</span>
-          </Heading>
-          <BarChartStacked
-            filterLabel={activeCity}
-            onBarClick={(d) => setActiveCity(d)}
-            data={processedData}
-            keys={keys}
-            labelAccessor={(d) => d.city as string}
-            width={width}
-            setTooltipState={setTooltipState}
-            height={800}
-            marginLeft={100}
-            tooltipFormatter={tooltipFormatter}
-          />
-          <Button
-            onClick={handleAddAll}
-            size='small'
-            color='font.primary'
-            marginTop='small'
-            marginLeft='xs'
-          >
-            Add All
-          </Button>
-          <Button
-            onClick={removeAll}
-            marginTop='small'
-            size='small'
-            color='font.primary'
-            marginLeft='xs'
-          >
-            Reset basket
-          </Button>
-          <Button
-            onClick={resetCity}
-            marginTop='small'
-            size='small'
-            color='font.primary'
-            marginLeft='xs'
-          >
-            Reset City
-          </Button>
-        </>
-      )}
+      <Heading level={2} marginTop='xxl' textAlign='center'>
+        Cost of basket <span className='highlight'>by City</span>
+      </Heading>
+      <BarChartStacked
+        loading={loading}
+        filterLabel={activeCity}
+        onBarClick={(d) =>
+          setActiveCity(
+            (d as SeriesPoint<FlexibleDataItem>).data?.city as string
+          )
+        }
+        data={processedData}
+        keys={keys}
+        labelAccessor={(d) => d.city as string}
+        width={width}
+        setTooltipState={setTooltipState}
+        height={800}
+        marginLeft={100}
+        tooltipFormatter={tooltipFormatter}
+      >
+        <Button onClick={handleAddAll} size='small' color='font.primary'>
+          Add All
+        </Button>
+        <Button onClick={removeAll} size='small' color='font.primary'>
+          Reset basket
+        </Button>
+        <Button onClick={resetCity} size='small' color='font.primary'>
+          Reset City
+        </Button>
+      </BarChartStacked>
       <Text fontSize='small' marginTop='large'>
         Food icons created by{' '}
         <a

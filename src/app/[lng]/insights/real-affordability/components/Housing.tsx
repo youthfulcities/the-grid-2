@@ -1,5 +1,6 @@
 import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
 import { Button, Heading, Text, View } from '@aws-amplify/ui-react';
+import { SeriesPoint } from 'd3';
 import React, { useMemo } from 'react';
 import { useProfile } from '../context/ProfileContext';
 import { TooltipState } from '../types/BasketTypes';
@@ -59,8 +60,8 @@ const Housing: React.FC<HousingProps> = ({
     }
   };
 
-  const onBarClick = (label: string) => {
-    setActiveCity(label);
+  const onBarClick = (d: FlexibleDataItem | SeriesPoint<FlexibleDataItem>) => {
+    setActiveCity((d as SeriesPoint<FlexibleDataItem>).data.city as string);
     handleScroll();
   };
 
@@ -77,6 +78,7 @@ const Housing: React.FC<HousingProps> = ({
         Click on a city to start your housing journey.
       </Text>
       <BarChartStacked
+        loading={!(sortedData.length > 0)}
         filterLabel={activeCity}
         marginLeft={100}
         onBarClick={onBarClick}
@@ -94,16 +96,11 @@ const Housing: React.FC<HousingProps> = ({
         data={sortedData}
         keys={keys}
         labelAccessor={(d) => d.city as string}
-      />
-      <Button
-        onClick={resetCity}
-        marginTop='small'
-        size='small'
-        color='font.primary'
-        marginLeft='xs'
       >
-        Reset City
-      </Button>
+        <Button onClick={resetCity} size='small' color='font.primary'>
+          Reset City
+        </Button>
+      </BarChartStacked>
     </View>
   );
 };

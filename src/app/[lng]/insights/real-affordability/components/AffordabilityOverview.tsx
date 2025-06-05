@@ -1,5 +1,8 @@
-import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
-import { Button, Flex, Loader, View } from '@aws-amplify/ui-react';
+import BarChartStacked, {
+  FlexibleDataItem,
+} from '@/app/components/dataviz/BarChartStacked';
+import { Button, View } from '@aws-amplify/ui-react';
+import { SeriesPoint } from 'd3';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useProfile } from '../context/ProfileContext';
 import { TooltipState } from '../types/BasketTypes';
@@ -50,13 +53,109 @@ const keys = [
 ];
 
 const colors = [
-  '#253D88',
-  '#673934',
   '#FBD166',
-  '#5125E8',
+  '#00BFA9',
+  '#2f4eac',
+  '#8755AF',
   '#F6D9D7',
-  '#550D35',
+  '#af6860',
   '#B8D98D',
+];
+
+const colors5 = [
+  '#F2695D', // 🔴 coral red (yours)
+  '#F97C0B', // 🟠 vivid orange
+  '#FBD166', // 🟡 golden yellow (yours)
+  '#A3CB38', // 🟢 bright lime green
+  '#B8D98D', // 🟢 muted green (yours)
+  '#00BFA9', // 🔵 cyan teal
+  '#2F4EAC', // 🔵 strong blue (yours)
+  '#5125E8', // 🔵 deep violet (yours)
+  '#8755AF', // 🟣 mid purple (harmonizes with 5125E8)
+  '#FF5DA2', // 🟣 hot pink (replaces F6D9D7 for contrast)
+];
+
+const colors2 = [
+  '#F2695D', // warm coral
+  '#FBD166', // golden yellow
+  '#B8D98D', // light olive green
+  '#2F4EAC', // strong blue
+  '#5125E8', // deep violet
+  '#F6D9D7', // pale rose
+
+  '#00BFA9', // teal
+  '#FF8C42', // vivid orange
+  '#CCCCFF', // soft lavender
+  '#FF5DA2', // hot pink
+  '#45D09E', // mint green
+  '#82D4F2', // sky blue
+  '#C678DD', // orchid purple
+  '#FFD700', // bright gold
+  '#38B000', // lime green
+  '#E63946', // crimson
+  '#6A4C93', // indigo
+  '#0081A7', // cerulean
+];
+
+const colors20 = [
+  '#F2695D', // vivid coral
+  '#2F4EAC', // deep royal blue
+  '#FBD166', // strong yellow
+  '#6A4C93', // muted indigo
+  '#00BFA9', // teal
+  '#AF6860', // brick red
+  '#45D09E', // mint green
+  '#5125E8', // intense purple
+  '#FF8C42', // vibrant orange
+  '#0081A7', // cyan-cerulean
+  '#E63946', // crimson
+  '#38B000', // lime green
+  '#C678DD', // orchid
+  '#B8D98D', // soft olive
+  '#FF5DA2', // hot pink
+  '#1B998B', // dark aqua
+  '#FFD700', // true gold
+  '#4B3F72', // eggplant
+  '#82D4F2', // sky blue
+  '#C1292E', // dark cherry
+];
+
+const colors3 = [
+  '#C1292E', // cherry red
+  '#F2695D', // coral red-orange
+  '#FF8C42', // vibrant orange
+  '#FBD166', // golden yellow
+  '#FFD700', // true gold
+  '#B8D98D', // olive green
+  '#38B000', // lime green
+  '#45D09E', // mint green
+  '#00BFA9', // teal
+  '#1B998B', // dark aqua
+  '#0081A7', // cerulean blue
+  '#82D4F2', // sky blue (added for smoother transition)
+  '#2F4EAC', // royal blue
+  '#C9D5E9', // soft periwinkle (your pastel)
+  '#5125E8', // strong indigo
+  '#8755AF', // warm violet (your color)
+  '#C678DD', // orchid purple
+  '#7A2D59', // plum (adjusted from #550D35)
+  '#FF5DA2', // hot pink
+  '#4B3F72', // eggplant (neutral anchor)
+];
+
+const colors4 = [
+  [
+    '#D7263D', // 🔴 Strong red
+    '#F46036', // 🟠 Vivid orange
+    '#FFD23F', // 🟡 Bold yellow
+    '#A3CB38', // 🟢 Bright lime green
+    '#00BFA9', // 🔵 Cyan teal
+    '#1089FF', // 🔵 Vivid blue
+    '#3F51B5', // 🔵 Indigo blue
+    '#8755AF', // 🟣 Medium violet (your color)
+    '#C678DD', // 🟣 Orchid purple
+    '#FF5DA2', // 🟣 Hot pink
+  ],
 ];
 
 const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
@@ -71,6 +170,8 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState(null);
+  const [drilldownLevel, setDrilldownLevel] = useState(0);
+  const [selectedSegment, setSelectedSegment] = useState<string | null>(null);
   const [clothing, setClothing] = useState<ClothingData>([]);
   const {
     gender,
@@ -192,6 +293,57 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
     [data]
   );
 
+  const onBarClick = (d: FlexibleDataItem | SeriesPoint<FlexibleDataItem>) => {
+    const { key } = d as FlexibleDataItem;
+    if (key === 'move' || key === 'work' || key === 'play' || key === 'live') {
+      setSelectedSegment(key as string);
+      setDrilldownLevel(1);
+    }
+  };
+
+  const drilldownData = useMemo(() => {
+    if (!selectedSegment || !['move', 'work', 'play'].includes(selectedSegment))
+      return null;
+
+    const segment = { move, work, play }[
+      selectedSegment as 'move' | 'work' | 'play'
+    ];
+    const { indicators, total_monthly_cost_by_city } = segment;
+
+    const cities = Object.keys(total_monthly_cost_by_city || {});
+
+    const unsorted = cities.map((city) => {
+      const cityEntry: Record<string, string | number> = { city };
+      let total = 0;
+      Object.entries(indicators).forEach(([indicator, indicatorData]) => {
+        const value = indicatorData.total_monthly_cost_by_city?.[city];
+        if (typeof value === 'number') {
+          cityEntry[indicator] = -value;
+          total += -value;
+        }
+      });
+
+      cityEntry._total = total;
+      return cityEntry;
+    });
+    // Sort by total descending (most negative total first)
+    const sorted = unsorted.sort(
+      (a, b) => (b._total as number) - (a._total as number)
+    );
+
+    // Clean up temp property before returning
+    return sorted.map(({ _total, ...rest }) => rest);
+  }, [selectedSegment, move, work, play]);
+
+  const drilldownKeys = useMemo(() => {
+    if (!selectedSegment || !['move', 'work', 'play'].includes(selectedSegment))
+      return null;
+    const segment = { move, work, play }[
+      selectedSegment as 'move' | 'work' | 'play'
+    ];
+    return Object.keys(segment.indicators);
+  }, [selectedSegment, move, work, play]);
+
   processedData.sort((a, b) => {
     if (b.surplus !== a.surplus) {
       return b.surplus - a.surplus;
@@ -220,32 +372,36 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
 
   return (
     <View marginBottom='large'>
-      {cityTotals?.length > 0 && processedData?.length > 0 ? (
-        <>
-          <BarChartStacked
-            colors={colors}
-            setTooltipState={setTooltipState}
-            data={processedData}
-            labelAccessor={(d) => d.city as string}
-            keys={keys}
-            width={width}
-            height={800}
-            marginLeft={100}
-          />
-          <Button
-            fontSize='small'
-            marginLeft='small'
-            color='#fff'
-            onClick={() => setCustomized(false)}
-          >
-            Reset customizations
+      <BarChartStacked
+        loading={!(cityTotals?.length > 0 && processedData?.length > 0)}
+        onBarClick={onBarClick}
+        colors={colors}
+        setTooltipState={setTooltipState}
+        data={
+          drilldownLevel === 0
+            ? processedData
+            : (drilldownData as FlexibleDataItem[])
+        }
+        keyAccessor={(d) => d.key as string}
+        labelAccessor={(d) => d.city as string}
+        keys={drilldownLevel === 0 ? keys : (drilldownKeys as string[])}
+        width={width}
+        height={800}
+        marginLeft={100}
+      >
+        {drilldownLevel > 0 && (
+          <Button fontSize='small' onClick={() => setDrilldownLevel(0)}>
+            Back
           </Button>
-        </>
-      ) : (
-        <Flex alignItems='center' margin='small'>
-          <Loader size='large' />
-        </Flex>
-      )}
+        )}
+        <Button
+          fontSize='small'
+          color='#fff'
+          onClick={() => setCustomized(false)}
+        >
+          Reset customizations
+        </Button>
+      </BarChartStacked>
     </View>
   );
 };

@@ -1,15 +1,14 @@
 // CharacterCreator.tsx
-import
-  {
-    Button,
-    CheckboxField,
-    Flex,
-    Heading,
-    SelectField,
-    StepperField,
-    Text,
-    View,
-  } from '@aws-amplify/ui-react';
+import {
+  Button,
+  CheckboxField,
+  Flex,
+  Heading,
+  SelectField,
+  StepperField,
+  Text,
+  View,
+} from '@aws-amplify/ui-react';
 import { micah } from '@dicebear/collection';
 import { schema } from '@dicebear/core';
 import React from 'react';
@@ -365,7 +364,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             id='gender'
             name='gender'
             label='Gender'
-            value={gender}
+            value={gender ?? 'woman'}
             onChange={(e) => {
               setGender(e.target.value);
               setCustomized(true);

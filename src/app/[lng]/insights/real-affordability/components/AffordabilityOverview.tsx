@@ -181,6 +181,8 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
     occupation,
     setCurrentIncome,
     setManIncome,
+    student,
+    car,
   } = useProfile();
 
   useEffect(() => {
@@ -231,9 +233,32 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
 
     return cityTotals.map((city) => ({
       city: city.city,
-      work: work.total_monthly_cost_by_city[city.city] ?? 0,
-      play: play.total_monthly_cost_by_city[city.city] ?? 0,
-      move: move.total_monthly_cost_by_city[city.city] ?? 0,
+      work:
+        (student
+          ? work.profiles?.student?.total_monthly_cost_by_city_student[
+              city.city
+            ] ?? 0
+          : 0) +
+        (!student
+          ? work.profiles?.all?.total_monthly_cost_by_city_all[city.city] ?? 0
+          : 0),
+      play: play.profiles?.all?.total_monthly_cost_by_city_all[city.city] ?? 0,
+      move:
+        (car
+          ? move.profiles?.car_user?.total_monthly_cost_by_city_car_user[
+              city.city
+            ] ?? 0
+          : 0) +
+        (student
+          ? move.profiles?.student?.total_monthly_cost_by_city_student[
+              city.city
+            ] ?? 0
+          : 0) +
+        (move.profiles?.all?.total_monthly_cost_by_city_all[city.city] ?? 0) +
+        (!student
+          ? move.profiles?.adult?.total_monthly_cost_by_city_adult[city.city] ??
+            0
+          : 0),
       clothing:
         clothing.find((item) => item.city === city.city)?.totalPrice ?? 0 / 12,
       food:
@@ -270,6 +295,8 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
     move,
     work,
     play,
+    student,
+    car,
   ]);
 
   const processedData = useMemo(
@@ -311,6 +338,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
     const { indicators, total_monthly_cost_by_city } = segment;
 
     const cities = Object.keys(total_monthly_cost_by_city || {});
+    console.log(indicators);
 
     const unsorted = cities.map((city) => {
       const cityEntry: Record<string, string | number> = { city };

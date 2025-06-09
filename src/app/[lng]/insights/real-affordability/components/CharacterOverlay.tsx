@@ -72,7 +72,7 @@ const CharacterOverlay: React.FC<{
               </Text>
               <Text fontSize='small'>
                 <span className='highlight'>Gender: </span>
-                {_.capitalize(gender)}
+                {_.capitalize(gender ?? 'Not selected')}
               </Text>
               <Text fontSize='small'>
                 <span className='highlight'>Occupation:</span>{' '}

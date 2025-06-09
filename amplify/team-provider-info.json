@@ -240,7 +240,7 @@
         },
         "processGrocery": {
           "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
-          "s3Key": "amplify-builds/processGrocery-68363576786b6b645a38-build.zip",
+          "s3Key": "amplify-builds/processGrocery-5a45476a4238464d6d38-build.zip",
           "bucketName": "ycydl"
         },
         "processClothing": {

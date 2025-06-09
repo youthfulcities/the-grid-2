@@ -30,8 +30,8 @@ const defaultOptions: AvatarOptions = {
 interface ProfileContextType {
   avatar: AvatarOptions;
   setAvatar: React.Dispatch<React.SetStateAction<AvatarOptions>>;
-  gender: string;
-  setGender: React.Dispatch<React.SetStateAction<string>>;
+  gender: string | null;
+  setGender: React.Dispatch<React.SetStateAction<string | null>>;
   occupation: string;
   student: boolean | null;
   setStudent: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -56,7 +56,7 @@ const ProfileContext = createContext<ProfileContextType | null>(null);
 
 export const ProfileProvider = ({ children }: { children: ReactNode }) => {
   const [avatar, setAvatar] = useState<AvatarOptions>(defaultOptions);
-  const [gender, setGender] = useState<string>('woman');
+  const [gender, setGender] = useState<string | null>(null);
   const [occupation, setOccupation] = useState<string>('0');
   const [age, setAge] = useState<number>(19);
   const [car, setCar] = useState<boolean | null>(null);

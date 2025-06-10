@@ -52,7 +52,6 @@ const getIncome = ({
       averageIncome
     );
   }
-
   const allIncomes = income
     .flatMap(
       (item) =>
@@ -71,4 +70,37 @@ const getIncome = ({
   return averageIncome;
 };
 
+const getIncomeSampleSize = ({
+  city,
+  currentProvince,
+  currentAge,
+  currentGender,
+  currentOccupation,
+  income,
+}: GetIncomeOptions): number | undefined => {
+  if (!currentAge || !currentGender || !currentOccupation) {
+    return;
+  }
+  const normalizeMatch = (entry: IncomeEntry) =>
+    currentAge &&
+    entry.Age_12_Group === currentAge &&
+    currentGender &&
+    entry.Gender_Label === currentGender &&
+    currentOccupation &&
+    entry.NOC_Class === currentOccupation;
+
+  // const averageIncome = computeAverageIncome(income);
+  if (city) {
+    const cityEntry = income.find(
+      (item) =>
+        item.city === city || item.city === `Other CMA - ${currentProvince}`
+    );
+
+    const nestedMatch = cityEntry?.data?.find(normalizeMatch);
+
+    return nestedMatch?.sample_size;
+  }
+};
+
 export default getIncome;
+export { getIncomeSampleSize };

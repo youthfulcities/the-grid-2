@@ -1,3 +1,4 @@
+import { useThemeContext } from '@/app/context/ThemeContext';
 import toGreyscale from '@/utils/toGreyscale';
 import { Flex, Placeholder } from '@aws-amplify/ui-react';
 import * as d3 from 'd3';
@@ -35,7 +36,11 @@ interface BarChartProps {
   keys: string[];
   labelAccessor: (d: FlexibleDataItem) => string;
   keyAccessor?: (d: FlexibleDataItem) => string;
-  tooltipFormatter?: (d: FlexibleDataItem) => string | React.ReactNode;
+  tooltipFormatter?: (
+    d: FlexibleDataItem,
+    key?: string,
+    value?: number
+  ) => string | React.ReactNode;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   onBarClick?: (d: FlexibleDataItem | SeriesPoint<FlexibleDataItem>) => void;
   filterLabel?: string | null;
@@ -70,6 +75,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   filterLabel,
   children,
 }) => {
+  const { colorMode } = useThemeContext();
   const [activeLegendItems, setActiveLegendItems] = useState<string[]>(() => [
     ...keys,
   ]);
@@ -200,6 +206,9 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         }
         return originalColor;
       })
+      // .attr('opacity', (d: SeriesPoint<FlexibleDataItem>) =>
+      //   d.data?.sample && (d.data.sample as number) < 50 ? 0.8 : 1
+      // )
       .on('click', (event, d: SeriesPoint<FlexibleDataItem>) => {
         if (onBarClick) {
           // const label = labelAccessor(d.data);
@@ -214,7 +223,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         setTooltipState({
           position: { x, y },
           content: tooltipFormatter
-            ? tooltipFormatter(d.data)
+            ? tooltipFormatter(d.data, key, value)
             : `${labelAccessor(d.data)} ${key}: $${value.toFixed(2)}`,
         });
       })
@@ -226,7 +235,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         setTooltipState({
           position: { x, y },
           content: tooltipFormatter
-            ? tooltipFormatter(d.data)
+            ? tooltipFormatter(d.data, key, value)
             : `${labelAccessor(d.data)} ${key}: $${value.toFixed(2)}`,
         });
       })
@@ -292,9 +301,11 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .selectAll('text')
       .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
       .attr('font-weight', '400')
-      .style('fill', 'white');
+      .style('fill', colorMode === 'dark' ? 'white' : 'black');
 
-    xAxis.selectAll('.tick line').attr('stroke', 'white');
+    xAxis
+      .selectAll('.tick line')
+      .attr('stroke', colorMode === 'dark' ? 'white' : 'black');
     xAxis.selectAll('.domain').remove();
 
     const yAxis = svg
@@ -310,9 +321,11 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .attr('dy', '-0.4em') // Move text up slightly
       .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
       .attr('font-weight', '400')
-      .style('fill', 'white');
+      .style('fill', colorMode === 'dark' ? 'white' : 'black');
 
-    yAxis.selectAll('.tick line').attr('stroke', 'white');
+    yAxis
+      .selectAll('.tick line')
+      .attr('stroke', colorMode === 'dark' ? 'white' : 'black');
     yAxis.selectAll('.domain').remove();
 
     // Find pixel position of 0
@@ -324,7 +337,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .attr('x2', zeroX)
       .attr('y1', margin.top)
       .attr('y2', height - margin.bottom)
-      .attr('stroke', 'white')
+      .attr('stroke', colorMode === 'dark' ? 'white' : 'black')
       .attr('stroke-width', 2)
       .attr('stroke-dasharray', '4,2');
 
@@ -340,7 +353,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         .attr('x', zeroX - 10) // 10px left of 0
         .attr('y', 0)
         .attr('text-anchor', 'end') // Right-align text
-        .attr('fill', 'white')
+        .attr('fill', colorMode === 'dark' ? 'white' : 'black')
         .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
         .attr('font-size', 12)
         .text('← Expenses');
@@ -351,7 +364,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         .attr('x', zeroX + 10) // 10px right of 0
         .attr('y', 0)
         .attr('text-anchor', 'start') // Left-align text
-        .attr('fill', 'white')
+        .attr('fill', colorMode === 'dark' ? 'white' : 'black')
         .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
         .attr('font-size', 12)
         .text('Surplus →');
@@ -364,6 +377,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
     filterLabel,
     activeLegendItems,
     selectedAnswers,
+    colorMode,
   ]);
 
   return (

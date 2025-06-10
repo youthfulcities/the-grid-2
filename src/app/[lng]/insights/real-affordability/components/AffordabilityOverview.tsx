@@ -1,16 +1,16 @@
 import BarChartStacked, {
   FlexibleDataItem,
 } from '@/app/components/dataviz/BarChartStacked';
-import { Button, View } from '@aws-amplify/ui-react';
+import { Button, Text, View } from '@aws-amplify/ui-react';
 import { SeriesPoint } from 'd3';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useProfile } from '../context/ProfileContext';
 import { TooltipState } from '../types/BasketTypes';
 import { CategoryData } from '../types/CostTypes';
 import { IncomeData } from '../types/IncomeTypes';
 import { RentData } from '../types/RentTypes';
 import ageMap from '../utils/ageMap';
-import getIncome from '../utils/calculateIncome';
+import getIncome, { getIncomeSampleSize } from '../utils/calculateIncome';
 import genderMap from '../utils/genderMap.json';
 import occupationMap from '../utils/occupationMap.json';
 import provinceMap from '../utils/provinceMap.json';
@@ -295,6 +295,19 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
           : undefined,
         income,
       }),
+      sample: getIncomeSampleSize({
+        city: city.city,
+        currentProvince: provinceMap[city.city as keyof typeof provinceMap],
+        currentAge: customized ? ageMap(age) : undefined,
+        currentGender: customized
+          ? genderMap[gender as keyof typeof genderMap]
+          : undefined,
+        currentOccupation: customized
+          ? occupationMap[occupation as keyof typeof occupationMap]
+          : undefined,
+        income,
+      }),
+      provincial: income.find((item) => item.city === city.city),
       other:
         cityData.find((item) => item.city === city.city)?.other ??
         averageValues.other,
@@ -321,12 +334,14 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
       data.map((d) => {
         const totalExpenses = d.rent + d.play + d.work + d.move + d.live;
         return {
-          city: d.city,
+          city: `${d.city}${d.sample && d.sample < 50 ? '*' : ''}${!d.provincial ? '†' : ''}`,
           live: -d.live,
           work: -d.work,
           move: -d.move,
           play: -d.play,
           rent: -d.rent,
+          sample: d.sample ?? '',
+          income: d.income,
           surplus: d.income - totalExpenses < 0 ? 0 : d.income - totalExpenses,
           deficit: d.income - totalExpenses > 0 ? 0 : d.income - totalExpenses,
           totalExpenses,
@@ -417,6 +432,25 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
     );
   }, [ageGroup, occupationGroup, genderGroup, income]);
 
+  const tooltipFormatter = useCallback(
+    (
+      d: FlexibleDataItem,
+      key: string | undefined,
+      value: number | undefined
+    ) => {
+      console.log(key, value);
+      if (!key || !value) return null;
+      return (
+        <div>
+          {`${d.city} ${key}: $${(value as number).toFixed(2)}`}
+          <br />
+          {`Total monthly income: $${(d.income as number).toFixed(2)}`}
+        </div>
+      );
+    },
+    []
+  );
+
   return (
     <View marginBottom='large'>
       <BarChartStacked
@@ -424,6 +458,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
         onBarClick={onBarClick}
         colors={colors}
         setTooltipState={setTooltipState}
+        tooltipFormatter={tooltipFormatter}
         data={
           drilldownLevel === 0
             ? processedData
@@ -454,6 +489,11 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
           Reset customizations
         </Button>
       </BarChartStacked>
+      <Text fontSize='small' marginTop='small'>
+        * represents income based on a sample size under 50. † represents income
+        based on provincial average. Data comes from the Statistics Canada
+        Labour Force Survey.
+      </Text>
     </View>
   );
 };

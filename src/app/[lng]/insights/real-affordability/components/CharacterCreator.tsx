@@ -385,7 +385,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
           <StyledSelectField
             id='occupation'
             name='occupation'
-            label='Occupation'
+            label='Sector'
             value={String(occupation)}
             onChange={(e) => {
               setOccupation(e.target.value);
@@ -393,7 +393,9 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
               setCustomized(true);
             }}
           >
-            <option value={0}>Manager</option>
+            <option value={0} disabled={age < 29}>
+              Management
+            </option>
             <option value={1}>Business and finance</option>
             <option value={2}>Applied sciences</option>
             <option value={3}>Health care</option>
@@ -414,6 +416,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             label='Age'
             name='age'
             type='number'
+            isDisabled={occupation === '0' && age === 29}
             value={age}
             onStepChange={(n) => {
               setAge(n);
@@ -443,6 +446,9 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
               onChange={(e) => setCar(!!e.target.checked)}
             />
           </Flex>
+          <Text fontSize='small' marginTop='small'>
+            Some options may be disabled due to low sample size.
+          </Text>
           {gender === 'nonbinary' && (
             <>
               <Text fontSize='small' marginTop='small'>

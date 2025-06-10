@@ -341,7 +341,12 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
               marginTop='xs'
               colorTheme='error'
               color='#fff'
-              onClick={() => setCustomized(false)}
+              onClick={() => {
+                setCustomized(false);
+                setGender(null);
+                setStudent(false);
+                setCar(false);
+              }}
             >
               Reset Chart
             </Button>
@@ -353,7 +358,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
               marginTop='xs'
               colorTheme='error'
               color='#fff'
-              onClick={() => setCustomized(true)}
+              onClick={() => {
+                setCustomized(true);
+                setGender(!gender ? 'woman' : gender);
+              }}
             >
               Apply selections to income
             </Button>
@@ -364,10 +372,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             id='gender'
             name='gender'
             label='Gender'
-            value={gender ?? 'woman'}
+            placeholder='Select gender'
+            value={gender ?? 'undetermined'}
             onChange={(e) => {
               setGender(e.target.value);
-              setCustomized(true);
             }}
           >
             <option value='woman'>Woman</option>
@@ -381,6 +389,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             value={String(occupation)}
             onChange={(e) => {
               setOccupation(e.target.value);
+              setGender(!gender ? 'woman' : gender);
               setCustomized(true);
             }}
           >
@@ -408,6 +417,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             value={age}
             onStepChange={(n) => {
               setAge(n);
+              setGender(!gender ? 'woman' : gender);
               setCustomized(true);
             }}
           />

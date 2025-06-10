@@ -24,6 +24,7 @@ interface AffordabilityOverviewProps {
   move: CategoryData;
   play: CategoryData;
   work: CategoryData;
+  live: CategoryData;
 }
 
 interface CityDataItem {
@@ -41,16 +42,7 @@ interface ClothingItem {
 
 type ClothingData = ClothingItem[];
 
-const keys = [
-  'deficit',
-  'rent',
-  'move',
-  'work',
-  'play',
-  'food',
-  'clothing',
-  'surplus',
-];
+const keys = ['deficit', 'rent', 'move', 'live', 'work', 'play', 'surplus'];
 
 const colors = [
   '#FBD166',
@@ -58,8 +50,8 @@ const colors = [
   '#2f4eac',
   '#8755AF',
   '#F6D9D7',
-  '#af6860',
   '#B8D98D',
+  '#af6860',
 ];
 
 const colors5 = [
@@ -167,6 +159,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   move,
   work,
   play,
+  live,
 }) => {
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState(null);
@@ -175,6 +168,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   const [clothing, setClothing] = useState<ClothingData>([]);
   const {
     gender,
+    setGender,
     age,
     customized,
     setCustomized,
@@ -182,7 +176,9 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
     setCurrentIncome,
     setManIncome,
     student,
+    setStudent,
     car,
+    setCar,
   } = useProfile();
 
   useEffect(() => {
@@ -233,6 +229,26 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
 
     return cityTotals.map((city) => ({
       city: city.city,
+      live:
+        gender === null
+          ? (live.profiles?.all?.total_monthly_cost_by_city_all[city.city] ??
+              0) +
+            ((live.profiles?.women?.total_monthly_cost_by_city_women[
+              city.city
+            ] ?? 0) +
+              (live.profiles?.men?.total_monthly_cost_by_city_men[city.city] ??
+                0)) /
+              2
+          : gender === 'man'
+            ? (live.profiles?.all?.total_monthly_cost_by_city_all[city.city] ??
+                0) +
+              (live.profiles?.men.total_monthly_cost_by_city_men[city.city] ??
+                0)
+            : (live.profiles?.all?.total_monthly_cost_by_city_all[city.city] ??
+                0) +
+              (live.profiles?.women.total_monthly_cost_by_city_women[
+                city.city
+              ] ?? 0),
       work:
         (student
           ? work.profiles?.student?.total_monthly_cost_by_city_student[
@@ -295,6 +311,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
     move,
     work,
     play,
+    live,
     student,
     car,
   ]);
@@ -302,16 +319,14 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   const processedData = useMemo(
     () =>
       data.map((d) => {
-        const totalExpenses =
-          d.rent + d.food + d.clothing + d.play + d.work + d.move;
+        const totalExpenses = d.rent + d.play + d.work + d.move + d.live;
         return {
           city: d.city,
+          live: -d.live,
           work: -d.work,
           move: -d.move,
           play: -d.play,
           rent: -d.rent,
-          food: -d.food,
-          clothing: -d.clothing,
           surplus: d.income - totalExpenses < 0 ? 0 : d.income - totalExpenses,
           deficit: d.income - totalExpenses > 0 ? 0 : d.income - totalExpenses,
           totalExpenses,
@@ -329,17 +344,18 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   };
 
   const drilldownData = useMemo(() => {
-    if (!selectedSegment || !['move', 'work', 'play'].includes(selectedSegment))
+    if (
+      !selectedSegment ||
+      !['move', 'work', 'play', 'live'].includes(selectedSegment)
+    )
       return null;
 
-    const segment = { move, work, play }[
-      selectedSegment as 'move' | 'work' | 'play'
+    const segment = { move, work, play, live }[
+      selectedSegment as 'move' | 'work' | 'play' | 'live'
     ];
     const { indicators, total_monthly_cost_by_city } = segment;
 
     const cities = Object.keys(total_monthly_cost_by_city || {});
-    console.log(indicators);
-
     const unsorted = cities.map((city) => {
       const cityEntry: Record<string, string | number> = { city };
       let total = 0;
@@ -361,16 +377,19 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
 
     // Clean up temp property before returning
     return sorted.map(({ _total, ...rest }) => rest);
-  }, [selectedSegment, move, work, play]);
+  }, [selectedSegment, move, work, play, live]);
 
   const drilldownKeys = useMemo(() => {
-    if (!selectedSegment || !['move', 'work', 'play'].includes(selectedSegment))
+    if (
+      !selectedSegment ||
+      !['move', 'work', 'play', 'live'].includes(selectedSegment)
+    )
       return null;
-    const segment = { move, work, play }[
-      selectedSegment as 'move' | 'work' | 'play'
+    const segment = { move, work, play, live }[
+      selectedSegment as 'move' | 'work' | 'play' | 'live'
     ];
     return Object.keys(segment.indicators);
-  }, [selectedSegment, move, work, play]);
+  }, [selectedSegment, move, work, play, live]);
 
   processedData.sort((a, b) => {
     if (b.surplus !== a.surplus) {
@@ -425,7 +444,12 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
         <Button
           fontSize='small'
           color='#fff'
-          onClick={() => setCustomized(false)}
+          onClick={() => {
+            setCustomized(false);
+            setGender(null);
+            setCar(false);
+            setStudent(false);
+          }}
         >
           Reset customizations
         </Button>

@@ -11,7 +11,7 @@ import {
   calculateGroceryTotals,
 } from '@/utils/calculateGroceryTotals';
 import fetchData from '@/utils/fetchData';
-import { Heading, View } from '@aws-amplify/ui-react';
+import { Heading, Text, View } from '@aws-amplify/ui-react';
 import _ from 'lodash';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import AffordabilityOverview from './components/AffordabilityOverview';
@@ -55,6 +55,7 @@ const AffordabilityPage: React.FC = () => {
   const [move, setMove] = useState({});
   const [play, setPlay] = useState({});
   const [work, setWork] = useState({});
+  const [live, setLive] = useState({});
   const [incomeLoading, setIncomeLoading] = useState<boolean>(true);
   const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
   const [groceryLoading, setGroceryLoading] = useState<boolean>(true);
@@ -109,6 +110,17 @@ const AffordabilityPage: React.FC = () => {
       const text = await fetchData(path, activeFile);
       const jsonData = JSON.parse(text as string);
       setWork(jsonData);
+    };
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const path = 'internal/RAI/live';
+      const activeFile = 'live_category.json';
+      const text = await fetchData(path, activeFile);
+      const jsonData = JSON.parse(text as string);
+      setLive(jsonData);
     };
     loadData();
   }, []);
@@ -208,11 +220,22 @@ const AffordabilityPage: React.FC = () => {
               Canada&apos;s Most{' '}
               <span className='highlight'>Affordable City</span>
             </Heading>
+            <Heading level={4}>Real Afforability Index 2025</Heading>
+            <Text marginBottom='xxl'>
+              What does it really cost to live in cities across Canada? The Real
+              Affordability Index goes beyond average rent or income figures to
+              reveal the actual monthly surplus or deficit faced by youth. This
+              interactive chart highlights how income, expenses, and lived
+              experiences intersect to shape financial stability—or strain—in
+              each city. Use it to uncover the gaps between perception and
+              reality in Canada’s affordability landscape.
+            </Text>
             <View ref={overviewRef} data-section='overviewInView'>
               <AffordabilityOverview
                 work={work as CategoryData}
                 move={move as CategoryData}
                 play={play as CategoryData}
+                live={live as CategoryData}
                 rent={rent}
                 income={income}
                 width={width}
@@ -223,6 +246,11 @@ const AffordabilityPage: React.FC = () => {
           </FadeInUp>
           <FadeInUp>
             <View ref={creatorRef} data-section='creatorInView'>
+              <Text marginTop='xxl'>
+                Try changing the income and expenses using the profile to see
+                how affordability shifts across gender, occupation, and life
+                stages.
+              </Text>
               <CharacterCreator />
             </View>
           </FadeInUp>

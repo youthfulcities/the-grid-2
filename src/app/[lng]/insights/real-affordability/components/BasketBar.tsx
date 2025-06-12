@@ -1,21 +1,15 @@
 'use client';
 
 import Drawer from '@/app/components/Drawer';
+import { calculateGroceryPrice } from '@/utils/calculateGroceryTotals';
 import { Flex, Text, View } from '@aws-amplify/ui-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useProfile } from '../context/ProfileContext';
-import { BasketEntry, GroceryItem } from '../types/BasketTypes';
+import { BasketEntry } from '../types/BasketTypes';
 
-interface BasketBarProps {
-  calculateGroceryPrice: (
-    item: GroceryItem,
-    cityData: GroceryItem['cities'][number] | undefined | null,
-    isCanadian: boolean | null,
-    defaultToGlobal?: boolean
-  ) => number;
-}
+interface BasketBarProps {}
 
 const BasketContainer = styled(Flex)`
   width: 100%;
@@ -30,7 +24,7 @@ const BasketWrapper = styled(View)`
 const BasketItems = styled(motion.div)`
   background: yellow;
   position: absolute;
-  bottom: 30%;
+  bottom: 50%;
   width: 210px;
   left: 50%;
   transform: translateX(-50%);
@@ -132,7 +126,7 @@ const getRandomOffset = () => ({
   rotate: Math.random() * 10 - 5, // -5 to +5 degrees
 });
 
-const BasketBar: React.FC<BasketBarProps> = ({ calculateGroceryPrice }) => {
+const BasketBar: React.FC<BasketBarProps> = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { activeCity, basket, setBasket } = useProfile();
   const [filteredBasket, setFilteredBasket] =
@@ -140,11 +134,6 @@ const BasketBar: React.FC<BasketBarProps> = ({ calculateGroceryPrice }) => {
 
   useEffect(() => {
     if (activeCity && Object.keys(basket).length > 0) {
-      // const filtered = Object.fromEntries(
-      //   Object.entries(basket).filter(([_, entry]) =>
-      //     entry.item.cities.some((city) => city.city === activeCity)
-      //   )
-      // );
       setIsOpen(true);
       setFilteredBasket(basket);
     } else {
@@ -168,10 +157,21 @@ const BasketBar: React.FC<BasketBarProps> = ({ calculateGroceryPrice }) => {
   const totalCanadianCost = Object.values(filteredBasket).reduce(
     (sum, { item, quantity }) => {
       const cityData = item.cities.find((c) => c.city === activeCity);
-      return (
-        sum +
-        calculateGroceryPrice(item, cityData ?? null, true, true) * quantity
+
+      const canadian = calculateGroceryPrice(
+        item,
+        cityData ?? null,
+        true,
+        !cityData
       );
+
+      const global = calculateGroceryPrice(
+        item,
+        cityData ?? null,
+        false,
+        !cityData
+      );
+      return sum + (canadian && global ? canadian : 0) * quantity;
     },
     0
   );
@@ -179,10 +179,20 @@ const BasketBar: React.FC<BasketBarProps> = ({ calculateGroceryPrice }) => {
   const totalNotCanadianCost = Object.values(filteredBasket).reduce(
     (sum, { item, quantity }) => {
       const cityData = item.cities.find((c) => c.city === activeCity);
-      return (
-        sum +
-        calculateGroceryPrice(item, cityData ?? null, false, true) * quantity
+      const canadian = calculateGroceryPrice(
+        item,
+        cityData ?? null,
+        true,
+        !cityData
       );
+
+      const global = calculateGroceryPrice(
+        item,
+        cityData ?? null,
+        false,
+        !cityData
+      );
+      return sum + (canadian && global ? global : 0) * quantity;
     },
     0
   );
@@ -245,7 +255,7 @@ const BasketBar: React.FC<BasketBarProps> = ({ calculateGroceryPrice }) => {
                     key={key}
                     style={{
                       left: `${(i % 5) * 30}px`,
-                      bottom: `${(i % 4) * 15}px`,
+                      bottom: `${(i % 4) * 5}px`,
                       rotate: `${offset.rotate}deg`,
                       zIndex: i,
                     }}

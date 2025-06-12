@@ -32,44 +32,18 @@ const StyledForm = styled(Flex)`
 const StyledInput = styled(TextField)`
   border: none;
   margin-bottom: var(--amplify-space-large);
-  label {
-    color: white;
-  }
-  input {
-    background-color: white;
-    border-color: transparent;
-  }
 `;
 
 const StyledTextArea = styled(TextAreaField)`
   margin-bottom: var(--amplify-space-large);
-  label {
-    color: white;
-  }
-  textarea {
-    background-color: white;
-    border-color: transparent;
-  }
 `;
 
 const StyledSelect = styled(SelectField)`
   margin-bottom: var(--amplify-space-large);
-  label {
-    color: white;
-  }
-  select {
-    background-color: white;
-    border-color: transparent;
-  }
-
-  option {
-    background-color: white;
-  }
 `;
 
 const SubHeading = styled(Text)`
   margin-bottom: var(--amplify-space-xl);
-  color: white;
 `;
 
 const StyledButton = styled(Button)`

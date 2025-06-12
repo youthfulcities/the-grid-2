@@ -13,6 +13,7 @@ import {
 } from '@aws-amplify/ui-react';
 import { SeriesPoint } from 'd3';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
 import { styled } from 'styled-components';
@@ -273,7 +274,7 @@ const Grocery = ({
 
   return (
     <>
-      <Heading level={1} marginTop='xxxl' marginBottom='small'>
+      <Heading level={1} marginBottom='small'>
         What&apos;s in <span className='highlight'>your basket?</span>
       </Heading>
       <Text>
@@ -360,13 +361,13 @@ const Grocery = ({
                     item,
                     cityData ?? null,
                     true,
-                    true
+                    !cityData
                   )}
                   globalPrice={calculateGroceryPrice(
                     item,
                     cityData ?? null,
                     false,
-                    true
+                    !cityData
                   )}
                   basePrice={
                     cityData?.canada_average_price_per_base ??
@@ -377,11 +378,7 @@ const Grocery = ({
                   baseUnit={
                     item.statscan_unit ? item.statscan_unit : item.base_unit
                   }
-                  baseQuantity={
-                    item.statscan_unit === 'ea' || item.base_unit === 'ea'
-                      ? 1
-                      : 100
-                  }
+                  baseQuantity={item.statscan_unit === 'ea' ? 1 : 100}
                   label={item.category}
                   city={activeCity}
                 />
@@ -517,6 +514,14 @@ const Grocery = ({
         store chains. There may be Canadian fruits and vegetables available that
         have not been marked as “Prepared in Canada” by the store.
       </Text>
+      <Heading level={3} marginTop='xxl'>
+        Want more data?
+      </Heading>
+      <Text>
+        Interested in updated, historical, brand-specific, or api data access?{' '}
+        <Link href='/contact'>Get in touch.</Link>
+      </Text>
+      <Text />
     </>
   );
 };

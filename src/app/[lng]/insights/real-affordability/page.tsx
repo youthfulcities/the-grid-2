@@ -6,10 +6,7 @@ import Tooltip from '@/app/components/dataviz/TooltipChart/TooltipChart';
 // import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 import FadeInUp from '@/app/components/FadeInUp';
 import { useDimensions } from '@/hooks/useDimensions';
-import {
-  calculateGroceryPrice,
-  calculateGroceryTotals,
-} from '@/utils/calculateGroceryTotals';
+import { calculateGroceryTotals } from '@/utils/calculateGroceryTotals';
 import fetchData from '@/utils/fetchData';
 import { Heading, Text, View } from '@aws-amplify/ui-react';
 import _ from 'lodash';
@@ -27,6 +24,7 @@ import { GroceryItem, TooltipState } from './types/BasketTypes';
 import { CategoryData } from './types/CostTypes';
 import { IncomeData } from './types/IncomeTypes';
 import { RentData } from './types/RentTypes';
+import getLatestTimestamp from './utils/getLatestTimestamp';
 
 const steps = [
   { title: 'Affordability', key: 'overviewInView' },
@@ -34,20 +32,7 @@ const steps = [
   { title: 'Grocery', key: 'groceryInView' },
   { title: 'Housing', key: 'housingInView' },
 ];
-const getLatestTimestamp = (items: GroceryItem[]): string | null => {
-  const allTimestamps = _.flatMap(items, (item) => {
-    const topLevel = item.latest_timestamp ? [item.latest_timestamp] : [];
-    const nested =
-      item.cities?.map((city) => city.latest_timestamp).filter(Boolean) || [];
-    return [...topLevel, ...nested];
-  });
 
-  const latest = _.maxBy(
-    allTimestamps.filter((ts): ts is string => ts !== null && ts !== undefined),
-    (ts) => new Date(ts).getTime()
-  );
-  return latest ?? null;
-};
 const AffordabilityPage: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   // const [loading, setLoading] = useState<boolean>(true);
@@ -255,7 +240,11 @@ const AffordabilityPage: React.FC = () => {
             </View>
           </FadeInUp>
           <FadeInUp>
-            <View ref={groceryRef} data-section='groceryInView'>
+            <View
+              ref={groceryRef}
+              data-section='groceryInView'
+              marginTop='xxxl'
+            >
               <Grocery
                 cityTotals={cityTotals}
                 groceryItems={groceryItems}
@@ -284,7 +273,7 @@ const AffordabilityPage: React.FC = () => {
           </View>
         </View>
       </Container>
-      <BasketBar calculateGroceryPrice={calculateGroceryPrice} />
+      <BasketBar />
       {tooltipState.position && (
         <Tooltip
           x={tooltipState.position.x}

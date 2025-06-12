@@ -88,6 +88,8 @@ const GroceryPriceLabel: React.FC<GroceryPriceLabelProps> = ({
     diffText = <Difference>No price data</Difference>;
   }
 
+  console.log(label, baseQuantity, baseUnit);
+
   const getBaseQuanity = (
     quantity: number | null,
     unit: string | null,

@@ -229,51 +229,35 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
 
     return cityTotals.map((city) => ({
       city: city.city,
-      live:
-        gender === null
-          ? (live.profiles?.all?.total_monthly_cost_by_city_all[city.city] ??
-              0) +
-            ((live.profiles?.women?.total_monthly_cost_by_city_women[
-              city.city
-            ] ?? 0) +
-              (live.profiles?.men?.total_monthly_cost_by_city_men[city.city] ??
-                0)) /
-              2
-          : gender === 'man'
-            ? (live.profiles?.all?.total_monthly_cost_by_city_all[city.city] ??
-                0) +
-              (live.profiles?.men.total_monthly_cost_by_city_men[city.city] ??
-                0)
-            : (live.profiles?.all?.total_monthly_cost_by_city_all[city.city] ??
-                0) +
-              (live.profiles?.women.total_monthly_cost_by_city_women[
-                city.city
-              ] ?? 0),
+      // live:
+      //   gender === null
+      //     ? (live.profiles?.all?.monthly_cost_by_city[city.city] ?? 0) +
+      //       ((live.profiles?.women?.monthly_cost_by_city[city.city] ?? 0) +
+      //         (live.profiles?.men?.monthly_cost_by_city[city.city] ?? 0)) /
+      //         2
+      //     : gender === 'man'
+      //       ? (live.profiles?.all?.monthly_cost_by_city[city.city] ?? 0) +
+      //         (live.profiles?.men.monthly_cost_by_city[city.city] ?? 0)
+      //       : (live.profiles?.all?.monthly_cost_by_city[city.city] ?? 0) +
+      //         (live.profiles?.women.monthly_cost_by_city[city.city] ?? 0),
       work:
         (student
-          ? work.profiles?.student?.total_monthly_cost_by_city_student[
-              city.city
-            ] ?? 0
+          ? work.profiles?.student?.monthly_cost_by_city[city.city] ?? 0
           : 0) +
         (!student
-          ? work.profiles?.all?.total_monthly_cost_by_city_all[city.city] ?? 0
+          ? work.profiles?.all?.monthly_cost_by_city[city.city] ?? 0
           : 0),
-      play: play.profiles?.all?.total_monthly_cost_by_city_all[city.city] ?? 0,
+      play: play.profiles?.all?.monthly_cost_by_city[city.city] ?? 0,
       move:
         (car
-          ? move.profiles?.car_user?.total_monthly_cost_by_city_car_user[
-              city.city
-            ] ?? 0
+          ? move.profiles?.car_user?.monthly_cost_by_city[city.city] ?? 0
           : 0) +
         (student
-          ? move.profiles?.student?.total_monthly_cost_by_city_student[
-              city.city
-            ] ?? 0
+          ? move.profiles?.student?.monthly_cost_by_city[city.city] ?? 0
           : 0) +
-        (move.profiles?.all?.total_monthly_cost_by_city_all[city.city] ?? 0) +
+        (move.profiles?.all?.monthly_cost_by_city[city.city] ?? 0) +
         (!student
-          ? move.profiles?.adult?.total_monthly_cost_by_city_adult[city.city] ??
-            0
+          ? move.profiles?.adult?.monthly_cost_by_city[city.city] ?? 0
           : 0),
       clothing:
         clothing.find((item) => item.city === city.city)?.totalPrice ?? 0 / 12,
@@ -332,10 +316,10 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   const processedData = useMemo(
     () =>
       data.map((d) => {
-        const totalExpenses = d.rent + d.play + d.work + d.move + d.live;
+        const totalExpenses = d.rent + d.play + d.work + d.move;
         return {
           city: `${d.city}${d.sample && d.sample < 50 ? '*' : ''}${!d.provincial ? '†' : ''}`,
-          live: -d.live,
+          // live: -d.live,
           work: -d.work,
           move: -d.move,
           play: -d.play,
@@ -368,21 +352,21 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
     const segment = { move, work, play, live }[
       selectedSegment as 'move' | 'work' | 'play' | 'live'
     ];
-    const { indicators, total_monthly_cost_by_city } = segment;
+    const { indicators, total } = segment;
 
-    const cities = Object.keys(total_monthly_cost_by_city || {});
+    const cities = Object.keys(total.monthly_cost_by_city || {});
     const unsorted = cities.map((city) => {
       const cityEntry: Record<string, string | number> = { city };
-      let total = 0;
+      let currentTotal = 0;
       Object.entries(indicators).forEach(([indicator, indicatorData]) => {
-        const value = indicatorData.total_monthly_cost_by_city?.[city];
+        const value = indicatorData.total.monthly_cost_by_city?.[city];
         if (typeof value === 'number') {
           cityEntry[indicator] = -value;
-          total += -value;
+          currentTotal += -value;
         }
       });
 
-      cityEntry._total = total;
+      cityEntry._total = currentTotal;
       return cityEntry;
     });
     // Sort by total descending (most negative total first)
@@ -438,13 +422,13 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
       key: string | undefined,
       value: number | undefined
     ) => {
-      console.log(key, value);
       if (!key || !value) return null;
       return (
         <div>
           {`${d.city} ${key}: $${(value as number).toFixed(2)}`}
           <br />
-          {`Total monthly income: $${(d.income as number).toFixed(2)}`}
+          {d.income &&
+            `Total monthly income: $${(d.income as number).toFixed(2)}`}
         </div>
       );
     },

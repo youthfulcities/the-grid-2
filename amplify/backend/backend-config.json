@@ -384,6 +384,488 @@
       "service": "Lambda"
     }
   },
+  "parameters": {
+    "AMPLIFY_auth_thegrid2fafc44b3_googleClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "thegrid2fafc44b3"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueries1eae25ec_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries1eae25ec"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueries1eae25ec_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries1eae25ec"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueries8e2ac1c4_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries8e2ac1c4"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueries8e2ac1c4_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries8e2ac1c4"
+        }
+      ]
+    },
+    "AMPLIFY_function_contactFormUploader_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "contactFormUploader"
+        }
+      ]
+    },
+    "AMPLIFY_function_contactFormUploader_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "contactFormUploader"
+        }
+      ]
+    },
+    "AMPLIFY_function_contactFormUploader_sesEmail": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "contactFormUploader"
+        }
+      ]
+    },
+    "AMPLIFY_function_contactFormUploader_sesEmailDev": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "contactFormUploader"
+        }
+      ]
+    },
+    "AMPLIFY_function_dataapi_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "dataapi"
+        }
+      ]
+    },
+    "AMPLIFY_function_dataapi_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "dataapi"
+        }
+      ]
+    },
+    "AMPLIFY_function_getGroceryItems_bucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getGroceryItems"
+        }
+      ]
+    },
+    "AMPLIFY_function_getGroceryItems_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getGroceryItems"
+        }
+      ]
+    },
+    "AMPLIFY_function_getGroceryItems_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getGroceryItems"
+        }
+      ]
+    },
+    "AMPLIFY_function_interviewAll_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "interviewAll"
+        }
+      ]
+    },
+    "AMPLIFY_function_interviewAll_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "interviewAll"
+        }
+      ]
+    },
+    "AMPLIFY_function_processClothing_bucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processClothing"
+        }
+      ]
+    },
+    "AMPLIFY_function_processClothing_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processClothing"
+        }
+      ]
+    },
+    "AMPLIFY_function_processClothing_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processClothing"
+        }
+      ]
+    },
+    "AMPLIFY_function_processGrocery_bucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processGrocery"
+        }
+      ]
+    },
+    "AMPLIFY_function_processGrocery_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processGrocery"
+        }
+      ]
+    },
+    "AMPLIFY_function_processGrocery_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "processGrocery"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3CreateAuthChallenge_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3CreateAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3CreateAuthChallenge_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3CreateAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3CustomMessage_EMAILMESSAGE": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3CustomMessage_EMAILSUBJECT": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3CustomMessage_REDIRECTURL": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3CustomMessage_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3CustomMessage_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3DefineAuthChallenge_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3DefineAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3DefineAuthChallenge_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3DefineAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3PostConfirmation_GROUP": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3PostConfirmation_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3PostConfirmation_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3VerifyAuthChallengeResponse_RECAPTCHASECRET": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3VerifyAuthChallengeResponse"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3VerifyAuthChallengeResponse_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3VerifyAuthChallengeResponse"
+        }
+      ]
+    },
+    "AMPLIFY_function_thegrid2fafc44b3VerifyAuthChallengeResponse_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "thegrid2fafc44b3VerifyAuthChallengeResponse"
+        }
+      ]
+    },
+    "AMPLIFY_storage_groceryprices_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "groceryprices"
+        }
+      ]
+    },
+    "AMPLIFY_storage_groceryprices_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "groceryprices"
+        }
+      ]
+    },
+    "AMPLIFY_storage_groceryprices_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "groceryprices"
+        }
+      ]
+    },
+    "AMPLIFY_storage_groceryprices_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "groceryprices"
+        }
+      ]
+    },
+    "AMPLIFY_storage_groceryprices_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "groceryprices"
+        }
+      ]
+    },
+    "AMPLIFY_storage_groceryprices_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "groceryprices"
+        }
+      ]
+    },
+    "AMPLIFY_storage_groceryprices_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "groceryprices"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviewall_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviewall_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviewall_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviewall_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviewall_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviewall_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviewall_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviews_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviews"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviews_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviews"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviews_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviews"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviews_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviews"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviews_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviews"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviews_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviews"
+        }
+      ]
+    },
+    "AMPLIFY_storage_interviews_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviews"
+        }
+      ]
+    },
+    "AMPLIFY_storage_thegrid24c63f4ac_bucketName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "thegrid24c63f4ac"
+        }
+      ]
+    },
+    "AMPLIFY_storage_thegrid24c63f4ac_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "thegrid24c63f4ac"
+        }
+      ]
+    }
+  },
   "storage": {
     "groceryAggregated": {
       "providerPlugin": "awscloudformation",

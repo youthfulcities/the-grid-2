@@ -48,6 +48,7 @@ interface BarChartProps {
   height?: number;
   colors?: string[];
   children?: React.ReactNode;
+  id?: string;
 }
 
 const BarChartStacked: React.FC<BarChartProps> = ({
@@ -74,6 +75,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   onBarClick,
   filterLabel,
   children,
+  id,
 }) => {
   const { colorMode } = useThemeContext();
   const [activeLegendItems, setActiveLegendItems] = useState<string[]>(() => [
@@ -387,7 +389,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       ) : (
         <>
           <ChartContainer>
-            <svg ref={ref} width={width} height={height} />
+            <svg ref={ref} width={width} height={height} id={id || ''} />
             <Legend
               data={legendData}
               activeLegendItems={activeLegendItems}
@@ -403,7 +405,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
           <Flex width='100%' wrap='wrap' marginTop='small' gap='xs'>
             <>
               {children}
-              {width > 0 && <SaveAsImg svgRef={ref} />}
+              {width > 0 && <SaveAsImg svgRef={ref} id={id} />}
             </>
           </Flex>
         </>

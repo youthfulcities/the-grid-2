@@ -399,6 +399,7 @@ const Grocery = ({
         Cost of basket <span className='highlight'>by City</span>
       </Heading>
       <BarChartStacked
+        id='grocery'
         loading={loading}
         filterLabel={activeCity}
         onBarClick={(d) =>

@@ -78,6 +78,7 @@ const Housing: React.FC<HousingProps> = ({
         Click on a city to start your housing journey.
       </Text>
       <BarChartStacked
+        id='housing'
         loading={!(sortedData.length > 0)}
         filterLabel={activeCity}
         marginLeft={100}

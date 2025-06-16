@@ -1,15 +1,16 @@
 import useTranslation from '@/app/i18n/client';
 import { Button } from '@aws-amplify/ui-react';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 
 interface SvgToImageProps {
   svgRef: React.RefObject<SVGSVGElement>;
+  id?: string;
 }
 
-const SaveAsImg: React.FC<SvgToImageProps> = ({ svgRef }) => {
+const SaveAsImg: React.FC<SvgToImageProps> = ({ svgRef, id }) => {
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'translation');
-
+  const pathname = usePathname();
   // **Extract & Inline CSS Styles**
   const inlineStyles = (svgElement: SVGSVGElement) => {
     let css = '';
@@ -90,6 +91,8 @@ const SaveAsImg: React.FC<SvgToImageProps> = ({ svgRef }) => {
 
   return (
     <Button
+      data-ga-download={`save-chart-img-${id || pathname}`}
+      id={`save-chart-img-${id || pathname}`}
       fontSize='small'
       color='#fff'
       onClick={() => downloadSVGAsImage('png')}

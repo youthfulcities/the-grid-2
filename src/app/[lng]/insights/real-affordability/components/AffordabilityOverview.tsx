@@ -35,13 +35,6 @@ interface CityDataItem {
 
 const cityData: CityDataItem[] = [];
 
-interface ClothingItem {
-  city: string;
-  totalPrice: number;
-}
-
-type ClothingData = ClothingItem[];
-
 const keys = ['deficit', 'rent', 'move', 'live', 'work', 'play', 'surplus'];
 
 const colors = [
@@ -52,102 +45,6 @@ const colors = [
   '#F6D9D7',
   '#B8D98D',
   '#af6860',
-];
-
-const colors5 = [
-  '#F2695D', // 🔴 coral red (yours)
-  '#F97C0B', // 🟠 vivid orange
-  '#FBD166', // 🟡 golden yellow (yours)
-  '#A3CB38', // 🟢 bright lime green
-  '#B8D98D', // 🟢 muted green (yours)
-  '#00BFA9', // 🔵 cyan teal
-  '#2F4EAC', // 🔵 strong blue (yours)
-  '#5125E8', // 🔵 deep violet (yours)
-  '#8755AF', // 🟣 mid purple (harmonizes with 5125E8)
-  '#FF5DA2', // 🟣 hot pink (replaces F6D9D7 for contrast)
-];
-
-const colors2 = [
-  '#F2695D', // warm coral
-  '#FBD166', // golden yellow
-  '#B8D98D', // light olive green
-  '#2F4EAC', // strong blue
-  '#5125E8', // deep violet
-  '#F6D9D7', // pale rose
-
-  '#00BFA9', // teal
-  '#FF8C42', // vivid orange
-  '#CCCCFF', // soft lavender
-  '#FF5DA2', // hot pink
-  '#45D09E', // mint green
-  '#82D4F2', // sky blue
-  '#C678DD', // orchid purple
-  '#FFD700', // bright gold
-  '#38B000', // lime green
-  '#E63946', // crimson
-  '#6A4C93', // indigo
-  '#0081A7', // cerulean
-];
-
-const colors20 = [
-  '#F2695D', // vivid coral
-  '#2F4EAC', // deep royal blue
-  '#FBD166', // strong yellow
-  '#6A4C93', // muted indigo
-  '#00BFA9', // teal
-  '#AF6860', // brick red
-  '#45D09E', // mint green
-  '#5125E8', // intense purple
-  '#FF8C42', // vibrant orange
-  '#0081A7', // cyan-cerulean
-  '#E63946', // crimson
-  '#38B000', // lime green
-  '#C678DD', // orchid
-  '#B8D98D', // soft olive
-  '#FF5DA2', // hot pink
-  '#1B998B', // dark aqua
-  '#FFD700', // true gold
-  '#4B3F72', // eggplant
-  '#82D4F2', // sky blue
-  '#C1292E', // dark cherry
-];
-
-const colors3 = [
-  '#C1292E', // cherry red
-  '#F2695D', // coral red-orange
-  '#FF8C42', // vibrant orange
-  '#FBD166', // golden yellow
-  '#FFD700', // true gold
-  '#B8D98D', // olive green
-  '#38B000', // lime green
-  '#45D09E', // mint green
-  '#00BFA9', // teal
-  '#1B998B', // dark aqua
-  '#0081A7', // cerulean blue
-  '#82D4F2', // sky blue (added for smoother transition)
-  '#2F4EAC', // royal blue
-  '#C9D5E9', // soft periwinkle (your pastel)
-  '#5125E8', // strong indigo
-  '#8755AF', // warm violet (your color)
-  '#C678DD', // orchid purple
-  '#7A2D59', // plum (adjusted from #550D35)
-  '#FF5DA2', // hot pink
-  '#4B3F72', // eggplant (neutral anchor)
-];
-
-const colors4 = [
-  [
-    '#D7263D', // 🔴 Strong red
-    '#F46036', // 🟠 Vivid orange
-    '#FFD23F', // 🟡 Bold yellow
-    '#A3CB38', // 🟢 Bright lime green
-    '#00BFA9', // 🔵 Cyan teal
-    '#1089FF', // 🔵 Vivid blue
-    '#3F51B5', // 🔵 Indigo blue
-    '#8755AF', // 🟣 Medium violet (your color)
-    '#C678DD', // 🟣 Orchid purple
-    '#FF5DA2', // 🟣 Hot pink
-  ],
 ];
 
 const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
@@ -165,7 +62,6 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   const [errorText, setErrorText] = useState(null);
   const [drilldownLevel, setDrilldownLevel] = useState(0);
   const [selectedSegment, setSelectedSegment] = useState<string | null>(null);
-  const [clothing, setClothing] = useState<ClothingData>([]);
   const {
     gender,
     setGender,
@@ -181,27 +77,6 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
     setCar,
   } = useProfile();
 
-  useEffect(() => {
-    const fetchClothing = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch('/api/clothing/totals');
-        const result = await response.json();
-        if (!response.ok) {
-          throw new Error(result.error || 'Failed to load income');
-        }
-        setClothing(result);
-        setErrorText(null);
-      } catch (fetchError: unknown) {
-        const error = fetchError as Error;
-        console.error('Error fetching income:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchClothing();
-  }, []);
-
   const ageGroup = ageMap(age);
   const genderGroup = genderMap[gender as keyof typeof genderMap];
   const occupationGroup =
@@ -215,9 +90,6 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
 
   const data = useMemo(() => {
     const averageValues = {
-      clothing:
-        clothing.reduce((sum, item) => sum + item.totalPrice, 0) /
-        (clothing.length || 1),
       food:
         cityTotals.reduce((sum, item) => sum + item.totalPrice, 0) /
         (cityTotals.length || 1),
@@ -229,17 +101,17 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
 
     return cityTotals.map((city) => ({
       city: city.city,
-      // live:
-      //   gender === null
-      //     ? (live.profiles?.all?.monthly_cost_by_city[city.city] ?? 0) +
-      //       ((live.profiles?.women?.monthly_cost_by_city[city.city] ?? 0) +
-      //         (live.profiles?.men?.monthly_cost_by_city[city.city] ?? 0)) /
-      //         2
-      //     : gender === 'man'
-      //       ? (live.profiles?.all?.monthly_cost_by_city[city.city] ?? 0) +
-      //         (live.profiles?.men.monthly_cost_by_city[city.city] ?? 0)
-      //       : (live.profiles?.all?.monthly_cost_by_city[city.city] ?? 0) +
-      //         (live.profiles?.women.monthly_cost_by_city[city.city] ?? 0),
+      live:
+        gender === null
+          ? (live.profiles?.all?.monthly_cost_by_city[city.city] ?? 0) +
+            ((live.profiles?.women?.monthly_cost_by_city[city.city] ?? 0) +
+              (live.profiles?.men?.monthly_cost_by_city[city.city] ?? 0)) /
+              2
+          : gender === 'man'
+            ? (live.profiles?.all?.monthly_cost_by_city[city.city] ?? 0) +
+              (live.profiles?.men.monthly_cost_by_city[city.city] ?? 0)
+            : (live.profiles?.all?.monthly_cost_by_city[city.city] ?? 0) +
+              (live.profiles?.women.monthly_cost_by_city[city.city] ?? 0),
       work:
         (student
           ? work.profiles?.student?.monthly_cost_by_city[city.city] ?? 0
@@ -259,8 +131,6 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
         (!student
           ? move.profiles?.adult?.monthly_cost_by_city[city.city] ?? 0
           : 0),
-      clothing:
-        clothing.find((item) => item.city === city.city)?.totalPrice ?? 0 / 12,
       food:
         cityTotals.find((item) => item.city === city.city)?.totalPrice ??
         averageValues.food,
@@ -300,7 +170,6 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
     cityTotals,
     rent,
     income,
-    clothing,
     age,
     gender,
     occupation,
@@ -319,7 +188,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
         const totalExpenses = d.rent + d.play + d.work + d.move;
         return {
           city: `${d.city}${d.sample && d.sample < 50 ? '*' : ''}${!d.provincial ? '†' : ''}`,
-          // live: -d.live,
+          live: -d.live,
           work: -d.work,
           move: -d.move,
           play: -d.play,
@@ -438,6 +307,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   return (
     <View marginBottom='large'>
       <BarChartStacked
+        id='affordability-overview'
         loading={!(cityTotals?.length > 0 && processedData?.length > 0)}
         onBarClick={onBarClick}
         colors={colors}

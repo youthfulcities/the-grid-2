@@ -25,8 +25,9 @@ const groupAndNormalize = (deduped) => {
     } = item;
 
     const baseAmount = parseFloat(base_amount);
-    const baseUnit = base_unit?.toLowerCase();
-    const quantityUnit = quantity_unit?.toLowerCase();
+    const rawBaseUnit = base_unit;
+    const rawQuantityUnit = quantity_unit;
+
     const isPrepared = prepared_in_canada === 'true';
     const time = new Date(timestamp);
 
@@ -34,15 +35,14 @@ const groupAndNormalize = (deduped) => {
 
     const { value: normalizedQty, unit: normalizedUnit } = normalizeQuantity(
       quantity,
-      quantityUnit
+      rawQuantityUnit
     );
-
     const { value: normalizedStatscanQty, unit: normalizedStatscanUnit } =
       normalizeQuantity(statscan_quantity, statscan_unit);
 
     const result = normalizePricePer(
       baseAmount,
-      baseUnit,
+      rawBaseUnit,
       parseFloat(price_per_base_amount)
     );
 

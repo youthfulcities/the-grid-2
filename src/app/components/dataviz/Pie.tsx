@@ -210,7 +210,7 @@ const PieChartComponent: React.FC<PieChartProps> = ({
     <Flex direction='column' ref={containerRef}>
       <StyledHeading
         level={4}
-        color='font.inverse'
+        color='font.primary'
         textAlign='center'
         marginBottom='large'
       >

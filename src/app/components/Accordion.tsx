@@ -31,7 +31,7 @@ const AccordionContent = styled(motion.div)<{
 const CustomizeButton = styled(Button)<{ border: boolean }>`
   margin-block-start: 0 !important;
   box-sizing: border-box;
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
   width: 100%;
   justify-content: flex-start;
   &:hover {
@@ -69,7 +69,7 @@ const Accordion: React.FC<AccordionProps> = ({
           level={5}
           marginLeft='xs'
           marginBottom='0'
-          color='font.inverse'
+          color='font.primary'
         >
           {title}
         </Heading>

@@ -15,6 +15,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb';
 import aggregateCategories from './utils/aggregateCategories.js';
+import calculateGroceryPrice from './utils/calculateGroceryPrice.js';
 import deduplicateItems from './utils/deduplicateItems.js';
 import groupAndNormalize from './utils/groupAndNormalize.js';
 
@@ -93,6 +94,21 @@ const handler = async (event) => {
 
     const aggregatedCategories = aggregateCategories(grouped);
 
+    aggregatedCategories.forEach((category) => {
+      // Calculate category-level final price (no city)
+      category.final_price = calculateGroceryPrice(category, null, null, true);
+
+      // Calculate city-level final price
+      category.cities.forEach((cityData) => {
+        cityData.final_price = calculateGroceryPrice(
+          category,
+          cityData,
+          null,
+          true
+        );
+      });
+    });
+
     await s3Client.send(
       new PutObjectCommand({
         Bucket: BUCKET_NAME,
@@ -109,7 +125,7 @@ const handler = async (event) => {
       //      "Access-Control-Allow-Origin": "*",
       //      "Access-Control-Allow-Headers": "*"
       //  },
-      body: JSON.stringify('Successfully updated cache'),
+      body: JSON.stringify(`Successfully updated cache`),
     };
   } catch (err) {
     console.error('Aggregation failed:', err);

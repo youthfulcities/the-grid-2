@@ -52,7 +52,7 @@ const ChartContainer = styled.div`
 
 const SmallText = styled(Text)`
   margin: 0;
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
   font-weight: 400;
   font-size: var(--amplify-font-sizes-small);
 `;

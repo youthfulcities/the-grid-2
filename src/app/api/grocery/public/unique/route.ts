@@ -208,7 +208,7 @@ const getTransformedData = async (): Promise<CategoryGroupedItem[]> => {
     categoryToBaseUnit[category] = dominantBaseUnit;
   });
 
-  console.log(allItems.filter((item) => item.category === 'chicken thigh'));
+  // console.log(allItems.filter((item) => item.category === 'chicken thigh'));
 
   const sharedRazorItems = allItems.filter(
     (item) =>

@@ -1,51 +1,89 @@
+import { useThemeContext } from '@/app/context/ThemeContext';
+import toGreyscale from '@/utils/toGreyscale';
+import { Flex, Placeholder } from '@aws-amplify/ui-react';
 import * as d3 from 'd3';
-import React, { useEffect, useRef } from 'react';
+import { SeriesPoint } from 'd3';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
+import Customize from './Customize';
 import Legend from './Legend';
 import SaveAsImg from './SaveAsImg';
-
-const colors = ['#FBD166', '#2f4eac', '#F6D9D7', '#B8D98D', '#af6860'];
 
 const ChartContainer = styled.div`
   position: relative;
 `;
 
-interface FlexibleDataItem {
+// Define a type alias for the keys in a stack (usually a string)
+export type StackKey = string;
+
+export interface FlexibleDataItem {
   [key: string]: number | string;
 }
 
+// Extend d3’s Series type so that each series has a key property.
+export type StackSeries = d3.Series<FlexibleDataItem, StackKey>;
+
 interface TooltipState {
   position: { x: number; y: number } | null;
-  content?: string;
+  content?: string | React.ReactNode;
   group?: string;
 }
 
 interface BarChartProps {
+  loading?: boolean;
   width: number;
   data: FlexibleDataItem[];
   keys: string[];
   labelAccessor: (d: FlexibleDataItem) => string;
-  tooltipFormatter?: (d: FlexibleDataItem) => string;
-  // filterLabel?: string | null;
-  // xLabel?: string;
-  // mode?: 'percent' | 'absolute';
+  keyAccessor?: (d: FlexibleDataItem) => string;
+  tooltipFormatter?: (
+    d: FlexibleDataItem,
+    key?: string,
+    value?: number
+  ) => string | React.ReactNode;
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
-  // onBarClick?: (label: string) => void;
-  // children?: React.ReactNode;
+  onBarClick?: (d: FlexibleDataItem | SeriesPoint<FlexibleDataItem>) => void;
+  filterLabel?: string | null;
   marginLeft?: number;
   height?: number;
+  colors?: string[];
+  children?: React.ReactNode;
+  id?: string;
 }
 
 const BarChartStacked: React.FC<BarChartProps> = ({
   height = 800,
   width = 600,
   setTooltipState,
+  loading = false,
   data,
   keys,
   labelAccessor,
+  keyAccessor,
   marginLeft,
   tooltipFormatter,
+  colors = [
+    '#8755AF',
+    '#F2695D',
+    '#FBD166',
+    '#B8D98D',
+    '#00BFA9',
+    '#2f4eac',
+    '#F6D9D7',
+    '#af6860',
+  ],
+  onBarClick,
+  filterLabel,
+  children,
+  id,
 }) => {
+  const { colorMode } = useThemeContext();
+  const [activeLegendItems, setActiveLegendItems] = useState<string[]>(() => [
+    ...keys,
+  ]);
+  const [selectedAnswers, setSelectedAnswers] = useState<string[]>(
+    data.map((d) => labelAccessor(d))
+  );
   const ref = useRef<SVGSVGElement | null>(null);
   const duration = 1000;
   const margin = {
@@ -55,16 +93,50 @@ const BarChartStacked: React.FC<BarChartProps> = ({
     bottom: 40,
   };
 
-  const filteredKeys = keys.filter((key) => key !== 'deficit'); // Exclude 'deficit' from the keys
-  const legendData = [
-    ...filteredKeys // Exclude 'deficit' first
-      .map((key, index) => ({
-        key,
-        color: colors[index] || '#000', // Default color if out of bounds
-      })),
+  const allOptions = useMemo(
+    () => data.map((d) => labelAccessor(d)),
+    [data, labelAccessor]
+  );
 
-    ...(keys.includes('deficit') ? [{ key: 'deficit', color: '#F2695D' }] : []), // Add deficit only if it's in the keys array
-  ];
+  useEffect(() => {
+    const hasChanged =
+      allOptions.length !== selectedAnswers.length ||
+      allOptions.some((label) => !selectedAnswers.includes(label));
+
+    if (hasChanged) {
+      setSelectedAnswers(allOptions);
+    }
+  }, [allOptions]);
+
+  // Update activeLegendItems whenever keys change.
+  useEffect(() => {
+    setActiveLegendItems([...keys]);
+  }, [keys]);
+
+  const filteredKeys = useMemo(
+    () => keys.filter((key) => key !== 'deficit'),
+    [keys]
+  );
+
+  const legendData = useMemo(
+    () => [
+      ...filteredKeys // Exclude 'deficit' first
+        .map((key, index) => ({
+          key,
+          color: colors[index] || '#000', // Default color if out of bounds
+        })),
+
+      ...(keys.includes('deficit')
+        ? [{ key: 'deficit', color: '#F2695D' }]
+        : []), // Add deficit only if it's in the keys array
+    ],
+    [filteredKeys, colors, keys]
+  );
+
+  const filteredData = useMemo(
+    () => data.filter((d) => selectedAnswers.includes(labelAccessor(d))),
+    [data, selectedAnswers, labelAccessor]
+  );
 
   useEffect(() => {
     if (!ref.current || !data || !width || !height) return;
@@ -77,15 +149,20 @@ const BarChartStacked: React.FC<BarChartProps> = ({
 
     const stackGenerator = d3
       .stack<{ [key: string]: number | string }>()
-      .keys(keys.filter((key) => key !== 'deficit')) // Exclude 'deficit' from the main stack
+      .keys(activeLegendItems.filter((key) => key !== 'deficit')) // Exclude 'deficit' from the main stack
       .offset(d3.stackOffsetDiverging);
 
-    const deficitData = data.map((d) => ({
-      label: labelAccessor(d),
-      value: d.deficit as number,
-    }));
+    //hide deficit if hidden by clicking the legend
+    const showDeficit = activeLegendItems.includes('deficit');
 
-    const currentSeries = stackGenerator(data);
+    const deficitData = showDeficit
+      ? filteredData.map((d) => ({
+          label: labelAccessor(d),
+          value: d.deficit as number,
+        }))
+      : [];
+
+    const currentSeries = stackGenerator(filteredData);
 
     const allValues = currentSeries.flatMap((s) =>
       s.map((d) => [d[0], d[1]]).flat()
@@ -96,7 +173,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
 
     const yScale = d3
       .scaleBand()
-      .domain(data.map((d) => labelAccessor(d)))
+      .domain(filteredData.map((d) => labelAccessor(d)))
       .range([margin.top, height - margin.bottom])
       .padding(0.2);
 
@@ -105,7 +182,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .domain([xDomainMin, xDomainMax])
       .nice()
       .range([margin.left, width - margin.right]);
-    const series = stackGenerator(data);
+    const series = stackGenerator(filteredData);
 
     const groups = svg
       .append('g')
@@ -123,6 +200,23 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .attr('width', 0)
       .attr('height', yScale.bandwidth())
       .attr('cursor', 'pointer')
+      .attr('fill', (d) => {
+        const barLabel = labelAccessor(d.data);
+        const originalColor = color(d.key);
+        if (filterLabel && filterLabel !== barLabel) {
+          return toGreyscale(originalColor as string);
+        }
+        return originalColor;
+      })
+      // .attr('opacity', (d: SeriesPoint<FlexibleDataItem>) =>
+      //   d.data?.sample && (d.data.sample as number) < 50 ? 0.8 : 1
+      // )
+      .on('click', (event, d: SeriesPoint<FlexibleDataItem>) => {
+        if (onBarClick) {
+          // const label = labelAccessor(d.data);
+          onBarClick(d);
+        }
+      })
       .on('mouseover', (event, d) => {
         const x = event.pageX;
         const y = event.pageY;
@@ -131,7 +225,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         setTooltipState({
           position: { x, y },
           content: tooltipFormatter
-            ? tooltipFormatter(d.data)
+            ? tooltipFormatter(d.data, key, value)
             : `${labelAccessor(d.data)} ${key}: $${value.toFixed(2)}`,
         });
       })
@@ -143,7 +237,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         setTooltipState({
           position: { x, y },
           content: tooltipFormatter
-            ? tooltipFormatter(d.data)
+            ? tooltipFormatter(d.data, key, value)
             : `${labelAccessor(d.data)} ${key}: $${value.toFixed(2)}`,
         });
       })
@@ -167,6 +261,12 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .attr('height', yScale.bandwidth())
       .attr('fill', '#F2695D') // Use a distinct color for deficit
       .attr('cursor', 'pointer')
+      .on('click', (event, d) => {
+        if (onBarClick) {
+          // const label = labelAccessor(d);
+          onBarClick(d);
+        }
+      })
       .on('mouseover', (event, d) => {
         const x = event.pageX;
         const y = event.pageY;
@@ -203,9 +303,11 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .selectAll('text')
       .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
       .attr('font-weight', '400')
-      .style('fill', 'white');
+      .style('fill', colorMode === 'dark' ? 'white' : 'black');
 
-    xAxis.selectAll('.tick line').attr('stroke', 'white');
+    xAxis
+      .selectAll('.tick line')
+      .attr('stroke', colorMode === 'dark' ? 'white' : 'black');
     xAxis.selectAll('.domain').remove();
 
     const yAxis = svg
@@ -221,9 +323,11 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .attr('dy', '-0.4em') // Move text up slightly
       .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
       .attr('font-weight', '400')
-      .style('fill', 'white');
+      .style('fill', colorMode === 'dark' ? 'white' : 'black');
 
-    yAxis.selectAll('.tick line').attr('stroke', 'white');
+    yAxis
+      .selectAll('.tick line')
+      .attr('stroke', colorMode === 'dark' ? 'white' : 'black');
     yAxis.selectAll('.domain').remove();
 
     // Find pixel position of 0
@@ -235,7 +339,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .attr('x2', zeroX)
       .attr('y1', margin.top)
       .attr('y2', height - margin.bottom)
-      .attr('stroke', 'white')
+      .attr('stroke', colorMode === 'dark' ? 'white' : 'black')
       .attr('stroke-width', 2)
       .attr('stroke-dasharray', '4,2');
 
@@ -251,7 +355,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         .attr('x', zeroX - 10) // 10px left of 0
         .attr('y', 0)
         .attr('text-anchor', 'end') // Right-align text
-        .attr('fill', 'white')
+        .attr('fill', colorMode === 'dark' ? 'white' : 'black')
         .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
         .attr('font-size', 12)
         .text('← Expenses');
@@ -262,20 +366,50 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         .attr('x', zeroX + 10) // 10px right of 0
         .attr('y', 0)
         .attr('text-anchor', 'start') // Left-align text
-        .attr('fill', 'white')
+        .attr('fill', colorMode === 'dark' ? 'white' : 'black')
         .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
         .attr('font-size', 12)
         .text('Surplus →');
     }
-  }, [data, width, height, keys]);
+  }, [
+    data,
+    width,
+    height,
+    keys,
+    filterLabel,
+    activeLegendItems,
+    selectedAnswers,
+    colorMode,
+  ]);
 
   return (
     <>
-      <ChartContainer>
-        <svg ref={ref} width={width} height={height} />
-        <Legend data={legendData} position='absolute' />
-      </ChartContainer>
-      {width > 0 && <SaveAsImg svgRef={ref} />}
+      {loading ? (
+        <Placeholder width={width} height={height} />
+      ) : (
+        <>
+          <ChartContainer>
+            <svg ref={ref} width={width} height={height} id={id || ''} />
+            <Legend
+              data={legendData}
+              activeLegendItems={activeLegendItems}
+              setActiveLegendItems={setActiveLegendItems}
+              position='absolute'
+            />
+          </ChartContainer>
+          <Customize
+            selectedOptions={selectedAnswers}
+            setSelectedOptions={setSelectedAnswers}
+            allOptions={allOptions}
+          />
+          <Flex width='100%' wrap='wrap' marginTop='small' gap='xs'>
+            <>
+              {children}
+              {width > 0 && <SaveAsImg svgRef={ref} id={id} />}
+            </>
+          </Flex>
+        </>
+      )}
     </>
   );
 };

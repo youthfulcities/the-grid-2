@@ -22,7 +22,7 @@ const NavLink = styled.a<{ $active: boolean }>`
   color: ${(props) =>
     props.$active
       ? 'var(--amplify-colors-brand-secondary-60)'
-      : 'var(--amplify-colors-font-inverse)'};
+      : 'var(--amplify-colors-font-primary)'};
   text-decoration: none;
   font-size: 18px;
   cursor: pointer;

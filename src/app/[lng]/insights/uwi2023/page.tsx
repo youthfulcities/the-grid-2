@@ -18,7 +18,7 @@ const Index = () => {
           Best City to <span className='highlight'>Work in Canada</span>
         </Heading>
         <div className='inner-container'>
-          <Heading level={3} color='font.inverse' marginBottom='xl'>
+          <Heading level={3} color='font.primary' marginBottom='xl'>
             Urban Work Index 2023
           </Heading>
         </div>

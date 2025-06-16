@@ -41,7 +41,7 @@ jest.mock('./components/IndexHeatmap', () => {
   );
 });
 
-jest.mock('@/app/components/dataviz/TooltipChart', () => () => (
+jest.mock('@/app/components/dataviz/TooltipChart/TooltipChart', () => () => (
   <div>Mocked Tooltip</div>
 ));
 

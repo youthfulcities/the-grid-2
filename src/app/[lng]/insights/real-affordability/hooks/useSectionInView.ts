@@ -8,17 +8,22 @@ export default function useSectionInView() {
   const [overviewRef, overviewInView] = useInView({ threshold: 0.3 });
   const [groceryRef, groceryInView] = useInView({ threshold: 0.3 });
   const [housingRef, housingInView] = useInView({ threshold: 0.3 });
+  const [housingJourneyRef, housingJourneyInView] = useInView({
+    threshold: 0.3,
+  });
 
   return {
     creatorRef,
     overviewRef,
     groceryRef,
     housingRef,
+    housingJourneyRef,
     inViewMap: {
       creatorInView,
       overviewInView,
       groceryInView,
       housingInView,
+      housingJourneyInView,
     },
   };
 }

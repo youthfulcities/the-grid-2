@@ -38,5 +38,24 @@ export function middleware(req) {
     return response;
   }
 
+  // Restrict access to RAI in prod before release
+  if (process.env.AMPLIFY_ENV === 'prod') {
+    // Check if the request is for the restricted route.
+    if (
+      req.nextUrl.pathname.includes('/insights/real-affordability') &&
+      !req.nextUrl.pathname.includes('/grocery') &&
+      !req.nextUrl.pathname.includes('/coming-soon')
+    ) {
+      console.log('hi');
+      // Option 1: Redirect to a custom 403 page:
+      return NextResponse.redirect(
+        new URL('/insights/real-affordability/coming-soon', req.url)
+      );
+
+      // Option 2: Return a 403 status response:
+      // return new NextResponse('Forbidden', { status: 403 });
+    }
+  }
+
   return NextResponse.next();
 }

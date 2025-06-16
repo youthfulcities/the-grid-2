@@ -70,12 +70,12 @@
         "processGrocery": {
           "bucketName": "ycydl",
           "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
-          "s3Key": "amplify-builds/processGrocery-53496270367753545775-build.zip"
+          "s3Key": "amplify-builds/processGrocery-5a45476a4238464d6d38-build.zip"
         },
         "processClothing": {
           "bucketName": "ycydl",
           "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
-          "s3Key": "amplify-builds/processClothing-6a6f74532b63666b6235-build.zip"
+          "s3Key": "amplify-builds/processClothing-774a59767a3962687454-build.zip"
         }
       },
       "storage": {
@@ -240,13 +240,13 @@
         },
         "processGrocery": {
           "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
-          "s3Key": "amplify-builds/processGrocery-53496270367753545775-build.zip",
+          "s3Key": "amplify-builds/processGrocery-5a45476a4238464d6d38-build.zip",
           "bucketName": "ycydl"
         },
         "processClothing": {
           "bucketName": "ycydl",
           "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
-          "s3Key": "amplify-builds/processClothing-6a6f74532b63666b6235-build.zip"
+          "s3Key": "amplify-builds/processClothing-774a59767a3962687454-build.zip"
         }
       },
       "api": {

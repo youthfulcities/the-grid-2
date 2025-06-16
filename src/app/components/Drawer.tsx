@@ -31,7 +31,7 @@ const DrawerContainer = styled(motion.div)<{
   min-width: 300px;
   max-width: ${({ $maxWidth }) => $maxWidth}%;
   height: 100%;
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
   background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
   z-index: 1000;
@@ -77,7 +77,7 @@ const Tab = styled(motion.div)<{
   min-height: 50px;
   height: auto;
   backdrop-filter: blur(10px);
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,7 +101,7 @@ const MinimalTab = styled(motion.div)<{
   min-height: 50px;
   height: auto;
   backdrop-filter: blur(10px);
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
   display: flex;
   align-items: center;
   justify-content: center;

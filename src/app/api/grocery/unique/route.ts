@@ -19,8 +19,6 @@ export async function GET(req: Request) {
 
   const fullUrl = `${apiUrl}?${queryParams.toString()}`;
 
-  console.log(fullUrl);
-
   try {
     const token = req.headers.get('Authorization');
     if (!token) {

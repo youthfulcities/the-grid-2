@@ -4,7 +4,7 @@ import { useHousingSurvey } from '@/app/[lng]/insights/housing/survey/context/Ho
 import Background from '@/app/components/Background';
 import CrosslinkCards from '@/app/components/CrosslinkCards';
 import BarChart from '@/app/components/dataviz/BarChartJSON';
-import Tooltip from '@/app/components/dataviz/TooltipChart';
+import Tooltip from '@/app/components/dataviz/TooltipChart/TooltipChart';
 import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
 import useDownloadFile from '@/hooks/useDownloadFile';
@@ -272,7 +272,7 @@ const HousingSurvey = () => {
               <StyledSelect
                 marginBottom='large'
                 label='Select a question'
-                color='font.inverse'
+                color='font.primary'
                 value={currentQuestion}
                 onChange={(e) => setCurrentQuestion(e.target.value)}
               >
@@ -285,7 +285,7 @@ const HousingSurvey = () => {
               <StyledSelect
                 marginBottom='xl'
                 label='Select a demographic segment'
-                color='font.inverse'
+                color='font.primary'
                 value={currentSegment}
                 onChange={(e) => setCurrentSegment(e.target.value)}
               >
@@ -297,10 +297,10 @@ const HousingSurvey = () => {
               </StyledSelect>
               {currentSegment && (
                 <>
-                  <Heading level={3} textAlign='center' color='font.inverse'>
+                  <Heading level={3} textAlign='center' color='font.primary'>
                     {currentQuestion?.replace(regex, '').trim()}
                   </Heading>
-                  <Heading level={5} textAlign='center' color='font.inverse'>
+                  <Heading level={5} textAlign='center' color='font.primary'>
                     Broken down by: {currentSegment.replace(regex, '').trim()}
                   </Heading>
                 </>

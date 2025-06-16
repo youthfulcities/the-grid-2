@@ -6,7 +6,7 @@ const deduplicateItems = (items) => {
     const product = item.product_name?.toLowerCase();
     const timestamp = new Date(item.timestamp);
 
-    if (!city || !product || isNaN(timestamp)) return;
+    if (!city || !product || Number.isNaN(timestamp)) return;
 
     const key = `${city}|${product}`;
     const existing = deduped.get(key);

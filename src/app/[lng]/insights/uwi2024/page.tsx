@@ -3,7 +3,7 @@
 import IndexHeatmap from '@/app/[lng]/insights/uwi2024/components/IndexHeatmap';
 import Background from '@/app/components/Background';
 import CustomMap from '@/app/components/dataviz/Map';
-import Tooltip from '@/app/components/dataviz/TooltipChart';
+import Tooltip from '@/app/components/dataviz/TooltipChart/TooltipChart';
 import useTranslation from '@/app/i18n/client';
 import uwi2024 from '@/data/uwi-2024.json';
 import { useDimensions } from '@/hooks/useDimensions';
@@ -54,7 +54,7 @@ const Index = () => {
           />
         </Heading>
         <div className='inner-container'>
-          <Heading level={3} color='font.inverse' marginBottom='xl'>
+          <Heading level={3} color='font.primary' marginBottom='xl'>
             {t('subtitle')}
           </Heading>
           <Text marginBottom='xl'>

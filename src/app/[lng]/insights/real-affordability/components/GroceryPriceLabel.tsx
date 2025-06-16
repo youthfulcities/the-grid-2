@@ -48,7 +48,11 @@ const Difference = styled.div<{ isPositive?: boolean }>`
   font-size: 0.9rem;
   margin-top: 4px;
   color: ${({ isPositive }) =>
-    isPositive === undefined ? '#444' : isPositive ? '#d11a2a' : '#007b3e'};
+    isPositive === undefined
+      ? '#444'
+      : isPositive
+        ? 'var(--amplify-colors-red-100)'
+        : 'var(--amplify-colors-green-100)'};
   font-weight: 600;
 `;
 
@@ -70,7 +74,7 @@ const GroceryPriceLabel: React.FC<GroceryPriceLabelProps> = ({
     const percentageDiff = ((diff / globalPrice!) * 100).toFixed(1);
     const isMoreExpensiveInCanada = diff > 0;
 
-    diffText = (
+    diffText = diff !== 0 && (
       <Difference isPositive={isMoreExpensiveInCanada}>
         {isMoreExpensiveInCanada ? '+' : ''}
         {percentageDiff}% to buy Canadian
@@ -90,7 +94,7 @@ const GroceryPriceLabel: React.FC<GroceryPriceLabelProps> = ({
     price: number
   ) => {
     if (unit === 'g' || unit === 'ml') {
-      return `$${(price * 100).toFixed(2)} per ${(quantity ?? 1) * 100}/${unit}`;
+      return `$${(price * 100).toFixed(2)} per ${quantity ?? 1}/${unit}`;
     }
     return `$${price.toFixed(2)} per ${quantity}/${unit}`;
   };

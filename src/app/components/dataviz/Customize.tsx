@@ -1,5 +1,5 @@
 import useTranslation from '@/app/i18n/client';
-import { CheckboxField, View } from '@aws-amplify/ui-react';
+import { CheckboxField } from '@aws-amplify/ui-react';
 import { useParams } from 'next/navigation';
 import React from 'react';
 import styled from 'styled-components';
@@ -13,7 +13,7 @@ interface CustomizeProps {
 
 const StyledCheckbox = styled(CheckboxField)`
   margin: 10px 0;
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
   .amplify-text {
     margin-bottom: 0;
     margin-left: 10px;

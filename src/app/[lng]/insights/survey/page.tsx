@@ -8,7 +8,7 @@ import CrosslinkCards from '@/app/components/CrosslinkCards';
 import Drawer from '@/app/components/Drawer';
 import FadeInUp from '@/app/components/FadeInUp';
 import BarChart from '@/app/components/dataviz/BarChartGeneral';
-import Tooltip from '@/app/components/dataviz/TooltipChart';
+import Tooltip from '@/app/components/dataviz/TooltipChart/TooltipChart';
 import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
 import useDownloadFile from '@/hooks/useDownloadFile';
@@ -305,7 +305,7 @@ const Survey: React.FC = () => {
                 <StyledSelect
                   marginBottom='large'
                   label={t('select_question')}
-                  color='font.inverse'
+                  color='font.primary'
                   value={currentQuestion}
                   onChange={(e) => setCurrentQuestion(e.target.value)}
                 >
@@ -333,7 +333,7 @@ const Survey: React.FC = () => {
                     <Heading
                       level={3}
                       textAlign='center'
-                      color='font.inverse'
+                      color='font.primary'
                       marginTop='xxl'
                       marginBottom='xl'
                     >

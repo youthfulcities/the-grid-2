@@ -35,7 +35,7 @@ const LegendLabel = styled.span<{ $isActive: boolean; $clickable: boolean }>`
   font-size: var(--amplify-font-sizes-xs);
   color: ${(props) =>
     props.$isActive || !props.$clickable
-      ? 'var(--amplify-colors-font-inverse)'
+      ? 'var(--amplify-colors-font-primary)'
       : 'grey'};
 `;
 
@@ -54,7 +54,7 @@ const AbsoluteLegendContainer = styled.div`
   flex-direction: column;
   padding: var(--amplify-space-xs) var(--amplify-space-small);
   text-align: left;
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
   backdrop-filter: blur(10px);
   max-width: 300px;
   border-radius: var(--amplify-space-xs);

@@ -35,7 +35,7 @@ const Demographics: React.FC<DemographicProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   return (
     <>
-      <Heading marginTop='xl' level={4} color='font.inverse'>
+      <Heading marginTop='xl' level={4} color='font.primary'>
         {t('demo_title')}
       </Heading>
       <Text

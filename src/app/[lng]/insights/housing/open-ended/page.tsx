@@ -4,7 +4,7 @@
 import Container from '@/app/components/Background';
 import CrosslinkCards from '@/app/components/CrosslinkCards';
 import BubbleChartJSON from '@/app/components/dataviz/BubbleChart/BubbleChartJSON';
-import Tooltip from '@/app/components/dataviz/TooltipChart';
+import Tooltip from '@/app/components/dataviz/TooltipChart/TooltipChart';
 import Drawer from '@/app/components/Drawer';
 import Quote from '@/app/components/Quote';
 import useTranslation from '@/app/i18n/client';
@@ -176,7 +176,7 @@ const Interview = () => {
             />
           </Heading>
           <View className='inner-container'>
-            <Heading level={3} color='font.inverse' marginBottom='xl'>
+            <Heading level={3} color='font.primary' marginBottom='xl'>
               {t('subtitle')}
             </Heading>
           </View>
@@ -264,7 +264,7 @@ const Interview = () => {
         >
           {visibleQuotes?.length > 0 ? (
             <Flex direction='column'>
-              <Heading level={3} color='font.inverse' marginBottom={0}>
+              <Heading level={3} color='font.primary' marginBottom={0}>
                 <Trans t={t} i18nKey='helper_text' values={{ code }} />
               </Heading>
               <View ref={quotesRef}>
@@ -290,7 +290,7 @@ const Interview = () => {
             </Flex>
           ) : (
             <Flex direction='column'>
-              <Heading level={3} color='font.inverse' marginBottom={0}>
+              <Heading level={3} color='font.primary' marginBottom={0}>
                 {t('quotes_empty')}
               </Heading>
             </Flex>

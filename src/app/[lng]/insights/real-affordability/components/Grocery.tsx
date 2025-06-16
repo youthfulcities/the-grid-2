@@ -1,7 +1,7 @@
 import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
 import {
   calculateGroceryPrice,
-  calculateGroceryTotals,
+  CityTotal,
 } from '@/utils/calculateGroceryTotals';
 import {
   Button,
@@ -11,13 +11,20 @@ import {
   Text,
   View,
 } from '@aws-amplify/ui-react';
+import { SeriesPoint } from 'd3';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
 import { styled } from 'styled-components';
-import { BasketEntry, GroceryItem, TooltipState } from '../types/types';
+import { useProfile } from '../context/ProfileContext';
+import { BasketEntry, GroceryItem, TooltipState } from '../types/BasketTypes';
 import GroceryBadge from './GroceryBadge';
 import GroceryPriceLabel from './GroceryPriceLabel';
+
+interface FlexibleDataItem {
+  [key: string]: number | string;
+}
 
 const itemVariants = {
   hidden: { opacity: 0, scale: 0.5 },
@@ -90,7 +97,7 @@ const ExpandButton = styled(Button)`
   z-index: 1;
 `;
 
-const keys = ['Canadian goods', 'Non-Canadian goods'];
+const keys = ['Canadian goods', 'Non-Canadian goods', 'Canadian average'];
 
 const containerVariants = {
   expanded: {
@@ -130,28 +137,21 @@ const removeSpecialChars = (string: string) =>
 const Grocery = ({
   groceryItems,
   latestTimestamp,
-  setBasket,
-  activeCity,
-  setActiveCity,
   cityTotals,
   setTooltipState,
   width,
   loading,
-  basket,
 }: {
   groceryItems: GroceryItem[];
   latestTimestamp: string | null;
-  setBasket: React.Dispatch<React.SetStateAction<Record<string, BasketEntry>>>;
-  activeCity: string | null;
-  setActiveCity: React.Dispatch<React.SetStateAction<string | null>>;
-  cityTotals: { city: string; totalPrice: number }[];
+  cityTotals: CityTotal[];
   setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   width: number;
   loading: boolean;
-  basket: Record<string, BasketEntry>;
 }) => {
   const [imgError, setImgError] = useState<{ [key: string]: boolean }>({});
   const [expanded, setExpanded] = useState(false);
+  const { activeCity, setActiveCity, setBasket } = useProfile();
 
   const visibleItems = useMemo(() => {
     if (expanded) return groceryItems;
@@ -221,36 +221,60 @@ const Grocery = ({
     setActiveCity(null);
   };
 
-  const canadianTotal = useMemo(
-    () => calculateGroceryTotals(groceryItems, basket, true),
-    [groceryItems, basket]
-  );
-
   const processedData = useMemo(
     () =>
       cityTotals.map((city) => {
         const cityName = city.city;
-        const canadian =
-          canadianTotal.find((item) => item.city === cityName)?.totalPrice ?? 0;
+        const {
+          totalPrice,
+          totalCanadianCost,
+          totalNotCanadianCost,
+          differenceFromNationalAverage,
+        } = city;
         return {
           city: cityName,
-          'Canadian goods': canadian,
-          'Non-Canadian goods': city.totalPrice - canadian,
-          totalPrice: city.totalPrice,
+          difference: differenceFromNationalAverage as number,
+          'Canadian goods': totalCanadianCost,
+          'Non-Canadian goods': totalNotCanadianCost,
+          'Canadian average': Math.max(
+            0,
+            totalPrice - (totalCanadianCost + totalNotCanadianCost)
+          ),
+          totalPrice,
         };
       }),
-    [cityTotals, canadianTotal]
+    [cityTotals]
   );
 
   const tooltipFormatter = useCallback(
-    (d: any) =>
-      `${d.city}: $${d.totalPrice.toFixed(2)} (${((d['Canadian goods'] / d.totalPrice) * 100).toFixed(1)}% Canadian goods)`,
+    (d: FlexibleDataItem) => (
+      <div>
+        {`${d.city}: $${(d.totalPrice as number).toFixed(2)}`}
+        <br />
+        {`${(
+          ((d['Canadian goods'] as number) / (d.totalPrice as number)) *
+          100
+        ).toFixed(1)}% Canadian goods`}
+        <br />
+        {`${(
+          ((d['Non-Canadian goods'] as number) / (d.totalPrice as number)) *
+          100
+        ).toFixed(1)}% Non-Canadian goods`}
+        <br />
+        {`${(
+          ((d['Canadian average'] as number) / (d.totalPrice as number)) *
+          100
+        ).toFixed(1)}% based on Canadian average`}
+        <br />
+        {`${(((d.difference as number) - 1) * 100).toFixed(2)}% difference from Canadian average`}
+      </div>
+    ),
     []
   );
 
   return (
     <>
-      <Heading level={1} marginTop='xxxl' marginBottom='small'>
+      <Heading level={1} marginBottom='small'>
         What&apos;s in <span className='highlight'>your basket?</span>
       </Heading>
       <Text>
@@ -259,17 +283,13 @@ const Grocery = ({
         represents the cost of goods prepared in Canada.
       </Text>
       {latestTimestamp && (
-        <Text>
+        <Text fontSize='small'>
           Last updated: {new Date(latestTimestamp).toLocaleDateString()}
         </Text>
       )}
-      <Flex>
-        <Button onClick={handleAddAll} variation='primary'>
-          Add All
-        </Button>
-        <Button onClick={removeAll} variation='primary'>
-          Reset
-        </Button>
+      <Flex justifyContent='center' marginTop='xxl'>
+        <Button onClick={handleAddAll}>Add All</Button>
+        <Button onClick={removeAll}>Reset</Button>
       </Flex>
       {loading ? (
         <Flex alignItems='center' margin='small'>
@@ -294,8 +314,18 @@ const Grocery = ({
                 onClick={() => handleAddToBasket(item)}
               >
                 <GroceryBadge
-                  canadianPrice={calculateGroceryPrice(item, cityData, true)}
-                  globalPrice={calculateGroceryPrice(item, cityData, false)}
+                  canadianPrice={calculateGroceryPrice(
+                    item,
+                    cityData ?? null,
+                    true,
+                    !cityData
+                  )}
+                  globalPrice={calculateGroceryPrice(
+                    item,
+                    cityData ?? null,
+                    false,
+                    !cityData
+                  )}
                 />
                 <MotionImage
                   layout
@@ -326,18 +356,29 @@ const Grocery = ({
                     alt={item.category}
                   />
                 </MotionImage>
-
                 <GroceryPriceLabel
-                  canadianPrice={calculateGroceryPrice(item, cityData, true)}
-                  globalPrice={calculateGroceryPrice(item, cityData, false)}
+                  canadianPrice={calculateGroceryPrice(
+                    item,
+                    cityData ?? null,
+                    true,
+                    !cityData
+                  )}
+                  globalPrice={calculateGroceryPrice(
+                    item,
+                    cityData ?? null,
+                    false,
+                    !cityData
+                  )}
                   basePrice={
                     cityData?.canada_average_price_per_base ??
                     cityData?.not_canada_average_price_per_base ??
                     item.canada_average_price_per_base ??
                     item.not_canada_average_price_per_base
                   }
-                  baseUnit={item.base_unit}
-                  baseQuantity={item.average_base_amount}
+                  baseUnit={
+                    item.statscan_unit ? item.statscan_unit : item.base_unit
+                  }
+                  baseQuantity={item.statscan_unit === 'ea' ? 1 : 100}
                   label={item.category}
                   city={activeCity}
                 />
@@ -354,55 +395,38 @@ const Grocery = ({
           </ExpandButton>
         </GridWrapper>
       )}
-      {!loading && (
-        <>
-          <Heading level={2} marginTop='xl' textAlign='center'>
-            Cost of basket by City
-          </Heading>
-          <BarChartStacked
-            data={processedData}
-            keys={keys}
-            labelAccessor={(d) => d.city as string}
-            width={width}
-            setTooltipState={setTooltipState}
-            height={800}
-            marginLeft={100}
-            tooltipFormatter={tooltipFormatter}
-          />
-          {/* <BarChart
-            data={cityTotals}
-            filterLabel={activeCity}
-            onBarClick={(city) => setActiveCity(city)}
-            width={width}
-            marginLeft={90}
-            tooltipState={tooltipState}
-            setTooltipState={setTooltipState}
-            mode='absolute'
-            labelAccessor={(d) => d.city as string}
-            valueAccessor={(d) => d.totalPrice as number}
-            tooltipFormatter={(d) =>
-              `${d.city}: $${(d.totalPrice as number).toFixed(2) ?? 0}`
-            }
-            xLabel='$CAD'
-          /> */}
-          <Flex marginBottom='large'>
-            <Button
-              onClick={handleAddAll}
-              variation='primary'
-              marginTop='small'
-            >
-              Add All
-            </Button>
-            <Button onClick={removeAll} variation='primary' marginTop='small'>
-              Reset basket
-            </Button>
-            <Button onClick={resetCity} variation='primary' marginTop='small'>
-              Reset City
-            </Button>
-          </Flex>
-        </>
-      )}
-      <Text>
+      <Heading level={2} marginTop='xxl' textAlign='center'>
+        Cost of basket <span className='highlight'>by City</span>
+      </Heading>
+      <BarChartStacked
+        id='grocery'
+        loading={loading}
+        filterLabel={activeCity}
+        onBarClick={(d) =>
+          setActiveCity(
+            (d as SeriesPoint<FlexibleDataItem>).data?.city as string
+          )
+        }
+        data={processedData}
+        keys={keys}
+        labelAccessor={(d) => d.city as string}
+        width={width}
+        setTooltipState={setTooltipState}
+        height={800}
+        marginLeft={100}
+        tooltipFormatter={tooltipFormatter}
+      >
+        <Button onClick={handleAddAll} size='small' color='font.primary'>
+          Add All
+        </Button>
+        <Button onClick={removeAll} size='small' color='font.primary'>
+          Reset basket
+        </Button>
+        <Button onClick={resetCity} size='small' color='font.primary'>
+          Reset City
+        </Button>
+      </BarChartStacked>
+      <Text fontSize='small' marginTop='large'>
         Food icons created by{' '}
         <a
           href='https://www.flaticon.com/free-icons/lentils'
@@ -486,11 +510,19 @@ const Grocery = ({
         </a>
         . Thank you!
       </Text>
-      <Text>
+      <Text fontSize='small'>
         Note that the data is limited to what is available from major grocery
         store chains. There may be Canadian fruits and vegetables available that
         have not been marked as “Prepared in Canada” by the store.
       </Text>
+      <Heading level={3} marginTop='xxl'>
+        Want more data?
+      </Heading>
+      <Text>
+        Interested in updated, historical, brand-specific, or api data access?{' '}
+        <Link href='/contact'>Get in touch.</Link>
+      </Text>
+      <Text />
     </>
   );
 };

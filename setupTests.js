@@ -93,6 +93,12 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
+jest.mock('next/navigation', () => ({
+  usePathname: () => '/test-path',
+  useParams: () => ({ lng: 'en' }),
+  useSearchParams: () => new URLSearchParams(),
+}));
+
 jest.mock('framer-motion', () => {
   // Import the actual module so we don't mock everything
   const actualFramerMotion = jest.requireActual('framer-motion');

@@ -1,20 +1,22 @@
 // CharacterCreator.tsx
 import {
   Button,
+  CheckboxField,
   Flex,
   Heading,
-  Image,
   SelectField,
   StepperField,
+  Text,
   View,
 } from '@aws-amplify/ui-react';
 import { micah } from '@dicebear/collection';
-import { createAvatar, schema } from '@dicebear/core';
-import { motion } from 'framer-motion';
-import React, { useMemo, useState } from 'react';
+import { schema } from '@dicebear/core';
+import React from 'react';
 import { FaCaretLeft, FaCaretRight } from 'react-icons/fa6';
 import styled from 'styled-components';
-import { Options } from './CharacterCreatorTypes';
+import { useProfile } from '../context/ProfileContext';
+import { AvatarOptions } from '../types/AvatarOptions';
+import AvatarSvg from './AvatarSvg';
 
 const OverlayButton = styled(View)`
   position: absolute;
@@ -40,7 +42,7 @@ const Background = styled(View)`
 `;
 
 const StyledButton = styled(Button)`
-  color: var(--amplify-colors-font-inverse);
+  color: var(--amplify-colors-font-primary);
   width: 30px;
   height: 30px;
   padding: 0;
@@ -49,30 +51,6 @@ const StyledButton = styled(Button)`
 const StyledHeading = styled(Heading)`
   margin-bottom: 2rem;
   text-align: center;
-`;
-
-const StyledLabel = styled.label`
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-`;
-
-const Wrapper = styled(View)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  max-width: 400px;
-  margin: auto;
-`;
-
-const AvatarWrapper = styled(motion.div)`
-  position: relative;
-  width: 200px;
-  height: 200px;
-  svg {
-    width: 100%;
-    height: 100%;
-  }
 `;
 
 const StyledStepperField = styled(StepperField)`
@@ -93,52 +71,38 @@ const StyledSelectField = styled(SelectField)`
   }
 `;
 
-const MotionImage = motion(Image);
-const MotionButton = motion(Button);
+const StyledCheckboxField = styled(CheckboxField)`
+  .amplify-text {
+    margin: 0;
+  }
+`;
 
-interface CharacterCreatorProps {
-  gender: string;
-  setGender: (value: string) => void;
-  occupation: number;
-  setOccupation: (value: number) => void;
-  age: number;
-  setAge: (value: number) => void;
-  setCustomized: (value: boolean) => void;
-  currentIncome: number;
-  manIncome: number;
-  customized: boolean;
-  seed: string;
-  setSeed: (value: string) => void;
-}
+interface CharacterCreatorProps {}
 
 const options = {
   ...schema.properties,
   ...micah.schema.properties,
 };
 
-const CharacterCreator: React.FC<CharacterCreatorProps> = ({
-  gender,
-  setGender,
-  occupation,
-  setOccupation,
-  age,
-  setAge,
-  setCustomized,
-  customized,
-  currentIncome,
-  manIncome,
-  seed,
-  setSeed,
-}) => {
-  const [hair, setHair] = useState('full');
-  const [eyes, setEyes] = useState('round');
-  const [mouth, setMouth] = useState('smile');
-  const [eyebrows, setEyebrows] = useState('up');
-  const [nose, setNose] = useState('curve');
-  const [glasses, setGlasses] = useState('none');
-  const [skin, setSkin] = useState('ac6651');
-  const [beard, setBeard] = useState('none');
-  const [hairColour, setHairColour] = useState('6bd9e9');
+const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
+  const {
+    avatar,
+    setAvatar,
+    gender,
+    setGender,
+    age,
+    setAge,
+    customized,
+    setCustomized,
+    occupation,
+    setOccupation,
+    currentIncome,
+    manIncome,
+    student,
+    car,
+    setCar,
+    setStudent,
+  } = useProfile();
 
   const mouthOptions =
     typeof options?.mouth !== 'boolean' && options?.mouth.default;
@@ -146,10 +110,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
     typeof options?.hair !== 'boolean' && options?.hair.default;
   const eyeOptions =
     typeof options?.eyes !== 'boolean' && options?.eyes.default;
-  const eyebrowOptions =
-    typeof options?.eyebrows !== 'boolean' && options?.eyebrows.default;
-  const noseOptions =
-    typeof options?.nose !== 'boolean' && options?.nose.default;
+  // const eyebrowOptions =
+  //   typeof options?.eyebrows !== 'boolean' && options?.eyebrows.default;
+  // const noseOptions =
+  //   typeof options?.nose !== 'boolean' && options?.nose.default;
   const glassesOptions = typeof options?.glasses !== 'boolean' &&
     options?.glasses.default && [
       ...(options?.glasses.default as string[]),
@@ -177,75 +141,42 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
     return currentOptions[prevIndex];
   };
 
-  const avatarSvg = useMemo(() => {
-    const avatar = createAvatar(micah, {
-      seed,
-      ears: ['attached'],
-      mouth: [mouth] as Options['mouth'],
-      glassesProbability: 100,
-      earringsProbability: 0,
-      glasses:
-        glasses !== 'none' ? ([glasses] as Options['glasses']) : undefined,
-      facialHairProbability: 100,
-      facialHair:
-        beard !== 'none' ? ([beard] as Options['facialHair']) : undefined,
-      facialHairColor:
-        hairColour !== 'none'
-          ? ([hairColour] as Options['facialHairColor'])
-          : undefined,
-      hairColor:
-        hairColour !== 'none'
-          ? ([hairColour] as Options['hairColor'])
-          : undefined,
-      eyes: [eyes] as Options['eyes'],
-      hair: [hair] as Options['hair'],
-      eyebrows: [eyebrows] as Options['eyebrows'],
-      nose: [nose] as Options['nose'],
-      baseColor: [skin] as Options['baseColor'],
-    });
-    return avatar.toString();
-  }, [
-    seed,
-    hair,
-    eyes,
-    mouth,
-    eyebrows,
-    nose,
-    glasses,
-    skin,
-    beard,
-    hairColour,
-  ]);
-
   const reroll = () => {
-    setSeed(Math.random().toString(36).substring(2, 10));
-    setHairColour(
-      hairColourOptions
+    setAvatar((prev: AvatarOptions) => ({
+      ...prev,
+      seed: Math.random().toString(36).substring(2, 10),
+      hairColour: hairColourOptions
         ? (hairColourOptions as string[])[
             Math.floor(Math.random() * (hairColourOptions as string[]).length)
           ]
-        : ''
-    );
+        : '',
+    }));
   };
+
+  const setAvatarOption = (key: string, newValue: string) =>
+    setAvatar((prev: AvatarOptions) => ({ ...prev, [key]: newValue }));
 
   return (
     <Background>
       <StyledHeading level={3}>Create Profile</StyledHeading>
-      <Flex alignItems='stretch' gap='large'>
+      <Flex
+        alignItems='stretch'
+        gap='large'
+        direction={{ base: 'column', medium: 'row' }}
+      >
         <View>
           <View position='relative'>
-            <AvatarWrapper
-              key={seed + hair + eyes + mouth}
-              transition={{ type: 'spring', stiffness: 120 }}
-              dangerouslySetInnerHTML={{ __html: avatarSvg }}
-            />
+            <AvatarSvg />
             <OverlayButton>
               <ButtonWrapper>
                 <StyledButton
                   variation='primary'
                   colorTheme='info'
                   onClick={() =>
-                    setHair(previousOption(hair, hairOptions as string[]))
+                    setAvatarOption(
+                      'hair',
+                      previousOption(avatar.hair, hairOptions as string[])
+                    )
                   }
                 >
                   <FaCaretLeft />
@@ -254,7 +185,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
                   variation='primary'
                   colorTheme='info'
                   onClick={() => {
-                    setHair(cycleOption(hair, hairOptions as string[]));
+                    setAvatarOption(
+                      'hair',
+                      cycleOption(avatar.hair, hairOptions as string[])
+                    );
                   }}
                 >
                   <FaCaretRight />
@@ -264,8 +198,9 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
                 <StyledButton
                   variation='primary'
                   onClick={() =>
-                    setGlasses(
-                      previousOption(glasses, glassesOptions as string[])
+                    setAvatarOption(
+                      'glasses',
+                      previousOption(avatar.glasses, glassesOptions as string[])
                     )
                   }
                 >
@@ -274,7 +209,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
                 <StyledButton
                   variation='primary'
                   onClick={() =>
-                    setGlasses(cycleOption(glasses, glassesOptions as string[]))
+                    setAvatarOption(
+                      'glasses',
+                      cycleOption(avatar.glasses, glassesOptions as string[])
+                    )
                   }
                 >
                   <FaCaretRight />
@@ -285,7 +223,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
                   variation='primary'
                   backgroundColor='yellow.60'
                   onClick={() =>
-                    setEyes(previousOption(eyes, eyeOptions as string[]))
+                    setAvatarOption(
+                      'eyes',
+                      previousOption(avatar.eyes, eyeOptions as string[])
+                    )
                   }
                 >
                   <FaCaretLeft />
@@ -294,7 +235,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
                   variation='primary'
                   backgroundColor='yellow.60'
                   onClick={() =>
-                    setEyes(cycleOption(eyes, eyeOptions as string[]))
+                    setAvatarOption(
+                      'eyes',
+                      cycleOption(avatar.eyes, eyeOptions as string[])
+                    )
                   }
                 >
                   <FaCaretRight />
@@ -305,7 +249,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
                   variation='primary'
                   colorTheme='success'
                   onClick={() =>
-                    setSkin(previousOption(skin, skinOptions as string[]))
+                    setAvatarOption(
+                      'skin',
+                      previousOption(avatar.skin, skinOptions as string[])
+                    )
                   }
                 >
                   <FaCaretLeft />
@@ -314,7 +261,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
                   variation='primary'
                   colorTheme='success'
                   onClick={() =>
-                    setSkin(cycleOption(skin, skinOptions as string[]))
+                    setAvatarOption(
+                      'skin',
+                      cycleOption(avatar.skin, skinOptions as string[])
+                    )
                   }
                 >
                   <FaCaretRight />
@@ -325,7 +275,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
                   variation='primary'
                   backgroundColor='pink.60'
                   onClick={() =>
-                    setMouth(previousOption(mouth, mouthOptions as string[]))
+                    setAvatarOption(
+                      'mouth',
+                      previousOption(avatar.mouth, mouthOptions as string[])
+                    )
                   }
                 >
                   <FaCaretLeft />
@@ -334,7 +287,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
                   variation='primary'
                   backgroundColor='pink.60'
                   onClick={() =>
-                    setMouth(cycleOption(mouth, mouthOptions as string[]))
+                    setAvatarOption(
+                      'mouth',
+                      cycleOption(avatar.mouth, mouthOptions as string[])
+                    )
                   }
                 >
                   <FaCaretRight />
@@ -345,7 +301,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
                   variation='primary'
                   colorTheme='warning'
                   onClick={() =>
-                    setBeard(previousOption(beard, beardOptions as string[]))
+                    setAvatarOption(
+                      'beard',
+                      previousOption(avatar.beard, beardOptions as string[])
+                    )
                   }
                 >
                   <FaCaretLeft />
@@ -354,7 +313,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
                   variation='primary'
                   colorTheme='warning'
                   onClick={() =>
-                    setBeard(cycleOption(beard, beardOptions as string[]))
+                    setAvatarOption(
+                      'beard',
+                      cycleOption(avatar.beard, beardOptions as string[])
+                    )
                   }
                 >
                   <FaCaretRight />
@@ -365,58 +327,86 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
           <Button
             marginTop='xxs'
             width='100%'
-            color='font.inverse'
+            color='font.primary'
             fontSize='small'
             onClick={reroll}
           >
             🎲 Randomize Colours
           </Button>
-          <Button
-            fontSize='small'
-            width='100%'
-            marginTop='xs'
-            colorTheme='error'
-            color='#fff'
-            onClick={() => setCustomized(false)}
-          >
-            Reset Chart
-          </Button>
+          {customized ? (
+            <Button
+              fontSize='small'
+              width='100%'
+              minWidth='200px'
+              marginTop='xs'
+              colorTheme='error'
+              color='#fff'
+              onClick={() => {
+                setCustomized(false);
+                setGender(null);
+                setStudent(false);
+                setCar(false);
+              }}
+            >
+              Reset Chart
+            </Button>
+          ) : (
+            <Button
+              fontSize='small'
+              width='100%'
+              minWidth='200px'
+              marginTop='xs'
+              colorTheme='error'
+              color='#fff'
+              onClick={() => {
+                setCustomized(true);
+                setGender(!gender ? 'woman' : gender);
+              }}
+            >
+              Apply selections to income
+            </Button>
+          )}
         </View>
         <View width='100%'>
           <StyledSelectField
             id='gender'
             name='gender'
             label='Gender'
-            value={gender}
+            placeholder='Select gender'
+            value={gender ?? 'undetermined'}
             onChange={(e) => {
               setGender(e.target.value);
-              setCustomized(true);
             }}
           >
             <option value='woman'>Woman</option>
             <option value='man'>Man</option>
-            <option value='nonbinary'>Non-binary / gender diverse*</option>
+            <option value='nonbinary'>Nonbinary / gender diverse*</option>
           </StyledSelectField>
           <StyledSelectField
             id='occupation'
             name='occupation'
-            label='Occupation'
+            label='Sector'
             value={String(occupation)}
             onChange={(e) => {
-              setOccupation(Number(e.target.value));
+              setOccupation(e.target.value);
+              setGender(!gender ? 'woman' : gender);
               setCustomized(true);
             }}
           >
-            <option value={0}>Manager</option>
+            <option value={0} disabled={age < 29}>
+              Management
+            </option>
             <option value={1}>Business and finance</option>
-            <option value={2}>Engineer</option>
+            <option value={2}>Applied sciences</option>
             <option value={3}>Health care</option>
-            <option value={4}>Teacher</option>
+            <option value={4}>
+              Education, law, social, & community services
+            </option>
             <option value={5}>Arts & recreation</option>
-            <option value={6}>Retail</option>
-            <option value={7}>Construction worker</option>
-            <option value={8}>Natural resources</option>
-            <option value={9}>Factory worker</option>
+            <option value={6}>Sales & service</option>
+            <option value={7}>Trades, transport, or equipment operator</option>
+            <option value={8}>Natural resources & agriculture</option>
+            <option value={9}>Manufacturing & utilities</option>
           </StyledSelectField>
           <StyledStepperField
             min={19}
@@ -426,12 +416,81 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
             label='Age'
             name='age'
             type='number'
+            isDisabled={occupation === '0' && age === 29}
             value={age}
             onStepChange={(n) => {
               setAge(n);
+              setGender(!gender ? 'woman' : gender);
               setCustomized(true);
             }}
           />
+          <Flex
+            marginTop='medium'
+            alignItems='baseline'
+            justifyContent='flex-start'
+          >
+            <StyledCheckboxField
+              label='I am a student'
+              name='student'
+              value='true'
+              size='large'
+              color='font.primary'
+              onChange={(e) => setStudent(!!e.target.checked)}
+            />
+            <StyledCheckboxField
+              name='car'
+              label='I own a car'
+              value='true'
+              size='large'
+              color='font.primary'
+              onChange={(e) => setCar(!!e.target.checked)}
+            />
+          </Flex>
+          <Text fontSize='small' marginTop='small'>
+            Some options may be disabled due to low sample size.
+          </Text>
+          {gender === 'nonbinary' && (
+            <>
+              <Text fontSize='small' marginTop='small'>
+                *Our income data comes from Statistics Canada, which states the
+                following regarding gender: &apos;Given that the non-binary
+                population is small, data aggregation to a two-category gender
+                variable is necessary to protect the confidentiality of
+                responses provided. Individuals in the category &quot;non-binary
+                persons&quot; are distributed into the other two gender
+                categories.&apos;
+              </Text>
+              <Text fontSize='small'>
+                According to the{' '}
+                <a href='https://www.nber.org/papers/w33075' target='_blank'>
+                  National Bureau of Economic Research
+                </a>
+                , &apos;nonbinary individuals assigned male at birth,
+                transgender men, transgender women, and cisgender women all earn
+                significantly less than comparable cisgender men.&apos; As such,
+                we have used the income of &apos;Women+&apos; as a baseline for
+                non-binary individuals. However, this may not fully reflect
+                individual realities.
+              </Text>
+              <Text fontSize='small'>
+                The NBER study found that &apos;nonbinary people assigned female
+                at birth–despite being more highly educated than other
+                groups–earn significantly less than cisgender men, cisgender
+                women, and all other gender minority groups. These gaps are
+                larger at the bottom of the annual earnings distribution than at
+                the top. [...] Lower-income transgender and nonbinary people may
+                face something like a “sticky floor” (see Christofides et al.
+                (2013)). Sticky floors represent a magnification of disadvantage
+                for the most marginalized members of already disadvantaged
+                groups. They may also be due to heterogeneity in the degree to
+                which gender minority people are actually seen as cisgender
+                people by the society surrounding them. If some members of
+                gender minority groups are not perceived by others as gender
+                minorities, we may expect those people to face smaller
+                disparities.&apos;
+              </Text>
+            </>
+          )}
         </View>
       </Flex>
       {manIncome !== 0 && customized && currentIncome !== 0 && (

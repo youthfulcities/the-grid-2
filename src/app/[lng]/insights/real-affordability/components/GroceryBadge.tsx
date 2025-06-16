@@ -12,7 +12,9 @@ const Badge = styled.div<{ $isCheaperInCanada: boolean }>`
   top: 4px;
   right: -10px;
   background-color: ${({ $isCheaperInCanada }) =>
-    $isCheaperInCanada ? 'green' : 'red'};
+    $isCheaperInCanada
+      ? 'var(--amplify-colors-green-100)'
+      : 'var(--amplify-colors-red-100)'};
   color: white;
   font-size: 0.7rem;
   font-weight: bold;
@@ -36,7 +38,6 @@ const GroceryBadge: React.FC<GroceryPriceLabelProps> = ({
   };
 
   const isCheaperInCanada = isCheaperToBuyCanadian(canadianPrice, globalPrice);
-
   const getPriceText = (): string | null => {
     if (canadianPrice && globalPrice) {
       const diff = canadianPrice - globalPrice;

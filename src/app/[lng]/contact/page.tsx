@@ -1,5 +1,6 @@
 'use client';
 
+import AuthenticatorProvider from '@/app/components/AuthenticatorProvider';
 import useTranslation from '@/app/i18n/client';
 import {
   Alert,
@@ -11,10 +12,12 @@ import {
   Text,
   TextAreaField,
   TextField,
-  View,
+  useAuthenticator,
   useTheme,
+  View,
 } from '@aws-amplify/ui-react';
 import { generateClient } from 'aws-amplify/api';
+import 'aws-amplify/auth/enable-oauth-listener';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 import React, { FormEvent, useEffect, useState } from 'react';
@@ -23,6 +26,8 @@ import styled from 'styled-components';
 import { z } from 'zod';
 import { createContactSubmission } from '../../../graphql/mutations';
 import Container from '../../components/Background';
+
+const client = generateClient();
 
 const StyledForm = styled(Flex)`
   margin: 0 auto;
@@ -79,8 +84,6 @@ interface FormData {
   message: string;
 }
 
-const client = generateClient();
-
 const ContactForm = () => {
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
@@ -99,6 +102,7 @@ const ContactForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   const [formErrors, setFormErrors] = useState({
     firstName: '',
     lastName: '',
@@ -107,7 +111,6 @@ const ContactForm = () => {
     topic: '',
     message: '',
   });
-
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'contact');
   const { t: tsubscribe } = useTranslation(lng, 'newsletter');
@@ -217,6 +220,7 @@ const ContactForm = () => {
             subscribed: subscribe,
           },
         },
+        authMode: authStatus === 'authenticated' ? 'userPool' : 'identityPool',
       });
 
       if (result) {
@@ -267,120 +271,125 @@ const ContactForm = () => {
   const isFormValid = validation.success;
 
   return (
-    <Container>
-      <View as='section' className='container' paddingTop='xxxl'>
-        <StyledForm as='form' onSubmit={handleSubmit}>
-          <Heading marginBottom={tokens.space.medium.value} level={2}>
-            {t('title')}
-          </Heading>
-          <SubHeading>
-            <Trans
-              t={t}
-              i18nKey='subtitle'
-              components={{
-                a: <a href='https://www.youthfulcities.com/about-us/' />,
-              }}
-            />
-          </SubHeading>
-          {error.length > 0 && statusSubscribe !== 'loading' && (
-            <Alert marginBottom={tokens.space.medium.value} variation='error'>
-              {error} {tsubscribe(responseMsgSubscribe)}
-            </Alert>
-          )}
-          {success.length > 0 && statusSubscribe !== 'loading' && (
-            <Alert marginBottom={tokens.space.medium.value} variation='success'>
-              {success} {tsubscribe(responseMsgSubscribe)}
-            </Alert>
-          )}
-          <Flex gap='24px'>
+    <AuthenticatorProvider>
+      <Container>
+        <View as='section' className='container' paddingTop='xxxl'>
+          <StyledForm as='form' onSubmit={handleSubmit}>
+            <Heading marginBottom={tokens.space.medium.value} level={2}>
+              {t('title')}
+            </Heading>
+            <SubHeading>
+              <Trans
+                t={t}
+                i18nKey='subtitle'
+                components={{
+                  a: <a href='https://www.youthfulcities.com/about-us/' />,
+                }}
+              />
+            </SubHeading>
+            {error.length > 0 && statusSubscribe !== 'loading' && (
+              <Alert marginBottom={tokens.space.medium.value} variation='error'>
+                {error} {tsubscribe(responseMsgSubscribe)}
+              </Alert>
+            )}
+            {success.length > 0 && statusSubscribe !== 'loading' && (
+              <Alert
+                marginBottom={tokens.space.medium.value}
+                variation='success'
+              >
+                {success} {tsubscribe(responseMsgSubscribe)}
+              </Alert>
+            )}
+            <Flex gap='24px'>
+              <StyledInput
+                flex={1}
+                label={t('fname')}
+                name='firstName'
+                value={formData.firstName}
+                onChange={handleChange}
+                onFocus={(e) => validate(e)}
+                isRequired
+                hasError={!!formErrors.firstName}
+                errorMessage={formErrors.firstName}
+              />
+              <StyledInput
+                flex={1}
+                label={t('lname')}
+                name='lastName'
+                value={formData.lastName}
+                onChange={handleChange}
+                onFocus={(e) => validate(e)}
+                isRequired
+                hasError={!!formErrors.lastName}
+                errorMessage={formErrors.lastName}
+              />
+            </Flex>
             <StyledInput
-              flex={1}
-              label={t('fname')}
-              name='firstName'
-              value={formData.firstName}
+              type='email'
+              label={t('email')}
+              name='email'
+              value={formData.email}
               onChange={handleChange}
               onFocus={(e) => validate(e)}
               isRequired
-              hasError={!!formErrors.firstName}
-              errorMessage={formErrors.firstName}
+              hasError={!!formErrors.email}
+              errorMessage={formErrors.email}
+            />
+            <StyledCheckbox
+              label={t('subscribe')}
+              name='subscribe'
+              value='true'
+              size='large'
+              onChange={handleSubscribe}
+              checked={subscribe}
             />
             <StyledInput
-              flex={1}
-              label={t('lname')}
-              name='lastName'
-              value={formData.lastName}
+              label={t('phone')}
+              name='phoneNumber'
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              onFocus={(e) => validate(e)}
+              hasError={!!formErrors.phoneNumber}
+              errorMessage={formErrors.phoneNumber}
+            />
+            <StyledSelect
+              label={t('reason')}
+              name='topic'
+              value={formData.topic}
+              onChange={handleChange}
+              onFocus={(e) => validate(e)}
+              required
+              hasError={!!formErrors.topic}
+              errorMessage={formErrors.topic}
+            >
+              <option value=''>{t('select')}</option>
+              <option value='Report a technical issue'>{t('technical')}</option>
+              <option value='Collaborate with us'>{t('collaborate')}</option>
+              <option value='Request more data'>{t('data')}</option>
+              <option value='Other inquiry'>{t('other')}</option>
+            </StyledSelect>
+            <StyledTextArea
+              label={t('message')}
+              placeholder={t('type')}
+              name='message'
+              value={formData.message}
               onChange={handleChange}
               onFocus={(e) => validate(e)}
               isRequired
-              hasError={!!formErrors.lastName}
-              errorMessage={formErrors.lastName}
+              hasError={!!formErrors.message}
+              errorMessage={formErrors.message}
             />
-          </Flex>
-          <StyledInput
-            type='email'
-            label={t('email')}
-            name='email'
-            value={formData.email}
-            onChange={handleChange}
-            onFocus={(e) => validate(e)}
-            isRequired
-            hasError={!!formErrors.email}
-            errorMessage={formErrors.email}
-          />
-          <StyledCheckbox
-            label={t('subscribe')}
-            name='subscribe'
-            value='true'
-            size='large'
-            onChange={handleSubscribe}
-            checked={subscribe}
-          />
-          <StyledInput
-            label={t('phone')}
-            name='phoneNumber'
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            onFocus={(e) => validate(e)}
-            hasError={!!formErrors.phoneNumber}
-            errorMessage={formErrors.phoneNumber}
-          />
-          <StyledSelect
-            label={t('reason')}
-            name='topic'
-            value={formData.topic}
-            onChange={handleChange}
-            onFocus={(e) => validate(e)}
-            required
-            hasError={!!formErrors.topic}
-            errorMessage={formErrors.topic}
-          >
-            <option value=''>{t('select')}</option>
-            <option value='Report a technical issue'>{t('technical')}</option>
-            <option value='Collaborate with us'>{t('collaborate')}</option>
-            <option value='Request more data'>{t('data')}</option>
-            <option value='Other inquiry'>{t('other')}</option>
-          </StyledSelect>
-          <StyledTextArea
-            label={t('message')}
-            placeholder={t('type')}
-            name='message'
-            value={formData.message}
-            onChange={handleChange}
-            onFocus={(e) => validate(e)}
-            isRequired
-            hasError={!!formErrors.message}
-            errorMessage={formErrors.message}
-          />
-          <StyledButton
-            type='submit'
-            isLoading={loading}
-            disabled={!isFormValid || loading}
-          >
-            {t('submit')}
-          </StyledButton>
-        </StyledForm>
-      </View>
-    </Container>
+            <StyledButton
+              type='submit'
+              isLoading={loading}
+              disabled={!isFormValid || loading}
+            >
+              {t('submit')}
+            </StyledButton>
+          </StyledForm>
+        </View>
+      </Container>
+    </AuthenticatorProvider>
   );
 };
 

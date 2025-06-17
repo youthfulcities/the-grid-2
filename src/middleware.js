@@ -39,14 +39,13 @@ export function middleware(req) {
   }
 
   // Restrict access to RAI in prod before release
-  if (process.env.AMPLIFY_ENV === 'prod') {
+  if (process.env.ENV === 'prod' || process.env.ENV === 'staging') {
     // Check if the request is for the restricted route.
     if (
       req.nextUrl.pathname.includes('/insights/real-affordability') &&
       !req.nextUrl.pathname.includes('/grocery') &&
       !req.nextUrl.pathname.includes('/coming-soon')
     ) {
-      console.log('hi');
       // Option 1: Redirect to a custom 403 page:
       return NextResponse.redirect(
         new URL('/insights/real-affordability/coming-soon', req.url)

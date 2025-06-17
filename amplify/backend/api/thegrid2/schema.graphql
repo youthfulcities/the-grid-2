@@ -1,7 +1,12 @@
 type ContactSubmission
   @model
   @aws_api_key
-  @auth(rules: [{ allow: public, operations: [create] }]) {
+  @auth(
+    rules: [
+      { allow: public, provider: identityPool, operations: [create] }
+      { allow: private, provider: userPools, operations: [create] }
+    ]
+  ) {
   id: ID!
   firstName: String
   lastName: String

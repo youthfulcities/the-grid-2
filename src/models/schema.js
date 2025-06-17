@@ -93,6 +93,14 @@ export const schema = {
                         "rules": [
                             {
                                 "allow": "public",
+                                "provider": "identityPool",
+                                "operations": [
+                                    "create"
+                                ]
+                            },
+                            {
+                                "allow": "private",
+                                "provider": "userPools",
                                 "operations": [
                                     "create"
                                 ]

@@ -185,7 +185,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   const processedData = useMemo(
     () =>
       data.map((d) => {
-        const totalExpenses = d.rent + d.play + d.work + d.move;
+        const totalExpenses = d.rent + d.play + d.work + d.move + d.live;
         return {
           city: `${d.city}${d.sample && d.sample < 50 ? '*' : ''}${!d.provincial ? '†' : ''}`,
           live: -d.live,

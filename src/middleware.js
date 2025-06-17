@@ -18,7 +18,7 @@ export function middleware(req) {
     process.env.NODE_ENV;
 
   // Restrict access to RAI in prod before release
-  if (env === 'prod' || env === 'staging') {
+  if (env === 'prod') {
     // Check if the request is for the restricted route.
     if (
       req.nextUrl.pathname.includes('/insights/real-affordability') &&

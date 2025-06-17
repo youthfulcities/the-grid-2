@@ -100,7 +100,7 @@ const Legend: React.FC<LegendProps> = ({
                   $clickable={setActiveLegendItems !== undefined}
                   $isActive={isActive}
                 >
-                  {item.key}
+                  {item.key.replace('_', ' ')}
                 </LegendLabel>
               </LegendItem>
             );

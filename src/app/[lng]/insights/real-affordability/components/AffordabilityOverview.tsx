@@ -222,19 +222,60 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
       selectedSegment as 'move' | 'work' | 'play' | 'live'
     ];
     const { indicators, total } = segment;
-
     const cities = Object.keys(total.monthly_cost_by_city || {});
     const unsorted = cities.map((city) => {
       const cityEntry: Record<string, string | number> = { city };
       let currentTotal = 0;
       Object.entries(indicators).forEach(([indicator, indicatorData]) => {
-        const value = indicatorData.total.monthly_cost_by_city?.[city];
+        const value = (() => {
+          const { profiles } = indicatorData;
+          const base = profiles?.all?.monthly_cost_by_city?.[city] ?? 0;
+
+          if (selectedSegment === 'move') {
+            return (
+              base +
+              (car
+                ? profiles?.car_user?.monthly_cost_by_city?.[city] ?? 0
+                : 0) +
+              (student
+                ? profiles?.student?.monthly_cost_by_city?.[city] ?? 0
+                : 0) +
+              (!student
+                ? profiles?.adult?.monthly_cost_by_city?.[city] ?? 0
+                : 0)
+            );
+          }
+
+          if (selectedSegment === 'work') {
+            return (
+              (student
+                ? profiles?.student?.monthly_cost_by_city?.[city] ?? 0
+                : 0) + base
+            );
+          }
+
+          if (selectedSegment === 'play') {
+            return base; // No variants
+          }
+
+          if (selectedSegment === 'live') {
+            const men = profiles?.men?.monthly_cost_by_city?.[city] ?? 0;
+            const women = profiles?.women?.monthly_cost_by_city?.[city] ?? 0;
+            if (gender === null) {
+              return base + (men + women) / 2;
+            }
+            return gender === 'man' ? base + men : base + women;
+          }
+
+          return base;
+        })();
         if (typeof value === 'number') {
-          cityEntry[indicator] = -value;
-          currentTotal += -value;
+          // Use negative value if needed (to match your existing logic)
+          const negValue = -value;
+          cityEntry[indicator] = negValue;
+          currentTotal += negValue;
         }
       });
-
       cityEntry._total = currentTotal;
       return cityEntry;
     });
@@ -245,7 +286,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
 
     // Clean up temp property before returning
     return sorted.map(({ _total, ...rest }) => rest);
-  }, [selectedSegment, move, work, play, live]);
+  }, [selectedSegment, move, work, play, live, car, gender, student]);
 
   const drilldownKeys = useMemo(() => {
     if (
@@ -294,7 +335,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
       if (!key || !value) return null;
       return (
         <div>
-          {`${d.city} ${key}: $${(value as number).toFixed(2)}`}
+          {`${d.city} ${key.replace('_', ' ')}: $${(value as number).toFixed(2)}`}
           <br />
           {d.income &&
             `Total monthly income: $${(d.income as number).toFixed(2)}`}

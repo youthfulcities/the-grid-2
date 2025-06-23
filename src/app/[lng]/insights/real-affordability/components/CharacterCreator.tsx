@@ -346,6 +346,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
                 setGender(null);
                 setStudent(false);
                 setCar(false);
+                setOccupation('');
               }}
             >
               Reset Chart
@@ -386,7 +387,8 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             id='occupation'
             name='occupation'
             label='Sector'
-            value={String(occupation)}
+            value={String(occupation) ?? ''}
+            placeholder='Select sector'
             onChange={(e) => {
               setOccupation(e.target.value);
               setGender(!gender ? 'woman' : gender);

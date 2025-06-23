@@ -1,6 +1,6 @@
 import { useThemeContext } from '@/app/context/ThemeContext';
 import toGreyscale from '@/utils/toGreyscale';
-import { Flex, Placeholder } from '@aws-amplify/ui-react';
+import { Button, Flex, Placeholder } from '@aws-amplify/ui-react';
 import * as d3 from 'd3';
 import { SeriesPoint } from 'd3';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -78,6 +78,9 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   id,
 }) => {
   const { colorMode } = useThemeContext();
+  const [customSortOrder, setCustomSortOrder] = useState<'asc' | 'desc' | null>(
+    null
+  );
   const [activeLegendItems, setActiveLegendItems] = useState<string[]>(() => [
     ...keys,
   ]);
@@ -133,17 +136,56 @@ const BarChartStacked: React.FC<BarChartProps> = ({
     [filteredKeys, colors, keys]
   );
 
-  const filteredData = useMemo(
-    () => data.filter((d) => selectedAnswers.includes(labelAccessor(d))),
-    [data, selectedAnswers, labelAccessor]
-  );
+  const filteredData = useMemo(() => {
+    let filtered = data.filter((d) =>
+      selectedAnswers.includes(labelAccessor(d))
+    );
+    if (customSortOrder) {
+      filtered = [...filtered].sort((a, b) => {
+        if (
+          activeLegendItems.includes('surplus') ||
+          activeLegendItems.includes('deficit')
+        ) {
+          if (b.surplus !== a.surplus) {
+            return customSortOrder === 'asc'
+              ? (a.surplus as number) - (b.surplus as number)
+              : (b.surplus as number) - (a.surplus as number);
+          }
+          return customSortOrder === 'asc'
+            ? (a.deficit as number) - (b.deficit as number)
+            : (b.deficit as number) - (a.deficit as number);
+        }
+        // Else, sort by sum of values for active legend items.
+        const aValue = d3.sum(
+          activeLegendItems.map((key) => (a[key] as number) || 0)
+        );
+        const bValue = d3.sum(
+          activeLegendItems.map((key) => (b[key] as number) || 0)
+        );
+        return customSortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+      });
+    }
+    return filtered;
+  }, [
+    data,
+    selectedAnswers,
+    labelAccessor,
+    customSortOrder,
+    activeLegendItems,
+  ]);
+
+  useEffect(() => {
+    setCustomSortOrder(null);
+  }, [data]);
 
   useEffect(() => {
     if (!ref.current || !data || !width || !height) return;
 
     const svg = d3.select(ref.current);
-
     svg.selectAll('*').remove();
+    svg.on('mouseout', () => {
+      setTooltipState({ position: null });
+    });
 
     const color = d3.scaleOrdinal<string>().domain(filteredKeys).range(colors);
 
@@ -380,6 +422,8 @@ const BarChartStacked: React.FC<BarChartProps> = ({
     activeLegendItems,
     selectedAnswers,
     colorMode,
+    colors,
+    customSortOrder,
   ]);
 
   return (
@@ -405,6 +449,18 @@ const BarChartStacked: React.FC<BarChartProps> = ({
           <Flex width='100%' wrap='wrap' marginTop='small' gap='xs'>
             <>
               {children}
+              <Button
+                fontSize='small'
+                onClick={() => setCustomSortOrder('asc')}
+              >
+                Sort Ascending
+              </Button>
+              <Button
+                fontSize='small'
+                onClick={() => setCustomSortOrder('desc')}
+              >
+                Sort Descending
+              </Button>
               {width > 0 && <SaveAsImg svgRef={ref} id={id} />}
             </>
           </Flex>

@@ -35,10 +35,9 @@ const getIncome = ({
 
   const averageIncome = computeAverageIncome(income);
   if (city) {
-    const cityEntry = income.find(
-      (item) =>
-        item.city === city || item.city === `Other CMA - ${currentProvince}`
-    );
+    const cityEntry =
+      income.find((item) => item.city === city) ||
+      income.find((item) => item.city === `Other CMA - ${currentProvince}`);
 
     const nestedMatch = cityEntry?.data?.find(normalizeMatch);
 

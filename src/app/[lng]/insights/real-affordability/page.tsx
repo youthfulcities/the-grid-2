@@ -11,6 +11,7 @@ import fetchData from '@/utils/fetchData';
 import { Heading, Text, View } from '@aws-amplify/ui-react';
 import _ from 'lodash';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import AffordabilityComparison from './components/AffordabilityComparison';
 import AffordabilityOverview from './components/AffordabilityOverview';
 import BasketBar from './components/BasketBar';
 import CharacterCreator from './components/CharacterCreator';
@@ -68,112 +69,20 @@ const AffordabilityPage: React.FC = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      const path = 'internal/RAI/move';
-      const activeFile = 'move_category.json';
+      const path = 'internal/RAI/cache';
+      const activeFile = 'cache.json';
       const text = await fetchData(path, activeFile);
       const jsonData = JSON.parse(text as string);
-      setMove(jsonData);
+      setMove(jsonData.move);
+      setLive(jsonData.live);
+      setPlay(jsonData.play);
+      setRent(jsonData.rent);
+      setWork(jsonData.work);
+      setGroceryItems(jsonData.groceryItems);
+      setLatestTimestamp(getLatestTimestamp(jsonData.groceryItems));
+      setIncome(jsonData.income);
     };
     loadData();
-  }, []);
-
-  useEffect(() => {
-    const loadData = async () => {
-      const path = 'internal/RAI/play';
-      const activeFile = 'play_category.json';
-      const text = await fetchData(path, activeFile);
-      const jsonData = JSON.parse(text as string);
-      setPlay(jsonData);
-    };
-    loadData();
-  }, []);
-
-  useEffect(() => {
-    const loadData = async () => {
-      const path = 'internal/RAI/work';
-      const activeFile = 'work_category.json';
-      const text = await fetchData(path, activeFile);
-      const jsonData = JSON.parse(text as string);
-      setWork(jsonData);
-    };
-    loadData();
-  }, []);
-
-  useEffect(() => {
-    const loadData = async () => {
-      const path = 'internal/RAI/live';
-      const activeFile = 'live_category.json';
-      const text = await fetchData(path, activeFile);
-      const jsonData = JSON.parse(text as string);
-      setLive(jsonData);
-    };
-    loadData();
-  }, []);
-
-  useEffect(() => {
-    const fetchGroceryItems = async () => {
-      setGroceryLoading(true);
-      try {
-        const response = await fetch('/api/grocery/public/all');
-        const result = await response.json();
-
-        if (!response.ok) {
-          throw new Error(result.error || 'Failed to load grocery items');
-        }
-
-        setGroceryItems(result);
-        setLatestTimestamp(getLatestTimestamp(result));
-        setErrorText(null);
-      } catch (fetchError: unknown) {
-        const error = fetchError as Error;
-        console.error('Error fetching grocery items:', error);
-      } finally {
-        setGroceryLoading(false);
-      }
-    };
-    fetchGroceryItems();
-  }, []);
-
-  useEffect(() => {
-    const fetchIncome = async () => {
-      setIncomeLoading(true);
-      try {
-        const response = await fetch('/api/income');
-        const result = await response.json();
-        if (!response.ok) {
-          throw new Error(result.error || 'Failed to load income');
-        }
-        setIncome(result);
-        setErrorText(null);
-      } catch (fetchError: unknown) {
-        const error = fetchError as Error;
-        console.error('Error fetching income:', error);
-      } finally {
-        setIncomeLoading(false);
-      }
-    };
-    fetchIncome();
-  }, []);
-
-  useEffect(() => {
-    const fetchRent = async () => {
-      setRentLoading(true);
-      try {
-        const response = await fetch('/api/rent');
-        const result = await response.json();
-        if (!response.ok) {
-          throw new Error(result.error || 'Failed to load rent');
-        }
-        setRent(result);
-        setErrorText(null);
-      } catch (fetchError: unknown) {
-        const error = fetchError as Error;
-        console.error('Error fetching rent:', error);
-      } finally {
-        setRentLoading(false);
-      }
-    };
-    fetchRent();
   }, []);
 
   const cityTotals = useMemo(() => {
@@ -237,6 +146,7 @@ const AffordabilityPage: React.FC = () => {
                 stages.
               </Text>
               <CharacterCreator />
+              <AffordabilityComparison />
             </View>
           </FadeInUp>
           <FadeInUp>
@@ -251,7 +161,7 @@ const AffordabilityPage: React.FC = () => {
                 latestTimestamp={latestTimestamp}
                 setTooltipState={setTooltipState}
                 width={width}
-                loading={groceryLoading}
+                loading={groceryItems.length === 0}
               />
             </View>
           </FadeInUp>
@@ -267,7 +177,7 @@ const AffordabilityPage: React.FC = () => {
           <View ref={housingJourneyRef} data-section='housingJourneyInView'>
             <HousingJourney
               processedData={processedRentData}
-              loading={rentLoading}
+              loading={rent.length === 0}
               rent={rent}
             />
           </View>

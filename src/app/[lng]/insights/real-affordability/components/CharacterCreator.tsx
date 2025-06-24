@@ -374,9 +374,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             name='gender'
             label='Gender'
             placeholder='Select gender'
-            value={gender ?? 'undetermined'}
+            value={gender ?? ''}
             onChange={(e) => {
               setGender(e.target.value);
+              setCustomized(true);
             }}
           >
             <option value='woman'>Woman</option>
@@ -391,7 +392,6 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             placeholder='Select sector'
             onChange={(e) => {
               setOccupation(e.target.value);
-              setGender(!gender ? 'woman' : gender);
               setCustomized(true);
             }}
           >
@@ -414,6 +414,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             min={19}
             max={29}
             step={5}
+            inputStyles={{ color: customized ? 'white' : 'neutral.80' }}
             id='age'
             label='Age'
             name='age'
@@ -422,7 +423,6 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             value={age}
             onStepChange={(n) => {
               setAge(n);
-              setGender(!gender ? 'woman' : gender);
               setCustomized(true);
             }}
           />

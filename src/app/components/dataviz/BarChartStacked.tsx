@@ -9,6 +9,17 @@ import Customize from './Customize';
 import Legend from './Legend';
 import SaveAsImg from './SaveAsImg';
 
+const defaultColors = [
+  '#8755AF',
+  '#F2695D',
+  '#FBD166',
+  '#B8D98D',
+  '#00BFA9',
+  '#2f4eac',
+  '#F6D9D7',
+  '#af6860',
+];
+
 const ChartContainer = styled.div`
   position: relative;
 `;
@@ -62,16 +73,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   keyAccessor,
   marginLeft,
   tooltipFormatter,
-  colors = [
-    '#8755AF',
-    '#F2695D',
-    '#FBD166',
-    '#B8D98D',
-    '#00BFA9',
-    '#2f4eac',
-    '#F6D9D7',
-    '#af6860',
-  ],
+  colors = defaultColors,
   onBarClick,
   filterLabel,
   children,
@@ -92,7 +94,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   const margin = {
     left: marginLeft ?? 60,
     right: 20,
-    top: 20,
+    top: 40,
     bottom: 40,
   };
 
@@ -343,8 +345,11 @@ const BarChartStacked: React.FC<BarChartProps> = ({
 
     xAxis
       .selectAll('text')
+      .attr('text-anchor', 'start')
       .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
       .attr('font-weight', '400')
+      .attr('transform', 'rotate(-30)')
+      .attr('dy', '-0.4em')
       .style('fill', colorMode === 'dark' ? 'white' : 'black');
 
     xAxis
@@ -470,4 +475,4 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   );
 };
 
-export default React.memo(BarChartStacked);
+export default BarChartStacked;

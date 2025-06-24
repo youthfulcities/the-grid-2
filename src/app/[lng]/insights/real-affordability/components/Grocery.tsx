@@ -272,6 +272,10 @@ const Grocery = ({
     []
   );
 
+  const onBarClick = useCallback((d: SeriesPoint<FlexibleDataItem>) => {
+    setActiveCity(d.data?.city as string);
+  }, []);
+
   return (
     <>
       <Heading level={1} marginBottom='small'>
@@ -402,11 +406,7 @@ const Grocery = ({
         id='grocery'
         loading={loading}
         filterLabel={activeCity}
-        onBarClick={(d) =>
-          setActiveCity(
-            (d as SeriesPoint<FlexibleDataItem>).data?.city as string
-          )
-        }
+        onBarClick={(d) => onBarClick(d as SeriesPoint<FlexibleDataItem>)}
         data={processedData}
         keys={keys}
         labelAccessor={(d) => d.city as string}

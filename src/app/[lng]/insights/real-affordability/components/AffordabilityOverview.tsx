@@ -1,6 +1,7 @@
 import BarChartStacked, {
   FlexibleDataItem,
 } from '@/app/components/dataviz/BarChartStacked';
+import downloadJSON from '@/utils/downloadJSON';
 import { Button, Tabs, Text, View } from '@aws-amplify/ui-react';
 import { SeriesPoint } from 'd3';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -82,6 +83,7 @@ const chartViews: ChartView[] = [
     chartId: 'affordability-income',
     keys: ['income'],
     sort: (a, b) => (b.income as number) - (a.income as number),
+    colors: ['#B8D98D', '#F2695D'],
   },
   {
     value: 'costs',
@@ -119,12 +121,6 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState(null);
   const [drilldownLevel, setDrilldownLevel] = useState(0);
-  const [customSortOrder, setCustomSortOrder] = useState<'asc' | 'desc' | null>(
-    null
-  );
-  const [sortFn, setSortFn] = useState<
-    ((a: FlexibleDataItem, b: FlexibleDataItem) => number) | null
-  >(null);
   const [tab, setTab] = useState('overview');
   const [selectedSegments, setSelectedSegments] = useState<string[]>([]);
   const {
@@ -270,29 +266,30 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
     [data]
   );
 
-  const onBarClick = (d: FlexibleDataItem | SeriesPoint<FlexibleDataItem>) => {
-    const { key } = d as FlexibleDataItem;
-    if (
-      key === 'move' ||
-      key === 'work' ||
-      key === 'play' ||
-      key === 'live' ||
-      key === 'total_expenses'
-    ) {
-      setSelectedSegments((prev) => [...(prev ?? []), key as string]);
-      setDrilldownLevel((prev) => prev + 1);
-    }
-  };
+  const onBarClick = useCallback(
+    (d: FlexibleDataItem | SeriesPoint<FlexibleDataItem>) => {
+      const { key } = d as FlexibleDataItem;
+      if (
+        (key === 'move' ||
+          key === 'work' ||
+          key === 'play' ||
+          key === 'live' ||
+          key === 'total_expenses') &&
+        !selectedSegments.includes(key as string)
+      ) {
+        setSelectedSegments((prev) => [...(prev ?? []), key as string]);
+        setDrilldownLevel((prev) => prev + 1);
+      }
+    },
+    [selectedSegments]
+  );
 
   const sortedData = useMemo(() => {
     const currentView = chartViews.find((view) => view.value === tab);
-    if (sortFn) {
-      return [...processedData].sort(sortFn);
-    }
     if (!currentView || !currentView.sort) return processedData;
 
     return [...processedData].sort(currentView.sort);
-  }, [processedData, tab, sortFn]);
+  }, [processedData, tab]);
 
   const drilldownData = useMemo(() => {
     if (
@@ -368,7 +365,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
       return cityEntry;
     });
 
-    const order = sortedData.map((d) => d.city);
+    const order = sortedData?.map((d) => d.city);
     const originalOrder = [...unsorted].sort((a, b) => {
       const indexA = order.findIndex((city) => city.includes(a.city as string));
       const indexB = order.findIndex((city) => city.includes(b.city as string));
@@ -387,7 +384,8 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
     car,
     gender,
     student,
-    processedData,
+    drilldownLevel,
+    sortedData,
   ]);
 
   const drilldownKeys = useMemo(() => {
@@ -406,17 +404,6 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
     ];
     return Object.keys(segment.indicators);
   }, [selectedSegments, move, work, play, live, drilldownLevel]);
-
-  const downloadJSON = () => {
-    const json = JSON.stringify(processedData, null, 2);
-    const blob = new Blob([json], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'processedData.json';
-    link.click();
-    URL.revokeObjectURL(url);
-  };
 
   useEffect(() => {
     setManIncome(
@@ -514,7 +501,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
               >
                 Reset customizations
               </Button>
-              <Button fontSize='small' onClick={downloadJSON}>
+              <Button fontSize='small' onClick={() => downloadJSON(sortedData)}>
                 Download JSON
               </Button>
             </BarChartStacked>

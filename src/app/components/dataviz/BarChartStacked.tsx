@@ -104,14 +104,10 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   );
 
   useEffect(() => {
-    const hasChanged =
-      allOptions.length !== selectedAnswers.length ||
-      allOptions.some((label) => !selectedAnswers.includes(label));
-
-    if (hasChanged) {
+    if (selectedAnswers.length === 0) {
       setSelectedAnswers(allOptions);
     }
-  }, [allOptions]);
+  }, [allOptions, selectedAnswers]);
 
   // Update activeLegendItems whenever keys change.
   useEffect(() => {
@@ -475,4 +471,4 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   );
 };
 
-export default BarChartStacked;
+export default React.memo(BarChartStacked);

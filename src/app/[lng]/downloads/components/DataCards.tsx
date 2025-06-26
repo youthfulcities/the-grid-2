@@ -1,4 +1,4 @@
-import CardAccordion from '@/app/[lng]/datasets/components/CardAccordion';
+import CardAccordion from '@/app/[lng]/downloads/components/CardAccordion';
 import useTranslation from '@/app/i18n/client';
 import datasetCards from '@/data/dataset-cards.json';
 import useDimension from '@/hooks/useDimensions';

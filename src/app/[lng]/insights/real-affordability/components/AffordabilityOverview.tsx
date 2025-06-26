@@ -510,7 +510,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
       </Tabs.Container>
       <Text fontSize='small' marginTop='small'>
         * represents income based on a sample size under 50. † represents income
-        based on provincial average. Data comes from the Statistics Canada
+        based on provincial average. Data is derived from the Statistics Canada
         Labour Force Survey.
       </Text>
     </View>

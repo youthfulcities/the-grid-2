@@ -1,3 +1,4 @@
+import { IncomeItem } from './IncomeTypes';
 export interface CityCostMap {
   [city: string]: number;
 }
@@ -42,4 +43,17 @@ export interface CategoryData {
   indicators: Record<string, IndicatorDetail>;
   profiles: Profiles;
   total: ProfileDetail;
+}
+
+export interface ProcessedDataItem {
+  city: string;
+  live: number;
+  work: number;
+  play: number;
+  move: number;
+  food: number;
+  rent: number;
+  income: number | null;
+  sample: number | undefined;
+  provincial: IncomeItem | undefined;
 }

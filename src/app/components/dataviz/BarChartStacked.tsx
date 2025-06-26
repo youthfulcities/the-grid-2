@@ -87,7 +87,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
     ...keys,
   ]);
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>(
-    data.map((d) => labelAccessor(d))
+    data.map((d) => labelAccessor(d).replace(/[^a-zA-Z0-9]/g, ''))
   );
   const ref = useRef<SVGSVGElement | null>(null);
   const duration = 1000;
@@ -99,7 +99,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   };
 
   const allOptions = useMemo(
-    () => data.map((d) => labelAccessor(d)),
+    () => data.map((d) => labelAccessor(d).replace(/[^a-zA-Z0-9]/g, '')),
     [data, labelAccessor]
   );
 
@@ -136,7 +136,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
 
   const filteredData = useMemo(() => {
     let filtered = data.filter((d) =>
-      selectedAnswers.includes(labelAccessor(d))
+      selectedAnswers.includes(labelAccessor(d).replace(/[^a-zA-Z0-9]/g, ''))
     );
     if (customSortOrder) {
       filtered = [...filtered].sort((a, b) => {

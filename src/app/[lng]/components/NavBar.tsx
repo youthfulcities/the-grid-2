@@ -260,8 +260,8 @@ const NavBar = () => {
                 {t('chatbot')}
               </MobileMenuItem>
             </MobileLink>
-            <MobileLink href='/datasets'>
-              <MobileMenuItem isDisabled={pathNoLocale === '/datasets'}>
+            <MobileLink href='/downloads'>
+              <MobileMenuItem isDisabled={pathNoLocale === '/downloads'}>
                 {t('datasets')}
               </MobileMenuItem>
             </MobileLink>
@@ -298,8 +298,8 @@ const NavBar = () => {
                 {t('chatbot')}
               </NavLink>
               <NavLink
-                $currentPage={pathNoLocale === '/datasets'}
-                href={`/${lng}/datasets`}
+                $currentPage={pathNoLocale === '/downloads'}
+                href={`/${lng}/downloads`}
               >
                 {t('datasets')}
               </NavLink>

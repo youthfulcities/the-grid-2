@@ -76,6 +76,12 @@
           "bucketName": "ycydl",
           "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
           "s3Key": "amplify-builds/processClothing-774a59767a3962687454-build.zip"
+        },
+        "cacheAffordabilityData": {
+          "bucket": "ycydl",
+          "bucketName": "ycydl",
+          "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
+          "s3Key": "amplify-builds/cacheAffordabilityData-447767556c6b4d45712b-build.zip"
         }
       },
       "storage": {

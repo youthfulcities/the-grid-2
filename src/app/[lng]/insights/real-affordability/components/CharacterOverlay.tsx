@@ -43,7 +43,8 @@ const CharacterOverlay: React.FC<{
 }> = ({ income, profileInView }) => {
   const [hovered, setHovered] = React.useState(false);
 
-  const { age, gender, occupation, activeCity, currentIncome } = useProfile();
+  const { age, gender, occupation, activeCity, currentIncome, customized } =
+    useProfile();
 
   return (
     <AnimatePresence>
@@ -68,7 +69,8 @@ const CharacterOverlay: React.FC<{
                 Current Profile
               </Heading>
               <Text fontSize='small'>
-                <span className='highlight'>Age:</span> {ageMap(age)}
+                <span className='highlight'>Age:</span>{' '}
+                {customized ? ageMap(age) : 'Not selected'}
               </Text>
               <Text fontSize='small'>
                 <span className='highlight'>Gender: </span>
@@ -76,7 +78,9 @@ const CharacterOverlay: React.FC<{
               </Text>
               <Text fontSize='small'>
                 <span className='highlight'>Occupation:</span>{' '}
-                {occupationMap[occupation as keyof typeof occupationMap]}
+                {customized && occupation
+                  ? occupationMap[occupation as keyof typeof occupationMap]
+                  : 'Not selected'}
               </Text>
               <Text fontSize='small'>
                 <span className='highlight'>Income:</span>

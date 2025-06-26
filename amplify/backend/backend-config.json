@@ -831,6 +831,14 @@
         }
       ]
     },
+    "AMPLIFY_storage_interviewall_streamArn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "interviewall"
+        }
+      ]
+    },
     "AMPLIFY_storage_interviewall_tableName": {
       "usedBy": [
         {

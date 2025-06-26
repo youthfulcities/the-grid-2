@@ -178,7 +178,7 @@ const FooterComponent = () => {
                 {t('home')}
               </HoverLink>
               <HoverLink
-                href='/datasets'
+                href='/downloads'
                 passHref
                 $hover={tokens.colors.primary[60].value}
               >

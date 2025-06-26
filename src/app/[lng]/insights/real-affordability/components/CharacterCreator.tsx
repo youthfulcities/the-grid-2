@@ -53,7 +53,7 @@ const StyledHeading = styled(Heading)`
   text-align: center;
 `;
 
-const StyledStepperField = styled(StepperField)`
+const StyledStepperField = styled(StepperField)<{ $isDisabled?: boolean }>`
   button:hover {
     background-color: var(--amplify-colors-brand-primary-10);
   }
@@ -61,6 +61,12 @@ const StyledStepperField = styled(StepperField)`
     font-size: var(--amplify-font-sizes-small);
     margin-bottom: var(--amplify-space-xxxs);
   }
+  ${({ $isDisabled }) =>
+    $isDisabled &&
+    `
+    pointer-events: none;
+    opacity: 0.6;
+  `}
 `;
 
 const StyledSelectField = styled(SelectField)`
@@ -418,8 +424,8 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             id='age'
             label='Age'
             name='age'
-            type='number'
-            isDisabled={occupation === '0' && age === 29}
+            $isDisabled={occupation === '0' && age === 29}
+            // defaultValue={age}
             value={age}
             onStepChange={(n) => {
               setAge(n);

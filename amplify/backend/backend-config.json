@@ -228,6 +228,20 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "cacheAffordabilityData": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "thegrid24c63f4ac"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "contactFormUploader": {
       "build": true,
       "dependsOn": [
@@ -422,6 +436,38 @@
         {
           "category": "function",
           "resourceName": "AdminQueries8e2ac1c4"
+        }
+      ]
+    },
+    "AMPLIFY_function_cacheAffordabilityData_bucket": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "cacheAffordabilityData"
+        }
+      ]
+    },
+    "AMPLIFY_function_cacheAffordabilityData_bucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "cacheAffordabilityData"
+        }
+      ]
+    },
+    "AMPLIFY_function_cacheAffordabilityData_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "cacheAffordabilityData"
+        }
+      ]
+    },
+    "AMPLIFY_function_cacheAffordabilityData_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "cacheAffordabilityData"
         }
       ]
     },
@@ -778,14 +824,6 @@
       ]
     },
     "AMPLIFY_storage_interviewall_sortKeyType": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "interviewall"
-        }
-      ]
-    },
-    "AMPLIFY_storage_interviewall_streamArn": {
       "usedBy": [
         {
           "category": "storage",

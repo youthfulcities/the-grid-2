@@ -25,6 +25,16 @@ const keys = [
   'movers',
 ];
 
+const colors = [
+  '#F2695D',
+  '#FBD166',
+  '#B8D98D',
+  '#2f4eac',
+  '#5125E8',
+  '#F6D9D7',
+  '#af6860',
+];
+
 const Housing: React.FC<HousingProps> = ({
   processedData,
   width,
@@ -85,15 +95,7 @@ const Housing: React.FC<HousingProps> = ({
         onBarClick={onBarClick}
         setTooltipState={setTooltipState}
         width={width}
-        colors={[
-          '#F2695D',
-          '#FBD166',
-          '#B8D98D',
-          '#2f4eac',
-          '#5125E8',
-          '#F6D9D7',
-          '#af6860',
-        ]}
+        colors={colors}
         data={sortedData}
         keys={keys}
         labelAccessor={(d) => d.city as string}

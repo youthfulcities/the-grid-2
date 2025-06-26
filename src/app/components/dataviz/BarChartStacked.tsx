@@ -1,6 +1,6 @@
 import { useThemeContext } from '@/app/context/ThemeContext';
 import toGreyscale from '@/utils/toGreyscale';
-import { Flex, Placeholder } from '@aws-amplify/ui-react';
+import { Button, Flex, Placeholder } from '@aws-amplify/ui-react';
 import * as d3 from 'd3';
 import { SeriesPoint } from 'd3';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -8,6 +8,17 @@ import styled from 'styled-components';
 import Customize from './Customize';
 import Legend from './Legend';
 import SaveAsImg from './SaveAsImg';
+
+const defaultColors = [
+  '#8755AF',
+  '#F2695D',
+  '#FBD166',
+  '#B8D98D',
+  '#00BFA9',
+  '#2f4eac',
+  '#F6D9D7',
+  '#af6860',
+];
 
 const ChartContainer = styled.div`
   position: relative;
@@ -62,22 +73,16 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   keyAccessor,
   marginLeft,
   tooltipFormatter,
-  colors = [
-    '#8755AF',
-    '#F2695D',
-    '#FBD166',
-    '#B8D98D',
-    '#00BFA9',
-    '#2f4eac',
-    '#F6D9D7',
-    '#af6860',
-  ],
+  colors = defaultColors,
   onBarClick,
   filterLabel,
   children,
   id,
 }) => {
   const { colorMode } = useThemeContext();
+  const [customSortOrder, setCustomSortOrder] = useState<'asc' | 'desc' | null>(
+    null
+  );
   const [activeLegendItems, setActiveLegendItems] = useState<string[]>(() => [
     ...keys,
   ]);
@@ -89,7 +94,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   const margin = {
     left: marginLeft ?? 60,
     right: 20,
-    top: 20,
+    top: 40,
     bottom: 40,
   };
 
@@ -99,14 +104,10 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   );
 
   useEffect(() => {
-    const hasChanged =
-      allOptions.length !== selectedAnswers.length ||
-      allOptions.some((label) => !selectedAnswers.includes(label));
-
-    if (hasChanged) {
+    if (selectedAnswers.length === 0) {
       setSelectedAnswers(allOptions);
     }
-  }, [allOptions]);
+  }, [allOptions, selectedAnswers]);
 
   // Update activeLegendItems whenever keys change.
   useEffect(() => {
@@ -133,17 +134,56 @@ const BarChartStacked: React.FC<BarChartProps> = ({
     [filteredKeys, colors, keys]
   );
 
-  const filteredData = useMemo(
-    () => data.filter((d) => selectedAnswers.includes(labelAccessor(d))),
-    [data, selectedAnswers, labelAccessor]
-  );
+  const filteredData = useMemo(() => {
+    let filtered = data.filter((d) =>
+      selectedAnswers.includes(labelAccessor(d))
+    );
+    if (customSortOrder) {
+      filtered = [...filtered].sort((a, b) => {
+        if (
+          activeLegendItems.includes('surplus') ||
+          activeLegendItems.includes('deficit')
+        ) {
+          if (b.surplus !== a.surplus) {
+            return customSortOrder === 'asc'
+              ? (a.surplus as number) - (b.surplus as number)
+              : (b.surplus as number) - (a.surplus as number);
+          }
+          return customSortOrder === 'asc'
+            ? (a.deficit as number) - (b.deficit as number)
+            : (b.deficit as number) - (a.deficit as number);
+        }
+        // Else, sort by sum of values for active legend items.
+        const aValue = d3.sum(
+          activeLegendItems.map((key) => (a[key] as number) || 0)
+        );
+        const bValue = d3.sum(
+          activeLegendItems.map((key) => (b[key] as number) || 0)
+        );
+        return customSortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+      });
+    }
+    return filtered;
+  }, [
+    data,
+    selectedAnswers,
+    labelAccessor,
+    customSortOrder,
+    activeLegendItems,
+  ]);
+
+  useEffect(() => {
+    setCustomSortOrder(null);
+  }, [data]);
 
   useEffect(() => {
     if (!ref.current || !data || !width || !height) return;
 
     const svg = d3.select(ref.current);
-
     svg.selectAll('*').remove();
+    svg.on('mouseout', () => {
+      setTooltipState({ position: null });
+    });
 
     const color = d3.scaleOrdinal<string>().domain(filteredKeys).range(colors);
 
@@ -301,8 +341,11 @@ const BarChartStacked: React.FC<BarChartProps> = ({
 
     xAxis
       .selectAll('text')
+      .attr('text-anchor', 'start')
       .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
       .attr('font-weight', '400')
+      .attr('transform', 'rotate(-30)')
+      .attr('dy', '-0.4em')
       .style('fill', colorMode === 'dark' ? 'white' : 'black');
 
     xAxis
@@ -380,6 +423,8 @@ const BarChartStacked: React.FC<BarChartProps> = ({
     activeLegendItems,
     selectedAnswers,
     colorMode,
+    colors,
+    customSortOrder,
   ]);
 
   return (
@@ -405,6 +450,18 @@ const BarChartStacked: React.FC<BarChartProps> = ({
           <Flex width='100%' wrap='wrap' marginTop='small' gap='xs'>
             <>
               {children}
+              <Button
+                fontSize='small'
+                onClick={() => setCustomSortOrder('asc')}
+              >
+                Sort Ascending
+              </Button>
+              <Button
+                fontSize='small'
+                onClick={() => setCustomSortOrder('desc')}
+              >
+                Sort Descending
+              </Button>
               {width > 0 && <SaveAsImg svgRef={ref} id={id} />}
             </>
           </Flex>

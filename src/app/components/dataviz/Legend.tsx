@@ -100,7 +100,9 @@ const Legend: React.FC<LegendProps> = ({
                   $clickable={setActiveLegendItems !== undefined}
                   $isActive={isActive}
                 >
-                  {item.key}
+                  {item.key
+                    .replace('_', ' ')
+                    .replace(/\b\w/g, (char) => char.toUpperCase())}
                 </LegendLabel>
               </LegendItem>
             );
@@ -127,7 +129,9 @@ const Legend: React.FC<LegendProps> = ({
                   $clickable={setActiveLegendItems !== undefined}
                   $isActive={isActive}
                 >
-                  {item.key}
+                  {item.key
+                    .replace('_', ' ')
+                    .replace(/\b\w/g, (char) => char.toUpperCase())}
                 </LegendLabel>
               </LegendItem>
             );

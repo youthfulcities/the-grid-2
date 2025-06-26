@@ -57,7 +57,7 @@ const ProfileContext = createContext<ProfileContextType | null>(null);
 export const ProfileProvider = ({ children }: { children: ReactNode }) => {
   const [avatar, setAvatar] = useState<AvatarOptions>(defaultOptions);
   const [gender, setGender] = useState<string | null>(null);
-  const [occupation, setOccupation] = useState<string>('1');
+  const [occupation, setOccupation] = useState<string>('');
   const [age, setAge] = useState<number>(19);
   const [car, setCar] = useState<boolean | null>(null);
   const [student, setStudent] = useState<boolean | null>(null);

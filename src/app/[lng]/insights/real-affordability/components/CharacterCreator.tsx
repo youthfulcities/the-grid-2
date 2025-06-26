@@ -346,6 +346,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
                 setGender(null);
                 setStudent(false);
                 setCar(false);
+                setOccupation('');
               }}
             >
               Reset Chart
@@ -373,9 +374,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             name='gender'
             label='Gender'
             placeholder='Select gender'
-            value={gender ?? 'undetermined'}
+            value={gender ?? ''}
             onChange={(e) => {
               setGender(e.target.value);
+              setCustomized(true);
             }}
           >
             <option value='woman'>Woman</option>
@@ -386,10 +388,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             id='occupation'
             name='occupation'
             label='Sector'
-            value={String(occupation)}
+            value={String(occupation) ?? ''}
+            placeholder='Select sector'
             onChange={(e) => {
               setOccupation(e.target.value);
-              setGender(!gender ? 'woman' : gender);
               setCustomized(true);
             }}
           >
@@ -412,6 +414,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             min={19}
             max={29}
             step={5}
+            inputStyles={{ color: customized ? 'white' : 'neutral.80' }}
             id='age'
             label='Age'
             name='age'
@@ -420,7 +423,6 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             value={age}
             onStepChange={(n) => {
               setAge(n);
-              setGender(!gender ? 'woman' : gender);
               setCustomized(true);
             }}
           />
@@ -432,7 +434,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             <StyledCheckboxField
               label='I am a student'
               name='student'
-              value='true'
+              value={student ? 'true' : 'false'}
               size='large'
               color='font.primary'
               onChange={(e) => setStudent(!!e.target.checked)}
@@ -440,7 +442,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             <StyledCheckboxField
               name='car'
               label='I own a car'
-              value='true'
+              value={car ? 'true' : 'false'}
               size='large'
               color='font.primary'
               onChange={(e) => setCar(!!e.target.checked)}

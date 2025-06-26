@@ -1,0 +1,23 @@
+{
+  "lambdaLayers": [],
+  "permissions": {
+    "storage": {
+      "thegrid24c63f4ac": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "bucket",
+      "environmentVariableName": "BUCKET"
+    },
+    {
+      "cloudFormationParameterName": "bucketName",
+      "environmentVariableName": "BUCKET_NAME"
+    }
+  ]
+}

@@ -25,47 +25,58 @@ const getIncome = ({
   currentOccupation,
   income,
 }: GetIncomeOptions): number => {
-  const normalizeMatch = (entry: IncomeEntry) =>
-    currentAge &&
-    entry.Age_12_Group === currentAge &&
-    currentGender &&
-    entry.Gender_Label === currentGender &&
-    currentOccupation &&
-    entry.NOC_Class === currentOccupation;
-
   const averageIncome = computeAverageIncome(income);
+
+  const matchEntry = (entry: IncomeEntry): boolean => {
+    const matchAge = currentAge ? entry.Age_12_Group === currentAge : true;
+    const matchGender = currentGender
+      ? entry.Gender_Label === currentGender
+      : true;
+    const matchOccupation = currentOccupation
+      ? entry.NOC_Class === currentOccupation
+      : true;
+
+    return matchAge && matchGender && matchOccupation;
+  };
+
+  const filterAndAverage = (entries: IncomeEntry[] = []): number | null => {
+    const matched = entries.filter(matchEntry);
+    if (matched.length === 0) return null;
+    const values = matched
+      .map((e) => e.median_monthly_income_post_tax)
+      .filter((v) => typeof v === 'number');
+    return values.length > 0
+      ? values.reduce((sum, val) => sum + val, 0) / values.length
+      : null;
+  };
+
+  // If city is specified
   if (city) {
-    const cityEntry = income.find(
-      (item) =>
-        item.city === city || item.city === `Other CMA - ${currentProvince}`
+    const cityEntry =
+      income.find((item) => item.city === city) ||
+      income.find((item) => item.city === `Other CMA - ${currentProvince}`);
+
+    // Try filtered match on nested data
+    const filteredCityAvg = filterAndAverage(cityEntry?.data);
+    if (filteredCityAvg != null) return filteredCityAvg;
+
+    // Try city-level average fallback
+    if (cityEntry?.median_monthly_income_post_tax)
+      return cityEntry.median_monthly_income_post_tax;
+
+    // Try province-level average
+    const provinceEntry = income.find(
+      (item) => item.province === provinceMap[city as keyof typeof provinceMap]
     );
-
-    const nestedMatch = cityEntry?.data?.find(normalizeMatch);
-
-    return (
-      nestedMatch?.median_monthly_income_post_tax ??
-      cityEntry?.median_monthly_income_post_tax ??
-      income.find(
-        (item) =>
-          item.province === provinceMap[city as keyof typeof provinceMap]
-      )?.median_monthly_income_post_tax ??
-      averageIncome
-    );
+    if (provinceEntry?.median_monthly_income_post_tax)
+      return provinceEntry.median_monthly_income_post_tax;
   }
-  const allIncomes = income
-    .flatMap(
-      (item) =>
-        item.data
-          ?.filter(normalizeMatch)
-          .map((entry) => entry.median_monthly_income_post_tax) || []
-    )
-    .filter((val) => typeof val === 'number');
 
-  if (allIncomes.length > 0) {
-    const avg =
-      allIncomes.reduce((sum, val) => sum + val, 0) / allIncomes.length;
-    return avg;
-  }
+  // If no city match or fallback needed
+  const overallFilteredAvg = filterAndAverage(
+    income.flatMap((i) => i.data || [])
+  );
+  if (overallFilteredAvg != null) return overallFilteredAvg;
 
   return averageIncome;
 };

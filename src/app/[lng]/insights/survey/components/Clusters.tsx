@@ -27,6 +27,7 @@ import { FaBrain, FaBriefcase, FaDollarSign } from 'react-icons/fa6';
 import styled from 'styled-components';
 import Legend from '../../../../components/dataviz/Legend';
 import Heatmap from './Heatmap';
+import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 
 interface DataItem {
   [key: string]: string | number;
@@ -34,15 +35,6 @@ interface DataItem {
 
 interface LegendProps {
   data: Array<{ key: string; color: string }>;
-}
-
-interface TooltipState {
-  position: { x: number; y: number } | null;
-  value?: number | null;
-  topic?: string;
-  content?: string;
-  group?: string;
-  child?: ReactNode | null;
 }
 
 interface ClusterProps {

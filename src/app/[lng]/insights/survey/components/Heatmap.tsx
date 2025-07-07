@@ -1,23 +1,13 @@
 'use client';
 
+import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 import FadeInUp from '@/app/components/FadeInUp';
 import { Placeholder } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import HeatmapTooltip from './HeatmapTooltip';
-
-interface TooltipState {
-  position: { x: number; y: number } | null;
-  value?: number | null;
-  topic?: string;
-  content?: string;
-  group?: string;
-  cluster?: string;
-  child?: ReactNode | null;
-  minWidth?: number | null;
-}
 
 interface DataItem {
   [key: string]: string | number;

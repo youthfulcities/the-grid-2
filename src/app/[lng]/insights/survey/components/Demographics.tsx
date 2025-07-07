@@ -5,17 +5,7 @@ import { Flex, Heading, Text } from '@aws-amplify/ui-react';
 import { useParams } from 'next/navigation';
 import React, { ReactNode, useRef } from 'react';
 import Pie from '../../../../components/dataviz/Pie';
-
-interface TooltipState {
-  position: { x: number; y: number } | null;
-  value?: number | null;
-  topic?: string;
-  content?: string;
-  group?: string;
-  cluster?: string;
-  child?: ReactNode | null;
-  minWidth?: number;
-}
+import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 
 interface DemographicProps {
   currentCluster: string;

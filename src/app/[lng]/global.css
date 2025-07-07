@@ -183,7 +183,7 @@ a:hover {
   color: var(--amplify-colors-secondary-60);
 }
 .alt-highlight {
-  color: var(--amplify-colors-yellow-60);
+  color: var(--amplify-colors-primary-60);
 }
 .light-heading {
   color: #fff;

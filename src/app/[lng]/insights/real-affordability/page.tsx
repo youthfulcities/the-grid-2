@@ -4,6 +4,7 @@ import Container from '@/app/components/Background';
 import ChapterNav from '@/app/components/ChapterNav';
 import Tooltip from '@/app/components/dataviz/TooltipChart/TooltipChart';
 // import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
+import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 import FadeInUp from '@/app/components/FadeInUp';
 import { useDimensions } from '@/hooks/useDimensions';
 import { calculateGroceryTotals } from '@/utils/calculateGroceryTotals';
@@ -21,7 +22,7 @@ import Housing from './components/Housing';
 import HousingJourney from './components/HousingJourney';
 import { useProfile } from './context/ProfileContext';
 import useSectionInView from './hooks/useSectionInView';
-import { GroceryItem, TooltipState } from './types/BasketTypes';
+import { GroceryItem } from './types/BasketTypes';
 import { CategoryData, ProcessedDataItem } from './types/CostTypes';
 import { IncomeData } from './types/IncomeTypes';
 import { RentData } from './types/RentTypes';
@@ -258,7 +259,12 @@ const AffordabilityPage: React.FC = () => {
                 stages.
               </Text>
               <CharacterCreator />
-              <AffordabilityComparison data={data} income={income} />
+              <AffordabilityComparison
+                data={data}
+                income={income}
+                tooltipState={tooltipState}
+                setTooltipState={setTooltipState}
+              />
             </View>
           </FadeInUp>
           <FadeInUp>
@@ -296,15 +302,7 @@ const AffordabilityPage: React.FC = () => {
         </View>
       </Container>
       <BasketBar />
-      {tooltipState.position && (
-        <Tooltip
-          x={tooltipState.position.x}
-          content={tooltipState.content}
-          y={tooltipState.position.y}
-          group={tooltipState.group}
-          child={tooltipState.child}
-        />
-      )}
+      <Tooltip />
       <CharacterOverlay
         income={income}
         profileInView={currentInView.creatorInView}

@@ -1,4 +1,5 @@
 import { useThemeContext } from '@/app/context/ThemeContext';
+import { useTooltip } from '@/app/context/TooltipContext';
 import toGreyscale from '@/utils/toGreyscale';
 import { Button, Flex, Placeholder } from '@aws-amplify/ui-react';
 import * as d3 from 'd3';
@@ -34,12 +35,6 @@ export interface FlexibleDataItem {
 // Extend d3’s Series type so that each series has a key property.
 export type StackSeries = d3.Series<FlexibleDataItem, StackKey>;
 
-interface TooltipState {
-  position: { x: number; y: number } | null;
-  content?: string | React.ReactNode;
-  group?: string;
-}
-
 interface BarChartProps {
   loading?: boolean;
   width: number;
@@ -52,7 +47,6 @@ interface BarChartProps {
     key?: string,
     value?: number
   ) => string | React.ReactNode;
-  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   onBarClick?: (d: FlexibleDataItem | SeriesPoint<FlexibleDataItem>) => void;
   filterLabel?: string | null;
   marginLeft?: number;
@@ -65,7 +59,6 @@ interface BarChartProps {
 const BarChartStacked: React.FC<BarChartProps> = ({
   height = 800,
   width = 600,
-  setTooltipState,
   loading = false,
   data,
   keys,
@@ -89,6 +82,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>(
     data.map((d) => labelAccessor(d).replace(/[^a-zA-Z0-9]/g, ''))
   );
+  const { setTooltipState } = useTooltip();
   const ref = useRef<SVGSVGElement | null>(null);
   const duration = 1000;
   const margin = {

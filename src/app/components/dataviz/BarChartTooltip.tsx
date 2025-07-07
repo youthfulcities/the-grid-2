@@ -37,4 +37,4 @@ const BarChartTooltip: React.FC<BarChartTooltipProps> = ({
   );
 };
 
-export default BarChartTooltip;
+export default React.memo(BarChartTooltip);

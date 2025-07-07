@@ -9,6 +9,7 @@ import Drawer from '@/app/components/Drawer';
 import FadeInUp from '@/app/components/FadeInUp';
 import BarChart from '@/app/components/dataviz/BarChartGeneral';
 import Tooltip from '@/app/components/dataviz/TooltipChart/TooltipChart';
+import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
 import useDownloadFile from '@/hooks/useDownloadFile';
@@ -28,7 +29,7 @@ import {
 import * as d3 from 'd3';
 import _ from 'lodash';
 import { useParams } from 'next/navigation';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
 import styled from 'styled-components';
 // import config from '../../../../amplifyconfiguration.json';
@@ -99,6 +100,9 @@ const questionRanges: Record<string, QuestionRange[]> = {
 const regex =
   /(\[Please choose all that apply\]_feature|_Feature|\[Please choose all that apply\]|_feature|_ feature|\[Please choose only one\]|Select as many as apply.|On a scale of 1 to 10 — with 1 being not at all_featurre interested, and 10 being extremely interested —|Choose as many as apply.)/;
 
+const activeFile = 'WUWWL_Full_National_ONLY - Questions.csv';
+const path = 'internal/DEV/survey';
+
 const Survey: React.FC = () => {
   const {
     data,
@@ -116,16 +120,7 @@ const Survey: React.FC = () => {
   const [currentCluster, setCurrentCluster] = useState(t('cluster_all'));
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const [tooltipState, setTooltipState] = useState<{
-    position: { x: number; y: number } | null;
-    value?: number | null;
-    topic?: string;
-    content?: string;
-    group?: string;
-    cluster?: string;
-    child?: ReactNode | null;
-    minWidth?: number;
-  }>({
+  const [tooltipState, setTooltipState] = useState<TooltipState>({
     position: null,
     value: null,
     content: '',
@@ -144,9 +139,6 @@ const Survey: React.FC = () => {
     medium: true,
     large: false,
   });
-
-  const activeFile = 'WUWWL_Full_National_ONLY - Questions.csv';
-  const path = 'internal/DEV/survey';
 
   const { downloadFile } = useDownloadFile();
 
@@ -347,8 +339,6 @@ const Survey: React.FC = () => {
                 <BarChart
                   data={currentData ?? []}
                   width={width}
-                  tooltipState={tooltipState}
-                  setTooltipState={setTooltipState}
                   labelAccessor={(d) => d.option_en as string}
                   valueAccessor={(d) => d.percentage_Total as number}
                 >
@@ -438,16 +428,7 @@ const Survey: React.FC = () => {
           setTooltipState={setTooltipState}
         />
       </Drawer>
-      {tooltipState.position && (
-        <Tooltip
-          x={tooltipState.position.x}
-          content={tooltipState.content}
-          y={tooltipState.position.y}
-          group={tooltipState.group}
-          child={tooltipState.child}
-          minWidth={tooltipState.minWidth}
-        />
-      )}
+      <Tooltip />
     </Container>
   );
 };

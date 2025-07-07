@@ -1,3 +1,4 @@
+import { useTooltip } from '@/app/context/TooltipContext';
 import { Text } from '@aws-amplify/ui-react';
 import React from 'react';
 import styled from 'styled-components';
@@ -26,21 +27,38 @@ const TooltipContainer = styled.div<{ $minWidth?: number }>`
   border-radius: var(--amplify-space-xs);
 `;
 
-const Tooltip: React.FC<TooltipState> = React.memo(
-  ({ x, y, content, group, child, minWidth = 0 }) => {
-    if (x === null || y === null) {
-      return null;
-    }
-
-    return (
-      <TooltipContainer style={{ left: x, top: y }} $minWidth={minWidth}>
-        {content}
-        {group && <SmallText>{group}</SmallText>}
-        {child}
-      </TooltipContainer>
-    );
+const Tooltip: React.FC<TooltipState> = ({
+  x,
+  y,
+  content,
+  group,
+  child,
+  minWidth = 0,
+}) => {
+  const { tooltipState } = useTooltip();
+  if (!x && !y && !tooltipState.position?.x && !tooltipState.position?.y) {
+    return null;
   }
-);
+
+  console.log(x, y, tooltipState.position?.x, tooltipState.position?.y);
+
+  return (
+    <TooltipContainer
+      style={{
+        left: x || tooltipState.position?.x,
+        top: y || tooltipState.position?.y,
+        // display: x && tooltipState.position?.x ? 'block' : 'none',
+      }}
+      $minWidth={minWidth || tooltipState.minWidth}
+    >
+      {content || tooltipState.content}
+      {(group || tooltipState.group) && (
+        <SmallText>{group || tooltipState.group}</SmallText>
+      )}
+      {child || tooltipState.child}
+    </TooltipContainer>
+  );
+};
 
 Tooltip.displayName = 'Tooltip';
 

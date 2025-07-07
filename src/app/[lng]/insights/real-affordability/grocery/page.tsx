@@ -1,6 +1,7 @@
 'use client';
 
 import Container from '@/app/components/Background';
+import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 import FadeInUp from '@/app/components/FadeInUp';
 import { useDimensions } from '@/hooks/useDimensions';
 import { calculateGroceryTotals } from '@/utils/calculateGroceryTotals';
@@ -10,7 +11,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import BasketBar from '../components/BasketBar';
 import Grocery from '../components/Grocery';
 import { useProfile } from '../context/ProfileContext';
-import { GroceryItem, TooltipState } from '../types/BasketTypes';
+import { GroceryItem } from '../types/BasketTypes';
 import getLatestTimestamp from '../utils/getLatestTimestamp';
 
 const GroceryPage = () => {

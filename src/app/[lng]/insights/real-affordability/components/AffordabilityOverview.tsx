@@ -6,10 +6,8 @@ import { Button, Tabs, Text, View } from '@aws-amplify/ui-react';
 import { SeriesPoint } from 'd3';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useProfile } from '../context/ProfileContext';
-import { TooltipState } from '../types/BasketTypes';
 import { CategoryData, ProcessedDataItem } from '../types/CostTypes';
 import { IncomeData } from '../types/IncomeTypes';
-import { RentData } from '../types/RentTypes';
 import ageMap from '../utils/ageMap';
 import getIncome from '../utils/calculateIncome';
 import genderMap from '../utils/genderMap.json';
@@ -17,10 +15,8 @@ import occupationMap from '../utils/occupationMap.json';
 
 interface AffordabilityOverviewProps {
   width: number;
-  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   cityTotals: { city: string; totalPrice: number }[];
   income: IncomeData;
-  rent: RentData;
   move: CategoryData;
   play: CategoryData;
   work: CategoryData;
@@ -101,18 +97,14 @@ const chartViews: ChartView[] = [
 
 const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   width,
-  setTooltipState,
   cityTotals,
   income,
-  rent,
   move,
   work,
   play,
   live,
   data,
 }) => {
-  const [loading, setLoading] = useState(false);
-  const [errorText, setErrorText] = useState(null);
   const [drilldownLevel, setDrilldownLevel] = useState(0);
   const [tab, setTab] = useState('overview');
   const [selectedSegments, setSelectedSegments] = useState<string[]>([]);
@@ -120,7 +112,6 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
     gender,
     setGender,
     age,
-    customized,
     setCustomized,
     occupation,
     setOccupation,
@@ -366,7 +357,6 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
               loading={!(cityTotals?.length > 0 && processedData?.length > 0)}
               onBarClick={onBarClick}
               colors={view.colors ?? colors}
-              setTooltipState={setTooltipState}
               tooltipFormatter={tooltipFormatter}
               data={
                 drilldownLevel === 0

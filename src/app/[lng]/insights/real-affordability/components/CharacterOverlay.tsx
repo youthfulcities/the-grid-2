@@ -70,7 +70,7 @@ const CharacterOverlay: React.FC<{
               </Heading>
               <Text fontSize='small'>
                 <span className='highlight'>Age:</span>{' '}
-                {customized ? ageMap(age) : 'Not selected'}
+                {customized ? ageMap(age ?? 0) : 'Not selected'}
               </Text>
               <Text fontSize='small'>
                 <span className='highlight'>Gender: </span>
@@ -88,7 +88,7 @@ const CharacterOverlay: React.FC<{
                 {currentIncome > 0
                   ? currentIncome.toFixed(2)
                   : getIncome({
-                      currentAge: ageMap(age),
+                      currentAge: ageMap(age ?? 0),
                       currentGender:
                         genderMap[gender as keyof typeof genderMap],
                       currentOccupation:

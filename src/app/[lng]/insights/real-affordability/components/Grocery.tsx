@@ -1,4 +1,5 @@
 import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
+import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 import {
   calculateGroceryPrice,
   CityTotal,
@@ -18,7 +19,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
 import { styled } from 'styled-components';
 import { useProfile } from '../context/ProfileContext';
-import { BasketEntry, GroceryItem, TooltipState } from '../types/BasketTypes';
+import { BasketEntry, GroceryItem } from '../types/BasketTypes';
 import GroceryBadge from './GroceryBadge';
 import GroceryPriceLabel from './GroceryPriceLabel';
 
@@ -411,7 +412,6 @@ const Grocery = ({
         keys={keys}
         labelAccessor={(d) => d.city as string}
         width={width}
-        setTooltipState={setTooltipState}
         height={800}
         marginLeft={100}
         tooltipFormatter={tooltipFormatter}

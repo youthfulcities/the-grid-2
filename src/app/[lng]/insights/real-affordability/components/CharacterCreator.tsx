@@ -352,6 +352,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
                 setGender(null);
                 setStudent(false);
                 setCar(false);
+                setAge(null);
                 setOccupation('');
               }}
             >
@@ -366,7 +367,6 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
               colorTheme='error'
               color='#fff'
               onClick={() => {
-                setCustomized(true);
                 setGender(!gender ? 'woman' : gender);
               }}
             >
@@ -401,7 +401,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
               setCustomized(true);
             }}
           >
-            <option value={0} disabled={age < 29}>
+            <option value={0} disabled={(age ?? 19) < 29}>
               Management
             </option>
             <option value={1}>Business and finance</option>
@@ -426,7 +426,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             name='age'
             $isDisabled={occupation === '0' && age === 29}
             // defaultValue={age}
-            value={age}
+            value={age ?? 19}
             onStepChange={(n) => {
               setAge(n);
               setCustomized(true);

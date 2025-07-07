@@ -6,18 +6,10 @@ import { useParams } from 'next/navigation';
 import { ReactNode, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Legend from './Legend';
+import { TooltipState } from './TooltipChart/TooltipState';
 
 interface DataItem {
   [key: string]: string | number;
-}
-
-interface TooltipState {
-  position: { x: number; y: number } | null;
-  value?: number | null;
-  topic?: string;
-  content?: string;
-  group?: string;
-  child?: ReactNode | null;
 }
 
 interface LegendProps {

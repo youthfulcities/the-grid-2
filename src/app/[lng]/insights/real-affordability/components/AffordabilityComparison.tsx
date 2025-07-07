@@ -30,7 +30,7 @@ const AffordabilityComparison: React.FC<AffordabilityComparisonProps> = ({
   const cityList = data.map((d) => d.city);
 
   const renderCard = useCallback(
-    (activeProfile: ProfileData, profile: ProfileData, width?: number) => {
+    (profile: ProfileData, activeProfile: ProfileData, width?: number) => {
       const {
         topIndustries,
         genderData,

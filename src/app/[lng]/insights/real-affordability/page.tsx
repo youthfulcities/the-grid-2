@@ -243,10 +243,8 @@ const AffordabilityPage: React.FC = () => {
                 move={move as CategoryData}
                 play={play as CategoryData}
                 live={live as CategoryData}
-                rent={rent}
                 income={income}
                 width={width}
-                setTooltipState={setTooltipState}
                 cityTotals={cityTotals}
               />
             </View>

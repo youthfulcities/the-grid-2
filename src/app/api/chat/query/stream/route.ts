@@ -1,4 +1,5 @@
 /* eslint no-restricted-syntax: 0 */
+/* eslint import/prefer-default-export: 0 */
 
 import {
   BedrockAgentRuntimeClient,
@@ -15,7 +16,7 @@ const bedrockAgentClient = new BedrockAgentRuntimeClient({
   credentials,
 });
 
-export default async function POST(req: Request) {
+export async function POST(req: Request) {
   const { query, sessionId } = await req.json();
 
   const encoder = new TextEncoder();

@@ -7,9 +7,10 @@ import styled from 'styled-components';
 interface AccordionProps {
   title: string;
   children: ReactNode;
-  open?: number | null;
+  open?: number | null | undefined;
   border?: boolean;
   padding?: boolean;
+  setOpen?: () => void;
 }
 
 const AccordionContent = styled(motion.div)<{
@@ -47,14 +48,18 @@ const Accordion: React.FC<AccordionProps> = ({
   title,
   children,
   open = null,
+  setOpen,
   border = true,
   padding = true,
 }) => {
-  const [openIndex, setOpenIndex] = useState<number | null>(open);
+  //allow open to be controlled if greater than -1
+  const [openIndex, setOpenIndex] = useState<number | null>(open ?? null);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
   const handleAccordionClick = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
+    if (setOpen) {
+      setOpen();
+    } else setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
@@ -75,7 +80,7 @@ const Accordion: React.FC<AccordionProps> = ({
         </Heading>
       </CustomizeButton>
       <AnimatePresence>
-        {openIndex === 0 && (
+        {(open ?? openIndex) === 0 && (
           <AccordionContent
             padding={padding}
             border={border}

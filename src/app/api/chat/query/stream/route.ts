@@ -7,7 +7,6 @@ import {
 import { fromNodeProviderChain } from '@aws-sdk/credential-providers';
 import { XMLParser } from 'fast-xml-parser';
 import { NextResponse } from 'next/server';
-import { ReadableStream } from 'stream/web';
 
 const credentials = await fromNodeProviderChain()();
 
@@ -16,7 +15,7 @@ const bedrockAgentClient = new BedrockAgentRuntimeClient({
   credentials,
 });
 
-export async function POST(req: Request) {
+export default async function POST(req: Request) {
   const { query, sessionId } = await req.json();
 
   const encoder = new TextEncoder();
@@ -42,9 +41,6 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
-
-  const traces: any[] = [];
-
   const stream = new ReadableStream({
     async start(controller) {
       try {
@@ -81,10 +77,11 @@ export async function POST(req: Request) {
           }
         }
         controller.close();
-      } catch (e: any) {
+      } catch (e: unknown) {
+        const message = e instanceof Error ? e.message : 'Unknown error';
         controller.enqueue(
           encoder.encode(
-            `${JSON.stringify({ type: 'error', error: e.message })}\n`
+            `${JSON.stringify({ type: 'error', error: message })}\n`
           )
         );
         controller.error(e);
@@ -99,27 +96,4 @@ export async function POST(req: Request) {
       'Transfer-Encoding': 'chunked',
     },
   });
-}
-
-function extractSourceIdMap(text: string): Record<string, string> {
-  const start = text.indexOf('<search_results>');
-  const end = text.indexOf('</search_results>') + '</search_results>'.length;
-  if (start === -1 || end === -1) return {};
-
-  const xml = `<root>${text.slice(start, end)}</root>`;
-  const parser = new XMLParser({ ignoreAttributes: false });
-
-  try {
-    const root = parser.parse(xml);
-    const results = root.root?.search_results?.search_result ?? [];
-    const items = Array.isArray(results) ? results : [results];
-    return items.reduce((acc: Record<string, string>, result: any) => {
-      const source = result.source?.trim?.();
-      const content = result.content?.trim?.();
-      if (source && content) acc[source] = content;
-      return acc;
-    }, {});
-  } catch {
-    return {};
-  }
 }

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/query": {
+      "name": "/query",
+      "lambdaFunction": "chat",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

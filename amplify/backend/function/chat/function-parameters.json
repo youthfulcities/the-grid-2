@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "auth": {
+      "thegrid2fafc44b3": [
+        "read"
+      ]
+    }
+  },
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "bedrockKbId",
+      "environmentVariableName": "BEDROCK_KB_ID"
+    },
+    {
+      "cloudFormationParameterName": "bedrockAgentId",
+      "environmentVariableName": "BEDROCK_AGENT_ID"
+    },
+    {
+      "cloudFormationParameterName": "bedrockAgentAliasId",
+      "environmentVariableName": "BEDROCK_AGENT_ALIAS_ID"
+    }
+  ]
+}

@@ -21,7 +21,7 @@ export declare type MyIconOverridesProps = {
     MyIcon?: PrimitiveOverrideProps<IconProps>;
 } & EscapeHatchProps;
 export declare type MyIconProps = React.PropsWithChildren<Partial<IconProps> & {
-    type?: "alert" | "analyse" | "arrow-right" | "authentication" | "bookmark_border" | "chat" | "chat-bubble-outline" | "checkmark" | "close" | "content" | "dashboard" | "data" | "delete" | "download" | "edit" | "email" | "facebook" | "favorite" | "favorite_border" | "file" | "function" | "group" | "home" | "info" | "instagram" | "linkedin" | "location" | "map" | "methodology" | "more_horiz" | "more_vert" | "notification" | "phone" | "plus" | "reply" | "send" | "settings" | "share" | "shopping_bag" | "shuffle" | "storage" | "table" | "twitter (x)" | "warning";
+    type?: "alert" | "analyse" | "arrow-right" | "authentication" | "bookmark_border" | "chat" | "chat-bubble-outline" | "checkmark" | "close" | "content" | "dashboard" | "data" | "delete" | "download" | "edit" | "email" | "favorite" | "favorite_border" | "file" | "function" | "group" | "home" | "info" | "instagram" | "location" | "map" | "methodology" | "more_horiz" | "more_vert" | "notification" | "phone" | "plus" | "reply" | "send" | "settings" | "share" | "shopping_bag" | "shuffle" | "storage" | "table" | "twitter" | "warning";
 } & {
     overrides?: MyIconOverridesProps | undefined | null;
 }>;

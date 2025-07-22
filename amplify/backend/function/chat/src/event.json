@@ -1,0 +1,14 @@
+{
+  "body": "{\"query\": \"How can the community and local government work to address the bias and lack of support for young people in Whitehorse?\"}",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "httpMethod": "POST",
+  "isBase64Encoded": false,
+  "path": "/bedrock-chat",
+  "requestContext": {
+    "resourcePath": "/bedrock-chat",
+    "httpMethod": "POST"
+  },
+  "resource": "/bedrock-chat"
+}

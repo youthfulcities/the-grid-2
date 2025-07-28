@@ -1,23 +1,13 @@
 'use client';
 
 import FadeInUp from '@/app/components/FadeInUp';
+import { useTooltip } from '@/app/context/TooltipContext';
 import { Placeholder } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import HeatmapTooltip from './HeatmapTooltip';
-
-interface TooltipState {
-  position: { x: number; y: number } | null;
-  value?: number | null;
-  topic?: string;
-  content?: string;
-  group?: string;
-  cluster?: string;
-  child?: ReactNode | null;
-  minWidth?: number | null;
-}
 
 interface DataItem {
   [key: string]: string | number;
@@ -27,8 +17,6 @@ interface HeatmapProps {
   width: number;
   height: number;
   activeFile: string;
-  tooltipState: TooltipState;
-  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   title: string;
 }
 
@@ -64,12 +52,7 @@ const shouldUseWhiteText = (color: string) => {
   return luminance < 0.3;
 };
 
-const Heatmap: React.FC<HeatmapProps> = ({
-  width,
-  activeFile,
-  setTooltipState,
-  title,
-}) => {
+const Heatmap: React.FC<HeatmapProps> = ({ width, activeFile, title }) => {
   const height = 400;
   const ref = useRef<SVGSVGElement>(null);
   const [loading, setLoading] = useState(true);
@@ -77,6 +60,7 @@ const Heatmap: React.FC<HeatmapProps> = ({
   const [parsedData, setParsedData] = useState<{ [key: string]: DataItem[] }>(
     {}
   );
+  const { setTooltipState } = useTooltip();
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 

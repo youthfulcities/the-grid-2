@@ -1,23 +1,15 @@
+import { useTooltip } from '@/app/context/TooltipContext';
 import useTranslation from '@/app/i18n/client';
 import { Flex, Heading } from '@aws-amplify/ui-react';
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import { useParams } from 'next/navigation';
-import { ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Legend from './Legend';
 
 interface DataItem {
   [key: string]: string | number;
-}
-
-interface TooltipState {
-  position: { x: number; y: number } | null;
-  value?: number | null;
-  topic?: string;
-  content?: string;
-  group?: string;
-  child?: ReactNode | null;
 }
 
 interface LegendProps {
@@ -33,8 +25,6 @@ interface PieChartProps {
   title?: string;
   margin?: { top: number; right: number; bottom: number; left: number };
   containerRef: React.RefObject<HTMLDivElement>;
-  tooltipState: TooltipState;
-  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
 }
 
 type PieArcDatum<T> = d3.PieArcDatum<T>;
@@ -49,8 +39,6 @@ const PieChartComponent: React.FC<PieChartProps> = ({
   title,
   margin = { top: 20, right: 40, bottom: 20, left: 40 },
   containerRef,
-  tooltipState,
-  setTooltipState,
 }) => {
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'WUWWL_survey');
@@ -58,6 +46,7 @@ const PieChartComponent: React.FC<PieChartProps> = ({
   const [parsedData, setParsedData] = useState<Record<string, DataItem[]>>({});
   const [activeFile, setActiveFile] = useState(`${type}-all.csv`);
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
+  const { setTooltipState } = useTooltip();
 
   useEffect(() => {
     if (cluster === t('cluster_economic')) {

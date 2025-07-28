@@ -11,6 +11,7 @@ import StyledComponentsRegistry from '../../utils/registry';
 import AutheticatorProvider from '../components/AuthenticatorProvider';
 import { LoadingProvider } from '../context/LoadingContext';
 import { ThemeProvider } from '../context/ThemeContext';
+import { TooltipProvider } from '../context/TooltipContext';
 import { languages } from '../i18n/settings';
 import AWSThemeProvider from './aws-theme-provider';
 import Banner from './components/BetaBanner';
@@ -148,20 +149,22 @@ const RootLayout: React.FC<RootLayoutProps> = ({
             <ThemeProvider>
               <AWSThemeProvider>
                 <LoadingProvider>
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      minHeight: '100vh',
-                      height: '100%',
-                    }}
-                  >
-                    <Banner />
-                    <LoadingBar />
-                    <NavBar />
-                    {children}
-                    <Footer />
-                  </div>
+                  <TooltipProvider>
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        minHeight: '100vh',
+                        height: '100%',
+                      }}
+                    >
+                      <Banner />
+                      <LoadingBar />
+                      <NavBar />
+                      {children}
+                      <Footer />
+                    </div>
+                  </TooltipProvider>
                 </LoadingProvider>
               </AWSThemeProvider>
             </ThemeProvider>

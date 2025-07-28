@@ -1,6 +1,8 @@
 'use client';
 
+import useTranslation from '@/app/i18n/client';
 import { Flex, Text } from '@aws-amplify/ui-react';
+import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'; // Import styled-components
 
@@ -112,6 +114,8 @@ const StyledText = styled(Text)`
 
 const Banner: React.FC = () => {
   const [isVisible, setIsVisible] = useState<boolean>(true);
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'translation');
 
   useEffect(() => {
     // Check local storage to see if the banner has been dismissed
@@ -135,20 +139,20 @@ const Banner: React.FC = () => {
       {/* Independent TextContainer */}
       <TextContainer>
         <StyledText>
-          Youth Data Lab is still in the early stages of development.{' '}
+          {t('banner')}
           <a
             href='https://www.surveymonkey.com/r/2VDFCKM'
             target='_blank'
             rel='noopener noreferrer'
             style={{ color: 'white', textDecoration: 'underline' }}
           >
-            Your feedback is appreciated!
+            {t('banner_link')}
           </a>
         </StyledText>
       </TextContainer>
 
       {/* Positioned button */}
-      <DismissButton onClick={handleDismiss}>Dismiss</DismissButton>
+      <DismissButton onClick={handleDismiss}>{t('dismiss')}</DismissButton>
     </BannerContainer>
   );
 };

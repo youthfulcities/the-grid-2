@@ -28,6 +28,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
+import { FaFileArrowDown, FaRobot } from 'react-icons/fa6';
 
 // Amplify.configure(config);
 
@@ -304,8 +305,12 @@ const Interview = () => {
             {t('download')}
           </Heading>
           <Text>{t('download_desc')}</Text>
-          <Button variation='primary' onClick={() => downloadFile(filename)}>
-            {t('download_button')}
+          <Button
+            gap='xs'
+            variation='primary'
+            onClick={() => downloadFile(filename)}
+          >
+            <FaFileArrowDown /> {t('download_button')}
           </Button>
           <Heading
             level={4}
@@ -313,11 +318,18 @@ const Interview = () => {
             marginTop='xxl'
             marginBottom='xs'
           >
+            ()
             {t('chatbot_title')}
           </Heading>
           <Text>{t('chatbot_text')}</Text>
           <Link href='/chatbot' target='_blank'>
-            <Button variation='primary' marginTop='xs' marginBottom='xl'>
+            <Button
+              gap='xs'
+              variation='primary'
+              marginTop='xs'
+              marginBottom='xl'
+            >
+              <FaRobot />
               {t('chatbot_button')}
             </Button>
           </Link>
@@ -379,7 +391,8 @@ const Interview = () => {
             {loading && <Loader />}
             <Text marginTop='xl'>{t('chatbot_text')}</Text>
             <Link href='/chatbot' target='_blank'>
-              <Button variation='primary' marginBottom='xl'>
+              <Button gap='xs' variation='primary' marginBottom='xl'>
+                <FaRobot />
                 {t('chatbot_button')}
               </Button>
             </Link>
@@ -389,8 +402,8 @@ const Interview = () => {
             <Text>{t('quotes_empty')}</Text>{' '}
             <Text marginTop='xl'>{t('chatbot_text')}</Text>
             <Link href='/chatbot' target='_blank'>
-              <Button variation='primary' marginBottom='xl'>
-                {t('chatbot_button')}
+              <Button gap='xs' variation='primary' marginBottom='xl'>
+                <FaRobot /> {t('chatbot_button')}
               </Button>
             </Link>
           </>

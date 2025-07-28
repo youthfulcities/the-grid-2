@@ -3,32 +3,17 @@
 import useTranslation from '@/app/i18n/client';
 import { Flex, Heading, Text } from '@aws-amplify/ui-react';
 import { useParams } from 'next/navigation';
-import React, { ReactNode, useRef } from 'react';
+import React, { useRef } from 'react';
 import Pie from '../../../../components/dataviz/Pie';
-
-interface TooltipState {
-  position: { x: number; y: number } | null;
-  value?: number | null;
-  topic?: string;
-  content?: string;
-  group?: string;
-  cluster?: string;
-  child?: ReactNode | null;
-  minWidth?: number;
-}
 
 interface DemographicProps {
   currentCluster: string;
   drawerwidth?: number;
-  tooltipState: TooltipState;
-  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
 }
 
 const Demographics: React.FC<DemographicProps> = ({
   currentCluster,
   drawerwidth,
-  tooltipState,
-  setTooltipState,
 }) => {
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'WUWWL_survey');
@@ -74,8 +59,6 @@ const Demographics: React.FC<DemographicProps> = ({
           title={t('demo_gender')}
           cluster={currentCluster}
           containerRef={containerRef}
-          tooltipState={tooltipState}
-          setTooltipState={setTooltipState}
         />
         <Pie
           width={drawerwidth}
@@ -83,8 +66,6 @@ const Demographics: React.FC<DemographicProps> = ({
           title={t('demo_citizen')}
           cluster={currentCluster}
           containerRef={containerRef}
-          tooltipState={tooltipState}
-          setTooltipState={setTooltipState}
         />
         <Pie
           width={drawerwidth}
@@ -92,8 +73,6 @@ const Demographics: React.FC<DemographicProps> = ({
           cluster={currentCluster}
           title={t('demo_ability')}
           containerRef={containerRef}
-          tooltipState={tooltipState}
-          setTooltipState={setTooltipState}
         />
       </Flex>
     </>

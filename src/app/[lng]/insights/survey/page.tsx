@@ -8,6 +8,7 @@ import CrosslinkCards from '@/app/components/CrosslinkCards';
 import Drawer from '@/app/components/Drawer';
 import FadeInUp from '@/app/components/FadeInUp';
 import BarChart from '@/app/components/dataviz/BarChartGeneral';
+import { FlexibleDataItem } from '@/app/components/dataviz/BarChartStacked';
 import Tooltip from '@/app/components/dataviz/TooltipChart/TooltipChart';
 import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
@@ -28,8 +29,9 @@ import {
 import * as d3 from 'd3';
 import _ from 'lodash';
 import { useParams } from 'next/navigation';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
+import { FaFileArrowDown } from 'react-icons/fa6';
 import styled from 'styled-components';
 // import config from '../../../../amplifyconfiguration.json';
 
@@ -99,6 +101,9 @@ const questionRanges: Record<string, QuestionRange[]> = {
 const regex =
   /(\[Please choose all that apply\]_feature|_Feature|\[Please choose all that apply\]|_feature|_ feature|\[Please choose only one\]|Select as many as apply.|On a scale of 1 to 10 — with 1 being not at all_featurre interested, and 10 being extremely interested —|Choose as many as apply.)/;
 
+const activeFile = 'WUWWL_Full_National_ONLY - Questions.csv';
+const path = 'internal/DEV/survey';
+
 const Survey: React.FC = () => {
   const {
     data,
@@ -115,25 +120,6 @@ const Survey: React.FC = () => {
   const { width } = useDimensions(containerRef);
   const [currentCluster, setCurrentCluster] = useState(t('cluster_all'));
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  const [tooltipState, setTooltipState] = useState<{
-    position: { x: number; y: number } | null;
-    value?: number | null;
-    topic?: string;
-    content?: string;
-    group?: string;
-    cluster?: string;
-    child?: ReactNode | null;
-    minWidth?: number;
-  }>({
-    position: null,
-    value: null,
-    content: '',
-    group: '',
-    topic: '',
-    child: null,
-    minWidth: 0,
-  });
   const [questions, setQuestions] = useState<string[]>([]);
   const [currentData, setCurrentData] = useState<SurveyData>(null);
   const posts = useFilteredPosts(47, lng);
@@ -144,9 +130,6 @@ const Survey: React.FC = () => {
     medium: true,
     large: false,
   });
-
-  const activeFile = 'WUWWL_Full_National_ONLY - Questions.csv';
-  const path = 'internal/DEV/survey';
 
   const { downloadFile } = useDownloadFile();
 
@@ -220,25 +203,19 @@ const Survey: React.FC = () => {
     filterDataByQuestion();
   }, [data, currentQuestion]);
 
-  // useEffect(() => {
-  //   const getSegments = () => {
-  //     if (!data || !data[currentQuestion]) return;
-  //     if (currentQuestion && data && data[currentQuestion]) {
-  //       const allSegments = Object.keys(data[currentQuestion]).filter(
-  //         (key) =>
-  //           key !== 'question_id' &&
-  //           key !== 'question_text' &&
-  //           key !== 'question_type'
-  //       );
-  //       setSegments(allSegments ?? []);
-  //       if (!currentSegment) {
-  //         setCurrentSegment(allSegments[1]);
-  //       }
-  //     }
-  //   };
-
-  //   getSegments();
-  // }, [data, currentQuestion]);
+  const tooltipFormatter = useCallback(
+    (d: FlexibleDataItem) => (
+      <Trans
+        i18nKey='tooltip'
+        t={t}
+        values={{
+          percent: d.percentage_Total,
+          question: d.option_en,
+        }}
+      />
+    ),
+    [t]
+  );
 
   return (
     <Container>
@@ -315,50 +292,25 @@ const Survey: React.FC = () => {
                     </option>
                   ))}
                 </StyledSelect>
-                {/* <StyledSelect
-                marginBottom='xl'
-                label='Select a demographic segment'
-                color='font.inverse'
-                value={currentSegment}
-                onChange={(e) => setCurrentSegment(e.target.value)}
-                >
-                {segments.map((segment) => (
-                  <option value={segment} key={segment}>
-                  {segment.replace(regex, '').trim()}
-                  </option>
-                  ))}
-                  </StyledSelect> */}
                 {currentData && (
-                  <>
-                    <Heading
-                      level={3}
-                      textAlign='center'
-                      color='font.primary'
-                      marginTop='xxl'
-                      marginBottom='xl'
-                    >
-                      {currentQuestion?.replace(regex, '').trim()}
-                    </Heading>
-                    {/* <Heading level={5} textAlign='center' color='font.inverse'>
-                    Broken down by: {currentSegment.replace(regex, '').trim()}
-                    </Heading> */}
-                  </>
+                  <Heading
+                    level={3}
+                    textAlign='center'
+                    color='font.primary'
+                    marginTop='xxl'
+                    marginBottom='xl'
+                  >
+                    {currentQuestion?.replace(regex, '').trim()}
+                  </Heading>
                 )}
                 <BarChart
-                  data={currentData ?? []}
+                  data={(currentData as FlexibleDataItem[]) ?? []}
                   width={width}
-                  tooltipState={tooltipState}
-                  setTooltipState={setTooltipState}
+                  xLabel={t('percent')}
                   labelAccessor={(d) => d.option_en as string}
                   valueAccessor={(d) => d.percentage_Total as number}
-                >
-                  {/* <Text fontSize='xs'>
-                  *Note: Segments below a sample size of 50 are not displayed.
-                  The dotted lined represents the national average, which
-                  includes segments not displayed on the chart. Hover or click
-                  on bars to reveal values.
-                  </Text> */}
-                </BarChart>
+                  tooltipFormatter={tooltipFormatter}
+                />
               </>
             ) : (
               <Placeholder
@@ -379,8 +331,6 @@ const Survey: React.FC = () => {
           setCurrentCluster={setCurrentCluster}
           isDrawerOpen={isDrawerOpen}
           setIsDrawerOpen={setIsDrawerOpen}
-          tooltipState={tooltipState}
-          setTooltipState={setTooltipState}
         />
         <FadeInUp>
           <Heading
@@ -400,12 +350,15 @@ const Survey: React.FC = () => {
             marginTop='xxl'
             marginBottom='xs'
           >
-            {t('download')}
+            {t('download_title')}
           </Heading>
-
           <Text>{t('download_desc')}</Text>
-          <Button variation='primary' onClick={() => downloadFile(activeFile)}>
-            {t('download_button')}
+          <Button
+            gap='xs'
+            variation='primary'
+            onClick={() => downloadFile(activeFile)}
+          >
+            <FaFileArrowDown /> {t('download_button')}
           </Button>
         </FadeInUp>
         <FadeInUp>
@@ -432,22 +385,9 @@ const Survey: React.FC = () => {
         }}
         tabText={t('demo_tab')}
       >
-        <Demographics
-          currentCluster={currentCluster}
-          tooltipState={tooltipState}
-          setTooltipState={setTooltipState}
-        />
+        <Demographics currentCluster={currentCluster} />
       </Drawer>
-      {tooltipState.position && (
-        <Tooltip
-          x={tooltipState.position.x}
-          content={tooltipState.content}
-          y={tooltipState.position.y}
-          group={tooltipState.group}
-          child={tooltipState.child}
-          minWidth={tooltipState.minWidth}
-        />
-      )}
+      <Tooltip />
     </Container>
   );
 };

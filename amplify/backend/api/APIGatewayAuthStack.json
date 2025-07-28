@@ -11,6 +11,9 @@
     "env": {
       "Type": "String"
     },
+    "chatbot": {
+      "Type": "String"
+    },
     "grocery": {
       "Type": "String"
     },

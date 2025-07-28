@@ -21,7 +21,7 @@
       "date": "April 2024",
       "datefr": "avril 2024",
       "desc": "Findings from the What's up with work lately? survey performed by Youthful Cities as part of the DEVlab project.",
-      "descfr": "Résultats de l'enquête « Que se passe-t-il au travail ces temps-ci? » réalisée par Youthful Cities dans le cadre du projet DEVlab.",
+      "descfr": "Résultats de l'enquête « Que se passe-t-il au travail ces temps-ci? » réalisée par Youthful Cities dans le cadre du projet laboDEV.",
       "link": "/insights/survey",
       "priority": 1
     },
@@ -32,9 +32,8 @@
       "datasetfr": "Tableau jeunesse",
       "date": "July 2024",
       "datefr": "juillet 2024",
-      "type": "",
       "desc": "Explore 1500 youth perspectives on housing affordability, equity, and shared housing alternatives in Canada, gathered from our State of Housing for Young People in Canada survey.",
-      "descfr": "",
+      "descfr": "Explorez 1500 points de vue de jeunes sur l'abordabilité du logement, l'équité et les solutions de logement partagé au Canada, recueillis dans le cadre de notre enquête sur l'état du logement pour les jeunes au Canada.",
       "link": "/insights/housing/survey",
       "priority": 3
     },
@@ -45,7 +44,6 @@
       "datasetfr": "Cite Jeunesse",
       "date": "July 2024",
       "datefr": "juillet 2024",
-      "type": "",
       "desc": "Explore what youth across Canada are saying about housing. See their quotes organized into an interactive, theme-based visual.",
       "descfr": "Découvrez ce que les jeunes de tout le Canada disent sur le logement dans notre enquête. Voyez leurs pensées organisées en un visuel interactif et thématique.",
       "link": "/insights/housing/open-ended",
@@ -57,7 +55,6 @@
       "dataset": "Best City to Work in Canada",
       "datasetfr": "Meilleure ville où travailler au Canada",
       "date": "2024",
-      "type": "",
       "desc": "Urban Work Index 2024 ranks 30 cities based on youth priorities for ideal living and working. It is the culmination of DEVlab, an investigation to help build dynamic, engaged, and vital workforces in Canada.",
       "descfr": "L'Indice du travail urbain 2024 classe 30 villes en fonction des priorités des jeunes en matière de vie et de travail idéaux. Il fait partie de laboDEV, une enquête visant à créer une main-d'œuvre dynamique, engagée et vitale au Canada.",
       "link": "/insights/uwi2024"
@@ -66,11 +63,11 @@
       "title": "A Day in the Life",
       "titlefr": "Une journée dans la vie",
       "dataset": "Real Affordability Index",
-      "datasetfr": "Indice d’accessibilité réelle",
+      "datasetfr": "Indice d'abordabilité réelle",
       "date": "2022",
       "type": "external",
       "desc": "Using data from our 2022 Real Affordability dataset, we crafted a story of what it is like to live as youth, trying to thrive financially in Canada.",
-      "descfr": "À l'aide des données de notre Indice d'accessibilité réelle 2022, nous avons rédigé une histoire de ce que c'est que de vivre en tant que jeune, en essayant de s'épanouir financièrement au Canada.",
+      "descfr": "À l'aide des données de notre Indice d'abordabilité réelle 2022, nous avons rédigé une histoire de ce que c'est que de vivre en tant que jeune, en essayant de s'épanouir financièrement au Canada.",
       "link": "https://raiscrollytelling2022.youthfulcities.com/"
     },
     {
@@ -87,7 +84,7 @@
 
     {
       "title": "YDL Chatbot",
-      "titlefr": "Chatbot LDJ",
+      "titlefr": "Chatbot de l'LDJ",
       "dataset": "",
       "datasetfr": "",
       "date": "2024",
@@ -98,13 +95,13 @@
     },
     {
       "title": "Best City to Work in Canada",
-      "titlefr": "",
+      "titlefr": "Meilleure ville où travailler au Canada",
       "dataset": "Urban Work Index 2023",
-      "datasetfr": "",
+      "datasetfr": "Indice de travail urbain 2023",
       "date": "2023",
       "type": "",
       "desc": "View the results of the Urban Work Index 2023 on an interactive map.",
-      "descfr": "",
+      "descfr": "Visualisez les résultats de l'indice de travail urbain 2023 sur une carte interactive.",
       "link": "/insights/uwi2023"
     }
   ]

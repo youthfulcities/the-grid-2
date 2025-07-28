@@ -1,3 +1,4 @@
+import useTranslation from '@/app/i18n/client';
 import { Button, Flex, Heading, Text, useTheme } from '@aws-amplify/ui-react';
 import { Feature, FeatureCollection, GeoJsonProperties, Point } from 'geojson';
 import _ from 'lodash';
@@ -112,6 +113,8 @@ const CustomMap: React.FC<CustomMapProps> = ({
   dataset,
   geoJSON,
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t: t_map } = useTranslation(lng, 'translation');
   const [viewState, setViewState] = useState<ViewState>(initialView);
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [currentFeature, setCurrentFeature] = useState<Feature<
@@ -342,7 +345,7 @@ const CustomMap: React.FC<CustomMapProps> = ({
       mapboxAccessToken={MAPBOX_TOKEN}
     >
       <ResetButton variation='primary' onClick={() => onReset()}>
-        Reset
+        {t_map('reset')}
       </ResetButton>
       <NavigationControl position='top-left' />
       <Drawer

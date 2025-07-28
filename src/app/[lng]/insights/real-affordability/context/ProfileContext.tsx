@@ -38,8 +38,8 @@ interface ProfileContextType {
   car: boolean | null;
   setCar: React.Dispatch<React.SetStateAction<boolean | null>>;
   setOccupation: React.Dispatch<React.SetStateAction<string>>;
-  age: number;
-  setAge: React.Dispatch<React.SetStateAction<number>>;
+  age: number | null;
+  setAge: React.Dispatch<React.SetStateAction<number | null>>;
   customized: boolean;
   setCustomized: React.Dispatch<React.SetStateAction<boolean>>;
   activeCity: string | null;
@@ -58,7 +58,7 @@ export const ProfileProvider = ({ children }: { children: ReactNode }) => {
   const [avatar, setAvatar] = useState<AvatarOptions>(defaultOptions);
   const [gender, setGender] = useState<string | null>(null);
   const [occupation, setOccupation] = useState<string>('');
-  const [age, setAge] = useState<number>(19);
+  const [age, setAge] = useState<number | null>(null);
   const [car, setCar] = useState<boolean | null>(null);
   const [student, setStudent] = useState<boolean | null>(null);
   const [customized, setCustomized] = useState<boolean>(false);

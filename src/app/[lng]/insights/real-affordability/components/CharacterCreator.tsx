@@ -53,7 +53,7 @@ const StyledHeading = styled(Heading)`
   text-align: center;
 `;
 
-const StyledStepperField = styled(StepperField)`
+const StyledStepperField = styled(StepperField)<{ $isDisabled?: boolean }>`
   button:hover {
     background-color: var(--amplify-colors-brand-primary-10);
   }
@@ -61,6 +61,12 @@ const StyledStepperField = styled(StepperField)`
     font-size: var(--amplify-font-sizes-small);
     margin-bottom: var(--amplify-space-xxxs);
   }
+  ${({ $isDisabled }) =>
+    $isDisabled &&
+    `
+    pointer-events: none;
+    opacity: 0.6;
+  `}
 `;
 
 const StyledSelectField = styled(SelectField)`
@@ -346,6 +352,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
                 setGender(null);
                 setStudent(false);
                 setCar(false);
+                setAge(null);
                 setOccupation('');
               }}
             >
@@ -360,7 +367,6 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
               colorTheme='error'
               color='#fff'
               onClick={() => {
-                setCustomized(true);
                 setGender(!gender ? 'woman' : gender);
               }}
             >
@@ -395,7 +401,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
               setCustomized(true);
             }}
           >
-            <option value={0} disabled={age < 29}>
+            <option value={0} disabled={(age ?? 19) < 29}>
               Management
             </option>
             <option value={1}>Business and finance</option>
@@ -418,9 +424,9 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             id='age'
             label='Age'
             name='age'
-            type='number'
-            isDisabled={occupation === '0' && age === 29}
-            value={age}
+            $isDisabled={occupation === '0' && age === 29}
+            // defaultValue={age}
+            value={age ?? 19}
             onStepChange={(n) => {
               setAge(n);
               setCustomized(true);

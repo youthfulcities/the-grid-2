@@ -6,6 +6,9 @@
   "interview": "<strong>Interview datasets</strong> contain quotes from participants and are useful for understanding the context of insights.",
   "more": "Need more data? <a>Get it touch with us!</a>",
   "download": "Download {{type}} file",
+  "download_file": "Download file",
   "report": "Download report",
-  "link": "Learn more"
+  "link": "Learn more",
+  "file_size": "File Size:",
+  "last_modified": "Last Modified"
 }

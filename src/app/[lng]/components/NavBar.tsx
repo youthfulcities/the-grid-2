@@ -56,7 +56,6 @@ const NavLink = styled(Link)<{ $currentPage: boolean }>`
   font-size: 16px;
   border-radius: inherit;
   font-weight: 450;
-  max-width: 110px;
   text-transform: uppercase;
   line-height: 24px;
   display: inline-block;
@@ -171,7 +170,7 @@ const NavBar = () => {
                 height='60px'
               />
             )}
-            <SmallText> Powered by Youthful Cities</SmallText>
+            <SmallText>{t('powered')}</SmallText>
           </Link>
 
           <View marginLeft='small' color='white'>
@@ -260,8 +259,8 @@ const NavBar = () => {
                 {t('chatbot')}
               </MobileMenuItem>
             </MobileLink>
-            <MobileLink href='/datasets'>
-              <MobileMenuItem isDisabled={pathNoLocale === '/datasets'}>
+            <MobileLink href='/downloads'>
+              <MobileMenuItem isDisabled={pathNoLocale === '/downloads'}>
                 {t('datasets')}
               </MobileMenuItem>
             </MobileLink>
@@ -298,8 +297,8 @@ const NavBar = () => {
                 {t('chatbot')}
               </NavLink>
               <NavLink
-                $currentPage={pathNoLocale === '/datasets'}
-                href={`/${lng}/datasets`}
+                $currentPage={pathNoLocale === '/downloads'}
+                href={`/${lng}/downloads`}
               >
                 {t('datasets')}
               </NavLink>

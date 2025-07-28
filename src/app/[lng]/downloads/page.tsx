@@ -18,18 +18,12 @@ import { getProperties, getUrl } from 'aws-amplify/storage';
 import Link from 'next/link';
 import React from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
-// import config from '../../../amplifyconfiguration.json';
 
 interface RootLayoutProps {
   params: { lng: string };
 }
 
-// Amplify.configure(config);
-
 const Datasets: React.FC<RootLayoutProps> = ({ params: { lng } }) => {
-  const { user } = useAuthenticator((context) => [context.user]);
-  const { downloadFile } = useDownloadFile();
-
   const fetchUrl = async (filename: string) => {
     try {
       const getUrlResult = await getUrl({

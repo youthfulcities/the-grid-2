@@ -71,6 +71,22 @@ const theme = createTheme(
               },
             },
             button: {
+              link: {
+                warning: {
+                  color: { value: '{colors.yellow.60.value}' },
+                  _hover: {
+                    backgroundColor: { value: '{colors.yellow.20.value}' },
+                    color: { value: '{colors.yellow.80.value}' },
+                  },
+                },
+                info: {
+                  color: { value: '{colors.blue.10.value}' },
+                  _hover: {
+                    backgroundColor: { value: '{colors.blue.80.value}' },
+                    color: { value: '{colors.blue.10.value}' },
+                  },
+                },
+              },
               color: { value: '{colors.font.primary.value}' },
               _hover: {
                 borderColor: { value: '{colors.brand.secondary.80.value}' },

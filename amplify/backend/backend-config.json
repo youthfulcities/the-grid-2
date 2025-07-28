@@ -28,6 +28,20 @@
       "providerPlugin": "awscloudformation",
       "service": "API Gateway"
     },
+    "chatbot": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "chat"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
     "grocery": {
       "dependsOn": [
         {
@@ -237,6 +251,20 @@
           ],
           "category": "storage",
           "resourceName": "thegrid24c63f4ac"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "chat": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "thegrid2fafc44b3"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -468,6 +496,46 @@
         {
           "category": "function",
           "resourceName": "cacheAffordabilityData"
+        }
+      ]
+    },
+    "AMPLIFY_function_chat_bedrockAgentAliasId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "chat"
+        }
+      ]
+    },
+    "AMPLIFY_function_chat_bedrockAgentId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "chat"
+        }
+      ]
+    },
+    "AMPLIFY_function_chat_bedrockKbId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "chat"
+        }
+      ]
+    },
+    "AMPLIFY_function_chat_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "chat"
+        }
+      ]
+    },
+    "AMPLIFY_function_chat_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "chat"
         }
       ]
     },

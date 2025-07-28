@@ -1,46 +1,37 @@
 'use client';
 
+import { useTooltip } from '@/app/context/TooltipContext';
 import truncateText from '@/utils/truncateText';
 import { Placeholder, View } from '@aws-amplify/ui-react';
 import * as d3 from 'd3';
 import _ from 'lodash';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { FlexibleDataItem } from './BarChartStacked';
 import Customize from './Customize';
 import SaveAsImg from './SaveAsImg';
 
-interface FlexibleDataItem {
-  [key: string]: string | number | undefined;
-}
-
-interface TooltipState {
-  position: { x: number; y: number } | null;
-  content?: string;
-  group?: string;
-}
-
 interface BarChartProps {
-  width: number;
+  height?: number;
+  width?: number;
   data: FlexibleDataItem[];
   labelAccessor: (d: FlexibleDataItem) => string;
   valueAccessor: (d: FlexibleDataItem) => number;
-  tooltipFormatter?: (d: FlexibleDataItem) => string;
-  tooltipState: TooltipState;
+  tooltipFormatter?: (d: FlexibleDataItem) => string | JSX.Element;
   filterLabel?: string | null;
   xLabel?: string;
   mode?: 'percent' | 'absolute';
-  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   onBarClick?: (label: string) => void;
   children?: React.ReactNode;
   marginLeft?: number;
+  customize?: boolean;
+  saveAsImg?: boolean;
+  truncateThreshold?: number;
+  colors?: string[];
 }
 
 interface LegendProps {
   data: Array<{ key: string; color: string }>;
-}
-
-interface ResponseGroup {
-  [key: string]: string | number;
 }
 
 const ChartContainer = styled.div`
@@ -48,7 +39,7 @@ const ChartContainer = styled.div`
   margin-bottom: var(--amplify-space-xl);
 `;
 
-const colors = [
+const defaultColors = [
   '#F2695D',
   '#FBD166',
   '#B8D98D',
@@ -59,7 +50,6 @@ const colors = [
 
 const BarChart: React.FC<BarChartProps> = ({
   width,
-  setTooltipState,
   data,
   children,
   mode = 'percent',
@@ -70,23 +60,30 @@ const BarChart: React.FC<BarChartProps> = ({
   onBarClick,
   filterLabel,
   marginLeft,
+  height = 600,
+  customize = true,
+  saveAsImg = true,
+  truncateThreshold = 35,
+  colors = defaultColors,
 }) => {
   const ref = useRef<SVGSVGElement>(null);
-  const height = 600;
   const [leftMargin, setLeftMargin] = useState(10);
-  const margin = {
-    left: marginLeft ?? leftMargin,
-    right: 10,
-    top: 0,
-    bottom: 20,
-  };
+  const margin = useMemo(
+    () => ({
+      left: marginLeft ?? leftMargin,
+      right: 10,
+      top: 0,
+      bottom: 60,
+    }),
+    [marginLeft, leftMargin]
+  );
   const duration = 1000;
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
   const [activeLegendItems, setActiveLegendItems] = useState<string[]>([]);
   const [allOptions, setAllOptions] = useState<string[]>([]);
   const sampleCutoff = 50;
-  const truncateThreshold = 35;
+  const { setTooltipState } = useTooltip();
 
   useEffect(() => {
     if (typeof window !== 'undefined' && sessionStorage) {
@@ -106,16 +103,26 @@ const BarChart: React.FC<BarChartProps> = ({
     const storedOptions = sessionStorage.getItem('selectedAnswers');
     if (storedOptions && storedOptions.length > 2) {
       setSelectedAnswers(JSON.parse(storedOptions));
-    } else setSelectedAnswers(answers.slice(0, answers.length) as string[]); // change me to show more or less answers at one time
+    } else {
+      setSelectedAnswers(answers.slice(0, answers.length) as string[]);
+    }
 
-    // Get the length of the longest item in allOptions using lodash
-    const maxLength = _.get(_.maxBy(answers, 'length'), 'length', 0);
+    // Measure true label width using canvas
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    if (context) {
+      context.font = '14px sans-serif'; // Update to match your app's actual font
 
-    if (maxLength * 10 < truncateThreshold * 5) {
-      // Update the left margin based on the max label length
-      const estimatedLabelWidth = maxLength * 10;
-      setLeftMargin(estimatedLabelWidth);
-    } else setLeftMargin(truncateThreshold * 5);
+      const maxTextWidth = answers.reduce((max, label) => {
+        const { width: textWidth } = context.measureText(label);
+        return Math.max(max, textWidth);
+      }, 0);
+
+      const marginPadding = 12; // extra space for axis/ticks
+      const maxAllowed = truncateThreshold * 6; // soft cap
+
+      setLeftMargin(Math.min(maxTextWidth + marginPadding, maxAllowed));
+    }
   }, [data]);
 
   // Update selected answers to display
@@ -125,16 +132,17 @@ const BarChart: React.FC<BarChartProps> = ({
   }, [data, selectedAnswers]);
 
   useEffect(() => {
-    if (!ref.current || !dataToDisplay || !selectedAnswers || !width || !height)
-      return;
+    if (!ref.current || !dataToDisplay || !selectedAnswers || !height) return;
 
     const svg = d3
       .select(ref.current)
-      .attr('width', width)
-      .attr('height', height)
-      .on('mouseleave', () => setTooltipState({ position: null }));
+      .attr('width', width ?? 0)
+      .attr('height', height);
 
     svg.selectAll('*').remove(); // Clear existing content
+    svg.on('mouseout', () => {
+      setTooltipState({ position: null });
+    });
 
     // Scales
     const xScale = d3
@@ -144,7 +152,7 @@ const BarChart: React.FC<BarChartProps> = ({
         d3.max(dataToDisplay, (d) => valueAccessor(d) as number) || 100,
       ])
       .nice()
-      .range([margin.left, width - margin.right]);
+      .range([margin.left, (width ?? 0) - margin.right]);
 
     const yScale = d3
       .scaleBand()
@@ -175,7 +183,7 @@ const BarChart: React.FC<BarChartProps> = ({
     svg
       .append('text')
       .attr('class', 'x-axis-title')
-      .attr('x', width / 2)
+      .attr('x', (width ?? 0) / 2)
       .attr('y', height - 5)
       .attr('text-anchor', 'middle')
       .attr('fill', 'white')
@@ -254,11 +262,28 @@ const BarChart: React.FC<BarChartProps> = ({
       .duration(duration)
       .delay((d, i) => i * (duration / 10))
       .attr('width', (d) => xScale(valueAccessor(d) as number) - xScale(0));
-  }, [dataToDisplay, width, height, leftMargin, filterLabel]);
+  }, [
+    dataToDisplay,
+    width,
+    height,
+    leftMargin,
+    filterLabel,
+    colors,
+    labelAccessor,
+    valueAccessor,
+    tooltipFormatter,
+    setTooltipState,
+    margin,
+    mode,
+    xLabel,
+    onBarClick,
+    selectedAnswers,
+    truncateThreshold,
+  ]);
 
   return (
-    <View>
-      {!width || !dataToDisplay ? (
+    <View width='100%'>
+      {!dataToDisplay ? (
         <Placeholder
           isLoaded={false}
           width='100%'
@@ -271,16 +296,18 @@ const BarChart: React.FC<BarChartProps> = ({
             <svg ref={ref} data-testid='bar-chart-general' />
           </ChartContainer>
           {children}
-          <Customize
-            selectedOptions={selectedAnswers}
-            setSelectedOptions={setSelectedAnswers}
-            allOptions={allOptions}
-          />
-          {width > 0 && <SaveAsImg svgRef={ref} />}
+          {customize && (
+            <Customize
+              selectedOptions={selectedAnswers}
+              setSelectedOptions={setSelectedAnswers}
+              allOptions={allOptions}
+            />
+          )}
+          {saveAsImg && <SaveAsImg svgRef={ref} />}
         </>
       )}
     </View>
   );
 };
 
-export default BarChart;
+export default React.memo(BarChart);

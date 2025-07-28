@@ -1,9 +1,9 @@
 import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
+import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 import { Button, Heading, Text, View } from '@aws-amplify/ui-react';
 import { SeriesPoint } from 'd3';
 import React, { useMemo } from 'react';
 import { useProfile } from '../context/ProfileContext';
-import { TooltipState } from '../types/BasketTypes';
 
 interface FlexibleDataItem {
   [key: string]: number | string;
@@ -93,7 +93,6 @@ const Housing: React.FC<HousingProps> = ({
         filterLabel={activeCity}
         marginLeft={100}
         onBarClick={onBarClick}
-        setTooltipState={setTooltipState}
         width={width}
         colors={colors}
         data={sortedData}

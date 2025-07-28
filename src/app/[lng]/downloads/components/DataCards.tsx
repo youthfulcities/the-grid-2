@@ -46,7 +46,7 @@ interface DatasetCard {
 const StyledCard = styled(Card)<{ $background: string; $font: string }>`
   position: relative;
   display: flex;
-  border-radius: var(--amplify-radii-large) 0px 0px 0px;
+  border-radius: var(--amplify-radii-large) var(--amplify-radii-large) 0px 0px;
   background-color: ${(props) => props.$background};
   color: ${(props) => props.$font};
 `;
@@ -57,20 +57,6 @@ const MetadataContainer = styled(View)`
   left: 15px;
   right: 0;
   padding: 10px;
-`;
-
-const ClickableText = styled(Text)<{
-  $color: string;
-  $inverse: string;
-}>`
-  color: ${(props) => props.$color};
-  cursor: pointer;
-  text-decoration: underline;
-  &:hover {
-    color: ${(props) => props.$inverse};
-  }
-  position: absolute;
-  bottom: 90px;
 `;
 
 const DownloadButton = styled(Button)<{
@@ -195,7 +181,8 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
         <div
           className={`card-img ${card.className}`}
           style={{
-            borderRadius: 'var(--amplify-radii-large) 0px 0px 0px',
+            borderRadius:
+              'var(--amplify-radii-large) var(--amplify-radii-large) 0px 0px',
             position: 'absolute',
             top: '-1px',
             transform: `translateX(-${tokens.space.large.value})`,
@@ -226,7 +213,7 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
           {cardMetadata && (
             <MetadataContainer>
               <Text fontSize='xs' color={getColor(index).titleFont}>
-                <strong>File Size:</strong>{' '}
+                <strong>{t('file_size')}</strong>{' '}
                 {cardMetadata.size
                   ? `${bytesToMB(cardMetadata.size)} MB`
                   : 'N/A'}
@@ -236,7 +223,7 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
                 color={getColor(index).titleFont}
                 marginBottom='large'
               >
-                <strong>Last Modified:</strong>{' '}
+                <strong>{t('last_modified')}</strong>{' '}
                 {cardMetadata.lastModified
                   ? new Date(cardMetadata.lastModified).toLocaleDateString()
                   : 'N/A'}
@@ -244,7 +231,6 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
             </MetadataContainer>
           )}
         </Flex>
-
         <DownloadButton
           data-ga-download={`download-${card.file}`}
           $background={getColor(index).background}
@@ -258,7 +244,7 @@ const DataCard = ({ fetchUrl, getFileProperties }: AppProps) => {
             )
           }
         >
-          Download File
+          {t('download_file')}
         </DownloadButton>
 
         {/* Conditionally render CardAccordion */}

@@ -2,11 +2,11 @@
   "datasetCards": [
     {
       "title": "Building Bridges: Connecting Youth Skills to the Future of Work",
-      "titlefr": "",
+      "titlefr": "Bâtir des ponts : Relier les compétences des jeunes à l’avenir du travail",
       "date": "2024",
-      "type": "survey",
+      "type": "file",
       "desc": "Download part one of the DEVlab insights report, taking a deep dive into youth data insights and stories from the DEVlab project.",
-      "descfr": "",
+      "descfr": "Téléchargez la première partie du rapport laboDEV insights, qui présente une analyse approfondie des données relatives aux jeunes et des histoires tirées du projet laboDEV.",
       "className": "image-card-insight-1",
       "file": "insight-part-1-final-small.pdf",
       "public": true,
@@ -224,12 +224,12 @@
     },
     {
       "title": "Real Affordability Index",
-      "titlefr": "Indice d’accessibilité réelle",
+      "titlefr": "Indice d'abordabilité réelle",
       "type": "index",
       "date": "2022",
       "className": "image-card-real-affordability-index",
       "desc": "The Real Affordability Index is a joint project between Youthful Cities and RBC Future Launch. It indexes real costs in 27 cities across Canada as of April 2022.",
-      "descfr": "L’indice d’accessibilité réelle est un projet collectif de Youthful Cities et de RBC Objectif avenir. Il indexe les coûts réels dans 27 villes du Canada à partir d’avril 2022.",
+      "descfr": "L’indice d'abordabilité réelle est un projet collectif de Youthful Cities et de RBC Objectif avenir. Il indexe les coûts réels dans 27 villes du Canada à partir d’avril 2022.",
       "file": "real-affordability-index-2022.csv",
       "link": "https://www.youthfulcities.com/blog/reports/real-affordability-index-2022/",
       "downloads": [
@@ -237,7 +237,7 @@
           "title": "A Day in the Life",
           "titlefr": "Une journée dans la vie",
           "desc": "Using data from our 2022 Real Affordability dataset, we crafted a story of what it is like to live as youth, trying to thrive financially in Canada.",
-          "descfr": "À l'aide des données de notre Indice d'accessibilité réelle 2022, nous avons rédigé une histoire de ce que c'est que de vivre en tant que jeune, en essayant de s'épanouir financièrement au Canada.",
+          "descfr": "À l'aide des données de notre Indice d'abordabilité réelle 2022, nous avons rédigé une histoire de ce que c'est que de vivre en tant que jeune, en essayant de s'épanouir financièrement au Canada.",
           "type": "tool",
           "file": "https://raiscrollytelling2022.youthfulcities.com/"
         },
@@ -257,7 +257,7 @@
         {
           "title": "Quotes",
           "desc": "Responses from youth collected after the release of the Real Affordability Index.",
-          "descfr": "Réponses des jeunes recueillies après la publication de l'indice d'accessibilité réelle.",
+          "descfr": "Réponses des jeunes recueillies après la publication de l'indice d'abordabilité réelle",
           "titlefr": "Citations",
           "type": "quotes",
           "file": "rbc_rai_codebook.xlsx"
@@ -406,7 +406,7 @@
     },
     {
       "title": "Global Affordability Index 2014",
-      "titlefr": "Indice mondial d'accessibilité financière 2014",
+      "titlefr": "Indice mondial d'abordabilité 2014",
       "type": "index",
       "date": "2014",
       "className": "image-card-local-economic-growth",

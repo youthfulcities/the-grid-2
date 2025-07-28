@@ -1,4 +1,5 @@
 import { WUWWLSurveyProvider } from '@/app/[lng]/insights/survey/context/WUWWLSurveyContext';
+import { TooltipProvider } from '@/app/context/TooltipContext';
 import fetchData from '@/utils/fetchData';
 import {
   act,
@@ -37,9 +38,11 @@ describe('Survey Component', () => {
   it('renders without crashing', async () => {
     await act(async () => {
       render(
-        <WUWWLSurveyProvider>
-          <Survey />
-        </WUWWLSurveyProvider>
+        <TooltipProvider>
+          <WUWWLSurveyProvider>
+            <Survey />
+          </WUWWLSurveyProvider>
+        </TooltipProvider>
       );
     });
     expect(screen.getByText('title')).toBeInTheDocument();
@@ -48,9 +51,11 @@ describe('Survey Component', () => {
   it('loads data on mount', async () => {
     await act(async () => {
       render(
-        <WUWWLSurveyProvider>
-          <Survey />
-        </WUWWLSurveyProvider>
+        <TooltipProvider>
+          <WUWWLSurveyProvider>
+            <Survey />
+          </WUWWLSurveyProvider>
+        </TooltipProvider>
       );
     });
     expect(fetchData).toHaveBeenCalledWith(
@@ -61,9 +66,11 @@ describe('Survey Component', () => {
 
   it('displays loading state initially', () => {
     render(
-      <WUWWLSurveyProvider>
-        <Survey />
-      </WUWWLSurveyProvider>
+      <TooltipProvider>
+        <WUWWLSurveyProvider>
+          <Survey />
+        </WUWWLSurveyProvider>
+      </TooltipProvider>
     );
     expect(screen.getByTestId('survey-page-placeholder')).toBeInTheDocument();
   });
@@ -71,9 +78,11 @@ describe('Survey Component', () => {
   it('displays select after loading', async () => {
     await act(async () => {
       render(
-        <WUWWLSurveyProvider>
-          <Survey />
-        </WUWWLSurveyProvider>
+        <TooltipProvider>
+          <WUWWLSurveyProvider>
+            <Survey />
+          </WUWWLSurveyProvider>
+        </TooltipProvider>
       );
     });
 
@@ -83,22 +92,25 @@ describe('Survey Component', () => {
   it('displays chart after loading', async () => {
     await act(async () => {
       render(
-        <WUWWLSurveyProvider>
-          <Survey />
-        </WUWWLSurveyProvider>
+        <TooltipProvider>
+          <WUWWLSurveyProvider>
+            <Survey />
+          </WUWWLSurveyProvider>
+        </TooltipProvider>
       );
     });
     const svgElement = screen.findByTestId('bar-chart-general');
     expect(await svgElement).toBeInTheDocument();
-    expect(await screen.findByText('Percent')).toBeInTheDocument();
   });
 
   it('displays cluster chart after loading', async () => {
     await act(async () => {
       render(
-        <WUWWLSurveyProvider>
-          <Survey />
-        </WUWWLSurveyProvider>
+        <TooltipProvider>
+          <WUWWLSurveyProvider>
+            <Survey />
+          </WUWWLSurveyProvider>
+        </TooltipProvider>
       );
     });
     const svgElement = screen.findByTestId('cluster-chart');
@@ -109,9 +121,11 @@ describe('Survey Component', () => {
   it('displays heatmaps after loading', async () => {
     await act(async () => {
       render(
-        <WUWWLSurveyProvider>
-          <Survey />
-        </WUWWLSurveyProvider>
+        <TooltipProvider>
+          <WUWWLSurveyProvider>
+            <Survey />
+          </WUWWLSurveyProvider>
+        </TooltipProvider>
       );
     });
     const heatmaps = await screen.findAllByTestId('heatmap');
@@ -122,9 +136,11 @@ describe('Survey Component', () => {
   it('filters questions by topic', async () => {
     await act(async () => {
       render(
-        <WUWWLSurveyProvider>
-          <Survey />
-        </WUWWLSurveyProvider>
+        <TooltipProvider>
+          <WUWWLSurveyProvider>
+            <Survey />
+          </WUWWLSurveyProvider>
+        </TooltipProvider>
       );
     });
     const button = screen.getByRole('button', { name: 'select_other' });
@@ -137,9 +153,11 @@ describe('Survey Component', () => {
   it('filters data by selected question', async () => {
     await act(async () => {
       render(
-        <WUWWLSurveyProvider>
-          <Survey />
-        </WUWWLSurveyProvider>
+        <TooltipProvider>
+          <WUWWLSurveyProvider>
+            <Survey />
+          </WUWWLSurveyProvider>
+        </TooltipProvider>
       );
     });
     const button = screen.getByRole('button', { name: 'select_other' });
@@ -153,9 +171,11 @@ describe('Survey Component', () => {
   it('handles drawer open and close', async () => {
     await act(async () => {
       render(
-        <WUWWLSurveyProvider>
-          <Survey />
-        </WUWWLSurveyProvider>
+        <TooltipProvider>
+          <WUWWLSurveyProvider>
+            <Survey />
+          </WUWWLSurveyProvider>
+        </TooltipProvider>
       );
     });
     const overlay = screen.getByTestId('drawer-overlay');

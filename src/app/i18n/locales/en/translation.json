@@ -26,5 +26,14 @@
   "customize": "Customize chart",
   "select_other": "Other",
   "select_question": "Select a question",
-  "percent": "Percent"
+  "percent": "Percent",
+  "powered": "Powered by Youthful Cities",
+  "banner": "Youth Data Lab is still in the early stages of development. ",
+  "banner_link": "Your feedback is appreciated!",
+  "dismiss": "Dismiss",
+  "feature_tag": "FEATURED",
+  "feature_title": "Building Bridges: Connecting Youth Skills to the Future of Work",
+  "feature_desc": "Download part one of the DEVlab insights report, taking a deep dive into youth data insights and stories from the DEVlab project.",
+  "feature_btn": "Download Now",
+  "reset": "Reset"
 }

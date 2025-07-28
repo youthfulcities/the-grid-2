@@ -1,5 +1,6 @@
 import useTranslation from '@/app/i18n/client';
 import { CheckboxField } from '@aws-amplify/ui-react';
+import _ from 'lodash';
 import { useParams } from 'next/navigation';
 import React from 'react';
 import styled from 'styled-components';

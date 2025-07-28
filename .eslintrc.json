@@ -20,6 +20,7 @@
   },
   "plugins": ["react", "prettier", "json"],
   "rules": {
+    "no-restricted-syntax": "warn",
     "import/no-extraneous-dependencies": "warn",
     "max-classes-per-file": "warn",
     "react/jsx-no-useless-fragment": "warn",

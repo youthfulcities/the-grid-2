@@ -1,9 +1,8 @@
-import CompareCities from '@/app/components/CompareCities';
-import { Card, Divider, Flex, Heading, Text } from '@aws-amplify/ui-react';
-import { motion } from 'framer-motion';
+import CompareCities from '@/app/[lng]/insights/real-affordability/components/CompareCities';
+import { Divider, Flex, Heading, Text } from '@aws-amplify/ui-react';
 import React from 'react';
-import styled from 'styled-components';
 import { RentData } from '../types/RentTypes';
+import { ProfileData } from '../types/ProfileTypes';
 
 interface CityCardProps {
   cityName: string;
@@ -86,8 +85,8 @@ const HousingComparison: React.FC<{ rent: RentData }> = ({ rent }) => {
       <Heading level={4}>Overview</Heading>
       <CompareCities
         allCities={availableCities}
-        renderCard={(city, activeCity) => (
-          <CityCard cityName={city} activeCityName={activeCity} data={rent} />
+        renderCard={(profile: ProfileData, activeProfile: ProfileData) => (
+          <CityCard cityName={profile?.city ?? ''} activeCityName={activeProfile?.city ?? ''} data={rent} />
         )}
       />
     </>

@@ -76,6 +76,17 @@
           "bucketName": "ycydl",
           "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
           "s3Key": "amplify-builds/processClothing-774a59767a3962687454-build.zip"
+        },
+        "cacheAffordabilityData": {
+          "bucket": "ycydl",
+          "bucketName": "ycydl",
+          "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
+          "s3Key": "amplify-builds/cacheAffordabilityData-447767556c6b4d45712b-build.zip"
+        },
+        "chat": {
+          "bedrockKbId": "GVJRIVSACA",
+          "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
+          "s3Key": "amplify-builds/chat-6c54734f6d5078494668-build.zip"
         }
       },
       "storage": {
@@ -126,7 +137,8 @@
         "thegrid2": {},
         "interviewAll": {},
         "AdminQueries": {},
-        "grocery": {}
+        "grocery": {},
+        "chatbot": {}
       }
     }
   },
@@ -253,6 +265,13 @@
           "bucketName": "ycydl",
           "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
           "s3Key": "amplify-builds/cacheAffordabilityData-447767556c6b4d45712b-build.zip"
+        },
+        "chat": {
+          "deploymentBucketName": "amplify-thegrid2-staging-214411-deployment",
+          "s3Key": "amplify-builds/chat-6a3950344e706b44442f-build.zip",
+          "bedrockKbId": "5D4TZVQVAP",
+          "bedrockAgentId": "N5EPFOYVOA",
+          "bedrockAgentAliasId": "1KLZS85GXJ"
         }
       },
       "api": {
@@ -260,7 +279,8 @@
         "thegrid2": {},
         "interviewAll": {},
         "grocery": {},
-        "AdminQueries": {}
+        "AdminQueries": {},
+        "chatbot": {}
       },
       "analytics": {
         "thegrid2": {}

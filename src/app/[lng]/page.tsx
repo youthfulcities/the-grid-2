@@ -11,7 +11,6 @@ import Container from '../components/Background';
 import FadeInUp from '../components/FadeInUp';
 import Banner from './components/Banner';
 import HomeHeader from './components/HomeHeader';
-import TooltipContext from '../context/TooltipContext';
 
 Amplify.configure(awsExports);
 

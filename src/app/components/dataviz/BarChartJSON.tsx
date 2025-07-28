@@ -1,45 +1,28 @@
 'use client';
 
+import { useTooltip } from '@/app/context/TooltipContext';
 import truncateText from '@/utils/truncateText';
 import * as d3 from 'd3';
 import _, { sample } from 'lodash';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { FlexibleDataItem } from './BarChartStacked';
 import Customize from './Customize';
 import Legend from './Legend';
 import SaveAsImg from './SaveAsImg';
-
-interface DataItem {
-  [key: string]: string | number;
-}
 
 interface ResponseGroup {
   [key: string]: string | number;
 }
 
-interface QuestionResponses {
-  [key: string]: ResponseGroup;
-}
-
-interface SurveyData {
-  [question: string]: QuestionResponses;
-}
-
-interface TooltipState {
-  position: { x: number; y: number } | null;
-  value?: number | null;
-  topic?: string;
-  content?: string;
-  group?: string;
-  child?: ReactNode | null;
-}
-
 interface BarProps {
   width: number;
-  tooltipState: TooltipState;
-  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
-  data: ResponseGroup | number | null;
   children?: ReactNode;
+  xLabel?: string;
+  data?: FlexibleDataItem | ResponseGroup;
+  labelAccessor?: (d: FlexibleDataItem) => string;
+  valueAccessor?: (d: FlexibleDataItem) => number;
+  tooltipFormatter?: (d: FlexibleDataItem) => string | JSX.Element;
 }
 
 interface LegendProps {
@@ -50,15 +33,6 @@ const ChartContainer = styled.div`
   position: relative;
   margin-bottom: var(--amplify-space-xl);
 `;
-
-const colors = [
-  '#F2695D',
-  '#FBD166',
-  '#B8D98D',
-  '#253D88',
-  '#F6D9D7',
-  '#673934',
-];
 const newColors = [
   '#F2695D',
   '#FBD166',
@@ -70,13 +44,15 @@ const newColors = [
 
 const BarChart: React.FC<BarProps> = ({
   width,
-  tooltipState,
-  setTooltipState,
   data,
   children,
+  xLabel = 'Percent',
+  labelAccessor,
+  valueAccessor,
+  tooltipFormatter,
 }) => {
   const ref = useRef<SVGSVGElement>(null);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [allOptions, setAllOptions] = useState<string[]>([]);
   const [legendData, setLegendData] = useState<LegendProps['data']>([]);
@@ -89,6 +65,7 @@ const BarChart: React.FC<BarProps> = ({
   const duration = 1000;
   const sampleCutoff = 50;
   const truncateThreshold = 20;
+  const { setTooltipState } = useTooltip();
 
   useEffect(() => {
     if (typeof window !== 'undefined' && sessionStorage) {
@@ -242,7 +219,7 @@ const BarChart: React.FC<BarProps> = ({
       .attr('text-anchor', 'middle')
       .attr('fill', 'white')
       .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
-      .text('Percent');
+      .text(xLabel);
 
     // y-axis
     svg
@@ -282,15 +259,17 @@ const BarChart: React.FC<BarProps> = ({
       .on('mouseover', (event, d) => {
         setTooltipState({
           position: { x: event.pageX, y: event.pageY },
-          content: `${d.value}% of youth who identify as ${d.option} selected ${d.answer}`,
-          group: `National average: ${d.average}%`,
+          content: tooltipFormatter
+            ? tooltipFormatter(d)
+            : `${d.value}% of youth who identify as ${d.option} selected ${d.answer}`,
         });
       })
       .on('mousemove', (event, d) => {
         setTooltipState({
           position: { x: event.pageX, y: event.pageY },
-          content: `${d.value}% of youth who identify as ${d.option} selected ${d.answer}`,
-          group: `National average: ${d.average}%`,
+          content: tooltipFormatter
+            ? tooltipFormatter(d)
+            : `${d.value}% of youth who identify as ${d.option} selected ${d.answer}`,
         });
       })
       .on('mouseout', () => {

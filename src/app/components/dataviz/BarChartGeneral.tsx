@@ -7,11 +7,9 @@ import * as d3 from 'd3';
 import _ from 'lodash';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { FlexibleDataItem } from './BarChartStacked';
 import Customize from './Customize';
 import SaveAsImg from './SaveAsImg';
-interface FlexibleDataItem {
-  [key: string]: string | number | undefined;
-}
 
 interface BarChartProps {
   height?: number;
@@ -19,7 +17,7 @@ interface BarChartProps {
   data: FlexibleDataItem[];
   labelAccessor: (d: FlexibleDataItem) => string;
   valueAccessor: (d: FlexibleDataItem) => number;
-  tooltipFormatter?: (d: FlexibleDataItem) => string;
+  tooltipFormatter?: (d: FlexibleDataItem) => string | JSX.Element;
   filterLabel?: string | null;
   xLabel?: string;
   mode?: 'percent' | 'absolute';

@@ -1,6 +1,7 @@
 'use client';
 
 import FadeInUp from '@/app/components/FadeInUp';
+import { useTooltip } from '@/app/context/TooltipContext';
 import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
 import {
@@ -14,20 +15,12 @@ import {
 import { downloadData } from 'aws-amplify/storage';
 import * as d3 from 'd3';
 import { useParams } from 'next/navigation';
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
 import { FaBrain, FaBriefcase, FaDollarSign } from 'react-icons/fa6';
 import styled from 'styled-components';
 import Legend from '../../../../components/dataviz/Legend';
 import Heatmap from './Heatmap';
-import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 
 interface DataItem {
   [key: string]: string | number;
@@ -42,8 +35,6 @@ interface ClusterProps {
   setCurrentCluster: (cluster: string) => void;
   isDrawerOpen: boolean;
   setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
-  tooltipState: TooltipState;
-  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
 }
 
 const ChartContainer = styled.div`
@@ -59,8 +50,6 @@ const Clusters: React.FC<ClusterProps> = ({
   setCurrentCluster,
   isDrawerOpen,
   setIsDrawerOpen,
-  tooltipState,
-  setTooltipState,
 }) => {
   const { lng } = useParams<{ lng: string }>();
   const { t } = useTranslation(lng, 'WUWWL_survey');
@@ -74,6 +63,7 @@ const Clusters: React.FC<ClusterProps> = ({
   const { tokens } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const { width: containerWidth } = useDimensions(containerRef);
+  const { setTooltipState } = useTooltip();
   const width = containerWidth - 60;
 
   useEffect(() => {
@@ -352,24 +342,18 @@ const Clusters: React.FC<ClusterProps> = ({
         activeFile='cluster-heatmap-economic.csv'
         width={width}
         height={height}
-        tooltipState={tooltipState}
-        setTooltipState={setTooltipState}
         title={t('cluster_economic')}
       />
       <Heatmap
         activeFile='cluster-heatmap-forming.csv'
         width={width}
         height={height}
-        tooltipState={tooltipState}
-        setTooltipState={setTooltipState}
         title={t('cluster_forming')}
       />
       <Heatmap
         activeFile='cluster-heatmap-social.csv'
         width={width}
         height={height}
-        tooltipState={tooltipState}
-        setTooltipState={setTooltipState}
         title={t('cluster_social')}
       />
     </OverflowContainer>

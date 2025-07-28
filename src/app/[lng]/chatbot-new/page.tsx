@@ -2,9 +2,19 @@
 
 import Accordion from '@/app/components/Accordion';
 import Container from '@/app/components/Background';
-import { Button, Card, Flex, Input, Text, View } from '@aws-amplify/ui-react';
+import useTranslation from '@/app/i18n/client';
+import {
+  Button,
+  Card,
+  Flex,
+  Input,
+  Text,
+  View,
+  useAuthenticator,
+} from '@aws-amplify/ui-react';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -132,6 +142,18 @@ const normalizeNewlines = (text: string) =>
     .trim(); // Remove leading/trailing blank lines
 
 const ChatInterface: React.FC = () => {
+  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
+  const router = useRouter();
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'chatbot');
+
+  // useEffect(() => {
+  //   if (authStatus !== 'authenticated') {
+  //     sessionStorage.setItem('postLoginRedirect', '/chatbot-new');
+  //     router.push('/authentication');
+  //   }
+  // }, [authStatus, router]);
+
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
@@ -356,7 +378,7 @@ const ChatInterface: React.FC = () => {
                 {msg.role === 'assistant' && (msg.quotes?.length ?? 0) > 0 && (
                   <View marginTop='small'>
                     <Accordion
-                      title='Citations'
+                      title={t('citations')}
                       open={msg.open ? 0 : undefined}
                       setOpen={() => toggleCitations(idx)}
                     >
@@ -380,7 +402,7 @@ const ChatInterface: React.FC = () => {
                   (msg.followups?.length ?? 0) > 0 && (
                     <View marginTop='1rem'>
                       <Text fontWeight='bold' marginBottom='xs'>
-                        Follow-up Questions:
+                        {t('followup')}
                       </Text>
                       <Flex direction='column' gap='0'>
                         {msg.followups?.map((question) => (
@@ -410,13 +432,13 @@ const ChatInterface: React.FC = () => {
             gap='0.5rem'
           >
             <Input
-              placeholder='Ask something...'
+              placeholder={t('ask_something')}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               disabled={loading}
             />
             <Button isDisabled={loading} type='submit'>
-              Send
+              {t('send_btn')}
             </Button>
           </Flex>
         </Flex>

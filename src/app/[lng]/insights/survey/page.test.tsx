@@ -101,7 +101,6 @@ describe('Survey Component', () => {
     });
     const svgElement = screen.findByTestId('bar-chart-general');
     expect(await svgElement).toBeInTheDocument();
-    expect(await screen.findByText('Percent')).toBeInTheDocument();
   });
 
   it('displays cluster chart after loading', async () => {

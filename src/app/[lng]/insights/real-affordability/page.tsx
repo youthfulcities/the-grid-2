@@ -32,6 +32,9 @@ import genderMap from './utils/genderMap.json';
 import getLatestTimestamp from './utils/getLatestTimestamp';
 import occupationMap from './utils/occupationMap.json';
 import provinceMap from './utils/provinceMap.json';
+import { Trans } from 'react-i18next/TransWithoutContext';
+import useTranslation from '@/app/i18n/client';
+import { useParams } from 'next/navigation';
 
 const steps = [
   { title: 'Affordability', key: 'overviewInView' },
@@ -41,6 +44,8 @@ const steps = [
 ];
 
 const AffordabilityPage: React.FC = () => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'rai');
   const containerRef = useRef<HTMLDivElement>(null);
   // const [loading, setLoading] = useState<boolean>(true);
   const [income, setIncome] = useState<IncomeData>([]);

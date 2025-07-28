@@ -6,6 +6,7 @@ import {
   InvokeAgentCommand,
 } from '@aws-sdk/client-bedrock-agent-runtime';
 import { fromNodeProviderChain } from '@aws-sdk/credential-providers';
+import { createHash, randomUUID } from 'crypto';
 import { XMLParser } from 'fast-xml-parser';
 import { NextResponse } from 'next/server';
 
@@ -16,6 +17,9 @@ const bedrockAgentClient = new BedrockAgentRuntimeClient({
   credentials,
 });
 
+const hashSessionId = (input: string): string =>
+  createHash('sha256').update(input).digest('hex').slice(0, 64); // trim to fit
+
 export async function POST(req: Request) {
   const { query, sessionId } = await req.json();
 
@@ -25,7 +29,7 @@ export async function POST(req: Request) {
   const command = new InvokeAgentCommand({
     agentId: process.env.BEDROCK_AGENT_ID!,
     agentAliasId: process.env.BEDROCK_ALIAS_ID!,
-    sessionId: sessionId || crypto.randomUUID(),
+    sessionId: hashSessionId(sessionId) || randomUUID(),
     inputText: query,
     enableTrace: true,
     streamingConfigurations: {

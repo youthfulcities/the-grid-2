@@ -26,5 +26,14 @@
   "blog_button": "Lire l'article du blog",
   "percent": "Pourcentage",
   "select_other": "Autres",
-  "customize": "Personnaliser le graphique"
+  "customize": "Personnaliser le graphique",
+  "powered": "Propulsé par Youthful Cities",
+  "banner": "Labo Data Jeunesse en est encore aux premiers stades de son développement. ",
+  "banner_link": "Vos commentaires sont les bienvenus !",
+  "dismiss": "Renvoyer",
+  "feature_tag": "À L'AFFICHE",
+  "feature_title": "Bâtir des ponts : Relier les compétences des jeunes à l’avenir du travail",
+  "feature_desc": "Téléchargez la première partie du rapport laboDEV insights, qui présente une analyse approfondie des données relatives aux jeunes et des histoires tirées du projet laboDEV.",
+  "feature_btn": "Télécharger maintenant",
+  "reset": "Réinitialiser"
 }

@@ -1,6 +1,9 @@
+import useTranslation from '@/app/i18n/client';
 import useDownloadFile from '@/hooks/useDownloadFile';
 import { Button, Card, Flex, Heading, Text, View } from '@aws-amplify/ui-react';
+import { useParams } from 'next/navigation';
 import React from 'react';
+import { FaFileArrowDown } from 'react-icons/fa6';
 import styled from 'styled-components';
 
 interface FeatureProps {
@@ -17,6 +20,8 @@ const StyledImage = styled.img`
 
 const Feature: React.FC<FeatureProps> = ({ color = 'blue', value = '60' }) => {
   const { downloadFile } = useDownloadFile();
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'translation');
 
   return (
     <Card
@@ -36,7 +41,7 @@ const Feature: React.FC<FeatureProps> = ({ color = 'blue', value = '60' }) => {
       >
         <StyledImage
           src='https://www.youthfulcities.com/wp-content/uploads/2025/05/insight-part-1.3.png'
-          alt='Building Bridges: Connecting Youth Skills to the Future of Work'
+          alt={t('feature_title')}
         />
         <Flex
           direction='column'
@@ -46,23 +51,19 @@ const Feature: React.FC<FeatureProps> = ({ color = 'blue', value = '60' }) => {
         >
           <View marginBottom='small'>
             <Heading level={5} color='yellow.60'>
-              FEATURED
+              {t('feature_tag')}
             </Heading>
-            <Heading level={3}>
-              Building Bridges: Connecting Youth Skills to the Future of Work
-            </Heading>
+            <Heading level={3}>{t('feature_title')}</Heading>
           </View>
-          <Text marginBottom='medium'>
-            Download part one of the DEVlab insights report, taking a deep dive
-            into youth data insights and stories from the DEVlab project.
-          </Text>
+          <Text marginBottom='medium'>{t('feature_desc')}</Text>
           <Button
+            gap='xs'
             data-ga-download='download-insight-part-1-final-small.pdf'
             id='feature-download-insight-part-1-final-small.pdf'
             onClick={() => downloadFile('insight-part-1-final-small.pdf', true)}
             variation='primary'
           >
-            Download Now
+            <FaFileArrowDown /> {t('feature_btn')}
           </Button>
         </Flex>
       </Flex>

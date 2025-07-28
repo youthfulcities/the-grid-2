@@ -56,7 +56,6 @@ const NavLink = styled(Link)<{ $currentPage: boolean }>`
   font-size: 16px;
   border-radius: inherit;
   font-weight: 450;
-  max-width: 110px;
   text-transform: uppercase;
   line-height: 24px;
   display: inline-block;
@@ -171,7 +170,7 @@ const NavBar = () => {
                 height='60px'
               />
             )}
-            <SmallText> Powered by Youthful Cities</SmallText>
+            <SmallText>{t('powered')}</SmallText>
           </Link>
 
           <View marginLeft='small' color='white'>

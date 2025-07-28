@@ -24,6 +24,7 @@ import { downloadData } from 'aws-amplify/storage';
 import { useParams } from 'next/navigation';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { Trans } from 'react-i18next/TransWithoutContext';
+import { FaFileArrowDown } from 'react-icons/fa6';
 
 // Amplify.configure(config);
 
@@ -58,7 +59,7 @@ const fetchData = async () => {
 
 const Interview = () => {
   const { lng } = useParams<{ lng: string }>();
-  const { t } = useTranslation(lng, 'housing');
+  const { t } = useTranslation(lng, 'housing_open');
 
   const containerRef = useRef<HTMLDivElement>(null);
   const quotesRef = useRef<HTMLDivElement>(null);
@@ -246,11 +247,15 @@ const Interview = () => {
               marginTop='xxl'
               marginBottom='xs'
             >
-              Download Raw Data
+              {t('download_title')}
             </Heading>
-            <Text>Create an account or sign in to download the dataset.</Text>
-            <Button variation='primary' onClick={() => downloadFile(filename)}>
-              Download
+            <Text>{t('download_desc')}</Text>
+            <Button
+              gap='xs'
+              variation='primary'
+              onClick={() => downloadFile(filename)}
+            >
+              <FaFileArrowDown /> {t('download_btn')}
             </Button>
           </View>
         </View>

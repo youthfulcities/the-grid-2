@@ -1,9 +1,11 @@
 import { useThemeContext } from '@/app/context/ThemeContext';
 import { useTooltip } from '@/app/context/TooltipContext';
+import useTranslation from '@/app/i18n/client';
 import toGreyscale from '@/utils/toGreyscale';
 import { Button, Flex, Placeholder } from '@aws-amplify/ui-react';
 import * as d3 from 'd3';
 import { SeriesPoint } from 'd3';
+import { useParams } from 'next/navigation';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Customize from './Customize';
@@ -54,6 +56,7 @@ interface BarChartProps {
   colors?: string[];
   children?: React.ReactNode;
   id?: string;
+  tFile?: string;
 }
 
 const BarChartStacked: React.FC<BarChartProps> = ({
@@ -71,7 +74,11 @@ const BarChartStacked: React.FC<BarChartProps> = ({
   filterLabel,
   children,
   id,
+  tFile,
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t: t_general } = useTranslation(lng, 'translation');
+  const { t } = useTranslation(lng, tFile);
   const { colorMode } = useThemeContext();
   const [customSortOrder, setCustomSortOrder] = useState<'asc' | 'desc' | null>(
     null
@@ -113,20 +120,22 @@ const BarChartStacked: React.FC<BarChartProps> = ({
     [keys]
   );
 
-  const legendData = useMemo(
-    () => [
-      ...filteredKeys // Exclude 'deficit' first
-        .map((key, index) => ({
-          key,
-          color: colors[index] || '#000', // Default color if out of bounds
-        })),
-
-      ...(keys.includes('deficit')
-        ? [{ key: 'deficit', color: '#F2695D' }]
-        : []), // Add deficit only if it's in the keys array
-    ],
-    [filteredKeys, colors, keys]
-  );
+  const legendData = [
+    ...filteredKeys.map((key, index) => ({
+      key,
+      color: colors[index] || '#000',
+      label: t(key),
+    })),
+    ...(keys.includes('deficit')
+      ? [
+          {
+            key: 'deficit',
+            color: '#F2695D',
+            label: t('deficit'),
+          },
+        ]
+      : []),
+  ];
 
   const filteredData = useMemo(() => {
     let filtered = data.filter((d) =>
@@ -242,12 +251,8 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         }
         return originalColor;
       })
-      // .attr('opacity', (d: SeriesPoint<FlexibleDataItem>) =>
-      //   d.data?.sample && (d.data.sample as number) < 50 ? 0.8 : 1
-      // )
       .on('click', (event, d: SeriesPoint<FlexibleDataItem>) => {
         if (onBarClick) {
-          // const label = labelAccessor(d.data);
           onBarClick(d);
         }
       })
@@ -330,7 +335,13 @@ const BarChartStacked: React.FC<BarChartProps> = ({
       .attr('class', 'x-axis')
       .attr('transform', `translate(0,${margin.top})`)
       .call(
-        d3.axisTop(xScale).tickFormat((d) => `$${d3.format(',')(d as number)}`)
+        d3.axisTop(xScale).tickFormat((d) =>
+          new Intl.NumberFormat(lng, {
+            style: 'currency',
+            currency: 'CAD',
+            maximumFractionDigits: 0,
+          }).format(d as number)
+        )
       );
 
     xAxis
@@ -395,7 +406,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         .attr('fill', colorMode === 'dark' ? 'white' : 'black')
         .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
         .attr('font-size', 12)
-        .text('← Expenses');
+        .text(t ? t('expenses_arrow') : '← Expenses');
 
       // Surplus label
       labelsGroup
@@ -406,7 +417,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         .attr('fill', colorMode === 'dark' ? 'white' : 'black')
         .attr('font-family', 'Gotham Narrow Book, Arial, sans-serif')
         .attr('font-size', 12)
-        .text('Surplus →');
+        .text(t ? t('surplus_arrow') : 'Surplus →');
     }
   }, [
     data,
@@ -419,6 +430,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
     colorMode,
     colors,
     customSortOrder,
+    lng,
   ]);
 
   return (
@@ -448,13 +460,13 @@ const BarChartStacked: React.FC<BarChartProps> = ({
                 fontSize='small'
                 onClick={() => setCustomSortOrder('asc')}
               >
-                Sort Ascending
+                {t_general('sort_asc')}
               </Button>
               <Button
                 fontSize='small'
                 onClick={() => setCustomSortOrder('desc')}
               >
-                Sort Descending
+                {t_general('sort_desc')}
               </Button>
               {width > 0 && <SaveAsImg svgRef={ref} id={id} />}
             </>

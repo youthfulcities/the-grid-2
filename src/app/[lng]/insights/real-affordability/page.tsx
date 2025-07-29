@@ -6,12 +6,15 @@ import Tooltip from '@/app/components/dataviz/TooltipChart/TooltipChart';
 // import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 import FadeInUp from '@/app/components/FadeInUp';
+import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
 import { calculateGroceryTotals } from '@/utils/calculateGroceryTotals';
 import fetchData from '@/utils/fetchData';
 import { Heading, Text, View } from '@aws-amplify/ui-react';
 import _ from 'lodash';
+import { useParams } from 'next/navigation';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Trans } from 'react-i18next/TransWithoutContext';
 import AffordabilityComparison from './components/AffordabilityComparison';
 import AffordabilityOverview from './components/AffordabilityOverview';
 import BasketBar from './components/BasketBar';
@@ -32,9 +35,6 @@ import genderMap from './utils/genderMap.json';
 import getLatestTimestamp from './utils/getLatestTimestamp';
 import occupationMap from './utils/occupationMap.json';
 import provinceMap from './utils/provinceMap.json';
-import { Trans } from 'react-i18next/TransWithoutContext';
-import useTranslation from '@/app/i18n/client';
-import { useParams } from 'next/navigation';
 
 const steps = [
   { title: 'Affordability', key: 'overviewInView' },
@@ -228,19 +228,14 @@ const AffordabilityPage: React.FC = () => {
         <View className='container padding' ref={containerRef}>
           <FadeInUp>
             <Heading level={1} marginBottom='large'>
-              Canada&apos;s Most{' '}
-              <span className='highlight'>Affordable City</span>
+              <Trans
+                t={t}
+                i18nKey='title'
+                components={{ span: <span className='highlight' /> }}
+              />
             </Heading>
-            <Heading level={4}>Real Afforability Index 2025</Heading>
-            <Text marginBottom='xxl'>
-              What does it really cost to live in cities across Canada? The Real
-              Affordability Index goes beyond average rent or income figures to
-              reveal the actual monthly surplus or deficit faced by youth. This
-              interactive chart highlights how income, expenses, and lived
-              experiences intersect to shape financial stability—or strain—in
-              each city. Use it to uncover the gaps between perception and
-              reality in Canada’s affordability landscape.
-            </Text>
+            <Heading level={4}>{t('subtitle')}</Heading>
+            <Text marginBottom='xxl'>{t('desc')}</Text>
             <View ref={overviewRef} data-section='overviewInView'>
               <AffordabilityOverview
                 data={data}
@@ -256,11 +251,7 @@ const AffordabilityPage: React.FC = () => {
           </FadeInUp>
           <FadeInUp>
             <View ref={creatorRef} data-section='creatorInView'>
-              <Text marginTop='xxl'>
-                Try changing the income and expenses using the profile to see
-                how affordability shifts across gender, occupation, and life
-                stages.
-              </Text>
+              <Text marginTop='xxl'>{t('profile_desc')}</Text>
               <CharacterCreator />
               <AffordabilityComparison
                 data={data}

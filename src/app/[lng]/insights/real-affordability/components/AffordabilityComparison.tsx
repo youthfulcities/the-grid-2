@@ -10,6 +10,9 @@ import { ProfileData } from '../types/ProfileTypes';
 import ageMap from '../utils/ageMap';
 import computeIncomeComparisons from '../utils/computeIncomeComparisons';
 import occupationMap from '../utils/occupationMap.json';
+import { useParams } from 'next/navigation';
+import useTranslation from '@/app/i18n/client';
+import { Trans } from 'react-i18next/TransWithoutContext';
 
 interface AffordabilityComparisonProps {
   data: ProcessedDataItem[];
@@ -23,10 +26,48 @@ export interface Industry {
   income: number;
 }
 
+const IncomeComparison = ({ profile, incomeDifference }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'rai');
+
+  const ageString =
+    profile.customized && profile.age
+      ? t('age_fragment', {
+          ageRange: ageMap(profile.age, lng),
+        })
+      : '';
+
+  const occupationString = profile.occupation
+    ? t('occupation_fragment', {
+        occupation:
+          occupationMap[profile.occupation as keyof typeof occupationMap],
+      })
+    : '';
+
+  const percent = Math.abs(incomeDifference).toFixed(0);
+  const direction = t(incomeDifference >= 0 ? 'less' : 'more');
+
+  return (
+    <Trans
+      i18nKey='income_comparison'
+      values={{
+        age: ageString,
+        occupation: occupationString,
+        percent,
+        direction,
+      }}
+      components={{ 1: <span className='alt-highlight' /> }}
+    />
+  );
+};
+
+
 const AffordabilityComparison: React.FC<AffordabilityComparisonProps> = ({
   data,
   income,
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'rai');
   const cityList = data.map((d) => d.city);
 
   const renderCard = useCallback(
@@ -51,7 +92,7 @@ const AffordabilityComparison: React.FC<AffordabilityComparisonProps> = ({
       return (
         <>
           <Heading level={4} color='secondary.60'>
-            Top 3 industries
+            {t('industry_title')}
           </Heading>
           <ol>
             {topIndustries.map((industry: Industry) => (
@@ -61,7 +102,7 @@ const AffordabilityComparison: React.FC<AffordabilityComparisonProps> = ({
             ))}
           </ol>
           <Heading marginTop='large' level={4} color='secondary.60'>
-            Gender income disparity
+            {t('income_title')}
           </Heading>
           <Text>
             Overall, women{' '}

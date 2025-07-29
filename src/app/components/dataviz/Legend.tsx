@@ -41,7 +41,7 @@ const LegendLabel = styled.span<{ $isActive: boolean; $clickable: boolean }>`
 
 interface LegendProps {
   position?: string;
-  data: Array<{ key: string; color: string }>;
+  data: Array<{ key: string; color: string; label?: string }>;
   setActiveLegendItems?: React.Dispatch<React.SetStateAction<string[]>>;
   activeLegendItems?: string[];
 }
@@ -100,9 +100,7 @@ const Legend: React.FC<LegendProps> = ({
                   $clickable={setActiveLegendItems !== undefined}
                   $isActive={isActive}
                 >
-                  {item.key
-                    .replace('_', ' ')
-                    .replace(/\b\w/g, (char) => char.toUpperCase())}
+                  {item.label || item.key}
                 </LegendLabel>
               </LegendItem>
             );
@@ -129,9 +127,7 @@ const Legend: React.FC<LegendProps> = ({
                   $clickable={setActiveLegendItems !== undefined}
                   $isActive={isActive}
                 >
-                  {item.key
-                    .replace('_', ' ')
-                    .replace(/\b\w/g, (char) => char.toUpperCase())}
+                  {item.label || item.key}
                 </LegendLabel>
               </LegendItem>
             );

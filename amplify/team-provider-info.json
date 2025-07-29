@@ -84,9 +84,11 @@
           "s3Key": "amplify-builds/cacheAffordabilityData-447767556c6b4d45712b-build.zip"
         },
         "chat": {
-          "bedrockKbId": "GVJRIVSACA",
           "deploymentBucketName": "amplify-thegrid2-prod-f85ee-deployment",
-          "s3Key": "amplify-builds/chat-6c54734f6d5078494668-build.zip"
+          "s3Key": "amplify-builds/chat-2f386430385862523248-build.zip",
+          "bedrockKbId": "GVJRIVSACA",
+          "bedrockAgentId": "N5EPFOYVOA",
+          "bedrockAgentAliasId": "1KLZS85GXJ"
         }
       },
       "storage": {

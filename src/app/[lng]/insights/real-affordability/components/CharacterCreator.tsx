@@ -1,4 +1,5 @@
 // CharacterCreator.tsx
+import useTranslation from '@/app/i18n/client';
 import {
   Button,
   CheckboxField,
@@ -11,7 +12,9 @@ import {
 } from '@aws-amplify/ui-react';
 import { micah } from '@dicebear/collection';
 import { schema } from '@dicebear/core';
+import { useParams } from 'next/navigation';
 import React from 'react';
+import { Trans } from 'react-i18next/TransWithoutContext';
 import { FaCaretLeft, FaCaretRight } from 'react-icons/fa6';
 import styled from 'styled-components';
 import { useProfile } from '../context/ProfileContext';
@@ -91,6 +94,8 @@ const options = {
 };
 
 const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'rai');
   const {
     avatar,
     setAvatar,
@@ -164,7 +169,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
 
   return (
     <Background>
-      <StyledHeading level={3}>Create Profile</StyledHeading>
+      <StyledHeading level={3}>{t('profile_title')}</StyledHeading>
       <Flex
         alignItems='stretch'
         gap='large'
@@ -337,7 +342,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             fontSize='small'
             onClick={reroll}
           >
-            🎲 Randomize Colours
+            {t('btn_random')}
           </Button>
           {customized ? (
             <Button
@@ -356,7 +361,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
                 setOccupation('');
               }}
             >
-              Reset Chart
+              {t('reset_chart')}
             </Button>
           ) : (
             <Button
@@ -370,7 +375,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
                 setGender(!gender ? 'woman' : gender);
               }}
             >
-              Apply selections to income
+              {t('apply')}
             </Button>
           )}
         </View>
@@ -378,43 +383,41 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
           <StyledSelectField
             id='gender'
             name='gender'
-            label='Gender'
-            placeholder='Select gender'
+            label={t('gender')}
+            placeholder={t('select_gender')}
             value={gender ?? ''}
             onChange={(e) => {
               setGender(e.target.value);
               setCustomized(true);
             }}
           >
-            <option value='woman'>Woman</option>
-            <option value='man'>Man</option>
-            <option value='nonbinary'>Nonbinary / gender diverse*</option>
+            <option value='woman'>{t('woman')}</option>
+            <option value='man'>{t('man')}</option>
+            <option value='nonbinary'>{t('nonbinary')}</option>
           </StyledSelectField>
           <StyledSelectField
             id='occupation'
             name='occupation'
-            label='Sector'
+            label={t('sector')}
             value={String(occupation) ?? ''}
-            placeholder='Select sector'
+            placeholder={t('select_sector')}
             onChange={(e) => {
               setOccupation(e.target.value);
               setCustomized(true);
             }}
           >
             <option value={0} disabled={(age ?? 19) < 29}>
-              Management
+              {t('management')}
             </option>
-            <option value={1}>Business and finance</option>
-            <option value={2}>Applied sciences</option>
-            <option value={3}>Health care</option>
-            <option value={4}>
-              Education, law, social, & community services
-            </option>
-            <option value={5}>Arts & recreation</option>
-            <option value={6}>Sales & service</option>
-            <option value={7}>Trades, transport, or equipment operator</option>
-            <option value={8}>Natural resources & agriculture</option>
-            <option value={9}>Manufacturing & utilities</option>
+            <option value={1}>{t('bus')}</option>
+            <option value={2}>{t('sci')}</option>
+            <option value={3}>{t('health')}</option>
+            <option value={4}>{t('edu')}</option>
+            <option value={5}>{t('art')}</option>
+            <option value={6}>{t('sales')}</option>
+            <option value={7}>{t('trades')}</option>
+            <option value={8}>{t('agri')}</option>
+            <option value={9}>{t('util')}</option>
           </StyledSelectField>
           <StyledStepperField
             min={19}
@@ -422,7 +425,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             step={5}
             inputStyles={{ color: customized ? 'white' : 'neutral.80' }}
             id='age'
-            label='Age'
+            label={t('age')}
             name='age'
             $isDisabled={occupation === '0' && age === 29}
             // defaultValue={age}
@@ -438,7 +441,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             justifyContent='flex-start'
           >
             <StyledCheckboxField
-              label='I am a student'
+              label={t('student')}
               name='student'
               value={student ? 'true' : 'false'}
               size='large'
@@ -447,7 +450,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             />
             <StyledCheckboxField
               name='car'
-              label='I own a car'
+              label={t('car_own')}
               value={car ? 'true' : 'false'}
               size='large'
               color='font.primary'
@@ -455,49 +458,22 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
             />
           </Flex>
           <Text fontSize='small' marginTop='small'>
-            Some options may be disabled due to low sample size.
+            {t('disclaimer_profile')}
           </Text>
           {gender === 'nonbinary' && (
-            <>
-              <Text fontSize='small' marginTop='small'>
-                *Our income data comes from Statistics Canada, which states the
-                following regarding gender: &apos;Given that the non-binary
-                population is small, data aggregation to a two-category gender
-                variable is necessary to protect the confidentiality of
-                responses provided. Individuals in the category &quot;non-binary
-                persons&quot; are distributed into the other two gender
-                categories.&apos;
-              </Text>
-              <Text fontSize='small'>
-                According to the{' '}
-                <a href='https://www.nber.org/papers/w33075' target='_blank'>
-                  National Bureau of Economic Research
-                </a>
-                , &apos;nonbinary individuals assigned male at birth,
-                transgender men, transgender women, and cisgender women all earn
-                significantly less than comparable cisgender men.&apos; As such,
-                we have used the income of &apos;Women+&apos; as a baseline for
-                non-binary individuals. However, this may not fully reflect
-                individual realities.
-              </Text>
-              <Text fontSize='small'>
-                The NBER study found that &apos;nonbinary people assigned female
-                at birth–despite being more highly educated than other
-                groups–earn significantly less than cisgender men, cisgender
-                women, and all other gender minority groups. These gaps are
-                larger at the bottom of the annual earnings distribution than at
-                the top. [...] Lower-income transgender and nonbinary people may
-                face something like a “sticky floor” (see Christofides et al.
-                (2013)). Sticky floors represent a magnification of disadvantage
-                for the most marginalized members of already disadvantaged
-                groups. They may also be due to heterogeneity in the degree to
-                which gender minority people are actually seen as cisgender
-                people by the society surrounding them. If some members of
-                gender minority groups are not perceived by others as gender
-                minorities, we may expect those people to face smaller
-                disparities.&apos;
-              </Text>
-            </>
+            <Trans
+              t={t}
+              i18nKey='disclaimer_gender'
+              components={{
+                p: <Text fontSize='small' />,
+                a: (
+                  <a
+                    href='https://www.nber.org/papers/w33075'
+                    target='_blank'
+                  />
+                ),
+              }}
+            />
           )}
         </View>
       </Flex>
@@ -508,7 +484,11 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
           marginBottom='0'
           textAlign='center'
         >
-          Average income: ${currentIncome.toFixed(2)} per month{' '}
+          <Trans
+            t={t}
+            i18nKey='profile_income'
+            values={{ income: currentIncome.toFixed(2) }}
+          />
           {gender !== 'man' && customized && (
             <span
               style={{
@@ -521,7 +501,11 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = () => {
               ({currentIncome > manIncome ? '+' : ''}
               {(((currentIncome - manIncome) / manIncome) * 100).toFixed(
                 1
-              )}% {currentIncome > manIncome ? 'more than' : 'less than'} men)
+              )}%{' '}
+              {currentIncome > manIncome
+                ? t('more_than_men')
+                : t('less_than_men')}
+              )
             </span>
           )}
         </Heading>

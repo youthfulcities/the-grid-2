@@ -20,13 +20,13 @@
       "Type": "String",
       "Default": "auththegrid2fafc44b3UserPoolId"
     },
-    "bedrockKbId": {
-      "Type": "String"
-    },
     "bedrockAgentId": {
       "Type": "String"
     },
     "bedrockAgentAliasId": {
+      "Type": "String"
+    },
+    "bedrockKbId": {
       "Type": "String"
     }
   },
@@ -86,14 +86,14 @@
             "AUTH_THEGRID2FAFC44B3_USERPOOLID": {
               "Ref": "auththegrid2fafc44b3UserPoolId"
             },
-            "BEDROCK_KB_ID": {
-              "Ref": "bedrockKbId"
-            },
             "BEDROCK_AGENT_ID": {
               "Ref": "bedrockAgentId"
             },
             "BEDROCK_AGENT_ALIAS_ID": {
               "Ref": "bedrockAgentAliasId"
+            },
+            "BEDROCK_KB_ID": {
+              "Ref": "bedrockKbId"
             }
           }
         },

@@ -1,9 +1,12 @@
 import BarChartStacked, {
   FlexibleDataItem,
 } from '@/app/components/dataviz/BarChartStacked';
+import useTranslation from '@/app/i18n/client';
 import downloadJSON from '@/utils/downloadJSON';
+import formatCurrency from '@/utils/formatCurrency';
 import { Button, Tabs, Text, View } from '@aws-amplify/ui-react';
 import { SeriesPoint } from 'd3';
+import { useParams } from 'next/navigation';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useProfile } from '../context/ProfileContext';
 import { CategoryData, ProcessedDataItem } from '../types/CostTypes';
@@ -105,6 +108,8 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
   live,
   data,
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'rai');
   const [drilldownLevel, setDrilldownLevel] = useState(0);
   const [tab, setTab] = useState('overview');
   const [selectedSegments, setSelectedSegments] = useState<string[]>([]);
@@ -332,27 +337,24 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
       value: number | undefined
     ) => {
       if (!key || !value) return null;
-      return (
-        <div>
-          {`${d.city} ${key.replace('_', ' ')}: $${(value as number).toFixed(2)}`}
-        </div>
-      );
+      return <div>{`${d.city} ${t(key)}: ${formatCurrency(value, lng)}`}</div>;
     },
     []
   );
 
   return (
     <View marginBottom='large'>
-      <Tabs.Container value={tab} onValueChange={(t) => setTab(t)}>
+      <Tabs.Container value={tab} onValueChange={(v) => setTab(v)}>
         <Tabs.List marginBottom='large'>
-          <Tabs.Item value='overview'>Overview</Tabs.Item>
-          <Tabs.Item value='income'>Income</Tabs.Item>
-          <Tabs.Item value='costs'>Costs</Tabs.Item>
-          <Tabs.Item value='surplus'>Surplus / Deficit</Tabs.Item>
+          <Tabs.Item value='overview'>{t('overview')}</Tabs.Item>
+          <Tabs.Item value='income'>{t('income')}</Tabs.Item>
+          <Tabs.Item value='costs'>{t('costs')}</Tabs.Item>
+          <Tabs.Item value='surplus'>{t('surplus')}</Tabs.Item>
         </Tabs.List>
         {chartViews.map((view) => (
           <Tabs.Panel key={view.value} value={view.value}>
             <BarChartStacked
+              tFile='rai'
               id={view.chartId}
               loading={!(cityTotals?.length > 0 && processedData?.length > 0)}
               onBarClick={onBarClick}
@@ -380,7 +382,7 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
                     setSelectedSegments((prev) => prev.splice(-1, 1));
                   }}
                 >
-                  Back
+                  {t('back')}
                 </Button>
               )}
               <Button
@@ -394,19 +396,17 @@ const AffordabilityOverview: React.FC<AffordabilityOverviewProps> = ({
                   setOccupation('');
                 }}
               >
-                Reset customizations
+                {t('reset_custom')}
               </Button>
               <Button fontSize='small' onClick={() => downloadJSON(sortedData)}>
-                Download JSON
+                {t('download_JSON')}
               </Button>
             </BarChartStacked>
           </Tabs.Panel>
         ))}
       </Tabs.Container>
       <Text fontSize='small' marginTop='small'>
-        * represents income based on a sample size under 50. † represents income
-        based on provincial average. Data is derived from the Statistics Canada
-        Labour Force Survey.
+        {t('disclaimer_chart')}
       </Text>
     </View>
   );

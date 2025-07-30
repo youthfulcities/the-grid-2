@@ -256,8 +256,6 @@ const AffordabilityPage: React.FC = () => {
               <AffordabilityComparison
                 data={data}
                 income={income}
-                tooltipState={tooltipState}
-                setTooltipState={setTooltipState}
               />
             </View>
           </FadeInUp>
@@ -271,7 +269,6 @@ const AffordabilityPage: React.FC = () => {
                 cityTotals={cityTotals}
                 groceryItems={groceryItems}
                 latestTimestamp={latestTimestamp}
-                setTooltipState={setTooltipState}
                 width={width}
                 loading={groceryItems.length === 0}
               />
@@ -301,7 +298,7 @@ const AffordabilityPage: React.FC = () => {
         income={income}
         profileInView={currentInView.creatorInView}
       />
-      <ChapterNav currentInView={currentInView} steps={steps} />
+      <ChapterNav currentInView={currentInView} steps={steps} tFile='rai' />
     </>
   );
 };

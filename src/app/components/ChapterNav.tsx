@@ -3,8 +3,10 @@
 import { useBreakpointValue } from '@aws-amplify/ui-react';
 import { faCircle, faCircleDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import useTranslation from '../i18n/client';
 
 type SectionStep = {
   title: string;
@@ -14,6 +16,7 @@ type SectionStep = {
 type Props = {
   currentInView: Record<string, boolean>;
   steps: SectionStep[];
+  tFile?: string;
 };
 
 const NavContainer = styled.nav`
@@ -58,12 +61,14 @@ const Divider = styled.div`
   align-self: flex-start;
 `;
 
-const ChapterNav: React.FC<Props> = ({ currentInView, steps }) => {
+const ChapterNav: React.FC<Props> = ({ currentInView, steps, tFile }) => {
   const smallScreen = useBreakpointValue({
     base: true,
     medium: true,
     large: false,
   });
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, tFile);
   const [currentSection, setCurrentSection] = useState<number | null>(null);
 
   useEffect(() => {
@@ -96,7 +101,7 @@ const ChapterNav: React.FC<Props> = ({ currentInView, steps }) => {
                 <FontAwesomeIcon
                   icon={index === currentSection ? faCircleDot : faCircle}
                 />
-                {step.title}
+                {tFile ? t(step.key) : step.title}
               </NavButton>
               {index < steps.length - 1 && <Divider />}
             </React.Fragment>

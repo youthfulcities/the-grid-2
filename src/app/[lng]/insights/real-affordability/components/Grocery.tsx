@@ -1,5 +1,5 @@
 import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
-import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
+import useTranslation from '@/app/i18n/client';
 import {
   calculateGroceryPrice,
   CityTotal,
@@ -15,7 +15,9 @@ import {
 import { SeriesPoint } from 'd3';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { Trans } from 'react-i18next/TransWithoutContext';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
 import { styled } from 'styled-components';
 import { useProfile } from '../context/ProfileContext';
@@ -139,17 +141,17 @@ const Grocery = ({
   groceryItems,
   latestTimestamp,
   cityTotals,
-  setTooltipState,
   width,
   loading,
 }: {
   groceryItems: GroceryItem[];
   latestTimestamp: string | null;
   cityTotals: CityTotal[];
-  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   width: number;
   loading: boolean;
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'rai');
   const [imgError, setImgError] = useState<{ [key: string]: boolean }>({});
   const [expanded, setExpanded] = useState(false);
   const { activeCity, setActiveCity, setBasket } = useProfile();
@@ -280,16 +282,20 @@ const Grocery = ({
   return (
     <>
       <Heading level={1} marginBottom='small'>
-        What&apos;s in <span className='highlight'>your basket?</span>
+        <Trans
+          t={t}
+          i18nKey='title'
+          components={{ span: <span className='highlight' /> }}
+        />
       </Heading>
-      <Text>
-        Costs are in CAD. Prices reflect an average of non-discounted, in-stock
-        items at common Canadian grocery stores. When available, the price
-        represents the cost of goods prepared in Canada.
-      </Text>
+      <Text>{t('grocery_desc')}</Text>
       {latestTimestamp && (
         <Text fontSize='small'>
-          Last updated: {new Date(latestTimestamp).toLocaleDateString()}
+          <Trans
+            t={t}
+            i18nKey='updated'
+            values={{ date: new Date(latestTimestamp).toLocaleDateString(lng) }}
+          />
         </Text>
       )}
       <Flex justifyContent='center' marginTop='xxl'>

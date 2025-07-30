@@ -1,11 +1,13 @@
 'use client';
 
 import { useTooltip } from '@/app/context/TooltipContext';
+import useTranslation from '@/app/i18n/client';
 import truncateText from '@/utils/truncateText';
 import { Placeholder, View } from '@aws-amplify/ui-react';
 import * as d3 from 'd3';
 import _ from 'lodash';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useParams } from 'next/navigation';
+import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { FlexibleDataItem } from './BarChartStacked';
 import Customize from './Customize';
@@ -17,7 +19,7 @@ interface BarChartProps {
   data: FlexibleDataItem[];
   labelAccessor: (d: FlexibleDataItem) => string;
   valueAccessor: (d: FlexibleDataItem) => number;
-  tooltipFormatter?: (d: FlexibleDataItem) => string | JSX.Element;
+  tooltipFormatter?: (d: FlexibleDataItem) => string | JSX.Element | ReactNode;
   filterLabel?: string | null;
   xLabel?: string;
   mode?: 'percent' | 'absolute';
@@ -28,6 +30,7 @@ interface BarChartProps {
   saveAsImg?: boolean;
   truncateThreshold?: number;
   colors?: string[];
+  tFile?: string;
 }
 
 interface LegendProps {
@@ -65,7 +68,11 @@ const BarChart: React.FC<BarChartProps> = ({
   saveAsImg = true,
   truncateThreshold = 35,
   colors = defaultColors,
+  tFile,
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, tFile);
+
   const ref = useRef<SVGSVGElement>(null);
   const [leftMargin, setLeftMargin] = useState(10);
   const margin = useMemo(

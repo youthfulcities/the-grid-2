@@ -24,6 +24,9 @@ i18next
   )
   .init({
     ...getOptions(),
+    interpolation: {
+      escapeValue: false, // react already escapes; prevents special characters from being displayed incorrectly in the UI
+    },
     lng: undefined, // let detect the language on client side
     detection: {
       order: ['path', 'htmlTag', 'cookie', 'navigator'],

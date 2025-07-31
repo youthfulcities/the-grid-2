@@ -1,9 +1,12 @@
 'use client';
 
 import Drawer from '@/app/components/Drawer';
+import useTranslation from '@/app/i18n/client';
 import { calculateGroceryPrice } from '@/utils/calculateGroceryTotals';
+import formatNumber from '@/utils/formatNumber';
 import { Flex, Text, View } from '@aws-amplify/ui-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useProfile } from '../context/ProfileContext';
@@ -127,6 +130,8 @@ const getRandomOffset = () => ({
 });
 
 const BasketBar: React.FC<BasketBarProps> = () => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'rai');
   const [isOpen, setIsOpen] = useState(false);
   const { activeCity, basket, setBasket } = useProfile();
   const [filteredBasket, setFilteredBasket] =
@@ -139,7 +144,7 @@ const BasketBar: React.FC<BasketBarProps> = () => {
     } else {
       setFilteredBasket(basket);
     }
-  }, [activeCity, basket]);
+  }, [basket]);
 
   const total = Object.values(filteredBasket).reduce(
     (sum, { item, quantity }) => {
@@ -217,7 +222,6 @@ const BasketBar: React.FC<BasketBarProps> = () => {
   };
 
   const costDifference = totalCanadianCost - totalNotCanadianCost;
-  const costDifferenceFormatted = costDifference.toFixed(2);
   const isMoreExpensive = costDifference > 0;
 
   return (
@@ -227,7 +231,7 @@ const BasketBar: React.FC<BasketBarProps> = () => {
       onClose={() => setIsOpen((prev) => !prev)}
       tabComponent={
         <BasketTab>
-          <img src='/assets/food-icons/basket.png' alt='Basket' />
+          <img src='/assets/food-icons/basket.png' alt={t('basket')} />
           {totalQuantity > 0 && (
             <QuantityBadge
               initial={{ scale: 0 }}
@@ -271,7 +275,7 @@ const BasketBar: React.FC<BasketBarProps> = () => {
                       }}
                       layoutId={`icon-${removeSpecialChars(item.category)}`}
                       src={`/assets/food-icons/${removeSpecialChars(item.category)}.png`}
-                      alt={item.category}
+                      alt={t(item.category)}
                     />
                   </Item>
                 );
@@ -287,7 +291,7 @@ const BasketBar: React.FC<BasketBarProps> = () => {
         </BasketWrapper>
         <Total>
           <Text marginTop='-50px'>
-            Total: <strong>${total.toFixed(2)}</strong>
+            Total: <strong>${formatNumber(total, lng)}</strong>
           </Text>
           {totalQuantity > 0 &&
             totalCanadianCost > 0 &&
@@ -296,11 +300,17 @@ const BasketBar: React.FC<BasketBarProps> = () => {
               <>
                 <Text fontSize='0.9rem' marginTop='0.5rem'>
                   {isMoreExpensive
-                    ? `It costs $${costDifferenceFormatted} more to buy Canadian!`
-                    : `You're saving $${Math.abs(costDifference).toFixed(2)} by buying Canadian!`}
+                    ? t('costs_more', {
+                        cost: formatNumber(costDifference, lng),
+                      })
+                    : t('costs_less', {
+                        cost: formatNumber(Math.abs(costDifference), lng),
+                      })}
                 </Text>
                 {activeCity && (
-                  <Text fontSize='0.9rem'>City: {activeCity}</Text>
+                  <Text fontSize='0.9rem'>
+                    {t('city')} {activeCity}
+                  </Text>
                 )}
               </>
             )}
@@ -308,7 +318,6 @@ const BasketBar: React.FC<BasketBarProps> = () => {
         <BasketList>
           {Object.entries(filteredBasket).map(([key, { item, quantity }]) => {
             const cityData = item.cities.find((c) => c.city === activeCity);
-
             const canadianPrice = calculateGroceryPrice(
               item,
               cityData ?? null,
@@ -326,21 +335,24 @@ const BasketBar: React.FC<BasketBarProps> = () => {
                 <Flex>
                   <img
                     src={`/assets/food-icons/${removeSpecialChars(item.category)}.png`}
-                    alt={item.category}
+                    alt={t(item.category)}
                     width='40px'
                     height='40px'
                   />
                   <BasketListText>
-                    <strong>{item.category}</strong>
+                    <strong>{t(item.category)}</strong>
                     <span>
-                      {`${quantity} × ${canadianPrice ? `🍁 $${canadianPrice.toFixed(2)}` : '🍁 N/A'} | ${
-                        globalPrice ? `🌎 $${globalPrice.toFixed(2)}` : '🌎 N/A'
+                      {`${quantity} × ${canadianPrice ? `🍁 ${formatNumber(canadianPrice, lng)}` : '🍁 N/A'} | ${
+                        globalPrice
+                          ? `🌎 ${formatNumber(globalPrice, lng)}`
+                          : '🌎 N/A'
                       }`}
                     </span>
                     <span>
-                      per{' '}
+                      {t('per')}{' '}
                       {item.statscan_quantity ?? item.most_frequent_quantity}{' '}
-                      {item.statscan_unit ?? item.base_unit}
+                      {t(item.statscan_unit as string) ??
+                        t(item.base_unit as string)}
                     </span>
                   </BasketListText>
                 </Flex>

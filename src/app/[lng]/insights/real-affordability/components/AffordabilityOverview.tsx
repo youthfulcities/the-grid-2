@@ -3,7 +3,7 @@ import BarChartStacked, {
 } from '@/app/components/dataviz/BarChartStacked';
 import useTranslation from '@/app/i18n/client';
 import downloadJSON from '@/utils/downloadJSON';
-import formatCurrency from '@/utils/formatCurrency';
+import formatCurrency from '@/utils/formatNumber';
 import { Button, Tabs, Text, View } from '@aws-amplify/ui-react';
 import { SeriesPoint } from 'd3';
 import { useParams } from 'next/navigation';

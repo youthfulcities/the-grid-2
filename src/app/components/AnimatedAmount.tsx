@@ -1,3 +1,4 @@
+import formatNumber from '@/utils/formatNumber';
 import { Heading } from '@aws-amplify/ui-react';
 import {
   animate,
@@ -5,21 +6,19 @@ import {
   useMotionValue,
   useTransform,
 } from 'framer-motion';
+import { useParams } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 
 interface AnimatedAmountProps {
   amount: number;
-  before?: string;
-  after?: string;
   color?: string;
 }
 
 const AnimatedAmount: React.FC<AnimatedAmountProps> = ({
   amount,
-  before,
-  after,
   color = 'red.60',
 }) => {
+  const { lng } = useParams<{ lng: string }>();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, margin: '-10% 0px' }); // optional: be more sensitive
 
@@ -54,9 +53,7 @@ const AnimatedAmount: React.FC<AnimatedAmountProps> = ({
       fontSize='xxxxl'
       color={color}
     >
-      {before}
-      {displayValue}
-      {after}
+      {formatNumber(displayValue, lng)}
     </Heading>
   );
 };

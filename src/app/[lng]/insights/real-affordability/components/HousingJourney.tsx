@@ -1,8 +1,10 @@
 import AnimatedAmount from '@/app/components/AnimatedAmount';
 import FadeInUp from '@/app/components/FadeInUp';
+import useTranslation from '@/app/i18n/client';
 import { Button, Flex, Heading, Text, View } from '@aws-amplify/ui-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { FaBan, FaPerson } from 'react-icons/fa6';
 import styled from 'styled-components';
@@ -142,6 +144,8 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
   loading,
   processedData,
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'rai');
   const { activeCity, currentIncome } = useProfile();
   const [bedrooms, setBedrooms] = useState<number | null>(null);
   const [location, setLocation] = useState<string | null>(null);
@@ -202,8 +206,7 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
         <FadeInUp>
           <AvatarSvg radius={50} />
           <Text textAlign='center' marginTop='large'>
-            So, you want to move out. What type of appartment are you looking
-            for?
+            {t('rent_type_intro')}
           </Text>
         </FadeInUp>
         <Flex
@@ -236,7 +239,7 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
                 transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
               />
             </ImgButton>
-            <Text textAlign='center'>Studio</Text>
+            <Text textAlign='center'>{t('0 beds')}</Text>
           </Flex>
           <Flex direction='column' justifyContent='center'>
             <ImgButton
@@ -262,7 +265,7 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
               />
             </ImgButton>
             <Text marginBottom='0' textAlign='center'>
-              1 Bedroom
+              {t('1 beds')}
             </Text>
             <Text
               textAlign='center'
@@ -297,7 +300,7 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
               />
             </ImgButton>
             <Text textAlign='center' marginBottom='0'>
-              2 Bedrooms
+              {t('2 beds')}
             </Text>
             <Text
               textAlign='center'
@@ -331,7 +334,7 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
               />
             </ImgButton>
             <Text textAlign='center' marginBottom='0'>
-              3 Bedrooms
+              {t('3 beds')}
             </Text>
             <Text
               textAlign='center'
@@ -343,9 +346,7 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
             </Text>
           </Flex>
         </Flex>
-        <Text textAlign='center'>
-          Now, what area of the city are you looking for?
-        </Text>
+        <Text textAlign='center'>{t('rent_area')}</Text>
         <Flex justifyContent='center' alignItems='start' marginBottom='xxxl'>
           <Flex direction='column' justifyContent='center'>
             <SvgButton
@@ -373,7 +374,7 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
               </SvgContainer>
             </SvgButton>
             <Text textAlign='center' marginBottom='0'>
-              Outer City
+              {t('rent_area_outer')}
             </Text>
           </Flex>
           <Flex direction='column' justifyContent='center'>
@@ -402,7 +403,7 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
               </SvgContainer>
             </SvgButton>
             <Text textAlign='center' marginBottom='0'>
-              Inner City
+              {t('rent_area_inner')}
             </Text>
             <Text
               textAlign='center'
@@ -414,9 +415,9 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
             </Text>
           </Flex>
         </Flex>
-        <Text textAlign='center'>The current appartment would cost you...</Text>
+        <Text textAlign='center'>{t('rent_cost')}</Text>
         <Flex justifyContent='center'>
-          <AnimatedAmount before='$' amount={activeRent ?? 0} />
+          <AnimatedAmount amount={activeRent ?? 0} />
           {count > 0 && (
             <>
               <Heading
@@ -429,16 +430,13 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
                 / {count + 1} =
               </Heading>
               <AnimatedAmount
-                before='$'
                 amount={(activeRent ?? 0) / (count + 1)}
                 color='yellow.60'
               />
             </>
           )}
         </Flex>
-        <Text textAlign='center'>
-          How many roommates do you want to split the cost with?
-        </Text>
+        <Text textAlign='center'>{t('rent_roommates')}</Text>
         <Flex width='100%' justifyContent='space-between' marginBottom='xxxl'>
           <Button
             fontSize='xxxl'
@@ -500,23 +498,23 @@ const HousingJourney: React.FC<HousingJourneyProps> = ({
           </Button>
         </Flex>
         <Text textAlign='center'>
-          {activeCity ? `In ${activeCity}` : 'On average'}, it will take you{' '}
-          {rentToDaysOfWork(
-            (activeCityTotal ?? 0) -
-              (activeRent ?? 0) * 2 +
-              ((activeRent ?? 0) / (count + 1)) * 2,
-            currentIncome
-          ).toFixed(0)}{' '}
-          days* to save up move out and{' '}
-          {rentToDaysOfWork(
-            (activeRent ?? 0) / (count + 1),
-            currentIncome
-          ).toFixed(0)}{' '}
-          days to work to pay your rent each month.
+          {t('rent_time', {
+            intro: activeCity
+              ? t('rent_time_fragment_1', { city: activeCity })
+              : t('rent_time_fragment_2'),
+            time: rentToDaysOfWork(
+              (activeCityTotal ?? 0) -
+                (activeRent ?? 0) * 2 +
+                ((activeRent ?? 0) / (count + 1)) * 2,
+              currentIncome
+            ).toFixed(0),
+            days: rentToDaysOfWork(
+              (activeRent ?? 0) / (count + 1),
+              currentIncome
+            ).toFixed(0),
+          })}
         </Text>
-        <Text fontSize='small'>
-          *if you save 100% of your income and work full-time.
-        </Text>
+        <Text fontSize='small'>{t('rent_time_disclaimer')}</Text>
         <HousingComparison rent={rent} />
       </Flex>
     )

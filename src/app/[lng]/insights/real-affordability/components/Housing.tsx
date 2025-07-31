@@ -1,8 +1,10 @@
 import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
-import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
+import useTranslation from '@/app/i18n/client';
 import { Button, Heading, Text, View } from '@aws-amplify/ui-react';
 import { SeriesPoint } from 'd3';
+import { useParams } from 'next/navigation';
 import React, { useMemo } from 'react';
+import { Trans } from 'react-i18next/TransWithoutContext';
 import { useProfile } from '../context/ProfileContext';
 
 interface FlexibleDataItem {
@@ -11,7 +13,6 @@ interface FlexibleDataItem {
 
 interface HousingProps {
   width: number;
-  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   processedData: FlexibleDataItem[];
 }
 
@@ -35,11 +36,9 @@ const colors = [
   '#af6860',
 ];
 
-const Housing: React.FC<HousingProps> = ({
-  processedData,
-  width,
-  setTooltipState,
-}) => {
+const Housing: React.FC<HousingProps> = ({ processedData, width }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'rai');
   const { activeCity, setActiveCity } = useProfile();
 
   const sortedData = useMemo(
@@ -82,10 +81,14 @@ const Housing: React.FC<HousingProps> = ({
   return (
     <View marginTop='xxxl'>
       <Heading level={1} marginBottom='large'>
-        The Real Cost of <span className='highlight'>Moving Out</span>
+        <Trans
+          t={t}
+          i18nKey='rent_title'
+          components={{ span: <span className='highlight' /> }}
+        />
       </Heading>
       <Text marginBottom='large' textAlign='center'>
-        Click on a city to start your housing journey.
+        {t('rent_desc')}
       </Text>
       <BarChartStacked
         id='housing'
@@ -98,9 +101,10 @@ const Housing: React.FC<HousingProps> = ({
         data={sortedData}
         keys={keys}
         labelAccessor={(d) => d.city as string}
+        tFile='rai'
       >
         <Button onClick={resetCity} size='small' color='font.primary'>
-          Reset City
+          {t('reset_city')}
         </Button>
       </BarChartStacked>
     </View>

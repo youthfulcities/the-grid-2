@@ -1,8 +1,10 @@
 'use client';
 
+import useTranslation from '@/app/i18n/client';
+import formatNumber from '@/utils/formatNumber';
 import { Text } from '@aws-amplify/ui-react';
 import { motion } from 'framer-motion';
-import _ from 'lodash';
+import { useParams } from 'next/navigation';
 import styled from 'styled-components';
 
 interface GroceryPriceLabelProps {
@@ -65,6 +67,8 @@ const GroceryPriceLabel: React.FC<GroceryPriceLabelProps> = ({
   basePrice,
   city,
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'rai');
   let diffText = null;
   const hasCanadian = typeof canadianPrice === 'number' && canadianPrice > 0;
   const hasAmerican = typeof globalPrice === 'number' && globalPrice > 0;
@@ -77,15 +81,15 @@ const GroceryPriceLabel: React.FC<GroceryPriceLabelProps> = ({
     diffText = diff !== 0 && (
       <Difference isPositive={isMoreExpensiveInCanada}>
         {isMoreExpensiveInCanada ? '+' : ''}
-        {percentageDiff}% to buy Canadian
+        {percentageDiff}% {t('to_buy_ca')}
       </Difference>
     );
   } else if (hasCanadian && !hasAmerican) {
-    diffText = <Difference>Canadian only</Difference>;
+    diffText = <Difference>{t('ca_only')}</Difference>;
   } else if (!hasCanadian && hasAmerican) {
-    diffText = <Difference>No Canadian options</Difference>;
+    diffText = <Difference>{t('ca_none')}</Difference>;
   } else {
-    diffText = <Difference>No price data</Difference>;
+    diffText = <Difference>{t('no_price')}</Difference>;
   }
 
   const getBaseQuanity = (
@@ -94,9 +98,9 @@ const GroceryPriceLabel: React.FC<GroceryPriceLabelProps> = ({
     price: number
   ) => {
     if (unit === 'g' || unit === 'ml') {
-      return `$${(price * 100).toFixed(2)} per ${quantity ?? 1}/${unit}`;
+      return `${formatNumber(price * 100, lng)} ${t('per')} ${quantity ?? 1}/${unit}`;
     }
-    return `$${price.toFixed(2)} per ${quantity}/${unit}`;
+    return `${formatNumber(price, lng)} ${t('per')} ${quantity}/${t(unit as string)}`;
   };
 
   return (
@@ -106,10 +110,11 @@ const GroceryPriceLabel: React.FC<GroceryPriceLabelProps> = ({
       whileTap={{ scale: 0.98 }}
       style={{ transform: 'translateX(-50%)', left: '50%' }}
     >
-      {label && <LabelTitle>{_.startCase(label)}</LabelTitle>}
-
-      {hasCanadian && <Price>${canadianPrice!.toFixed(2)}</Price>}
-      {!hasCanadian && hasAmerican && <Price>${globalPrice!.toFixed(2)}</Price>}
+      {label && <LabelTitle>{t(label)}</LabelTitle>}
+      {hasCanadian && <Price>{formatNumber(canadianPrice!, lng)}</Price>}
+      {!hasCanadian && hasAmerican && (
+        <Price>{formatNumber(globalPrice!, lng)}</Price>
+      )}
       {basePrice !== null && basePrice > 0 && (
         <LabelTitle>
           {getBaseQuanity(baseQuantity, baseUnit, basePrice)}

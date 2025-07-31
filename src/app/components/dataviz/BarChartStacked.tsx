@@ -1,6 +1,7 @@
 import { useThemeContext } from '@/app/context/ThemeContext';
 import { useTooltip } from '@/app/context/TooltipContext';
 import useTranslation from '@/app/i18n/client';
+import formatNumber from '@/utils/formatNumber';
 import toGreyscale from '@/utils/toGreyscale';
 import { Button, Flex, Placeholder } from '@aws-amplify/ui-react';
 import * as d3 from 'd3';
@@ -265,7 +266,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
           position: { x, y },
           content: tooltipFormatter
             ? tooltipFormatter(d.data, key, value)
-            : `${labelAccessor(d.data)} ${key}: $${value.toFixed(2)}`,
+            : `${labelAccessor(d.data)} ${tFile ? t(key) : key}: ${formatNumber(value, lng)}`,
         });
       })
       .on('mousemove', (event, d) => {
@@ -277,7 +278,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
           position: { x, y },
           content: tooltipFormatter
             ? tooltipFormatter(d.data, key, value)
-            : `${labelAccessor(d.data)} ${key}: $${value.toFixed(2)}`,
+            : `${labelAccessor(d.data)} ${tFile ? t(key) : key}: ${formatNumber(value, lng)}`,
         });
       })
       .on('mouseout', () => {
@@ -311,7 +312,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         const y = event.pageY;
         setTooltipState({
           position: { x, y },
-          content: `Deficit: $${d.value.toFixed(2)}`,
+          content: `${t('deficit') ?? 'Deficit'}: ${formatNumber(d.value, lng)}`,
         });
       })
       .on('mousemove', (event, d) => {
@@ -319,7 +320,7 @@ const BarChartStacked: React.FC<BarChartProps> = ({
         const y = event.pageY;
         setTooltipState({
           position: { x, y },
-          content: `Deficit: $${d.value.toFixed(2)}`,
+          content: `${t('deficit') ?? 'Deficit'}: ${formatNumber(d.value, lng)}`,
         });
       })
       .on('mouseout', () => {

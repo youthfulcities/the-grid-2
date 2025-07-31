@@ -253,10 +253,7 @@ const AffordabilityPage: React.FC = () => {
             <View ref={creatorRef} data-section='creatorInView'>
               <Text marginTop='xxl'>{t('profile_desc')}</Text>
               <CharacterCreator />
-              <AffordabilityComparison
-                data={data}
-                income={income}
-              />
+              <AffordabilityComparison data={data} income={income} />
             </View>
           </FadeInUp>
           <FadeInUp>
@@ -276,11 +273,7 @@ const AffordabilityPage: React.FC = () => {
           </FadeInUp>
           <FadeInUp>
             <View ref={housingRef} data-section='housingInView'>
-              <Housing
-                processedData={processedRentData}
-                width={width}
-                setTooltipState={setTooltipState}
-              />
+              <Housing processedData={processedRentData} width={width} />
             </View>
           </FadeInUp>
           <View ref={housingJourneyRef} data-section='housingJourneyInView'>

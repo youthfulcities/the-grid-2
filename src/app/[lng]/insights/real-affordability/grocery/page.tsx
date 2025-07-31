@@ -1,7 +1,6 @@
 'use client';
 
 import Container from '@/app/components/Background';
-import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
 import FadeInUp from '@/app/components/FadeInUp';
 import { useDimensions } from '@/hooks/useDimensions';
 import { calculateGroceryTotals } from '@/utils/calculateGroceryTotals';
@@ -18,9 +17,6 @@ const GroceryPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
   const [groceryLoading, setGroceryLoading] = useState<boolean>(true);
-  const [tooltipState, setTooltipState] = useState<TooltipState>({
-    position: null,
-  });
   const { basket } = useProfile();
   const { width } = useDimensions(containerRef);
   const [latestTimestamp, setLatestTimestamp] = useState<string | null>(null);
@@ -65,7 +61,6 @@ const GroceryPage = () => {
             cityTotals={cityTotals}
             groceryItems={groceryItems}
             latestTimestamp={latestTimestamp}
-            setTooltipState={setTooltipState}
             width={width}
             loading={groceryLoading}
           />

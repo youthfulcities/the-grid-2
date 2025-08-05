@@ -35,5 +35,7 @@
   "feature_title": "Bâtir des ponts : Relier les compétences des jeunes à l’avenir du travail",
   "feature_desc": "Téléchargez la première partie du rapport laboDEV insights, qui présente une analyse approfondie des données relatives aux jeunes et des histoires tirées du projet laboDEV.",
   "feature_btn": "Télécharger maintenant",
-  "reset": "Réinitialiser"
+  "reset": "Réinitialiser",
+  "sort_asc": "Trier par ordre croissant",
+  "sort_desc": "Trier par ordre décroissant"
 }

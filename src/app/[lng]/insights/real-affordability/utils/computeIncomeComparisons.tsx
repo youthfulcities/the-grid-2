@@ -37,15 +37,16 @@ const computeIncomeComparisons = (income: IncomeData, profile: ProfileData) => {
   const currentProvince = provinceMap[city as keyof typeof provinceMap];
 
   // Compute industries sorted by income for the given occupation in this city.
-  const industries = Object.values(occupationMap)
-    .map((o) => ({
-      occupation: o,
+  const industries = Object.entries(occupationMap)
+    .map(([object_key, value]) => ({
+      occupation: value,
+      occupationKey: object_key,
       income: getIncome({
         city: city ?? '',
         currentProvince,
         currentAge: customized ? ageMap(age) : undefined,
         currentGender: genderMap[gender as keyof typeof genderMap] ?? undefined,
-        currentOccupation: o,
+        currentOccupation: value,
         income,
       }),
     }))
@@ -108,8 +109,8 @@ const computeIncomeComparisons = (income: IncomeData, profile: ProfileData) => {
   ];
 
   // Compute genderData for each occupation
-  const genderData = Object.values(occupationMap)
-    .map((o) => {
+  const genderData = Object.entries(occupationMap)
+    .map(([o_key, o]) => {
       const male = getIncome({
         city: city ?? '',
         currentProvince,
@@ -128,7 +129,7 @@ const computeIncomeComparisons = (income: IncomeData, profile: ProfileData) => {
       });
       const difference = female !== 0 ? ((male - female) / female) * 100 : 0;
       return {
-        occupation: o,
+        occupation: o_key,
         maleIncome: male,
         femaleIncome: female,
         difference,

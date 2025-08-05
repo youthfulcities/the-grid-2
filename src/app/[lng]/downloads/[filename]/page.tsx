@@ -12,14 +12,14 @@ const DatasetDownloadPage = () => {
 
   useEffect(() => {
     if (typeof filename === 'string') {
-      downloadFile(filename); // bypass auth since file is public
+      downloadFile(decodeURI(filename)); // bypass auth since file is public
     }
   }, [filename]);
 
   return (
     <Container>
       <View className='container' marginTop='xxxl'>
-        <Text>Starting download for {filename}...</Text>
+        <Text>Starting download for {decodeURI(filename as string)}...</Text>
         <Text>
           If nothing happens,{' '}
           <Button

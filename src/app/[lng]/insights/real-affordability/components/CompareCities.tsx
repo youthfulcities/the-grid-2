@@ -1,4 +1,5 @@
 import ComparisonCard from '@/app/[lng]/insights/real-affordability/components/ComparisonCard';
+import useTranslation from '@/app/i18n/client';
 import {
   Button,
   Flex,
@@ -9,6 +10,7 @@ import {
   Text,
 } from '@aws-amplify/ui-react';
 import { AnimatePresence } from 'framer-motion';
+import { useParams } from 'next/navigation';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useProfile } from '../context/ProfileContext';
@@ -46,6 +48,8 @@ const CompareCities: React.FC<CompareCitiesProps> = ({
   renderCard,
   profileSection = false,
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'rai');
   const { gender, age, occupation, customized } = useProfile();
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [newCity, setNewCity] = useState('');
@@ -115,23 +119,23 @@ const CompareCities: React.FC<CompareCitiesProps> = ({
             first={i === 0}
             key={profile.key}
             profile={profile}
-            title={profile.city ?? 'Profile'}
+            title={profile.city ?? t('profile')}
             onRemove={() => handleRemove(profile.city ?? '', profile.key)}
           >
             {(width) => renderCard(profile, profiles[0], width)}
           </ComparisonCard>
         ))}
       </AnimatePresence>
-      <ComparisonCard title='Add Comparison'>
+      <ComparisonCard title={t('compare_title')}>
         {(width) => (
           <>
             <SelectField
               labelHidden
-              label='Select City'
+              label={t('select_city')}
               value={newCity}
               onChange={(e) => setNewCity(e.target.value)}
             >
-              <option value=''>Select a city</option>
+              <option value=''>{t('select_city')}</option>
               {availableCities.map((city: string) => (
                 <option key={city} value={city}>
                   {city}
@@ -141,10 +145,10 @@ const CompareCities: React.FC<CompareCitiesProps> = ({
             {profileSection && (
               <>
                 <Text marginTop='small' textAlign='center'>
-                  --- or ---
+                  --- {t('or')} ---
                 </Text>
                 <Heading level={5} color='font.primary'>
-                  Select Profile
+                  {t('select_profile')}
                 </Heading>
                 {(gender || occupation || age) && (
                   <Button
@@ -164,51 +168,47 @@ const CompareCities: React.FC<CompareCitiesProps> = ({
                     }}
                   >
                     <Flex justifyContent='space-between' alignItems='center'>
-                      <AvatarSvg width={100} height={100} radius={100} /> Use
-                      Current Profile
+                      <AvatarSvg width={100} height={100} radius={100} />{' '}
+                      {t('current_profile')}
                     </Flex>
                   </Button>
                 )}
                 <SelectField
                   id='gender'
                   name='gender'
-                  label='Gender'
-                  placeholder='Select gender'
+                  label={t('gender')}
+                  placeholder={t('select_gender')}
                   value={tempProfile.gender ?? ''}
                   onChange={(e) => {
                     setGender(e.target.value);
                   }}
                 >
-                  <option value='woman'>Woman</option>
-                  <option value='man'>Man</option>
-                  <option value='nonbinary'>Nonbinary / gender diverse*</option>
+                  <option value='woman'>{t('woman')}</option>
+                  <option value='man'>{t('man')}</option>
+                  <option value='nonbinary'>{t('nonbinary')}</option>
                 </SelectField>
                 <SelectField
                   id='occupation'
                   name='occupation'
-                  label='Sector'
+                  label={t('sector')}
                   value={String(tempProfile.occupation) ?? ''}
-                  placeholder='Select sector'
+                  placeholder={t('select_sector')}
                   onChange={(e) => {
                     setOccupation(e.target.value);
                   }}
                 >
                   <option value={0} disabled={(tempProfile.age ?? 19) < 29}>
-                    Management
+                    {t('management')}
                   </option>
-                  <option value={1}>Business and finance</option>
-                  <option value={2}>Applied sciences</option>
-                  <option value={3}>Health care</option>
-                  <option value={4}>
-                    Education, law, social, & community services
-                  </option>
-                  <option value={5}>Arts & recreation</option>
-                  <option value={6}>Sales & service</option>
-                  <option value={7}>
-                    Trades, transport, or equipment operator
-                  </option>
-                  <option value={8}>Natural resources & agriculture</option>
-                  <option value={9}>Manufacturing & utilities</option>
+                  <option value={1}>{t('bus')}</option>
+                  <option value={2}>{t('sci')}</option>
+                  <option value={3}>{t('health')}</option>
+                  <option value={4}>{t('edu')}</option>
+                  <option value={5}>{t('art')}</option>
+                  <option value={6}>{t('sales')}</option>
+                  <option value={7}>{t('trade')}</option>
+                  <option value={8}>{t('agri')}</option>
+                  <option value={9}>{t('util')}</option>
                 </SelectField>
                 <StyledStepperField
                   min={19}
@@ -218,7 +218,7 @@ const CompareCities: React.FC<CompareCitiesProps> = ({
                     color: tempProfile.customized ? 'white' : 'neutral.80',
                   }}
                   id='age'
-                  label='Age'
+                  label={t('age')}
                   name='age'
                   $isDisabled={
                     tempProfile.occupation === '0' && tempProfile.age === 29
@@ -243,7 +243,7 @@ const CompareCities: React.FC<CompareCitiesProps> = ({
                 handleAddCity(newCity === '' ? selectedCities[0] : newCity);
               }}
             >
-              Add Profile
+              {t('add_profile')}
             </Button>
             <Button
               fontSize='small'
@@ -267,7 +267,7 @@ const CompareCities: React.FC<CompareCitiesProps> = ({
                 });
               }}
             >
-              Reset
+              {t('reset')}
             </Button>
           </>
         )}

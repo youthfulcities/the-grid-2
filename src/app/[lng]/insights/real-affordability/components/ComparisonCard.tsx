@@ -1,12 +1,12 @@
+import useTranslation from '@/app/i18n/client';
 import { useDimensions } from '@/hooks/useDimensions';
 import { Button, Card, Flex, Heading, Text } from '@aws-amplify/ui-react';
 import { motion } from 'framer-motion';
+import { useParams } from 'next/navigation';
 import React, { forwardRef, useRef } from 'react';
 import styled from 'styled-components';
 import { ProfileData } from '../types/ProfileTypes';
 import ageMap from '../utils/ageMap';
-import genderMap from '../utils/genderMap.json';
-import occupationMap from '../utils/occupationMap.json';
 
 export interface ComparisonCardProps {
   title: string;
@@ -24,6 +24,8 @@ const StyledMotionCard = styled(motion(Card))`
 
 const ComparisonCard = forwardRef<HTMLDivElement, ComparisonCardProps>(
   ({ title, onRemove, children, first = false, profile }, externalRef) => {
+    const { lng } = useParams<{ lng: string }>();
+    const { t } = useTranslation(lng, 'rai');
     const internalRef = useRef<HTMLDivElement>(null);
     const ref = (externalRef as React.RefObject<HTMLDivElement>) ?? internalRef;
     const { width } = useDimensions(ref);
@@ -58,29 +60,26 @@ const ComparisonCard = forwardRef<HTMLDivElement, ComparisonCardProps>(
                 variation='primary'
                 onClick={() => onRemove(title)}
               >
-                Remove
+                {t('remove')}
               </Button>
             )}
           </Flex>
           {profile?.gender && (
             <Text margin='0' fontSize='small'>
-              Gender: {genderMap[profile.gender as keyof typeof genderMap]}
+              {t('gender')}: {t(profile.gender)}
             </Text>
           )}
           {profile?.occupation && (
             <Text margin='0' fontSize='small'>
-              Occupation:{' '}
-              {occupationMap[profile.occupation as keyof typeof occupationMap]}
+              {t('sector')}: {t(profile.occupation as string)}
             </Text>
           )}
           {profile?.age && (
-            <Text fontSize='small'>Age: {ageMap(profile.age)}</Text>
-          )}
-          {first && (
             <Text fontSize='small'>
-              *All subsequent profiles will be compared to this one
+              {t('age')}: {ageMap(profile.age, lng)}
             </Text>
           )}
+          {first && <Text fontSize='small'>{t('disclaimer_compare')}</Text>}
         </Flex>
         <Flex
           direction='column'
@@ -95,7 +94,7 @@ const ComparisonCard = forwardRef<HTMLDivElement, ComparisonCardProps>(
   }
 );
 
-// Assign a display name to the component
+// Assign a display name to the component so React doesn't complain
 ComparisonCard.displayName = 'ComparisonCard';
 
 export default ComparisonCard;

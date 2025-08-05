@@ -1,8 +1,11 @@
 import CompareCities from '@/app/[lng]/insights/real-affordability/components/CompareCities';
+import useTranslation from '@/app/i18n/client';
+import formatNumber from '@/utils/formatNumber';
 import { Divider, Flex, Heading, Text } from '@aws-amplify/ui-react';
+import { useParams } from 'next/navigation';
 import React from 'react';
-import { RentData } from '../types/RentTypes';
 import { ProfileData } from '../types/ProfileTypes';
+import { RentData } from '../types/RentTypes';
 
 interface CityCardProps {
   cityName: string;
@@ -40,6 +43,8 @@ const CityCard: React.FC<CityCardProps> = ({
   data,
   activeCityName,
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'rai');
   const entry = data.find((d) => d.city === cityName);
   const deltas = getRentDiffs(data, activeCityName, cityName);
 
@@ -54,9 +59,9 @@ const CityCard: React.FC<CityCardProps> = ({
           marginTop='small'
           width='100%'
         >
-          <Text>{bedroom} beds</Text>
+          <Text>{t(`${bedroom} beds`)}</Text>
           <Flex direction='column' alignItems='flex-end' gap='xs'>
-            <Text marginBottom='0'>${rent}</Text>
+            <Text marginBottom='0'>{formatNumber(rent, lng)}</Text>
             {deltas?.[Number(bedroom)] !== undefined &&
               activeCityName !== cityName && (
                 <Text
@@ -78,15 +83,21 @@ const CityCard: React.FC<CityCardProps> = ({
 };
 
 const HousingComparison: React.FC<{ rent: RentData }> = ({ rent }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t: t_page } = useTranslation(lng, 'rai');
   const availableCities = rent.map((d) => d.city);
 
   return (
     <>
-      <Heading level={4}>Overview</Heading>
+      <Heading level={4}>{t_page('overview')}</Heading>
       <CompareCities
         allCities={availableCities}
         renderCard={(profile: ProfileData, activeProfile: ProfileData) => (
-          <CityCard cityName={profile?.city ?? ''} activeCityName={activeProfile?.city ?? ''} data={rent} />
+          <CityCard
+            cityName={profile?.city ?? ''}
+            activeCityName={activeProfile?.city ?? ''}
+            data={rent}
+          />
         )}
       />
     </>

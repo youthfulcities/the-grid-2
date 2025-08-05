@@ -9,6 +9,14 @@
   "lambdaLayers": [],
   "environmentVariableList": [
     {
+      "cloudFormationParameterName": "bedrockAgentId",
+      "environmentVariableName": "BEDROCK_AGENT_ID"
+    },
+    {
+      "cloudFormationParameterName": "bedrockAgentAliasId",
+      "environmentVariableName": "BEDROCK_AGENT_ALIAS_ID"
+    },
+    {
       "cloudFormationParameterName": "bedrockKbId",
       "environmentVariableName": "BEDROCK_KB_ID"
     },

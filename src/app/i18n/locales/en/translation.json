@@ -35,5 +35,7 @@
   "feature_title": "Building Bridges: Connecting Youth Skills to the Future of Work",
   "feature_desc": "Download part one of the DEVlab insights report, taking a deep dive into youth data insights and stories from the DEVlab project.",
   "feature_btn": "Download Now",
-  "reset": "Reset"
+  "reset": "Reset",
+  "sort_asc": "Sort ascending",
+  "sort_desc": "Sort descending"
 }

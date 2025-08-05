@@ -1,6 +1,8 @@
+import useTranslation from '@/app/i18n/client';
 import { Heading, Text, View } from '@aws-amplify/ui-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import _ from 'lodash';
+import { useParams } from 'next/navigation';
 import React from 'react';
 import styled from 'styled-components';
 import { useProfile } from '../context/ProfileContext';
@@ -41,6 +43,8 @@ const CharacterOverlay: React.FC<{
   profileInView: boolean;
   income: IncomeData;
 }> = ({ income, profileInView }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'rai');
   const [hovered, setHovered] = React.useState(false);
 
   const { age, gender, occupation, activeCity, currentIncome, customized } =
@@ -66,24 +70,22 @@ const CharacterOverlay: React.FC<{
               transition={{ duration: 0.2 }}
             >
               <Heading level={5} color='font.primary' textAlign='center'>
-                Current Profile
+                {t('current_profile_title')}
               </Heading>
               <Text fontSize='small'>
-                <span className='highlight'>Age:</span>{' '}
-                {customized ? ageMap(age ?? 0) : 'Not selected'}
+                <span className='highlight'>{t('age')}:</span>{' '}
+                {customized ? ageMap(age, lng ?? 0) : t('not_selected')}
               </Text>
               <Text fontSize='small'>
-                <span className='highlight'>Gender: </span>
-                {_.capitalize(gender ?? 'Not selected')}
+                <span className='highlight'>{t('gender')}: </span>
+                {_.capitalize(gender ?? t('not_selected'))}
               </Text>
               <Text fontSize='small'>
-                <span className='highlight'>Occupation:</span>{' '}
-                {customized && occupation
-                  ? occupationMap[occupation as keyof typeof occupationMap]
-                  : 'Not selected'}
+                <span className='highlight'>{t('sector')}:</span>{' '}
+                {customized && occupation ? t(occupation) : t('not_selected')}
               </Text>
               <Text fontSize='small'>
-                <span className='highlight'>Income:</span>
+                <span className='highlight'>{t('income')}:</span>
                 {' $'}
                 {currentIncome > 0
                   ? currentIncome.toFixed(2)
@@ -95,11 +97,11 @@ const CharacterOverlay: React.FC<{
                         occupationMap[occupation as keyof typeof occupationMap],
                       income,
                     }).toFixed(2)}{' '}
-                per month
+                {t('per_month')}
               </Text>
               <Text fontSize='small'>
-                <span className='highlight'>Current city:</span>{' '}
-                {activeCity === null ? 'Not selected' : activeCity}
+                <span className='highlight'>{t('current_city')}:</span>{' '}
+                {activeCity === null ? t('not_selected') : activeCity}
               </Text>
             </HoverCard>
           )}

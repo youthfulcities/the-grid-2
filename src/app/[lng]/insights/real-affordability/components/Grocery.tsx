@@ -1,9 +1,10 @@
 import BarChartStacked from '@/app/components/dataviz/BarChartStacked';
-import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
+import useTranslation from '@/app/i18n/client';
 import {
   calculateGroceryPrice,
   CityTotal,
 } from '@/utils/calculateGroceryTotals';
+import formatNumber from '@/utils/formatNumber';
 import {
   Button,
   Flex,
@@ -15,7 +16,9 @@ import {
 import { SeriesPoint } from 'd3';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { Trans } from 'react-i18next/TransWithoutContext';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
 import { styled } from 'styled-components';
 import { useProfile } from '../context/ProfileContext';
@@ -139,17 +142,17 @@ const Grocery = ({
   groceryItems,
   latestTimestamp,
   cityTotals,
-  setTooltipState,
   width,
   loading,
 }: {
   groceryItems: GroceryItem[];
   latestTimestamp: string | null;
   cityTotals: CityTotal[];
-  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
   width: number;
   loading: boolean;
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'rai');
   const [imgError, setImgError] = useState<{ [key: string]: boolean }>({});
   const [expanded, setExpanded] = useState(false);
   const { activeCity, setActiveCity, setBasket } = useProfile();
@@ -250,24 +253,24 @@ const Grocery = ({
   const tooltipFormatter = useCallback(
     (d: FlexibleDataItem) => (
       <div>
-        {`${d.city}: $${(d.totalPrice as number).toFixed(2)}`}
+        {`${d.city}: ${formatNumber(d.totalPrice as number, lng)}`}
         <br />
         {`${(
           ((d['Canadian goods'] as number) / (d.totalPrice as number)) *
           100
-        ).toFixed(1)}% Canadian goods`}
+        ).toFixed(1)}% ${t('Canadian goods')}`}
         <br />
         {`${(
           ((d['Non-Canadian goods'] as number) / (d.totalPrice as number)) *
           100
-        ).toFixed(1)}% Non-Canadian goods`}
+        ).toFixed(1)}% ${t('Non-Canadian goods')}`}
         <br />
         {`${(
           ((d['Canadian average'] as number) / (d.totalPrice as number)) *
           100
-        ).toFixed(1)}% based on Canadian average`}
+        ).toFixed(1)}% ${t('ca_avg')}`}
         <br />
-        {`${(((d.difference as number) - 1) * 100).toFixed(2)}% difference from Canadian average`}
+        {`${(((d.difference as number) - 1) * 100).toFixed(2)}% ${t('ca_avg_diff')}`}
       </div>
     ),
     []
@@ -280,21 +283,25 @@ const Grocery = ({
   return (
     <>
       <Heading level={1} marginBottom='small'>
-        What&apos;s in <span className='highlight'>your basket?</span>
+        <Trans
+          t={t}
+          i18nKey='title'
+          components={{ span: <span className='highlight' /> }}
+        />
       </Heading>
-      <Text>
-        Costs are in CAD. Prices reflect an average of non-discounted, in-stock
-        items at common Canadian grocery stores. When available, the price
-        represents the cost of goods prepared in Canada.
-      </Text>
+      <Text>{t('grocery_desc')}</Text>
       {latestTimestamp && (
         <Text fontSize='small'>
-          Last updated: {new Date(latestTimestamp).toLocaleDateString()}
+          <Trans
+            t={t}
+            i18nKey='updated'
+            values={{ date: new Date(latestTimestamp).toLocaleDateString(lng) }}
+          />
         </Text>
       )}
       <Flex justifyContent='center' marginTop='xxl'>
-        <Button onClick={handleAddAll}>Add All</Button>
-        <Button onClick={removeAll}>Reset</Button>
+        <Button onClick={handleAddAll}>{t('add_all')}</Button>
+        <Button onClick={removeAll}>{t('reset')}</Button>
       </Flex>
       {loading ? (
         <Flex alignItems='center' margin='small'>
@@ -401,7 +408,11 @@ const Grocery = ({
         </GridWrapper>
       )}
       <Heading level={2} marginTop='xxl' textAlign='center'>
-        Cost of basket <span className='highlight'>by City</span>
+        <Trans
+          t={t}
+          i18nKey='grocery_chart_title'
+          components={{ span: <span className='highlight' /> }}
+        />
       </Heading>
       <BarChartStacked
         id='grocery'
@@ -411,23 +422,24 @@ const Grocery = ({
         data={processedData}
         keys={keys}
         labelAccessor={(d) => d.city as string}
+        tFile='rai'
         width={width}
         height={800}
         marginLeft={100}
         tooltipFormatter={tooltipFormatter}
       >
         <Button onClick={handleAddAll} size='small' color='font.primary'>
-          Add All
+          {t('add_all')}
         </Button>
         <Button onClick={removeAll} size='small' color='font.primary'>
-          Reset basket
+          {t('reset_basket')}
         </Button>
         <Button onClick={resetCity} size='small' color='font.primary'>
-          Reset City
+          {t('reset_city')}
         </Button>
       </BarChartStacked>
       <Text fontSize='small' marginTop='large'>
-        Food icons created by{' '}
+        {t('food_credit')}{' '}
         <a
           href='https://www.flaticon.com/free-icons/lentils'
           title='lentils icons'
@@ -508,19 +520,18 @@ const Grocery = ({
         >
           piksart
         </a>
-        . Thank you!
+        . {t('thank_you')}
       </Text>
-      <Text fontSize='small'>
-        Note that the data is limited to what is available from major grocery
-        store chains. There may be Canadian fruits and vegetables available that
-        have not been marked as “Prepared in Canada” by the store.
-      </Text>
+      <Text fontSize='small'>{t('grocery_disclaimer')}</Text>
       <Heading level={3} marginTop='xxl'>
-        Want more data?
+        {t('want_more')}
       </Heading>
       <Text>
-        Interested in updated, historical, brand-specific, or api data access?{' '}
-        <Link href='/contact'>Get in touch.</Link>
+        <Trans
+          t={t}
+          i18nKey='grocery_more_desc'
+          components={{ a: <Link href='/contact' /> }}
+        />
       </Text>
       <Text />
     </>

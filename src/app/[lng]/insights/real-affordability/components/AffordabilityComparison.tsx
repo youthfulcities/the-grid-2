@@ -1,32 +1,73 @@
 import CompareCities from '@/app/[lng]/insights/real-affordability/components/CompareCities';
 import BarChart from '@/app/components/dataviz/BarChartGeneral';
+import { FlexibleDataItem } from '@/app/components/dataviz/BarChartStacked';
 import LineChart from '@/app/components/dataviz/LineChart';
-import { TooltipState } from '@/app/components/dataviz/TooltipChart/TooltipState';
+import useTranslation from '@/app/i18n/client';
 import { Heading, Text } from '@aws-amplify/ui-react';
+import { useParams } from 'next/navigation';
 import { useCallback } from 'react';
+import { Trans } from 'react-i18next/TransWithoutContext';
 import { ProcessedDataItem } from '../types/CostTypes';
 import { IncomeData } from '../types/IncomeTypes';
 import { ProfileData } from '../types/ProfileTypes';
 import ageMap from '../utils/ageMap';
 import computeIncomeComparisons from '../utils/computeIncomeComparisons';
-import occupationMap from '../utils/occupationMap.json';
 
 interface AffordabilityComparisonProps {
   data: ProcessedDataItem[];
   income: IncomeData;
-  tooltipState: TooltipState;
-  setTooltipState: React.Dispatch<React.SetStateAction<TooltipState>>;
 }
 
 export interface Industry {
   occupation: string;
+  occupationKey: string;
   income: number;
 }
+
+export const IncomeComparison: React.FC<{
+  profile: ProfileData;
+  incomeDifference: number;
+}> = ({ profile, incomeDifference }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'rai');
+
+  const ageString =
+    profile.customized && profile.age
+      ? t('age_fragment', {
+          ageRange: ageMap(profile.age, lng),
+        })
+      : '';
+
+  const occupationString = profile.occupation
+    ? t('occupation_fragment', {
+        occupation: t(profile.occupation),
+      })
+    : '';
+
+  const percent = Math.abs(incomeDifference).toFixed(0);
+  const direction = t(incomeDifference >= 0 ? 'less' : 'more');
+
+  return (
+    <Trans
+      i18nKey='income_comparison'
+      t={t}
+      values={{
+        age: ageString,
+        occupation: occupationString,
+        percent,
+        direction,
+      }}
+      components={{ 1: <span className='alt-highlight' /> }}
+    />
+  );
+};
 
 const AffordabilityComparison: React.FC<AffordabilityComparisonProps> = ({
   data,
   income,
 }) => {
+  const { lng } = useParams<{ lng: string }>();
+  const { t } = useTranslation(lng, 'rai');
   const cityList = data.map((d) => d.city);
 
   const renderCard = useCallback(
@@ -48,34 +89,34 @@ const AffordabilityComparison: React.FC<AffordabilityComparisonProps> = ({
         ? [ageIncomes, compareAgeIncomes].flat()
         : ageIncomes;
 
+      const tooltipFormatter = (d: FlexibleDataItem): string =>
+        t('gender_tooltip', {
+          age: ageMap(profile.age, lng), // or empty string if no age
+          occupation: t(d.occupation as string),
+          percent: (d.difference as number).toFixed(0),
+        });
       return (
         <>
           <Heading level={4} color='secondary.60'>
-            Top 3 industries
+            {t('industry_title')}
           </Heading>
           <ol>
             {topIndustries.map((industry: Industry) => (
               <li key={industry.occupation}>
-                <Text key={industry.occupation}>{industry.occupation}</Text>
+                <Text key={industry.occupation}>
+                  {t(industry.occupationKey)}
+                </Text>
               </li>
             ))}
           </ol>
           <Heading marginTop='large' level={4} color='secondary.60'>
-            Gender income disparity
+            {t('income_title')}
           </Heading>
           <Text>
-            Overall, women{' '}
-            {profile.customized && profile.age && ` age ${ageMap(profile.age)}`}{' '}
-            earn{' '}
-            <span className='alt-highlight'>
-              {Math.abs(incomeDifference).toFixed(0)}%{' '}
-              {incomeDifference >= 0 ? 'less' : 'more'}
-            </span>{' '}
-            than men
-            {profile.occupation &&
-              ` in ${occupationMap[profile.occupation as keyof typeof occupationMap]}`}
-            . The following chart shows the industries with the greatest
-            gender-based income disparity:
+            <IncomeComparison
+              profile={profile}
+              incomeDifference={incomeDifference}
+            />
           </Text>
           <BarChart
             width={(width ?? 0) * 0.85}
@@ -83,30 +124,34 @@ const AffordabilityComparison: React.FC<AffordabilityComparisonProps> = ({
             data={genderData}
             truncateThreshold={15}
             colors={genderColors}
-            labelAccessor={(d) => d.occupation as string}
+            labelAccessor={(d) => t(d.occupation as string)}
             valueAccessor={(d) => d.difference as number}
-            tooltipFormatter={(d) =>
-              `${d.occupation}: Women${profile.customized && profile.age ? ` age ${ageMap(profile.age)}` : ''} earn ${(
-                d.difference as number
-              ).toFixed(0)}% less than men.`
-            }
+            tooltipFormatter={tooltipFormatter}
             customize={false}
             saveAsImg={false}
+            tFile='rai'
+            xLabel={t('percent')}
           />
           <Heading marginTop='large' level={4} color='secondary.60'>
-            Change in income over time
+            {t('time_title')}
           </Heading>
           <LineChart
             width={(width ?? 0) * 0.85}
             data={combineAgeIncomes}
             tooltipFormatter={(d) =>
-              `${d.group} in ${d.city}: $${(d.value as number).toFixed(2)}`
+              t('time_tooltip', {
+                age: t(d.group as string),
+                city: d.city,
+                income: (d.value as number).toFixed(2),
+              })
             }
-            labelAccessor={(d) => d.group as string}
+            labelAccessor={(d) => t(d.group as string)}
             valueAccessor={(d) => d.value as number}
             height={300}
             seriesAccessor={(d) => d.key as string}
             saveAsImg={false}
+            xLabel={t('age')}
+            yLabel={t('income')}
           />
         </>
       );

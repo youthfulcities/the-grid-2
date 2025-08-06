@@ -69,6 +69,7 @@ export async function POST(req: Request) {
           if (chunk.chunk?.bytes) {
             const content = new TextDecoder().decode(chunk.chunk.bytes);
             const attributions = chunk.chunk.attribution?.citations ?? [];
+            // console.log(attributions[0]?.retrievedReferences);
             controller.enqueue(
               encoder.encode(`${JSON.stringify({ type: 'text', content })}\n`)
             );

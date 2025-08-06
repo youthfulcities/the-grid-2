@@ -21,6 +21,7 @@ import styled from 'styled-components';
 interface Quote {
   text: string;
   id: string;
+  [key: string]: string;
 }
 
 interface ChatMessage {
@@ -205,10 +206,19 @@ const ChatInterface: React.FC = () => {
                 const quotes = part.retrievedReferences;
                 const { end } =
                   part.generatedResponsePart.textResponsePart.span;
-                return quotes.forEach((quote, quoteI: number) =>
+                return quotes.forEach((quote, quoteI: number) => {
+                  const { metadata } = quote;
                   setMessages((prev) =>
                     prev.map((msg, i) => {
                       if (i === prev.length - 1 && msg.role === 'assistant') {
+                        if (
+                          msg.quotes &&
+                          msg.quotes.some(
+                            (q) => q.id === `${quoteI}_${i}_${attI}`
+                          )
+                        ) {
+                          return msg;
+                        }
                         if (msg.content.length >= end) {
                           const footnoteLink = `<sup><a href="#footnote-${quoteI}_${i}_${attI}">[${(msg.quotes?.length ?? 0) + 1}]</a></sup>`;
                           const footnoteLength = footnoteLink.length;
@@ -225,6 +235,7 @@ const ChatInterface: React.FC = () => {
                             quotes: [
                               ...(msg.quotes ?? []),
                               {
+                                ...metadata,
                                 text: quote.content.text,
                                 id: `${quoteI}_${i}_${attI}`,
                               },
@@ -244,8 +255,8 @@ const ChatInterface: React.FC = () => {
                       }
                       return msg;
                     })
-                  )
-                );
+                  );
+                });
               });
             } else if (payload.type === 'followups') {
               setMessages((prev) =>
@@ -391,6 +402,25 @@ const ChatInterface: React.FC = () => {
                           >
                             <sup id={`footnote-${q.id}`}>[{i + 1}]</sup>{' '}
                             {q.text}
+                            <br />
+                            <br />
+                            {q.project && `Project: ${q.project}`}
+                            {q.year && `, ${q.year}`}
+                            <br />
+                            {q.source_url && (
+                              <>
+                                Source:
+                                <a
+                                  style={{ overflowWrap: 'break-word' }}
+                                  href={q.source_url}
+                                  target='_blank'
+                                  rel='noopener noreferrer'
+                                >
+                                  {' '}
+                                  {q.source_url}
+                                </a>
+                              </>
+                            )}
                           </Text>
                         </QuoteCard>
                       ))}

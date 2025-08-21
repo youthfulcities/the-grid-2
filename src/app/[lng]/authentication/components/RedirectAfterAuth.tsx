@@ -3,7 +3,7 @@
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import 'aws-amplify/auth/enable-oauth-listener';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 //THIS COMPONENT IS ONLY FOR LOCAL LOGINS
 const RedirectAfterAuth = () => {
@@ -11,16 +11,18 @@ const RedirectAfterAuth = () => {
   const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   // Retrieve the redirect URL from session storage or set a default
 
+  // Guard so we don't redirect multiple times
+  const hasRedirected = useRef(false);
+
   useEffect(() => {
-    const redirectUrl = sessionStorage.getItem('postLoginRedirect') || '/';
-    // Check if there is a user object, which indicates a successful login
-    if (authStatus === 'authenticated' || authStatus === 'configuring') {
+    if (authStatus === 'authenticated' && !hasRedirected.current) {
+      hasRedirected.current = true; // lock it
+      const redirectUrl = sessionStorage.getItem('postLoginRedirect');
+      router.push(redirectUrl ?? '/'); // Redirect to the intended URL or home
       sessionStorage.removeItem('postLoginRedirect');
-      router.push(redirectUrl); // Redirect to the intended URL or home
     }
   }, [authStatus, router]);
-
-  return null;
+  return null; // This component does not render anything
 };
 
 export default RedirectAfterAuth;

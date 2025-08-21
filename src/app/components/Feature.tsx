@@ -60,10 +60,29 @@ const Feature: React.FC<FeatureProps> = ({ color = 'blue', value = '60' }) => {
             gap='xs'
             data-ga-download='download-insight-part-1-final-small.pdf'
             id='feature-download-insight-part-1-final-small.pdf'
-            onClick={() => downloadFile('insight-part-1-final-small.pdf', true)}
+            onClick={() =>
+              downloadFile(
+                'reports/Building-Bridges-Connecting-Youth-Skills-to-the-Future-of-Work-(Part-1).pdf',
+                true
+              )
+            }
             variation='primary'
           >
-            <FaFileArrowDown /> {t('feature_btn')}
+            <FaFileArrowDown /> Download Part 1
+          </Button>
+          <Button
+            gap='xs'
+            data-ga-download='download-insight-part-2'
+            id='download-insight-part-2'
+            onClick={() =>
+              downloadFile(
+                'reports/Building-Bridges-Connecting-Youth-Skills-to-the-Future-of-Work-(Part-2).pdf',
+                true
+              )
+            }
+            variation='primary'
+          >
+            <FaFileArrowDown /> Download Part 2
           </Button>
         </Flex>
       </Flex>

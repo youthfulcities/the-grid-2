@@ -29,7 +29,7 @@ export async function POST(req: Request) {
   const command = new InvokeAgentCommand({
     agentId: process.env.BEDROCK_AGENT_ID!,
     agentAliasId: process.env.BEDROCK_ALIAS_ID!,
-    sessionId: hashSessionId(sessionId) || randomUUID(),
+    sessionId: sessionId ? hashSessionId(sessionId) : randomUUID(),
     inputText: query,
     enableTrace: true,
     streamingConfigurations: {

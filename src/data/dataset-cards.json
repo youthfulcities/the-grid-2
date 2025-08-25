@@ -2,25 +2,25 @@
   "datasetCards": [
     {
       "title": "Building Bridges: Connecting Youth Skills to the Future of Work (Part 2)",
-      "titlefr": "",
+      "titlefr": "Bâtir des ponts : Relier les compétences des jeunes à l’avenir du travail (2e partie)",
       "date": "2024",
       "type": "file",
       "desc": "Download part two of the DEVlab insights report, which focuses on building youth skills pathways through community engagement.",
-      "descfr": "",
+      "descfr": "Téléchargez la deuxième partie du rapport DEVlab, qui se concentre sur le développement des compétences des jeunes grâce à l'engagement communautaire.",
       "className": "image-card-insight-1",
-      "file": "Building Bridges - Connecting Youth Skills to the Future of Work (Part 2).pdf",
+      "file": "Building-Bridges-Connecting-Youth-Skills-to-the-Future-of-Work-(Part-2).pdf",
       "public": true,
       "keywords": []
     },
     {
       "title": "Building Bridges: Connecting Youth Skills to the Future of Work (Part 1)",
-      "titlefr": "Bâtir des ponts : Relier les compétences des jeunes à l’avenir du travail",
+      "titlefr": "Bâtir des ponts : Relier les compétences des jeunes à l’avenir du travail (1re partie)",
       "date": "2024",
       "type": "file",
       "desc": "Download part one of the DEVlab insights report, taking a deep dive into youth data insights and stories from the DEVlab project.",
-      "descfr": "Téléchargez la première partie du rapport laboDEV insights, qui présente une analyse approfondie des données relatives aux jeunes et des histoires tirées du projet laboDEV.",
+      "descfr": "Téléchargez la première partie du rapport laboDEV, qui présente une analyse approfondie des données relatives aux jeunes et des histoires tirées du projet laboDEV.",
       "className": "image-card-insight-1",
-      "file": "insight-part-1-final-small.pdf",
+      "file": "Building-Bridges-Connecting-Youth-Skills-to-the-Future-of-Work-(Part-1).pdf",
       "public": true,
       "keywords": []
     },

@@ -10,6 +10,15 @@ import { createHash, randomUUID } from 'crypto';
 import { XMLParser } from 'fast-xml-parser';
 import { NextResponse } from 'next/server';
 
+interface Filter {
+  type: 'equals' | 'notEquals';
+  value: string;
+}
+
+interface Filters {
+  [key: string]: Filter[];
+}
+
 const credentials = await fromNodeProviderChain()();
 
 const bedrockAgentClient = new BedrockAgentRuntimeClient({
@@ -21,19 +30,60 @@ const hashSessionId = (input: string): string =>
   createHash('sha256').update(input).digest('hex').slice(0, 64); // trim to fit
 
 export async function POST(req: Request) {
-  const { query, sessionId } = await req.json();
+  const { query, sessionId, filters } = (await req.json()) as {
+    query: string;
+    sessionId?: string;
+    filters?: Filters;
+  };
 
   const encoder = new TextEncoder();
   const parser = new XMLParser({ ignoreAttributes: false });
 
+  // Convert Filters object from sidebar to Bedrock filter format
+  const filtersArray: any[] = [];
+
+  Object.entries(filters || {}).forEach(([key, filterList]) => {
+    filterList.forEach((f: { type: 'equals' | 'notEquals'; value: string }) => {
+      if (f.type === 'equals') {
+        filtersArray.push({ equals: { key, value: f.value } });
+      } else if (f.type === 'notEquals') {
+        filtersArray.push({ notEquals: { key, value: f.value } });
+      }
+    });
+  });
+
+  // Determine if we need a single filter or andAll
+  const filterConfig =
+    filtersArray.length === 0
+      ? undefined
+      : filtersArray.length === 1
+        ? filtersArray[0]
+        : { andAll: filtersArray };
+
+  const knowledgeBaseConfigurations = filterConfig
+    ? [
+        {
+          knowledgeBaseId: process.env.BEDROCK_KB_ID!,
+          retrievalConfiguration: {
+            vectorSearchConfiguration: {
+              filter: filterConfig,
+            },
+          },
+        },
+      ]
+    : undefined;
+
   const command = new InvokeAgentCommand({
     agentId: process.env.BEDROCK_AGENT_ID!,
     agentAliasId: process.env.BEDROCK_ALIAS_ID!,
-    sessionId: hashSessionId(sessionId) || randomUUID(),
+    sessionId: sessionId ? hashSessionId(sessionId) : randomUUID(),
     inputText: query,
     enableTrace: true,
     streamingConfigurations: {
       streamFinalResponse: true,
+    },
+    sessionState: {
+      knowledgeBaseConfigurations,
     },
   });
 

@@ -423,7 +423,7 @@ const ChatInterface: React.FC = () => {
             >
               The YC AI Research Assistant is an experimental tool that
               retrieves information from internal and external sources curated
-              by Youthful Cities. The Assistant utilizes Claude 3 Sonnet to
+              by Youthful Cities. The Assistant utilizes Claude 3 Haiku to
               interpret and summarize results. All AI generated content should
               be carefully reviewed for accuracy, and we encourage you to read
               the original sources linked in the citations to get the full

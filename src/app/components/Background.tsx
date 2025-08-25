@@ -6,6 +6,7 @@ interface ContainerProps {
   background?: string;
   children: ReactNode;
   noOverflow?: boolean;
+  relative?: boolean;
 }
 
 const Background = styled.main<{ $background: string; $noOverflow: boolean }>`

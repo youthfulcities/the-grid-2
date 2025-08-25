@@ -7,16 +7,27 @@ import {
   Button,
   Card,
   Flex,
-  Input,
   Text,
+  TextAreaField,
   View,
   useAuthenticator,
 } from '@aws-amplify/ui-react';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { AnimatePresence, motion } from 'framer-motion';
+import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import ChatSidebar from './components/ChatSidebar';
+
+interface Filter {
+  type: 'equals' | 'notEquals';
+  value: string;
+}
+
+interface Filters {
+  [key: string]: Filter[];
+}
 
 interface Quote {
   text: string;
@@ -168,6 +179,7 @@ const ChatInterface: React.FC = () => {
   }, [authStatus, router]);
 
   const [input, setInput] = useState('');
+  const [filters, setFilters] = useState<Filters>({});
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'assistant',
@@ -185,6 +197,10 @@ const ChatInterface: React.FC = () => {
   const sendQuery = async (query: string) => {
     try {
       setLoading(true);
+      // Remove empty filter arrays
+      const cleanedFilters = Object.fromEntries(
+        Object.entries(filters).filter(([_, arr]) => arr.length > 0)
+      );
       const session = await fetchAuthSession();
       const token = session.tokens?.idToken?.toString();
       const res = await fetch('/api/chat/query/stream', {
@@ -193,7 +209,11 @@ const ChatInterface: React.FC = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ query, sessionId: token }),
+        body: JSON.stringify({
+          query,
+          sessionId: token,
+          filters: cleanedFilters,
+        }),
       });
 
       if (!res.body) throw new Error('No response stream');
@@ -386,148 +406,175 @@ const ChatInterface: React.FC = () => {
 
   return (
     <Container>
-      <ChatContainer>
-        <Flex direction='column' gap='1rem'>
-          <sub
-            style={{
-              color: '#fff',
-              marginBottom: 'var(--amplify-space-large)',
-            }}
-          >
-            The YC AI Research Assistant is an experimental tool that retrieves
-            information from internal and external sources curated by Youthful
-            Cities. The Assistant utilizes Claude 3 Sonnet to interpret and
-            summarize results. All AI generated content should be carefully
-            reviewed for accuracy, and we encourage you to read the original
-            sources linked in the citations to get the full context.
-          </sub>
-          <AnimatePresence>
-            {messages.map((msg, idx) => (
-              <Bubble
-                key={idx}
-                isUser={msg.role === 'user'}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Flex
-                  direction='column'
-                  gap={msg.content.length === 0 && loading ? '0' : 'large'}
-                  marginTop={
-                    msg.role === 'user' ? '0' : 'var(--amplify-space-xs)'
-                  }
-                  marginBottom={
-                    msg.role === 'user' ? '0' : 'var(--amplify-space-xs)'
-                  }
+      <Flex alignContent='stretch' height='100%' wrap='wrap'>
+        <View
+          backgroundColor='rgba(0, 0, 0, 0.8)'
+          width={{ base: 'auto', small: '100%', large: 'auto' }}
+        >
+          <ChatSidebar filters={filters} setFilters={setFilters} />
+        </View>
+        <ChatContainer>
+          <Flex direction='column' gap='1rem'>
+            <sub
+              style={{
+                color: '#fff',
+                marginBottom: 'var(--amplify-space-large)',
+              }}
+            >
+              The YC AI Research Assistant is an experimental tool that
+              retrieves information from internal and external sources curated
+              by Youthful Cities. The Assistant utilizes Claude 3 Sonnet to
+              interpret and summarize results. All AI generated content should
+              be carefully reviewed for accuracy, and we encourage you to read
+              the original sources linked in the citations to get the full
+              context. If you&apos;re experiencing technical issues, please{' '}
+              <Link href='/contact'>reach out to us.</Link>
+            </sub>
+            <AnimatePresence>
+              {messages.map((msg, idx) => (
+                <Bubble
+                  key={idx}
+                  isUser={msg.role === 'user'}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  {loading &&
-                    msg.content.length === 0 &&
-                    msg.role === 'assistant' && <DotLoader />}
-                  <Text
-                    as='p'
-                    margin='0'
-                    style={{ whiteSpace: 'pre-wrap' }}
-                    dangerouslySetInnerHTML={{
-                      __html: normalizeNewlines(msg.content),
-                    }}
-                  />
-                  {msg.role === 'assistant' &&
-                    (msg.quotes?.length ?? 0) > 0 && (
-                      <View>
-                        <Accordion
-                          title={t('citations')}
-                          open={msg.open ? 0 : undefined}
-                          setOpen={() => toggleCitations(idx)}
-                        >
-                          {msg.quotes?.map((q, i) => (
-                            <QuoteCard key={`quote-${q.id}`}>
-                              <Text
-                                as='blockquote'
-                                color='font.inverse'
+                  <Flex
+                    direction='column'
+                    gap={msg.content.length === 0 && loading ? '0' : 'large'}
+                    marginTop={
+                      msg.role === 'user' ? '0' : 'var(--amplify-space-xs)'
+                    }
+                    marginBottom={
+                      msg.role === 'user' ? '0' : 'var(--amplify-space-xs)'
+                    }
+                  >
+                    {loading &&
+                      msg.content.length === 0 &&
+                      msg.role === 'assistant' && <DotLoader />}
+                    <Text
+                      as='p'
+                      margin='0'
+                      style={{ whiteSpace: 'pre-wrap' }}
+                      dangerouslySetInnerHTML={{
+                        __html: normalizeNewlines(msg.content),
+                      }}
+                    />
+                    {msg.role === 'assistant' &&
+                      (msg.quotes?.length ?? 0) > 0 && (
+                        <View>
+                          <Accordion
+                            title={t('citations')}
+                            open={msg.open ? 0 : undefined}
+                            setOpen={() => toggleCitations(idx)}
+                          >
+                            {msg.quotes?.map((q, i) => (
+                              <QuoteCard key={`quote-${q.id}`}>
+                                <Text
+                                  as='blockquote'
+                                  color='font.inverse'
+                                  fontSize='small'
+                                >
+                                  <sup id={`footnote-${q.id}`}>[{i + 1}]</sup>{' '}
+                                  {q.text}
+                                  {q.project && (
+                                    <>
+                                      <br />
+                                      <br />
+                                      <strong>Project:</strong> {q.project}
+                                    </>
+                                  )}
+                                  {q.type && q.type !== 'None' && (
+                                    <>
+                                      <br />
+                                      <strong>Type:</strong> {q.type}
+                                    </>
+                                  )}
+                                  {q.year && q.year !== 'None' && (
+                                    <>
+                                      <br />
+                                      <strong>Year:</strong> {q.year}
+                                    </>
+                                  )}
+                                  {q.source_url && (
+                                    <>
+                                      <br />
+                                      <strong>Source:</strong>{' '}
+                                      <QuoteLink
+                                        href={q.source_url}
+                                        target='_blank'
+                                        rel='noopener noreferrer'
+                                      >
+                                        {q.source_url}
+                                      </QuoteLink>
+                                    </>
+                                  )}
+                                </Text>
+                              </QuoteCard>
+                            ))}
+                          </Accordion>
+                        </View>
+                      )}
+
+                    {msg.role === 'assistant' &&
+                      (msg.followups?.length ?? 0) > 0 && (
+                        <View>
+                          <Text fontWeight='bold' marginBottom='xs'>
+                            {t('followup')}
+                          </Text>
+                          <Flex direction='column' gap='0'>
+                            {msg.followups?.map((question) => (
+                              <FollowupButton
+                                key={question}
+                                variation='link'
                                 fontSize='small'
+                                colorTheme='info'
+                                onClick={() => handleFollowupClick(question)}
                               >
-                                <sup id={`footnote-${q.id}`}>[{i + 1}]</sup>{' '}
-                                {q.text}
-                                {q.project && (
-                                  <>
-                                    <br />
-                                    <br />
-                                    <strong>Project:</strong> {q.project}
-                                  </>
-                                )}
-                                {q.project && q.year && q.year !== 'None' && (
-                                  <>, {q.year}</>
-                                )}
-                                {q.source_url && (
-                                  <>
-                                    <br />
-                                    <strong>Source:</strong>{' '}
-                                    <QuoteLink
-                                      href={q.source_url}
-                                      target='_blank'
-                                      rel='noopener noreferrer'
-                                    >
-                                      {q.source_url}
-                                    </QuoteLink>
-                                  </>
-                                )}
-                              </Text>
-                            </QuoteCard>
-                          ))}
-                        </Accordion>
-                      </View>
-                    )}
-
-                  {msg.role === 'assistant' &&
-                    (msg.followups?.length ?? 0) > 0 && (
-                      <View>
-                        <Text fontWeight='bold' marginBottom='xs'>
-                          {t('followup')}
-                        </Text>
-                        <Flex direction='column' gap='0'>
-                          {msg.followups?.map((question) => (
-                            <FollowupButton
-                              key={question}
-                              variation='link'
-                              fontSize='small'
-                              colorTheme='info'
-                              onClick={() => handleFollowupClick(question)}
-                            >
-                              {question}
-                            </FollowupButton>
-                          ))}
-                        </Flex>
-                      </View>
-                    )}
-                </Flex>
-              </Bubble>
-            ))}
-          </AnimatePresence>
-
-          <Flex
-            as='form'
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSend();
-            }}
-            gap='0.5rem'
-          >
-            <Input
-              style={{ resize: 'vertical' }}
-              as='textarea'
-              rows={1}
-              placeholder={t('ask_something')}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              disabled={loading}
-            />
-            <Button isDisabled={loading} type='submit'>
-              {t('send_btn')}
-            </Button>
+                                {question}
+                              </FollowupButton>
+                            ))}
+                          </Flex>
+                        </View>
+                      )}
+                  </Flex>
+                </Bubble>
+              ))}
+            </AnimatePresence>
+            <Flex
+              as='form'
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSend();
+              }}
+              gap='0.5rem'
+            >
+              <TextAreaField
+                style={{ resize: 'vertical' }}
+                width='100%'
+                label='Message'
+                labelHidden
+                as='textarea'
+                rows={1}
+                placeholder={t('ask_something')}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                disabled={loading}
+              />
+              <Button
+                isDisabled={
+                  loading ||
+                  (filters.project?.length === 0 && filters.type?.length > 0)
+                }
+                type='submit'
+              >
+                {t('send_btn')}
+              </Button>
+            </Flex>
           </Flex>
-        </Flex>
-      </ChatContainer>
+        </ChatContainer>
+      </Flex>
     </Container>
   );
 };

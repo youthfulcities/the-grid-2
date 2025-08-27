@@ -52,7 +52,7 @@ interface FilterSidebarProps {
 
 const ChatSidebar: React.FC<FilterSidebarProps> = ({ filters, setFilters }) => {
   const isMobile = useBreakpointValue({
-    base: false,
+    base: true,
     xs: true,
     small: true,
     medium: true,

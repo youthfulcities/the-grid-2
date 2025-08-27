@@ -40,7 +40,7 @@ const StyledFlex = styled(Flex)`
 
 const NavigationLinks = styled(Flex)`
   color: white;
-  gap: var(--amplify-space-xl);
+  gap: var(--amplify-space-large);
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -55,14 +55,13 @@ const NavLink = styled(Link)<{ $currentPage: boolean }>`
   text-align: center;
   font-size: 16px;
   border-radius: inherit;
+  width: 100%;
   font-weight: 450;
   text-transform: uppercase;
   line-height: 24px;
-  display: inline-block;
   cursor: pointer;
   text-decoration: none;
   position: relative;
-  overflow: hidden;
   &::before {
     content: '';
     position: absolute;

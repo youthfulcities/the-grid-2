@@ -17,9 +17,9 @@ const RedirectAfterAuth = () => {
   useEffect(() => {
     if (authStatus === 'authenticated' && !hasRedirected.current) {
       hasRedirected.current = true; // lock it
-      const redirectUrl = sessionStorage.getItem('postLoginRedirect');
-      router.push(redirectUrl ?? '/'); // Redirect to the intended URL or home
-      sessionStorage.removeItem('postLoginRedirect');
+      const redirectUrl = localStorage.getItem('postLoginRedirect');
+      router.replace(redirectUrl ?? '/'); // Redirect to the intended URL or home
+      localStorage.removeItem('postLoginRedirect');
     }
   }, [authStatus, router]);
   return null; // This component does not render anything

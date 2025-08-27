@@ -71,7 +71,7 @@ const AuthLink: React.FC<{ mobile?: boolean }> = ({ mobile = false }) => {
     if (authStatus === 'authenticated') {
       signOut();
     } else {
-      sessionStorage.setItem('postLoginRedirect', pathname);
+      localStorage.setItem('postLoginRedirect', pathname);
       router.push('/authentication');
     }
   };

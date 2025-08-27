@@ -69,15 +69,15 @@ const useDownloadFile = () => {
 
   useEffect(() => {
     if (authStatus === 'authenticated') {
-      const storedFilename = sessionStorage.getItem('downloadFilename');
-      const storedRedirect = sessionStorage.getItem('postLoginRedirect');
+      const storedFilename = localStorage.getItem('downloadFilename');
+      const storedRedirect = localStorage.getItem('postLoginRedirect');
 
       if (storedFilename) {
-        sessionStorage.removeItem('downloadFilename');
+        localStorage.removeItem('downloadFilename');
         handleDownload(storedFilename);
       }
       if (storedRedirect) {
-        sessionStorage.removeItem('postLoginRedirect');
+        localStorage.removeItem('postLoginRedirect');
         router.push(storedRedirect);
       }
     }
@@ -86,8 +86,8 @@ const useDownloadFile = () => {
   const downloadFile = (filename: string, bypassAuthCheck = false) => {
     if (!bypassAuthCheck && authStatus !== 'authenticated') {
       console.error('User is not authenticated.');
-      sessionStorage.setItem('postLoginRedirect', pathname);
-      sessionStorage.setItem('downloadFilename', filename);
+      localStorage.setItem('postLoginRedirect', pathname);
+      localStorage.setItem('downloadFilename', filename);
       router.push('/authentication');
       return;
     }

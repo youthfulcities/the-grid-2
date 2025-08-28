@@ -17,10 +17,7 @@ const Chatbot = () => {
 
   useEffect(() => {
     if (authStatus !== 'authenticated') {
-      sessionStorage.setItem(
-        'postLoginRedirect',
-        '/insights/housing/open-ended'
-      );
+      localStorage.setItem('postLoginRedirect', '/insights/housing/open-ended');
       router.push('/authentication');
     }
   }, [authStatus, router]);

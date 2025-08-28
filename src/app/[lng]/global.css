@@ -1059,6 +1059,12 @@ a.outline-button:hover {
   background-size: cover;
 }
 
+.image-card-insight-2 {
+  background-image: url('https://www.youthfulcities.com/wp-content/uploads/2025/08/insight-part-2.png');
+  background-position: top;
+  background-size: cover;
+}
+
 /* Animations
 ========================================================================== */
 

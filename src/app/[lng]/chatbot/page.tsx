@@ -173,7 +173,7 @@ const ChatInterface: React.FC = () => {
 
   useEffect(() => {
     if (authStatus === 'unauthenticated') {
-      sessionStorage.setItem('postLoginRedirect', '/chatbot');
+      localStorage.setItem('postLoginRedirect', '/chatbot');
       router.push('/authentication');
     }
   }, [authStatus, router]);

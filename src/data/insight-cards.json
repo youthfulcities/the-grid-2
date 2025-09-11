@@ -1,6 +1,17 @@
 {
   "cards": [
     {
+      "title": "DEVlab – National Strategy Connections",
+      "titlefr": "laboDEV - Connexions stratégiques nationales",
+      "date": "September 2025",
+      "datefr": "Septembre 2025",
+      "type": "",
+      "desc": "Part of the DEVlab research noted a perceived mismatch between the competencies emphasized in the skills for success framework and those in job postings. This could be valuable for the government to consider if the skills required for young people to succeed in careers are shifting.",
+      "descfr": "Une partie de la recherche du laboDEV a relevé un décalage perçu entre les compétences mises en avant dans le cadre des compétences pour réussir et celles figurant dans les offres d'emploi. Il pourrait être utile pour le gouvernement d'examiner si les compétences requises pour que les jeunes réussissent dans leur carrière évoluent.",
+      "link": "/insights/devlab-national-strategy-connections",
+      "priority": 1
+    },
+    {
       "title": "What's up with work lately?",
       "titlefr": "Que se passe-t-il au travail ces temps-ci?",
       "dataset": "Youth Cite",
@@ -23,7 +34,7 @@
       "desc": "Findings from the What's up with work lately? survey performed by Youthful Cities as part of the DEVlab project.",
       "descfr": "Résultats de l'enquête « Que se passe-t-il au travail ces temps-ci? » réalisée par Youthful Cities dans le cadre du projet laboDEV.",
       "link": "/insights/survey",
-      "priority": 1
+      "priority": 2
     },
     {
       "title": "State of Housing for Young People in Canada",

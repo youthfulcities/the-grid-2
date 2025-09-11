@@ -191,14 +191,19 @@ a:hover {
 .breadcrumbs {
   color: #000;
 }
-ul {
-  list-style: square;
-}
+
 ol {
   list-style-type: decimal;
 }
+
+/* ul {
+  padding-bottom: var(--amplify-space-small);
+} */
+
 li {
   color: var(--amplify-colors-font-primary);
+  margin-bottom: var(--amplify-space-small);
+  font-size: 1.15rem;
 }
 
 .hover-cursor {

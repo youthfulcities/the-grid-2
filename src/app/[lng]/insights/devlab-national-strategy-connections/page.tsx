@@ -156,13 +156,13 @@ export default function DevlabNationalStrategyConnections() {
             (6) National Housing Strategy
           </Heading>
           <Text as='p'>
-            The National Housing Strategy is Canada's commitment to ensure more
+            The National Housing Strategy is Canada’s commitment to ensure more
             people living in Canada have access to safe, affordable and
             inclusive housing. The National Housing Strategy is currently a
             10-year, $115+ billion plan to give more people in Canada a place to
             call home. Launched in 2017, the Strategy includes a range of
             complementary programs and initiatives that address diverse needs
-            across the entire housing continuum. It's anchored in the National
+            across the entire housing continuum. It’s anchored in the National
             Housing Strategy Act which requires the Strategy to consider the key
             principles of a human rights-based approach to housing.
           </Text>

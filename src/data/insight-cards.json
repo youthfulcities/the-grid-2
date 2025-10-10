@@ -6,10 +6,10 @@
       "date": "September 2025",
       "datefr": "Septembre 2025",
       "type": "",
-      "desc": "Part of the DEVlab research noted a perceived mismatch between the competencies emphasized in the skills for success framework and those in job postings. This could be valuable for the government to consider if the skills required for young people to succeed in careers are shifting.",
-      "descfr": "Une partie de la recherche du laboDEV a relevé un décalage perçu entre les compétences mises en avant dans le cadre des compétences pour réussir et celles figurant dans les offres d'emploi. Il pourrait être utile pour le gouvernement d'examiner si les compétences requises pour que les jeunes réussissent dans leur carrière évoluent.",
+      "desc": "This page highlights national strategies that we identified as having potential connections to the DEVlab findings. These strategies were selected because the insights emerging from DEVlab could help inform, complement, or strengthen their goals, particularly in areas such as youth employment, skills development, housing, and equity.",
+      "descfr": "Cette page met en avant les stratégies nationales que nous avons identifiées comme pouvant avoir un lien avec les conclusions du DEVlab. Ces stratégies ont été sélectionnées parce que les enseignements tirés du DEVlab pourraient contribuer à éclairer, compléter ou renforcer leurs objectifs, en particulier dans des domaines tels que l'emploi des jeunes, le développement des compétences, le logement et l'équité.",
       "link": "/insights/devlab-national-strategy-connections",
-      "priority": 1
+      "priority": 2
     },
     {
       "title": "What's up with work lately?",
@@ -22,7 +22,7 @@
       "desc": "Explore what youth across Canada are saying about work preferences, education, and the impact of the COVID-19 pandemic. See their quotes organized into an interactive, theme-based visual.",
       "descfr": "Découvrez ce que les jeunes du Canada disent de leurs préférences en matière de travail, d'éducation et de l'impact de la pandémie de COVID-19. Voyez leurs citations organisées en un visuel interactif basé sur des thèmes.",
       "link": "/insights/interview",
-      "priority": 2
+      "priority": 1
     },
     {
       "title": "What's up with work lately?",

@@ -11,9 +11,9 @@ export default function DevlabNationalStrategyConnections() {
           DEVlab —{' '}
           <span className='highlight'>National Strategy Connections</span>
         </Heading>
-
         <section>
-          <Heading level={3}>(1) Skills for Success</Heading>
+          <Text as='p'>This page highlights national strategies that we identified as having potential connections to the DEVlab findings. These strategies were selected because the insights emerging from DEVlab could help inform, complement, or strengthen their goals, particularly in areas such as youth employment, skills development, housing, and equity.</Text>
+          <Heading level={3} marginTop='xxl'>(1) Skills for Success</Heading>
           <Text as='p'>
             The Skills for Success are one of Canada’s job training initiatives.
             Launched in 2021 the Skills for Success Program was created to “help
@@ -54,12 +54,6 @@ export default function DevlabNationalStrategyConnections() {
             employment and skills. In recent months, the Skills for Success
             program was also added to this ESDC Directorate.
           </Text>
-          <Text as='p'>
-            <strong>Actions to date:</strong> The DEVlab project and results
-            were shared with the Director General of the Youth and Skills
-            Innovation Directorate, and they were invited to attend the webinar
-            series.
-          </Text>
         </section>
 
         <section>
@@ -80,11 +74,6 @@ export default function DevlabNationalStrategyConnections() {
             ease this transition for young people. At the same time the SSLP
             team could learn about the challenges youth are facing to help in
             their efforts.
-          </Text>
-          <Text as='p'>
-            <strong>Next Steps:</strong> Tamarack to share Building Bridges
-            report with SSLP contacts and help to set up a meeting between
-            DEVlab team and SSLP team.
           </Text>
         </section>
 
